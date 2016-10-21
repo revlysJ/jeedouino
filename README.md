@@ -1,0 +1,2 @@
+# jeedouino
+plugin for jeedom

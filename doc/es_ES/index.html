@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.3.dev">
+<title>Jeedouino v0.97</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove the comments around the @import statement below when using this as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+#map_canvas img,#map_canvas embed,#map_canvas object,.map_canvas img,.map_canvas embed,.map_canvas object{max-width:none!important}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+.antialiased,body{-webkit-font-smoothing:antialiased}
+img{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.75em;line-height:1.4;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:-.15em .15em 0 .15em;padding:.2em .6em .2em .5em;vertical-align:middle;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.05em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.spread{width:100%}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1{padding-right:.75em;font-weight:bold}
+td.hdlist1,td.hdlist2{vertical-align:top}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none}
+span.footnote,span.footnoteref{vertical-align:super;font-size:.875em}
+span.footnote a,span.footnoteref a{text-decoration:none}
+span.footnote a:active,span.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em;line-height:1.3;font-size:.875em;margin-left:1.2em;text-indent:-1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+h1,h2{letter-spacing:-.01em}
+dt,th.tableblock,td.content{text-rendering:optimizeLegibility}
+p,td.content{letter-spacing:-.01em}
+p strong,td.content strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img{page-break-inside:avoid}
+thead{display:table-header-group}
+img{max-width:100%!important}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Jeedouino v0.97</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table des matières</div>
+<ul class="sectlevel1">
+<li><a href="#_description">1. Description</a></li>
+<li><a href="#_installation">2. Installation</a>
+<ul class="sectlevel2">
+<li><a href="#_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</a>
+<ul class="sectlevel3">
+<li><a href="#_installation_du_plugin">2.1.1. Installation du plugin</a></li>
+<li><a href="#_mise_à_jour_du_plugin">2.1.2. Mise à jour du plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_configuration">3. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_configuration_du_plugin">3.1. Configuration du plugin</a>
+<ul class="sectlevel3">
+<li><a href="#_onglet_options">3.1.1. Onglet : Options</a></li>
+<li><a href="#_onglet_dépendances">3.1.2. Onglet : Dépendances</a></li>
+<li><a href="#_onglet_démons">3.1.3. Onglet : Démons</a></li>
+<li><a href="#_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.4. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</a></li>
+<li><a href="#_onglet_configuration_docker">3.1.5. Onglet : Configuration Docker</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_utilisation">4. Utilisation</a>
+<ul class="sectlevel2">
+<li><a href="#_création_des_équipements">4.1. Création des équipements</a>
+<ul class="sectlevel3">
+<li><a href="#_configuration_des_pins">4.1.1. Configuration des pins</a></li>
+<li><a href="#_commandes">4.1.2. Commandes</a></li>
+<li><a href="#_widgets">4.1.3. Widgets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_santé">5. Santé</a>
+<ul class="sectlevel2">
+<li><a href="#_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</a>
+<ul class="sectlevel3">
+<li><a href="#_etat_des_démons_du_plugin">5.1.1. Etat des démons du plugin</a></li>
+<li><a href="#_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_changelog">6. Changelog</a>
+<ul class="sectlevel2">
+<li><a href="#_15_10_2016_v0_97_2">6.1. 15/10/2016 v0.97.2</a></li>
+<li><a href="#_11_10_2016_v0_97">6.2. 11/10/2016 v0.97</a></li>
+<li><a href="#_21_06_2016_v0_96">6.3. 21/06/2016 v0.96</a></li>
+<li><a href="#_21_04_2016_v0_95">6.4. 21/04/2016 v0.95</a></li>
+<li><a href="#_04_04_2016_v0_94">6.5. 04/04/2016 v0.94</a></li>
+<li><a href="#_21_03_2016_v0_93">6.6. 21/03/2016 v0.93</a></li>
+<li><a href="#_02_03_2016_v0_92">6.7. 02/03/2016 v0.92</a></li>
+<li><a href="#_03_02_2016_v0_9">6.8. 03/02/2016 v0.9</a></li>
+<li><a href="#_12_01_2016_v0_8">6.9. 12/01/2016 v0.8</a></li>
+<li><a href="#_07_01_2016_v0_75">6.10. 07/01/2016 v0.75</a></li>
+<li><a href="#_06_01_2016_v0_7">6.11. 06/01/2016 v0.7</a></li>
+<li><a href="#_03_01_2016_v0_6">6.12. 03/01/2016 v0.6</a></li>
+<li><a href="#_01_01_2016">6.13. 01/01/2016</a></li>
+<li><a href="#_31_12_2015">6.14. 31/12/2015</a></li>
+<li><a href="#_20_12_2015">6.15. 20/12/2015</a></li>
+</ul>
+</li>
+<li><a href="#_faq">7. FAQ</a>
+<ul class="sectlevel2">
+<li><a href="#_faq_2">7.1. FAQ</a>
+<ul class="sectlevel3">
+<li><a href="#_sketchs_personnels_modifiables_et_commandes_utilisateur">7.1.1. Sketchs Personnels/Modifiables et Commandes Utilisateur</a></li>
+<li><a href="#_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</a></li>
+<li><a href="#_groupes_virtuels">7.1.3. Groupes Virtuels</a></li>
+<li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</a></li>
+<li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ne_sont_pas_directement_fonctionnels_après_un_reboot">7.1.5. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.</a></li>
+<li><a href="#_les_démons_ne_démarrent_pas_aprés_un_reboot">7.1.6. Les démons  ne démarrent pas aprés un reboot ?</a></li>
+<li><a href="#_le_plugin_est_il_compatible_docker">7.1.7. Le plugin est-il compatible Docker ?</a></li>
+<li><a href="#_que_signifient_low_ou_high">7.1.8. Que signifient LOW ou HIGH ?</a></li>
+<li><a href="#_que_signifient_pull_up_ou_pull_down">7.1.9. Que signifient Pull_Up ou Pull_Down ?</a></li>
+<li><a href="#_quelle_est_la_configuration_détaillée_des_pins_possible">7.1.10. Quelle est la configuration (détaillée) des pins possible ?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_description">1. Description</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ce plugin vous permet de contrôler de différents manières les pins entrées/sorties des cartes suivantes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Arduinos (différents modèles) branchés en USB sur Raspberry PI.</p>
+</li>
+<li>
+<p>Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, ENC28J60) sur votre réseau.</p>
+</li>
+<li>
+<p>les ESP8266 / NodeMCU / Wemos (wifi).</p>
+</li>
+<li>
+<p>les GPIO du Raspberry PI.</p>
+</li>
+<li>
+<p>les cartes PiFace sur Raspberry PI.</p>
+</li>
+<li>
+<p>les cartes IO PiPlus et les MCP23017 sur Raspberry PI.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Il fonctionne en local ou en déporté (mode esclave de Jeedom) sur votre réseau.</p>
+</div>
+<div class="paragraph">
+<p>Il est compatible avec le nouveau fonctionnement maître/esclave (plugin Jeedom Link) de Jeedom.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation">2. Installation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.
+Un reboot peut même être nécéssaire dans certains cas.<br>
+Il suffit de suivre les logs des dépendances pour surveiller la progression.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_installation_du_plugin">2.1.1. Installation du plugin</h4>
+<div class="paragraph">
+<p>Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
+Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n&#8217;y a rien de plus a faire.
+De même si vous n&#8217;avez qu&#8217;un Jeedom.</p>
+</div>
+<div class="paragraph">
+<p>Pour les Arduinos connectées en USB sur le R.PI, les cartes PiFace, et les GPIO du R.PI, il faudra aussi installer et activer le plugin sur les jeedom esclaves concernés uniquement.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration.png" alt="configuration">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mise_à_jour_du_plugin">2.1.2. Mise à jour du plugin</h4>
+<div class="paragraph">
+<p>Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier.<br>
+Ensuite vous pouvez faire celle du Jeedom maître.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Une mise à jour peut interférer momentanément sur le fonctionnement des équipement liés.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Il est conseillé suite à celle-ci, de faire un <strong><em>Sauver et/ou Générer les commandes</em></strong> pour chaque équipement.<br>
+Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les flasher avec le nouveau sketch généré.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration">3. Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_configuration_du_plugin">3.1. Configuration du plugin</h3>
+<div class="paragraph">
+<p>Sur la page configuration du plugin</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ConfOptions.png" alt="ConfOptions">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_onglet_options">3.1.1. Onglet : Options</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Vous pouvez activer les logs (attention trés verbeux).</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Il n&#8217;est pas recommandé de laisser cette case en permanence cochée car cette option génère beaucoup d&#8217;écriture dans les fichiers de log.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Il faut aussi activer les logs de niveau "Debug" dans Jeedom ( Menu Configuration&#8594;Configuration des logs &amp; messages ).
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Il est possible d&#8217;activer les groupes virtuels (création automatique de commandes dans des virtuels pour simplifier vos équipements/installations).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Cette option n&#8217;apparaît que si vous avez le plugin Virtuel d&#8217;installé et d&#8217;activé dans votre Jeedom.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Il est possible d&#8217;activer les pins utilisateur (création automatique de commandes pour vos sketchs perso Arduinos/ESPs).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé dans votre Jeedom.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_onglet_dépendances">3.1.2. Onglet : Dépendances</h4>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration0.png" alt="configuration0">
+</div>
+</div>
+<div class="paragraph">
+<p>Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.arduino.cc/en/Main/Software" class="bare">https://www.arduino.cc/en/Main/Software</a></p>
+</li>
+<li>
+<p>Pour les cartes ESP8266, NodeMCU, Wemos vous pouvez aussi utiliser l&#8217;IDE Arduino en y ajoutant le support ESP8266.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html" class="bare">http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Pour les GPIO du R.PI, un bouton est disponible pour l&#8217;installation des dépendances.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://sourceforge.net/p/raspberry-gpio-python/wiki/install/" class="bare">http://sourceforge.net/p/raspberry-gpio-python/wiki/install/</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>De même, un bouton est présent pour celles des cartes PiFace.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/piface/pifacedigitalio" class="bare">https://github.com/piface/pifacedigitalio</a></p>
+</li>
+<li>
+<p>Il faudra aussi activer le module SPI.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://piface.github.io/pifacecommon/installation.html#enable-the-spi-module" class="bare">http://piface.github.io/pifacecommon/installation.html#enable-the-spi-module</a></p>
+</li>
+<li>
+<p><a href="http://www.piface.org.uk/guides/Install_PiFace_Software/Enabling_SPI/" class="bare">http://www.piface.org.uk/guides/Install_PiFace_Software/Enabling_SPI/</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Idem, un bouton est présent pour celles des cartes AB Electronics UK IO Pi Plus.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi" class="bare">https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi</a></p>
+</li>
+<li>
+<p>Il faudra aussi activer le module I2C.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.abelectronics.co.uk/kb/article/1/i2c&#8212;&#8203;smbus-and-raspbian-wheezy" class="bare">https://www.abelectronics.co.uk/kb/article/1/i2c&#8212;&#8203;smbus-and-raspbian-wheezy</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Il n&#8217;est pas nécéssaire d&#8217;installer les dépendances sur tous vos Jeedom, uniquement ceux qui seront utilisés.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Deux raccourcis sont présents pour aller directement voir les logs du plugin, et pour aller à vos équipements (uniquement sur le maître)
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_onglet_démons">3.1.3. Onglet : Démons</h4>
+<div class="paragraph">
+<p><em>Exemple de différents démons possibles:</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration1.png" alt="configuration1">
+</div>
+</div>
+<div class="paragraph">
+<p>Ici, dès que vous aurez créer des équipements necéssitant l&#8217;utilisation de démons, apparaîtront ces derniers.</p>
+</div>
+<div class="paragraph">
+<p>Ils seront affichés avec un raccourci direct vers l&#8217;équipement, leur Jeedom hôte, l&#8217;état de fonctionnement et la possibilité de redémarrer ou arréter le démon.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Concernant les équipements Arduino connectés en USB, un lien supplémentaire permettant de télécharger le sketch sera présent.
+Il faudra donc le téléverser dans l&#8217;arduino correspondant.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Suite a un reboot/redémarrage du système hôte, les démons ne sont lancés que 4 minutes environ après le démarrage de Jeedom.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement des démons et de les redémarrer le cas échéeant est désormais disponible.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ConfDemons.png" alt="ConfDemons">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.4. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</h4>
+<div class="paragraph">
+<p>Les arduinos/ESP/NodeMCU/Wemos en réseau n&#8217;ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
+Uniquement ceux des équipements créés.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration3.png" alt="configuration3">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_onglet_configuration_docker">3.1.5. Onglet : Configuration Docker</h4>
+<div class="paragraph">
+<p>Si votre Jeedom est sous Docker, il faut activer l&#8217;option, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration4.png" alt="configuration4">
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_utilisation">4. Utilisation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_création_des_équipements">4.1. Création des équipements</h3>
+<div class="paragraph">
+<p>La configuration des équipements Jeedouino est accessible à partir du menu Plugins :</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/menuplugin.png" alt="menuplugin">
+</div>
+</div>
+<div class="paragraph">
+<p>Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) :</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/equipements.png" alt="equipements">
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche permet de faire apparaître un menu d&#8217;accès rapide (vous pouvez, à partir de votre profil, le laisser toujours visible).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez :</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/equipements0.png" alt="equipements0">
+</div>
+</div>
+<div class="paragraph">
+<p>Vous retrouvez ici toute la configuration de votre équipement :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Nom de l&#8217;équipement</strong> : nom de votre équipement Jeedouino,</p>
+</li>
+<li>
+<p><strong>Objet parent</strong> : indique l&#8217;objet parent auquel appartient l&#8217;équipement,</p>
+</li>
+<li>
+<p><strong>Activer</strong> : permet de rendre votre équipement actif,</p>
+</li>
+<li>
+<p><strong>Visible</strong> : rend votre équipement visible sur le dashboard.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>En-dessous vous retrouvez le paramétrage de votre équipement :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Modèle</strong> : le Modèle de la carte que vous souhaitez controler,</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/modeles.png" alt="modeles">
+</div>
+</div>
+<div class="paragraph">
+<p><em>Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l&#8217;identifier (Si vous avez un piRack par ex.)</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/piface.png" alt="piface">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Port de connection</strong> : type de connection USB ou Réseau,</p>
+</li>
+<li>
+<p><strong>Adresse IP et Port</strong> : pour la connection à la carte via le réseau,</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d&#8217;un équipement, un port de libre vous est proposé.<br>
+<em>Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s&#8217;il s&#8217;avère impossible de l&#8217;utiliser.</em>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Le port doit aussi être différent de celui du Jeedom hôte.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<em>Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom.</em><br>
+Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adresse IP du Jeedom principal (maître).
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/listeIP.png" alt="listeIP">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Port USB</strong> : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,</p>
+</li>
+<li>
+<p><strong>Port local/Port déporté</strong> : Port USB physique ou est connectée la carte,</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/listeUSB.png" alt="listeUSB">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Port Démon</strong> : pour la connection au démon via le réseau, l&#8217;IP du démon étant celle du Jeedom hôte.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d&#8217;un équipement, un port de libre vous est proposé.<br>
+<em>Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s&#8217;il s&#8217;avère impossible de l&#8217;utiliser.</em>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Le port doit aussi être différent de celui du Jeedom hôte.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><strong>Sketch</strong> : Dans le cas d&#8217;une carte Arduino ou ESP8266, le sketch pour celle-ci est proposé au téléchargement aprés une première sauvegarde de l&#8217;équipement.<br>
+(NB. Rafraîchissement de la page, il peut être nécéssaire de faire un F5 pour voir apparaître le lien )</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tenant compte de l&#8217;adresse IP choisie, du port choisi, et d&#8217;une adresse mac unique.
+ <em>Ainsi que de l&#8217;IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d&#8217;après votre configuration réseau dans Jeedom).</em>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<em>Le Sketch est par défaut prévu pour les shields avec chip W5100, mais il peut fonctionner aussi avec des ENC28J60. Dans ce cas, il faudra lire et appliquer la procédure présente en entête du sketch.</em>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/sketch.png" alt="sketch">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Pour les modèles WiFi (ESP8266), il est spécifiquement généré, en tenant compte du port, du SSID, et du mot de passe wifi, l&#8217;adresse IP étant renvoyée par la carte.
+ <em>Ainsi que de l&#8217;IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d&#8217;après votre configuration réseau dans Jeedom).</em>
+<em>NB. Il faut tout de même renseigner l&#8217;adressse IP la premiére fois.</em>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espaces !
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ESP.png" alt="ESP">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuration_des_pins">4.1.1. Configuration des pins</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Modal Paramétrages / affectation des pins</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).<br>
+<em>NB : Des compléments d&#8217;infomations sont disponibles dans la FAQ.</em><br></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Entrées: Analogiques, Digitales, Compteur d&#8217;impulsions</p>
+</li>
+<li>
+<p>Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..).</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/jeedouino_screenshot4.png" alt="jeedouino screenshot4">
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<strong><em>Les Pins seront configurables uniquement après une première sauvegarde de votre équipement.</em></strong><br>
+Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l&#8217;équipement générera toutes les commandes nécéssaires.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Il n&#8217;est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
+Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Il est désormais possible de configurer les generic type directement, et d&#8217;affecter les pins à des groupes (équipements) virtuels, voir la FAQ.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Modal Paramétrages / affectation des pins utilisateur</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/UserPins.png" alt="UserPins">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Onglet Pins / GPIO<br></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Permet d&#8217;ajouter un certain nombre de pins utilisateur pour vos sketch Arduinos/ESPs : <em>0 à 100 max</em><br></p>
+</div>
+<div class="paragraph">
+<p>Il est possible d&#8217;activer ou non la génération automatique des commandes ALL_</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ALL_LOW	Met toutes les pins output à LOW</p>
+</li>
+<li>
+<p>ALL_HIGH	Met toutes les pins output à HIGH</p>
+</li>
+<li>
+<p>ALL_SWITCH	Inverse toutes les pins output</p>
+</li>
+<li>
+<p>ALL_PULSE_LOW	Met toutes les pins output à LOW pendant le temps choisi</p>
+</li>
+<li>
+<p>ALL_PULSE_HIGH	Met toutes les pins output à HIGH pendant le temps choisi</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ALLpins.png" alt="ALLpins">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_commandes">4.1.2. Commandes</h4>
+<div class="imageblock">
+<div class="content">
+<img src="../images/jeedouino_screenshot5.png" alt="jeedouino screenshot5">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sauvegarde de l&#8217;équipement</strong> : Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.
+Ansi, la roue crantée tournante peut rester affichée un bon moment. Il ne faut donc pas s&#8217;en inquièter.</p>
+</li>
+<li>
+<p>Les commandes sont créées automatiquement lors de la sauvegarde de l&#8217;équipement.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Il est bien sûr possible de renommer les commandes.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Pour chaque commande de type 'action', une commande de type 'info' de retour d&#8217;état est aussi créée <em>(si utile)</em>.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Les boutons <em>Afficher</em> et <em>Historiser</em> sont les boutons habituels d&#8217;affichage (ou non) de la commande sur le widget et de son historisation (ou non).</p>
+</li>
+<li>
+<p>Le bouton <em>Inverser (colonne Affichage)</em> permet d&#8217;inverser le résultat d&#8217;une commande info (sous-type binaire) sur le dashboard par ex.</p>
+</li>
+<li>
+<p>Le bouton <em>Inverser (colonne Valeur)</em> permet d&#8217;inverser le résultat d&#8217;une commande info (sous-type binaire) avant de la fournir à Jeedom.</p>
+</li>
+<li>
+<p>Le bouton <em>Tester</em> permet de&#8230;&#8203;tester une commande action par ex.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Il n&#8217;est pour l&#8217;instant pas prévu de pouvoir ajouter des commandes manuellement.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Pour les commandes info de type 'compteur', elles sont remises a la valeur stockée dans l&#8217;équipement à chaque sauvegarde de celui-ci.
+A l&#8217;inverse, après un reboot de l&#8217;arduino (par ex.), la derniére valeur est recupérée auprès du Jeedom maître.
+Si une erreur de communication survient a ce moment la, le compteur sera réinitialisé à zéro.<br>
+Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une valeur spécifique, une option "reset" est présente sur la commande de l&#8217;équipement concerné.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_widgets">4.1.3. Widgets</h4>
+<div class="paragraph">
+<p>Ce sont ceux par défaut de Jeedom.</p>
+</div>
+<div class="paragraph">
+<p>Les widgets desktop ressemblent à cela :</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/desktop_widget.png" alt="desktop widget">
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_santé">5. Santé</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</h3>
+<div class="sect3">
+<h4 id="_etat_des_démons_du_plugin">5.1.1. Etat des démons du plugin</h4>
+<div class="paragraph">
+<p>Le plugin indique Ok si tous les démons et dépendances sont fonctionnels.<br>
+Il est possible d&#8217;ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/sante1.png" alt="sante1">
+</div>
+</div>
+<div class="paragraph">
+<p>Il est possible de voir les états des équipements directement en cliquant sur l&#8217;cone à droite de Jeedouino.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</h4>
+<div class="paragraph">
+<p>La liste donne tous les équipements avec leurs ID, IP, Ports, Modèles et dates de communication.<br>
+Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa page.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/sante2.png" alt="sante2">
+</div>
+</div>
+<div class="paragraph">
+<p>Les dates de dernières commnunications sont colorisées:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Vertes si moins de 2h</p>
+</li>
+<li>
+<p>Orangées si moins de 24h</p>
+</li>
+<li>
+<p>Rouges au-delà de 24h.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>N.B. Un équipement grisé est un équipement désactivé.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_changelog">6. Changelog</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_15_10_2016_v0_97_2">6.1. 15/10/2016 v0.97.2</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Suppression des bootstrapswitch (boutons On/Off) pour compatibilité avec Jeedom.</p>
+</li>
+<li>
+<p>Mise à jour des visuels de la doc en conséquence.</p>
+</li>
+<li>
+<p>Correctifs divers.</p>
+</li>
+<li>
+<p>Arduino/ESP : Envoie de la trame téléinfo au plugin éponyme.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_11_10_2016_v0_97">6.2. 11/10/2016 v0.97</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Refonte et optimisation de la gestion des démons.</p>
+</li>
+<li>
+<p>Ajout du support des Generic Type (pour l&#8217;app mobile) en mode automatique ou manuel.</p>
+</li>
+<li>
+<p>Ajout de la possibilité de créér des commandes virtuelles automatiquement dans différents virtuels afin de mieux gérer ses équipements multiples.</p>
+</li>
+<li>
+<p>Correctifs et améliorations diverses sur plugin et préparation à la disparition du mode maître / esclave de Jeedom.</p>
+</li>
+<li>
+<p>Ajout de mise à jour du système (nécéssaire pour les gpio/dht/ds18b20) lors de l&#8217;installation des dépendances.</p>
+</li>
+<li>
+<p>Corréctifs et améliorations sur tous les démons (ajout d&#8217;une option de redémarrage automatique par ex).</p>
+</li>
+<li>
+<p>Améliorations des sketchs USB, LAN et ESP:</p>
+</li>
+<li>
+<p>Arduino/ESP : Ajout du support d&#8217;une laison série pour téléinfo.</p>
+</li>
+<li>
+<p>Arduino/ESP : Ajout du support d&#8217;écran LCD type 16x2 pour envois de messages depuis Jeedom.</p>
+</li>
+<li>
+<p>Arduino/ESP : Ajout du support de sketchs perso pour les utilisateurs (détails dans les sketchs).</p>
+</li>
+<li>
+<p>Arduino/ESP : Ajout de pins/commandes utilisateur (0 à 100 max) pour vos sketchs perso.</p>
+</li>
+<li>
+<p>Arduino/ESP : Ajout de la possibilité dans les sketchs d&#8217;activer/désactiver certaines fonctionnalités pour libérer de l&#8217;espace par ex..</p>
+</li>
+<li>
+<p>Adaptations de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
+</li>
+<li>
+<p>Amélioration de la doc</p>
+</li>
+<li>
+<p>Ajout de nouvelles commandes globales ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_21_06_2016_v0_96">6.3. 21/06/2016 v0.96</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Correctifs divers sur plugin, et sketchs.</p>
+</li>
+<li>
+<p>Ajout des dépendances Python-DHT et DS18B20.</p>
+</li>
+<li>
+<p>Ajout du support des sondes DHT 11, 22 (AM2302) et DS18B20 sur Raspberry PI (piGPIO).</p>
+</li>
+<li>
+<p>Ajout du support du capteur de distance HC-SR04.</p>
+</li>
+<li>
+<p>Améliorations diverses.</p>
+</li>
+<li>
+<p>Améliorations de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_21_04_2016_v0_95">6.4. 21/04/2016 v0.95</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Correctifs divers sur plugin et démons.</p>
+</li>
+<li>
+<p>Ajout de vérifications complémentaires.</p>
+</li>
+<li>
+<p>Ajout de la dépendance Python-Serial.</p>
+</li>
+<li>
+<p>Améliorations de la page configuration avec ajout d&#8217;onglets (tabs) pour plus de clarté.</p>
+</li>
+<li>
+<p>Note : Certains onglets et options ne sont visibles qu&#8217;en mode expert de Jeedom.</p>
+</li>
+<li>
+<p>Ajout de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_04_04_2016_v0_94">6.5. 04/04/2016 v0.94</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Amélioration de la doc.</p>
+</li>
+<li>
+<p>Correctifs divers sur plugin.</p>
+</li>
+<li>
+<p>Ajout du support de la carte IO PiPlus (et donc des MCP23017) et de son démon.</p>
+</li>
+<li>
+<p>Améliorations sur la page santé de Jeedom.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_21_03_2016_v0_93">6.6. 21/03/2016 v0.93</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Amélioration de la doc.</p>
+</li>
+<li>
+<p>Correctifs divers sur plugin, sketchs et démons.</p>
+</li>
+<li>
+<p>Ajout du support de la carte NodeMCU.</p>
+</li>
+<li>
+<p>Ajout du support de Docker ( cf. FAQ )</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_02_03_2016_v0_92">6.7. 02/03/2016 v0.92</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Correctifs divers sur plugin et démons.</p>
+</li>
+<li>
+<p>Ajout d&#8217;un ResetCompteur pour les cartes arduino/esp.</p>
+</li>
+<li>
+<p>Ajout d&#8217;une entrée digitale variable (0-255 sur 0-10s) pour les cartes arduino/esp.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_03_02_2016_v0_9">6.8. 03/02/2016 v0.9</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Amélioration de la doc.</p>
+</li>
+<li>
+<p>Réduction de la charge CPU des démons python, et amélioration de la réactivité.</p>
+</li>
+<li>
+<p>Correctifs divers.</p>
+</li>
+<li>
+<p>Ajout de vérifications/validations supplémentaires.</p>
+</li>
+<li>
+<p>Ajout du support des sondes DHT (11,21,22) et DS18x20 pour les Arduinos (Ethernet/USB) et ESP8266.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>(1 sonde max par pin - peut impacter la réactivité de l&#8217;arduino.)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Ajout d&#8217;un slider sur les commandes pwm et changement de valeur à la volée (scenarii).</p>
+</li>
+<li>
+<p>Amélioration de la page de configuration du plugin.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_12_01_2016_v0_8">6.9. 12/01/2016 v0.8</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Amélioration de la doc.</p>
+</li>
+<li>
+<p>Améliorations globale des démons python.</p>
+</li>
+<li>
+<p>Correctifs cosmétiques.</p>
+</li>
+<li>
+<p>Ajout du retour d&#8217;état des commandes 'action'.</p>
+</li>
+<li>
+<p>Amélioration des sketchs Arduinos (Ethernet/USB) et ESP8266.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_07_01_2016_v0_75">6.10. 07/01/2016 v0.75</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Amélioration de la doc.</p>
+</li>
+<li>
+<p>Amélioration de la gestion du redémarrage des démons en cas de reboot de plusieurs Jeedom esclaves en même temps.</p>
+</li>
+<li>
+<p>Correctifs mineurs.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_06_01_2016_v0_7">6.11. 06/01/2016 v0.7</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Correctifs mineurs sur les commandes.</p>
+</li>
+<li>
+<p>Correction d&#8217;un bug affectant les piFaces en piRack.</p>
+</li>
+<li>
+<p>Amélioration de la récupération des valeurs des compteurs sur les démons.</p>
+</li>
+<li>
+<p>Ajout de plus de flexibilité dans la communication entre sketchs/démons et Jeedom.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_03_01_2016_v0_6">6.12. 03/01/2016 v0.6</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Correctifs mineurs.</p>
+</li>
+<li>
+<p>Amélioration de la doc.</p>
+</li>
+<li>
+<p>Ajout du support de la carte ESP8266-01.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_01_01_2016">6.13. 01/01/2016</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Correction d&#8217;un bug sur le démon python ArduinoUSB.</p>
+</li>
+<li>
+<p>Correctif mineur du plugin.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_31_12_2015">6.14. 31/12/2015</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Ajout de screenshots pour le market.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_20_12_2015">6.15. 20/12/2015</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Création du plugin Jeedouino.</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_faq">7. FAQ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_faq_2">7.1. FAQ</h3>
+<div class="sect3">
+<h4 id="_sketchs_personnels_modifiables_et_commandes_utilisateur">7.1.1. Sketchs Personnels/Modifiables et Commandes Utilisateur</h4>
+<div class="paragraph">
+<p>Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos.<br>
+Il est donc possible de désactiver certaines de ces fonctionnalités afin d&#8217;alléger les sketchs si besoin.<br>
+Vous trouverez en entête des sketchs cette possibilité :</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<strong>#define DEBUGtoSERIAL 0</strong>	// 0, ou 1 pour debug dans la console serie<br>
+<strong>#define UseWatchdog 0</strong><br>
+<strong>#define UseDHT 1</strong><br>
+<strong>#define UseDS18x20 1</strong><br>
+<strong>#define UseTeleInfo 0</strong><br>
+<strong>#define UseLCD16x2 0</strong>	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C<br>
+<em>Vous permet d&#8217;inclure du sketch perso</em><br>
+<strong>#define UserSketch 0</strong><br>
+<em>Tags pour rechercher l&#8217;emplacement pour votre code :</em><br>
+<em>UserVars</em><br>
+<em>UserSetup</em><br>
+<em>UserLoop</em><br>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
+ou de la forcer si besoin.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<strong>#define NODHCP 0</strong>					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Pour vos Sketchs perso, il suffit d&#8217;aller voir dans les sketchs, tout est indiqué dedans avec des exemples.<br>
+Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour les pins matérielles.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Vous aurez le choix entre 3 types de pins entrées et 3 types de pins sorties :</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Entrée Numérique (Sous-type : binaire)</p>
+</li>
+<li>
+<p>Entrée Numérique (Sous-type : numérique)</p>
+</li>
+<li>
+<p>Entrée Numérique (Sous-type : autre)</p>
+</li>
+<li>
+<p>Sortie Numérique (Sous-type : défaut)</p>
+</li>
+<li>
+<p>Sortie Numérique (Sous-type : curseur)</p>
+</li>
+<li>
+<p>Sortie Numérique (Sous-type : message)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/UserPins.png" alt="UserPins">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</h4>
+<div class="paragraph">
+<p>Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l&#8217;app mobile liée.<br>
+Pour plus d&#8217;informations les concernant, veuillez-vous reportez à leurs documentations respectives.</p>
+</div>
+<div class="paragraph">
+<p>Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée),  lors de la
+mise à jour, le plugin essaiera de les récupérer<br>
+Vous pouvez aussi utiliser le mode auto, dans lequel le plugin essaiera de trouver le generic type le plus adapté.<br>
+Sinon vous pouvez choisir le generic type dans le plugin, et lors de la création des commandes le plugin s&#8217;adaptera si possible.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Par exemple, si vous choisissez une pin en <em>Sortie mise à LOW (HIGH générée aussi)</em> et le generic type <em>LIGHT ON</em> , alors le plugin générera les commandes (et vice-versa):<br>
+Sortie mise à LOW avec <em>LIGHT ON</em><br>
+Sortie mise à HIGH avec <em>LIGHT OFF</em><br>
+Etat de la sortie avec <em>LIGHT STATE</em><br>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/gt.png" alt="gt">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Si sur <strong>un même équipement</strong> vous avez beaucoup de commandes ainsi que beaucoup de generic type différents ( par ex. LIGHT, ENERGY, FLAP, SIREN, etc..)
+il est possible que l&#8217;app mobile ne vous les affichent pas tous, ou génére une erreur.<br>
+Cela évoluera certainement avec les futures versions de celle-ci.<br>
+<em>L&#8217;utilisation de <strong>Groupes Virtuels</strong> pour scinder les équipements est alors conseillée.</em>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_groupes_virtuels">7.1.3. Groupes Virtuels</h4>
+<div class="paragraph">
+<p><strong>Pré-requis : avoir le plugin Virtuel installé et activé.</strong></p>
+</div>
+<div class="paragraph">
+<p>Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration5.png" alt="configuration5">
+</div>
+</div>
+<div class="paragraph">
+<p>Il faut ensuite créer les équipements virtuels dont vous aurez besoin (avec le plugin Virtuel bien-sûr).</p>
+</div>
+<div class="paragraph">
+<p>Par la suite, lors de la configuration des pins dans vos équipements Jeedouino, il suffira d&#8217;indiquer pour chaque pin dans quel Virtuel, elle doit  être dupliquée.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/jeedouino_screenshot4.png" alt="jeedouino screenshot4">
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<strong>Un exemple pour bien comprendre :</strong><br>
+Mettons que vous avez dans votre jardin en deux endroits :<br>
+Un NoneMCU avec une carte 8 relais qui commande 4 electrovannes, 2 éclairages et une pompe de bassin.<br>
+Un Raspberry avec une carte 4 relais qui commande 2 electrovannes, 1 éclairage.<br>
+<br>
+<em>Vous avez donc 2 équipements séparés mais avec des fonctionalitées similaires que vous aimeriez regrouper par fonction.</em><br>
+Les virtuels de Jeedom sont là pour ça, mais il vous faut copier les commandes <em>manuellement</em>.<br>
+Les groupes virtuels de Jeedouino vous permettent de les sélectionner d&#8217;un clic, et de laisser faire le plugin automatiquement.<br>
+Dans cet exemple vous n&#8217;avez qu&#8217;à créer les virtuels : <em>Arrosage, Eclairage, Bassin.</em><br>
+Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtuel, et vous sauvez.<br>
+<em>Il ne vous reste plus qu&#8217;à utiliser vos virtuels.</em>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/virtuels.png" alt="virtuels">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</h4>
+<div class="paragraph">
+<p>Cela est possible.<br>
+En effet, lors du démarrage, un démon essaye d&#8217;utiliser le port choisi a 2 reprises avec un délai d&#8217;attente d&#8217;environ 11s.<br>
+Si au bout de ces 2 tentatives le port n&#8217;est toujours pas disponible, alors il essaie d&#8217;en trouver un de libre automatiquement.<br>
+Et s&#8217;il en trouve un, il l&#8217;utilise et met à jour l&#8217;équipement idoine.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ne_sont_pas_directement_fonctionnels_après_un_reboot">7.1.5. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.</h4>
+<div class="paragraph">
+<p>Voir ci-dessous.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_les_démons_ne_démarrent_pas_aprés_un_reboot">7.1.6. Les démons  ne démarrent pas aprés un reboot ?</h4>
+<div class="paragraph">
+<p>Les démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont relancés <strong>qu&#8217;environ 4 minutes</strong> après le lancement de Jeedom.
+Cela permet d&#8217;essayer d&#8217;assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc&#8230;&#8203;).<br></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Une option <strong>AutoReStart</strong> permettant le redémarrage automatique des démons est présente sur la page de configuration du plugin (onglet Démons).
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/configuration2.png" alt="configuration2">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_le_plugin_est_il_compatible_docker">7.1.7. Le plugin est-il compatible Docker ?</h4>
+<div class="paragraph">
+<p>A la base, non à cause de la configuration spécifique du Jeedom sous docker.</p>
+</div>
+<div class="paragraph">
+<p>Cependant une option, dans la page de configuration du plugin a été ajoutée pour pallier à cela.<br>
+Il faut l&#8217;activer, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/docker1.png" alt="docker1">
+</div>
+</div>
+<div class="paragraph">
+<p>Dans la configuration réseau de Jeedom, il faut désactiver la gestion du réseau par Jeedom<br>
+( Normalement c&#8217;est déja la cas, si votre installation docker fonctionne correctement).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/docker2.png" alt="docker2">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_que_signifient_low_ou_high">7.1.8. Que signifient LOW ou HIGH ?</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Pour faire simple Low = 0 = Gnd, c&#8217;est donc la mise à l&#8217;état bas de la pin.</p>
+</li>
+<li>
+<p>Pour faire simple High = 1 = Vcc , c&#8217;est donc la mise à l&#8217;état haut de la pin.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_que_signifient_pull_up_ou_pull_down">7.1.9. Que signifient Pull_Up ou Pull_Down ?</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Pour faire simple Pull_Up signifie qu&#8217;il y a une résistance (interne de tirage) entre la pin concernée et le Vcc du Microcontrôleur.
+Cela permet de maintenir la pin à l&#8217;etat haut (=High=1=Vcc) et d&#8217;éviter des tensions parasites.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ce mode est souvent disponible, dans le cas contraire, il vous suffit de mettre vous même une résistance dans votre montage.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Pour faire simple Pull_Down signifie qu&#8217;il y a une résistance (interne de tirage) entre la pin concernée et le Gnd du Microcontrôleur.
+Cela permet de maintenir la pin à l&#8217;etat bas (=Low=0=Gnd) et d&#8217;éviter des tensions parasites.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ce mode n&#8217;est pas souvent disponible, et dans ce cas, il vous suffit de mettre vous même une résistance dans votre montage.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_quelle_est_la_configuration_détaillée_des_pins_possible">7.1.10. Quelle est la configuration (détaillée) des pins possible ?</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Configuration des pins</strong> : Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<strong>Toutes les fonctions des pins ne sont pas forcément disponibles sur toutes les cartes / microcontrôleurs, chacun ayant ses propres caractéristiques.</strong>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<strong>Rappel</strong> : Il n&#8217;est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
+Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_pins_entrées_input">Pins Entrées (Input):</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Analogiques</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Permet de brancher un capteur analogique.</p>
+</li>
+<li>
+<p>Exemples:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Capteur de distance IR</p>
+</li>
+<li>
+<p>Capteur d’intensité sonore</p>
+</li>
+<li>
+<p>Capteur de lumière ambiante</p>
+</li>
+<li>
+<p>Capteur rotatif analogique</p>
+</li>
+<li>
+<p>Etc..</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Numériques</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Permet de brancher un capteur numérique (qui renvoie un binaire 0 / 1 i.e low / high).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+En pull_up, l&#8217;état de l&#8217;entrée au repos est HIGH (=1), il faut la mettre à LOW (=0) pour déclencher un signal.<br>
+En pull_down, l&#8217;état de l&#8217;entrée au repos est LOW (=0), il faut la mettre à HIGH (=1) pour déclencher un signal.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Compteur d&#8217;impulsions</strong> (Compteur d&#8217;eau , Compteur de courant, &#8230;&#8203; )</p>
+</li>
+<li>
+<p><strong>Entrée Numérique en PULL-UP</strong> (Bouton poussoir, interrupteur, capteur d&#8217;ouverture, capteur de mouvement.. )</p>
+</li>
+<li>
+<p><strong>Entrée Numérique Variable (0-255 sur 10s)</strong> (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)</p>
+</li>
+<li>
+<p><strong>HC-SR04 Echo</strong> En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/hc_sr04.png" alt="hc sr04">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Uniquement sur Arduino / ESP / NodeMCU / Wemos :</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sonde DHT11,21,22</strong> - Permet d&#8217;avoir 2 commandes, une pour la température, et une pour l&#8217;humidité.</p>
+</li>
+<li>
+<p><strong>Sonde DS18x20</strong> - Permet d&#8217;avoir une commande avec la température - <strong>1 sonde max par pin.</strong></p>
+</li>
+<li>
+<p><strong>Entrée téléinfo ERDF ( pin RX )</strong> - Permet d&#8217;avoir une commande de réception de message série pour la téléinfo.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Si vous avez le plugin Téléinfo d&#8217;installé et d&#8217;activé, cela crééra automatiquement un équipement téléinfo avec la trame reçue
+(il faudra activer les commandes auto dans cet équipement).<br>
+Dans ce cas d&#8217;utilisation, si le démon Téléinfo reste sur NOK, c&#8217;est normal, il n&#8217;est pas utilisé.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Uniquement sur Raspberry PI GPIO :</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sonde DHT 11, 22 (AM2302)</strong> - Permet d&#8217;avoir 2 commandes, une pour la température, et une pour l&#8217;humidité.</p>
+</li>
+<li>
+<p><strong>Sonde DS18B20</strong> - Permet d&#8217;avoir une commande avec la température - <strong>1 sonde max par pin.</strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_pins_sorties_output">Pins Sorties (output):</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Uniquement sur Arduino / ESP / NodeMCU / Wemos :</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Envoi d&#8217;un message sur LCD16x2</strong> - Permet d&#8217;envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/lcd.png" alt="lcd">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Numériques</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Permet d&#8217;actionner un récepteur numérique ( relais, led, etc &#8230;&#8203; )</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inverser la sortie (Switch)</strong>, Permet de mettre la sortie a LOW (=0) si elle est a HIGH (=1), et vice-versa. SANS connaître l&#8217;état précédent.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pratique pour changer l&#8217;état d&#8217;une led (clignotement).</p>
+</li>
+<li>
+<p>Actionner un relais comme un interrupteur (un coup, j&#8217;allume, un coup j&#8217;éteints.)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Sortie mise à LOW (HIGH générée aussi)</strong>, Permet d&#8217;avoir 2 commandes pour mettre la sortie a LOW (=0) ou a HIGH (=1).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pratique pour forcer l&#8217;état d&#8217;une sortie dans un scénario par ex.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Sortie mise à LOW/HIGH avec temporisation (minuterie)</strong>. Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.9s (env 166 minutes).
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Une commande opposée (sans temporisation) est aussi créée afin de pouvoir stopper (plus tôt) la commande temporisée pré-citée (Stop Volets par ex.).
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Pratique pour actionner une lumiere x minutes/secondes.</p>
+</li>
+<li>
+<p>Actionner un relais moins d&#8217;une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).</p>
+</li>
+<li>
+<p>Actionner un relais d&#8217;une élèctrovanne pour commander l&#8217;arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).</p>
+</li>
+<li>
+<p>Actionner des relais pour l&#8217;ouverture/fermeture de volets roulants (ex: 00400 pour 40s).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>HC-SR04 Trigger</strong> En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Numériques/pseudo-Analogiques</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sortie PWM</strong>, Permet de régler l&#8217;intensité d&#8217;un ruban led compatible par ex.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+</div>
+</div>
+</body>
+</html>

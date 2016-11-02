@@ -1,7 +1,7 @@
 :icons:
 = Jeedouino v0.97
 
-== Description
+== Beschreibung
 Ce plugin vous permet de contrôler de différents manières les pins entrées/sorties des cartes suivantes : 
 
 * Arduinos (différents modèles) branchés en USB sur Raspberry PI.
@@ -21,19 +21,19 @@ Il est compatible avec le nouveau fonctionnement maître/esclave (plugin Jeedom 
 include::installation.asciidoc[]
 
 '''
-== Configuration
+== Konfiguration
 include::configuration.asciidoc[]
 
 '''
-== Utilisation
+== Verwendung
 include::utilisation.asciidoc[]
 
 '''
-== Santé
+== Gesundheit
 include::sante.asciidoc[]
 
 '''
-== Changelog
+== Änderungsprotokoll
 include::changelog.asciidoc[]
 
 '''

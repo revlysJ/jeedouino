@@ -1,7 +1,7 @@
 # Jeedouino v0.97
 plugin for jeedom
 
-= Description
+Description
 Ce plugin vous permet de contrôler de différents manières les pins entrées/sorties des cartes suivantes : 
 
 * Arduinos (différents modèles) branchés en USB sur Raspberry PI.

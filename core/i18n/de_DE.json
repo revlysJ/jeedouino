@@ -1,6 +1,6 @@
 {
     "plugins\/jeedouino\/plugin_info\/info.xml": {
-        "Plugin Jeedouino pour gérer une\/des carte(s) Arduino (via Ethernet ou USB ), les GPIO du R.PI, les cartes PiFace (piRack), les cartes RPI IO Plus 32e\/s, les MCP23017 (sur RPI) ou les ESP8266 \/ NodeMCU\/ Wemos.": "Plugin Jeedouino pour gérer une\/des carte(s) Arduino (via Ethernet ou USB ), les GPIO du R.PI, les cartes PiFace (piRack), les cartes RPI IO Plus 32e\/s, les MCP23017 (sur RPI) ou les ESP8266 \/ NodeMCU\/ Wemos.",
-        "Voir la documentation. Merci.\n    ": "Voir la documentation. Merci.\n    "
+        "Plugin Jeedouino pour gérer une\/des carte(s) Arduino (via Ethernet ou USB ), les GPIO du R.PI, les cartes PiFace (piRack), les cartes RPI IO Plus 32e\/s, les MCP23017 (sur RPI) ou les ESP8266 \/ NodeMCU\/ Wemos.": "Plugin Jeedouino, zum verwalten einer\\/Arduino Karte(n) (über Ethernet oder USB), GPIO von einem R.PI, PiFace Karte (PiRack), der RPI IO Plus 32e\\/s Karten, MCP23017 (mit RPI) oder ESP8266 \\/ NodeMCU\\/ Wemos.  ",
+        "Voir la documentation. Merci.\n    ": "Lesen Sie die Dokumentation. Danke.\n    "
     }
 }

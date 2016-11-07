@@ -6,7 +6,7 @@ Le plugin indique Ok si tous les démons et dépendances sont fonctionnels. +
 Il est possible d'ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.
 
 image::../images/sante1.png[]
-Il est possible de voir les états des équipements directement en cliquant sur l'cone à droite de Jeedouino. 
+Il est possible de voir les états des équipements directement en cliquant sur l'icone à droite de Jeedouino. 
 
 ==== Etats des équipements du plugin
 

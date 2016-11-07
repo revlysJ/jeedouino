@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3.dev">
-<title>Jeedouino v0.97</title>
+<title>Description</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -412,12 +412,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Jeedouino v0.97</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table des matières</div>
 <ul class="sectlevel1">
 <li><a href="#_description">1. Description</a></li>
-<li><a href="#_installation">2. Installation</a>
+<li><a href="#_install">2. Install</a>
 <ul class="sectlevel2">
 <li><a href="#_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</a>
 <ul class="sectlevel3">
@@ -427,7 +426,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_configuration">3. Configuration</a>
+<li><a href="#_settings">3. Settings</a>
 <ul class="sectlevel2">
 <li><a href="#_configuration_du_plugin">3.1. Configuration du plugin</a>
 <ul class="sectlevel3">
@@ -440,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_utilisation">4. Utilisation</a>
+<li><a href="#_use">4. Use</a>
 <ul class="sectlevel2">
 <li><a href="#_création_des_équipements">4.1. Création des équipements</a>
 <ul class="sectlevel3">
@@ -451,7 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_santé">5. Santé</a>
+<li><a href="#_health">5. Health</a>
 <ul class="sectlevel2">
 <li><a href="#_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</a>
 <ul class="sectlevel3">
@@ -484,16 +483,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_faq_2">7.1. FAQ</a>
 <ul class="sectlevel3">
-<li><a href="#_sketchs_personnels_modifiables_et_commandes_utilisateur">7.1.1. Sketchs Personnels/Modifiables et Commandes Utilisateur</a></li>
+<li><a href="#_user_sketchs_and_user_commands">7.1.1. User Sketchs and user commands</a></li>
 <li><a href="#_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</a></li>
-<li><a href="#_groupes_virtuels">7.1.3. Groupes Virtuels</a></li>
-<li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</a></li>
-<li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ne_sont_pas_directement_fonctionnels_après_un_reboot">7.1.5. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.</a></li>
-<li><a href="#_les_démons_ne_démarrent_pas_aprés_un_reboot">7.1.6. Les démons  ne démarrent pas aprés un reboot ?</a></li>
-<li><a href="#_le_plugin_est_il_compatible_docker">7.1.7. Le plugin est-il compatible Docker ?</a></li>
-<li><a href="#_que_signifient_low_ou_high">7.1.8. Que signifient LOW ou HIGH ?</a></li>
-<li><a href="#_que_signifient_pull_up_ou_pull_down">7.1.9. Que signifient Pull_Up ou Pull_Down ?</a></li>
-<li><a href="#_quelle_est_la_configuration_détaillée_des_pins_possible">7.1.10. Quelle est la configuration (détaillée) des pins possible ?</a></li>
+<li><a href="#_virtual_groups">7.1.3. Virtual groups</a></li>
+<li><a href="#_equipment_with_daemons_rpi_gpio_piface_pi_plus_mcp23017_arduino_usb_have_changed_port_connection_alone">7.1.4. Equipment with daemons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) have changed port connection alone.</a></li>
+<li><a href="#_equipment_with_demons_rpi_gpio_piface_pi_plus_mcp23017_arduino_usb_are_not_directly_functional_after_a_reboot">7.1.5. Equipment with demons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) are not directly functional after a reboot.</a></li>
+<li><a href="#_the_daemons_do_not_start_after_a_reboot">7.1.6. The daemons do not start after a reboot?</a></li>
+<li><a href="#_is_the_plugin_compatible_with_docker">7.1.7. Is the plugin compatible with Docker?</a></li>
+<li><a href="#_what_means_high_or_low">7.1.8. What means HIGH or LOW?</a></li>
+<li><a href="#_what_means_pull_up_or_pull_down">7.1.9. What means Pull_Up or Pull_Down ?</a></li>
+<li><a href="#_what_is_the_configuration_detailed_of_pine_as_possible">7.1.10. What is the configuration (detailed) of pine as possible?</a></li>
 </ul>
 </li>
 </ul>
@@ -502,45 +501,49 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
+<div class="paragraph">
+<p>: icons:
+= Jeedouino v0.97</p>
+</div>
 <div class="sect1">
 <h2 id="_description">1. Description</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ce plugin vous permet de contrôler de différents manières les pins entrées/sorties des cartes suivantes :</p>
+<p>This plugin enable you to control in many ways the input/output of the following boards :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Arduinos (différents modèles) branchés en USB sur Raspberry PI.</p>
+<p>Arduinos (different models) connected by USB on Raspberry PI.</p>
 </li>
 <li>
-<p>Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, ENC28J60) sur votre réseau.</p>
+<p>(Different models) Arduinos connected with an Ethernet (W5100, ENC28J60) shield on your network.</p>
 </li>
 <li>
-<p>les ESP8266 / NodeMCU / Wemos (wifi).</p>
+<p>the ESP8266 / NodeMCU / Wemos (wifi).</p>
 </li>
 <li>
-<p>les GPIO du Raspberry PI.</p>
+<p>GPIO of the Raspberry PI.</p>
 </li>
 <li>
-<p>les cartes PiFace sur Raspberry PI.</p>
+<p>the PiFace boards on Raspberry PI.</p>
 </li>
 <li>
-<p>les cartes IO PiPlus et les MCP23017 sur Raspberry PI.</p>
+<p>the IO PiPlus boards and the MCP23017 on Raspberry PI.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Il fonctionne en local ou en déporté (mode esclave de Jeedom) sur votre réseau.</p>
+<p>It works by local or remote (slave mode Jeedom) on your network.</p>
 </div>
 <div class="paragraph">
-<p>Il est compatible avec le nouveau fonctionnement maître/esclave (plugin Jeedom Link) de Jeedom.</p>
+<p>It is compatible with the new master / slave mode (plugin Jeedom Link) of Jeedom.</p>
 </div>
 <hr>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_installation">2. Installation</h2>
+<h2 id="_install">2. Install</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</h3>
@@ -602,7 +605,7 @@ Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuration">3. Configuration</h2>
+<h2 id="_settings">3. Settings</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_configuration_du_plugin">3.1. Configuration du plugin</h3>
@@ -870,7 +873,7 @@ Uniquement ceux des équipements créés.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_utilisation">4. Utilisation</h2>
+<h2 id="_use">4. Use</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_création_des_équipements">4.1. Création des équipements</h3>
@@ -1327,7 +1330,7 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 </div>
 </div>
 <div class="sect1">
-<h2 id="_santé">5. Santé</h2>
+<h2 id="_health">5. Health</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</h3>
@@ -1709,11 +1712,11 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="sect2">
 <h3 id="_faq_2">7.1. FAQ</h3>
 <div class="sect3">
-<h4 id="_sketchs_personnels_modifiables_et_commandes_utilisateur">7.1.1. Sketchs Personnels/Modifiables et Commandes Utilisateur</h4>
+<h4 id="_user_sketchs_and_user_commands">7.1.1. User Sketchs and user commands</h4>
 <div class="paragraph">
-<p>Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos.<br>
-Il est donc possible de désactiver certaines de ces fonctionnalités afin d&#8217;alléger les sketchs si besoin.<br>
-Vous trouverez en entête des sketchs cette possibilité :</p>
+<p>With the news fonctionnalities, sketch vould become too heavy for the smaller Arduinos.<br>
+So it is possible to disable some in order to light the sketchs if needed.<br>
+You will find this possibility in the sketchs header :</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1728,9 +1731,9 @@ Vous trouverez en entête des sketchs cette possibilité :</p>
 <strong>#define UseDS18x20 1</strong><br>
 <strong>#define UseTeleInfo 0</strong><br>
 <strong>#define UseLCD16x2 0</strong>	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C<br>
-<em>Vous permet d&#8217;inclure du sketch perso</em><br>
+<em>For your user sketch</em><br>
 <strong>#define UserSketch 0</strong><br>
-<em>Tags pour rechercher l&#8217;emplacement pour votre code :</em><br>
+<em>Tags to seek place for your code :</em><br>
 <em>UserVars</em><br>
 <em>UserSetup</em><br>
 <em>UserLoop</em><br>
@@ -1739,8 +1742,8 @@ Vous trouverez en entête des sketchs cette possibilité :</p>
 </table>
 </div>
 <div class="paragraph">
-<p>Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
-ou de la forcer si besoin.</p>
+<p>For the ESP sketches, it is also possible to let the system get a free IP (DHCP)
+or to force if necessary.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1749,38 +1752,38 @@ ou de la forcer si besoin.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<strong>#define NODHCP 0</strong>					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
+<strong>#define NODHCP 0</strong>					// 0 for IP via DHCP, 1 for IP fixed in the sketch.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Pour vos Sketchs perso, il suffit d&#8217;aller voir dans les sketchs, tout est indiqué dedans avec des exemples.<br>
-Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour les pins matérielles.</p>
+<p>For your personal sketches, just look in them, they are fitted in with examples.<br>
+Commands related side Jeedom, just set them up as for material pine.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Vous aurez le choix entre 3 types de pins entrées et 3 types de pins sorties :</p>
+<p>You can choose between 3 types of input and 3 types of output :</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Entrée Numérique (Sous-type : binaire)</p>
+<p>Input digital (subtype: binary)</p>
 </li>
 <li>
-<p>Entrée Numérique (Sous-type : numérique)</p>
+<p>Input digital (subtype: digital)</p>
 </li>
 <li>
-<p>Entrée Numérique (Sous-type : autre)</p>
+<p>Input digital (sub-type: other)</p>
 </li>
 <li>
-<p>Sortie Numérique (Sous-type : défaut)</p>
+<p>Output digital (subtype: default)</p>
 </li>
 <li>
-<p>Sortie Numérique (Sous-type : curseur)</p>
+<p>Output digital (subtype: cursor)</p>
 </li>
 <li>
-<p>Sortie Numérique (Sous-type : message)</p>
+<p>Output digital (subtype: message)</p>
 </li>
 </ul>
 </div>
@@ -1796,14 +1799,14 @@ Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour l
 <div class="sect3">
 <h4 id="_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</h4>
 <div class="paragraph">
-<p>Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l&#8217;app mobile liée.<br>
-Pour plus d&#8217;informations les concernant, veuillez-vous reportez à leurs documentations respectives.</p>
+<p>The generic types are an addition of Jeedom for the operation of the mobile plug and the linked mobile app.<br>
+For more information about them, please refer to their respective documentations.</p>
 </div>
 <div class="paragraph">
-<p>Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée),  lors de la
-mise à jour, le plugin essaiera de les récupérer<br>
-Vous pouvez aussi utiliser le mode auto, dans lequel le plugin essaiera de trouver le generic type le plus adapté.<br>
-Sinon vous pouvez choisir le generic type dans le plugin, et lors de la création des commandes le plugin s&#8217;adaptera si possible.</p>
+<p>If you have Jeedouino equipment for which you have already configured the generic type (in advanced setup) during the
+update the plugin will try to recover them<br>
+You can also use auto mode in which the plugin will try to find the generic type of most suitable.<br>
+Otherwise you can choose the generic type in the plugin, and when creating commands the plugin will fit if possible.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1812,7 +1815,7 @@ Sinon vous pouvez choisir le generic type dans le plugin, et lors de la créatio
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Par exemple, si vous choisissez une pin en <em>Sortie mise à LOW (HIGH générée aussi)</em> et le generic type <em>LIGHT ON</em> , alors le plugin générera les commandes (et vice-versa):<br>
+For example, if you choose a pine <em>Sortie mise à LOW  (HIGH generated too) _ and the generic kind _LIGHT ON</em>, then the plugin will generate the commands (and vice versa):<br>
 Sortie mise à LOW avec <em>LIGHT ON</em><br>
 Sortie mise à HIGH avec <em>LIGHT OFF</em><br>
 Etat de la sortie avec <em>LIGHT STATE</em><br>
@@ -1832,22 +1835,26 @@ Etat de la sortie avec <em>LIGHT STATE</em><br>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Si sur <strong>un même équipement</strong> vous avez beaucoup de commandes ainsi que beaucoup de generic type différents ( par ex. LIGHT, ENERGY, FLAP, SIREN, etc..)
-il est possible que l&#8217;app mobile ne vous les affichent pas tous, ou génére une erreur.<br>
-Cela évoluera certainement avec les futures versions de celle-ci.<br>
-<em>L&#8217;utilisation de <strong>Groupes Virtuels</strong> pour scinder les équipements est alors conseillée.</em>
+If on * a same equipment * you have a lot of orders as well as a lot of generic different type (e.g. LIGHT, ENERGY, FLAP, SIREN, etc..)
+it is possible that the mobile app will not show you all, or generates an error.<br>
+That certainly changes with future versions thereof.<br>
+<em>Use of * groups virtual * to split the equipment is then adviced.</em>
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_groupes_virtuels">7.1.3. Groupes Virtuels</h4>
-<div class="paragraph">
-<p><strong>Pré-requis : avoir le plugin Virtuel installé et activé.</strong></p>
+<h4 id="_virtual_groups">7.1.3. Virtual groups</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Prerequisite: have the virtual plugin installed and active.*</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.</p>
+<p>To activate the virtual groups, an option is present on the configuration page of the plugin.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1855,37 +1862,32 @@ Cela évoluera certainement avec les futures versions de celle-ci.<br>
 </div>
 </div>
 <div class="paragraph">
-<p>Il faut ensuite créer les équipements virtuels dont vous aurez besoin (avec le plugin Virtuel bien-sûr).</p>
+<p>You must then create the virtual equipment you need (with the plugin of course Virtual).</p>
 </div>
 <div class="paragraph">
-<p>Par la suite, lors de la configuration des pins dans vos équipements Jeedouino, il suffira d&#8217;indiquer pour chaque pin dans quel Virtuel, elle doit  être dupliquée.</p>
+<p>Later, when configuring the pines in your Jeedouino equipment, suffice to choose for each pine in which Virtual it must be duplicated.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../images/jeedouino_screenshot4.png" alt="jeedouino screenshot4">
 </div>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<strong>Un exemple pour bien comprendre :</strong><br>
-Mettons que vous avez dans votre jardin en deux endroits :<br>
-Un NoneMCU avec une carte 8 relais qui commande 4 electrovannes, 2 éclairages et une pompe de bassin.<br>
-Un Raspberry avec une carte 4 relais qui commande 2 electrovannes, 1 éclairage.<br>
+<div class="ulist TIP">
+<ul class="TIP">
+<li>
+<p>An example to understand: *<br>
+Example if you have in your garden in two places: +.
+NodeMCU a card with 8 relays that control 4 solenoid valves, 2 lights and a pond pump.<br>
+A Raspberry with 4 relays card that control 2 solenoid valves, 1 lighting.<br>
 <br>
-<em>Vous avez donc 2 équipements séparés mais avec des fonctionalitées similaires que vous aimeriez regrouper par fonction.</em><br>
-Les virtuels de Jeedom sont là pour ça, mais il vous faut copier les commandes <em>manuellement</em>.<br>
-Les groupes virtuels de Jeedouino vous permettent de les sélectionner d&#8217;un clic, et de laisser faire le plugin automatiquement.<br>
-Dans cet exemple vous n&#8217;avez qu&#8217;à créer les virtuels : <em>Arrosage, Eclairage, Bassin.</em><br>
-Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtuel, et vous sauvez.<br>
-<em>Il ne vous reste plus qu&#8217;à utiliser vos virtuels.</em>
-</td>
-</tr>
-</table>
+<em>So you have two separate equipment but with similar features you would like to group by fonction.</em><br>
+The Virtuals in Jeedom are there for that, but you need to copy the commands <em>manually</em> .<br>
+The Jeedouino virtual groups allow you to select them with a click, and let the plugin automatically does it.<br>
+In this example you need to create the virtual: <em>Watering, Lighting, Pond.</em> +.
+Then for each pin of each Jeedouino equipment  you set the corresponding virtual, and you save.<br>
+<em>It remains for you to use your virtuals.</em></p>
+</li>
+</ul>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1894,25 +1896,25 @@ Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtue
 </div>
 </div>
 <div class="sect3">
-<h4 id="_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</h4>
+<h4 id="_equipment_with_daemons_rpi_gpio_piface_pi_plus_mcp23017_arduino_usb_have_changed_port_connection_alone">7.1.4. Equipment with daemons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) have changed port connection alone.</h4>
 <div class="paragraph">
-<p>Cela est possible.<br>
-En effet, lors du démarrage, un démon essaye d&#8217;utiliser le port choisi a 2 reprises avec un délai d&#8217;attente d&#8217;environ 11s.<br>
-Si au bout de ces 2 tentatives le port n&#8217;est toujours pas disponible, alors il essaie d&#8217;en trouver un de libre automatiquement.<br>
-Et s&#8217;il en trouve un, il l&#8217;utilise et met à jour l&#8217;équipement idoine.</p>
+<p>That is possible.<br>
+Indeed, when starting a daemon tries to use the selected port 2 times with a waiting time of approximately 11s.<br>
+If after these two attempts the port is still not available, so he tries to get one automatically.<br>
+And if it finds one, it uses it and update the suitable equipment.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ne_sont_pas_directement_fonctionnels_après_un_reboot">7.1.5. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.</h4>
+<h4 id="_equipment_with_demons_rpi_gpio_piface_pi_plus_mcp23017_arduino_usb_are_not_directly_functional_after_a_reboot">7.1.5. Equipment with demons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) are not directly functional after a reboot.</h4>
 <div class="paragraph">
-<p>Voir ci-dessous.</p>
+<p>See below.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_les_démons_ne_démarrent_pas_aprés_un_reboot">7.1.6. Les démons  ne démarrent pas aprés un reboot ?</h4>
+<h4 id="_the_daemons_do_not_start_after_a_reboot">7.1.6. The daemons do not start after a reboot?</h4>
 <div class="paragraph">
-<p>Les démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont relancés <strong>qu&#8217;environ 4 minutes</strong> après le lancement de Jeedom.
-Cela permet d&#8217;essayer d&#8217;assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc&#8230;&#8203;).<br></p>
+<p>Daemons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) are only launched <strong>about 4 minutes</strong> after launching Jeedom.
+This allows to try to ensure compatibility with somewhat slower systems (Ex: RPI 1, overloaded systems, etc&#8230;&#8203;).<br></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1921,7 +1923,7 @@ Cela permet d&#8217;essayer d&#8217;assurer une compatibilité avec les système
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
+If Jeedom slaves start also, the 4-minute time period begins after the last started Jeedom.
 </td>
 </tr>
 </table>
@@ -1933,7 +1935,7 @@ Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après l
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Une option <strong>AutoReStart</strong> permettant le redémarrage automatique des démons est présente sur la page de configuration du plugin (onglet Démons).
+An <strong>AutoReStart</strong> option for the automatic start of daemons is present on the plugin configuration page (Daemons tab).
 </td>
 </tr>
 </table>
@@ -1945,13 +1947,13 @@ Une option <strong>AutoReStart</strong> permettant le redémarrage automatique d
 </div>
 </div>
 <div class="sect3">
-<h4 id="_le_plugin_est_il_compatible_docker">7.1.7. Le plugin est-il compatible Docker ?</h4>
+<h4 id="_is_the_plugin_compatible_with_docker">7.1.7. Is the plugin compatible with Docker?</h4>
 <div class="paragraph">
-<p>A la base, non à cause de la configuration spécifique du Jeedom sous docker.</p>
+<p>Basically, not because of the specific configuration of Jeedom under Docker.</p>
 </div>
 <div class="paragraph">
-<p>Cependant une option, dans la page de configuration du plugin a été ajoutée pour pallier à cela.<br>
-Il faut l&#8217;activer, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).</p>
+<p>However an option in the plugin configuration page has been added to compensate for this.<br>
+Must activate it, and fill in the IP Address of the host (one of NAS most often) and the port mapped (often 9080).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1959,8 +1961,8 @@ Il faut l&#8217;activer, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS
 </div>
 </div>
 <div class="paragraph">
-<p>Dans la configuration réseau de Jeedom, il faut désactiver la gestion du réseau par Jeedom<br>
-( Normalement c&#8217;est déja la cas, si votre installation docker fonctionne correctement).</p>
+<p>In Jeedom network configuration, disable network management by Jeedom<br>
+(Normally this is already the case, if your Docker operates properly).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1969,40 +1971,40 @@ Il faut l&#8217;activer, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_que_signifient_low_ou_high">7.1.8. Que signifient LOW ou HIGH ?</h4>
+<h4 id="_what_means_high_or_low">7.1.8. What means HIGH or LOW?</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>Pour faire simple Low = 0 = Gnd, c&#8217;est donc la mise à l&#8217;état bas de la pin.</p>
+<p>Simply Low = 0 = GND, so it&#8217;s setting to the low state of the pin.</p>
 </li>
 <li>
-<p>Pour faire simple High = 1 = Vcc , c&#8217;est donc la mise à l&#8217;état haut de la pin.</p>
+<p>Simply High = 1 = Vcc, so setting the higher of the pin state.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_que_signifient_pull_up_ou_pull_down">7.1.9. Que signifient Pull_Up ou Pull_Down ?</h4>
+<h4 id="_what_means_pull_up_or_pull_down">7.1.9. What means Pull_Up or Pull_Down ?</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>Pour faire simple Pull_Up signifie qu&#8217;il y a une résistance (interne de tirage) entre la pin concernée et le Vcc du Microcontrôleur.
-Cela permet de maintenir la pin à l&#8217;etat haut (=High=1=Vcc) et d&#8217;éviter des tensions parasites.</p>
+<p>Simply Pull Up means that there is a resistance (internal circulation) between the data and the Vcc pin of the microcontroller.
+This keeps the pin in the high state (= High = 1 = Vcc) and avoid interference voltages.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Ce mode est souvent disponible, dans le cas contraire, il vous suffit de mettre vous même une résistance dans votre montage.</p>
+<p>This mode is often available, otherwise, simply put yourself in your electronic assembly a resistance.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Pour faire simple Pull_Down signifie qu&#8217;il y a une résistance (interne de tirage) entre la pin concernée et le Gnd du Microcontrôleur.
-Cela permet de maintenir la pin à l&#8217;etat bas (=Low=0=Gnd) et d&#8217;éviter des tensions parasites.</p>
+<p>Simple Pull_Down means that there is a resistance (internal circulation) between the pine concerned and the Gnd of the microcontroller.
+This keeps the pin in low state (= Low = 0 = GND) and avoid interference voltages.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Ce mode n&#8217;est pas souvent disponible, et dans ce cas, il vous suffit de mettre vous même une résistance dans votre montage.</p>
+<p>This mode is not often available, and in this case, simply put yourself in your electronic assembly a resistance.</p>
 </li>
 </ul>
 </div>
@@ -2011,25 +2013,20 @@ Cela permet de maintenir la pin à l&#8217;etat bas (=Low=0=Gnd) et d&#8217;évi
 </div>
 </div>
 <div class="sect3">
-<h4 id="_quelle_est_la_configuration_détaillée_des_pins_possible">7.1.10. Quelle est la configuration (détaillée) des pins possible ?</h4>
+<h4 id="_what_is_the_configuration_detailed_of_pine_as_possible">7.1.10. What is the configuration (detailed) of pine as possible?</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Configuration des pins</strong> : Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).</p>
+<p><strong>Pine Configuration</strong>: Select the appropriate pins and assign them an input type function (info) or output (action).</p>
 </li>
 </ul>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<strong>Toutes les fonctions des pins ne sont pas forcément disponibles sur toutes les cartes / microcontrôleurs, chacun ayant ses propres caractéristiques.</strong>
-</td>
-</tr>
-</table>
+<div class="ulist IMPORTANT">
+<ul class="IMPORTANT">
+<li>
+<p>All functions of the pines are not available on all cards / microcontrollers, each ones having its own caracteristiques.*</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2038,38 +2035,38 @@ Cela permet de maintenir la pin à l&#8217;etat bas (=Low=0=Gnd) et d&#8217;évi
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<strong>Rappel</strong> : Il n&#8217;est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
-Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
+<strong>Reminder</strong>: it is not useful to have a function to each pin, but only those you need.
+This will avoid the generation of unnecessary commands and to load too muwh Jeedom.
 </td>
 </tr>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_pins_entrées_input">Pins Entrées (Input):</h5>
+<h5 id="_input_pins">Input Pins:</h5>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Analogiques</strong></p>
+<p><strong>Analog</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Permet de brancher un capteur analogique.</p>
+<p>Allows to connect an analog sensor.</p>
 </li>
 <li>
-<p>Exemples:</p>
+<p>Examples:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Capteur de distance IR</p>
+<p>IR distance sensor</p>
 </li>
 <li>
-<p>Capteur d’intensité sonore</p>
+<p>Sound intensity sensor</p>
 </li>
 <li>
-<p>Capteur de lumière ambiante</p>
+<p>Ambient light sensor</p>
 </li>
 <li>
-<p>Capteur rotatif analogique</p>
+<p>Analog Rotary sensor</p>
 </li>
 <li>
 <p>Etc..</p>
@@ -2081,11 +2078,11 @@ Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 </div>
 </li>
 <li>
-<p><strong>Numériques</strong></p>
+<p><strong>Digital</strong>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Permet de brancher un capteur numérique (qui renvoie un binaire 0 / 1 i.e low / high).</p>
+<p>Allows you to connect a digital sensor (which returns a binary 0 / 1 i.e. low / high).</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2093,8 +2090,8 @@ Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-En pull_up, l&#8217;état de l&#8217;entrée au repos est HIGH (=1), il faut la mettre à LOW (=0) pour déclencher un signal.<br>
-En pull_down, l&#8217;état de l&#8217;entrée au repos est LOW (=0), il faut la mettre à HIGH (=1) pour déclencher un signal.
+In pull_up, the state of the input by default is HIGH (= 1), so put it to LOW (= 0) to trigger a signal.<br>
+In pull_down, sate of the input by default is LOW (= 0), then put it at HIGH (= 1) to trigger a signal.
 </td>
 </tr>
 </table>
@@ -2102,16 +2099,16 @@ En pull_down, l&#8217;état de l&#8217;entrée au repos est LOW (=0), il faut la
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Compteur d&#8217;impulsions</strong> (Compteur d&#8217;eau , Compteur de courant, &#8230;&#8203; )</p>
+<p><strong>Pulse meter</strong> (water meter, power meter, &#8230;&#8203;)</p>
 </li>
 <li>
-<p><strong>Entrée Numérique en PULL-UP</strong> (Bouton poussoir, interrupteur, capteur d&#8217;ouverture, capteur de mouvement.. )</p>
+<p><strong>Digital Input in PULL-UP</strong> (push button, switch, opening sensor, motion sensor ..)</p>
 </li>
 <li>
-<p><strong>Entrée Numérique Variable (0-255 sur 10s)</strong> (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)</p>
+<p><strong>Digital Input Variable (0-255 on 10s)</strong> (Pushbutton maintained from 0 to 10s to control via a dimmer scenario eg)</p>
 </li>
 <li>
-<p><strong>HC-SR04 Echo</strong> En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.</p>
+<p><strong>HC-SR04 Echo</strong> In connection with the trigger pin, retrieve the distance measured by the ultrasonic sensor.</p>
 </li>
 </ul>
 </div>
@@ -2129,17 +2126,17 @@ En pull_down, l&#8217;état de l&#8217;entrée au repos est LOW (=0), il faut la
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Uniquement sur Arduino / ESP / NodeMCU / Wemos :</strong></p>
+<p><strong>Only on Arduino / ESP / NodeMCU / Wemos :</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Sonde DHT11,21,22</strong> - Permet d&#8217;avoir 2 commandes, une pour la température, et une pour l&#8217;humidité.</p>
+<p><strong>Probe DHT11,21,22</strong> - Allows for two commands, one for temperature and one for humidity.</p>
 </li>
 <li>
-<p><strong>Sonde DS18x20</strong> - Permet d&#8217;avoir une commande avec la température - <strong>1 sonde max par pin.</strong></p>
+<p><strong>Probe DS18x20</strong> - Allows for a command with temperature -. <strong>1 probe max per pin</strong></p>
 </li>
 <li>
-<p><strong>Entrée téléinfo ERDF ( pin RX )</strong> - Permet d&#8217;avoir une commande de réception de message série pour la téléinfo.</p>
+<p><strong>Input Teleinfo ERDF (RX pin)</strong> - Allows for a message receiving order for the serial Teleinfo.</p>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -2147,9 +2144,9 @@ En pull_down, l&#8217;état de l&#8217;entrée au repos est LOW (=0), il faut la
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Si vous avez le plugin Téléinfo d&#8217;installé et d&#8217;activé, cela crééra automatiquement un équipement téléinfo avec la trame reçue
-(il faudra activer les commandes auto dans cet équipement).<br>
-Dans ce cas d&#8217;utilisation, si le démon Téléinfo reste sur NOK, c&#8217;est normal, il n&#8217;est pas utilisé.
+If you have Teleinfo plugin installed and activated, it will automatically create a Teleinfo equipment with the received serial
+(It will need to activate the auto controls in this equipment).<br>
+In this use case, if Teleinfo daemon stays on NOK, it&#8217;s normal, it is not used.
 </td>
 </tr>
 </table>
@@ -2159,14 +2156,14 @@ Dans ce cas d&#8217;utilisation, si le démon Téléinfo reste sur NOK, c&#8217;
 </div>
 </li>
 <li>
-<p><strong>Uniquement sur Raspberry PI GPIO :</strong></p>
+<p><strong>Only on Raspberry PI GPIO :</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Sonde DHT 11, 22 (AM2302)</strong> - Permet d&#8217;avoir 2 commandes, une pour la température, et une pour l&#8217;humidité.</p>
+<p><strong>Probe DHT 11, 22 (AM2302)</strong> - allows to have 2 commands, one for temperature, and one for the humidity.</p>
 </li>
 <li>
-<p><strong>Sonde DS18B20</strong> - Permet d&#8217;avoir une commande avec la température - <strong>1 sonde max par pin.</strong></p>
+<p><strong>Sensor DS18B20</strong> - allows to have a command  with temperature - <strong>1 probe max by pin.</strong></p>
 </li>
 </ul>
 </div>
@@ -2175,11 +2172,11 @@ Dans ce cas d&#8217;utilisation, si le démon Téléinfo reste sur NOK, c&#8217;
 </div>
 </div>
 <div class="sect4">
-<h5 id="_pins_sorties_output">Pins Sorties (output):</h5>
+<h5 id="_output_pins">Output pins:</h5>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Uniquement sur Arduino / ESP / NodeMCU / Wemos :</strong></p>
+<p><strong>Only on Arduino / ESP / NodeMCU / Wemos :</strong></p>
 <div class="ulist">
 <ul>
 <li>
@@ -2198,7 +2195,7 @@ Dans ce cas d&#8217;utilisation, si le démon Téléinfo reste sur NOK, c&#8217;
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Numériques</strong></p>
+<p><strong>Digital</strong>.</p>
 <div class="ulist">
 <ul>
 <li>

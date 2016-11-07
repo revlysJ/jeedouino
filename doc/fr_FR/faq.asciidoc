@@ -30,7 +30,7 @@ ou de la forcer si besoin.
 Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqué dedans avec des exemples. +
 [NOTE]
 Pensez à activer l'option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l'onglet Pins/GPIO de votre équipement. +
-Elles apparaîtrons dand l'onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+Elles apparaîtrons dans l'onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
 
 Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour les pins matérielles.
 

@@ -1,26 +1,26 @@
-=== Installation et mise à jour du plugin
+=== Installation and update of the plugin
 [IMPORTANT]
-Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.
-Un reboot peut même être nécéssaire dans certains cas. +
-Il suffit de suivre les logs des dépendances pour surveiller la progression. 
+An installation or an update of the plugin, on a slightly older system, can take some time for the update of it.
+A reboot may be necessary in some cases. +
+Just follow the dependencies logs to monitor the progress. 
 
-==== Installation du plugin
+==== Plugin Installation
 
-Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
-Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n'y a rien de plus a faire.
-De même si vous n'avez qu'un Jeedom.
+After downloading the plugin on your master Jeedom, you must activate it.
+If you only want to use Arduino boards with network shield, there is nothing more to do.
+Similarly, if you have only one Jeedom.
 
-Pour les Arduinos connectées en USB sur le R.PI, les cartes PiFace, et les GPIO du R.PI, il faudra aussi installer et activer le plugin sur les jeedom esclaves concernés uniquement.
+For USB-connected Arduinos on R.PI , the PiFace cards, and GPIO of R.PI, it will also need to install and activate the plugin on only concerned jeedom slaves.
 
 image::../images/configuration.png[]
 
-==== Mise à jour du plugin
+==== Plugin update
 
-Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier. + 
-Ensuite vous pouvez faire celle du Jeedom maître.
+If you have multiple Jeedom, it is advisable to update the Jeedom slaves first. + 
+Then you can update the master Jeedom.
 
 [IMPORTANT]
-Une mise à jour peut interférer momentanément sur le fonctionnement des équipement liés.
+An update may temporarily interfere with the operation of related equipment.
 
-Il est conseillé suite à celle-ci, de faire un *_Sauver et/ou Générer les commandes_* pour chaque équipement. + 
-Dans le cas d'Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les flasher avec le nouveau sketch généré.
+It is recommended following this, to make a *_Save and / or Generate_* for each equipment. + 
+In the case of the Arduino / ESP / NodeMCU / Wemos, it might be necessary to flash the new sketch generated.

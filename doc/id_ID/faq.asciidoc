@@ -2,6 +2,7 @@
 
 ==== Sketchs Personnels/Modifiables et Commandes Utilisateur
 
+===== Entêtes  des sketchs
 Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos. +
 Il est donc possible de désactiver certaines de ces fonctionnalités afin d'alléger les sketchs si besoin. +
 Vous trouverez en entête des sketchs cette possibilité : 
@@ -22,11 +23,15 @@ _UserLoop_ +
 
 Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
 ou de la forcer si besoin.
-
 [TIP]
 *#define NODHCP 0*					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
 
+===== Sketchs et pins Utilisateur
 Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqué dedans avec des exemples. +
+[NOTE]
+Pensez à activer l'option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l'onglet Pins/GPIO de votre équipement. +
+Elles apparaîtrons dans l'onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+
 Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour les pins matérielles.
 
 * Vous aurez le choix entre 3 types de pins entrées et 3 types de pins sorties :

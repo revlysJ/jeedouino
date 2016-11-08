@@ -418,33 +418,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_description">1. Description</a></li>
 <li><a href="#_install">2. Install</a>
 <ul class="sectlevel2">
-<li><a href="#_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</a>
+<li><a href="#_installation_and_update_of_the_plugin">2.1. Installation and update of the plugin</a>
 <ul class="sectlevel3">
-<li><a href="#_installation_du_plugin">2.1.1. Installation du plugin</a></li>
-<li><a href="#_mise_à_jour_du_plugin">2.1.2. Mise à jour du plugin</a></li>
+<li><a href="#_plugin_installation">2.1.1. Plugin Installation</a></li>
+<li><a href="#_plugin_update">2.1.2. Plugin update</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_settings">3. Settings</a>
 <ul class="sectlevel2">
-<li><a href="#_configuration_du_plugin">3.1. Configuration du plugin</a>
+<li><a href="#_the_plugin_configuration">3.1. The plugin configuration</a>
 <ul class="sectlevel3">
-<li><a href="#_onglet_options">3.1.1. Onglet : Options</a></li>
-<li><a href="#_onglet_dépendances">3.1.2. Onglet : Dépendances</a></li>
-<li><a href="#_onglet_démons">3.1.3. Onglet : Démons</a></li>
-<li><a href="#_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.4. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</a></li>
-<li><a href="#_onglet_configuration_docker">3.1.5. Onglet : Configuration Docker</a></li>
+<li><a href="#_tab_options">3.1.1. Tab: Options</a></li>
+<li><a href="#_tab_dependencies">3.1.2. Tab: Dependencies</a></li>
+<li><a href="#_tab_daemons">3.1.3. Tab: Daemons</a></li>
+<li><a href="#_tab_sketches_for_your_network_equipment_arduino_and_esp8266_nodemcu_wemos">3.1.4. Tab: Sketches for your network equipment (Arduino and ESP8266 / NodeMCU / Wemos)</a></li>
+<li><a href="#_tab_configuration_docker">3.1.5. Tab: Configuration Docker</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_use">4. Use</a>
 <ul class="sectlevel2">
-<li><a href="#_création_des_équipements">4.1. Création des équipements</a>
+<li><a href="#_creation_of_equipment">4.1. Creation of equipment</a>
 <ul class="sectlevel3">
-<li><a href="#_configuration_des_pins">4.1.1. Configuration des pins</a></li>
-<li><a href="#_commandes">4.1.2. Commandes</a></li>
+<li><a href="#_pin_configuration">4.1.1. Pin Configuration</a></li>
+<li><a href="#_commands">4.1.2. Commands</a></li>
 <li><a href="#_widgets">4.1.3. Widgets</a></li>
 </ul>
 </li>
@@ -452,17 +452,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_health">5. Health</a>
 <ul class="sectlevel2">
-<li><a href="#_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</a>
+<li><a href="#_page_health_in_jeedom">5.1. Page health in Jeedom</a>
 <ul class="sectlevel3">
-<li><a href="#_etat_des_démons_du_plugin">5.1.1. Etat des démons du plugin</a></li>
-<li><a href="#_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</a></li>
+<li><a href="#_state_plugin_demons">5.1.1. State plugin demons</a></li>
+<li><a href="#_states_of_plugin_equipments">5.1.2. States of plugin equipments</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_changelog">6. Changelog</a>
 <ul class="sectlevel2">
-<li><a href="#_15_10_2016_v0_97_2">6.1. 15/10/2016 v0.97.2</a></li>
+<li><a href="#_v0_97_2_15_10_2016">6.1. v0.97.2 15/10/2016</a></li>
 <li><a href="#_11_10_2016_v0_97">6.2. 11/10/2016 v0.97</a></li>
 <li><a href="#_21_06_2016_v0_96">6.3. 21/06/2016 v0.96</a></li>
 <li><a href="#_21_04_2016_v0_95">6.4. 21/04/2016 v0.95</a></li>
@@ -546,7 +546,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_install">2. Install</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</h3>
+<h3 id="_installation_and_update_of_the_plugin">2.1. Installation and update of the plugin</h3>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -554,22 +554,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.
-Un reboot peut même être nécéssaire dans certains cas.<br>
-Il suffit de suivre les logs des dépendances pour surveiller la progression.
+An installation or an update of the plugin, on a slightly older system, can take some time for the update of it.
+A reboot may be necessary in some cases.<br>
+Just follow the dependencies logs to monitor the progress.
 </td>
 </tr>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_installation_du_plugin">2.1.1. Installation du plugin</h4>
+<h4 id="_plugin_installation">2.1.1. Plugin Installation</h4>
 <div class="paragraph">
-<p>Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
-Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n&#8217;y a rien de plus a faire.
-De même si vous n&#8217;avez qu&#8217;un Jeedom.</p>
+<p>After downloading the plugin on your master Jeedom, you must activate it.
+If you only want to use Arduino boards with network shield, there is nothing more to do.
+Similarly, if you have only one Jeedom.</p>
 </div>
 <div class="paragraph">
-<p>Pour les Arduinos connectées en USB sur le R.PI, les cartes PiFace, et les GPIO du R.PI, il faudra aussi installer et activer le plugin sur les jeedom esclaves concernés uniquement.</p>
+<p>For USB-connected Arduinos on R.PI , the PiFace cards, and GPIO of R.PI, it will also need to install and activate the plugin on only concerned jeedom slaves.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -578,10 +578,10 @@ De même si vous n&#8217;avez qu&#8217;un Jeedom.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_mise_à_jour_du_plugin">2.1.2. Mise à jour du plugin</h4>
+<h4 id="_plugin_update">2.1.2. Plugin update</h4>
 <div class="paragraph">
-<p>Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier.<br>
-Ensuite vous pouvez faire celle du Jeedom maître.</p>
+<p>If you have multiple Jeedom, it is advisable to update the Jeedom slaves first.<br>
+Then you can update the master Jeedom.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -590,14 +590,14 @@ Ensuite vous pouvez faire celle du Jeedom maître.</p>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Une mise à jour peut interférer momentanément sur le fonctionnement des équipement liés.
+An update may temporarily interfere with the operation of related equipment.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Il est conseillé suite à celle-ci, de faire un <strong><em>Sauver et/ou Générer les commandes</em></strong> pour chaque équipement.<br>
-Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les flasher avec le nouveau sketch généré.</p>
+<p>It is recommended following this, to make a <strong><em>Save and / or Generate</em></strong> for each equipment.<br>
+In the case of the Arduino / ESP / NodeMCU / Wemos, it might be necessary to flash the new sketch generated.</p>
 </div>
 <hr>
 </div>
@@ -608,9 +608,9 @@ Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les
 <h2 id="_settings">3. Settings</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_configuration_du_plugin">3.1. Configuration du plugin</h3>
+<h3 id="_the_plugin_configuration">3.1. The plugin configuration</h3>
 <div class="paragraph">
-<p>Sur la page configuration du plugin</p>
+<p>On the configuration page of the plugin</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -618,11 +618,11 @@ Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_options">3.1.1. Onglet : Options</h4>
+<h4 id="_tab_options">3.1.1. Tab: Options</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>Vous pouvez activer les logs (attention trés verbeux).</p>
+<p>You can activate logs (attention very verbose).</p>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -630,7 +630,7 @@ Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Il n&#8217;est pas recommandé de laisser cette case en permanence cochée car cette option génère beaucoup d&#8217;écriture dans les fichiers de log.
+It is not recommended to leave this box checked constantly because this option generates a lot of writing in the log files.
 </td>
 </tr>
 </table>
@@ -642,29 +642,14 @@ Il n&#8217;est pas recommandé de laisser cette case en permanence cochée car c
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Il faut aussi activer les logs de niveau "Debug" dans Jeedom ( Menu Configuration&#8594;Configuration des logs &amp; messages ).
-</td>
-</tr>
-</table>
-</div>
-</li>
-<li>
-<p>Il est possible d&#8217;activer les groupes virtuels (création automatique de commandes dans des virtuels pour simplifier vos équipements/installations).</p>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Cette option n&#8217;apparaît que si vous avez le plugin Virtuel d&#8217;installé et d&#8217;activé dans votre Jeedom.
+You must also activate "Debug" level logs in Jeedom (Menu Configuration&#8594; Configuration of log &amp; messages).
 </td>
 </tr>
 </table>
 </div>
 </li>
 <li>
-<p>Il est possible d&#8217;activer les pins utilisateur (création automatique de commandes pour vos sketchs perso Arduinos/ESPs).</p>
+<p>It is possible to activate the virtual groups (automatic creation of orders in virtual to simplify your equipment / facilities).</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -672,7 +657,22 @@ Cette option n&#8217;apparaît que si vous avez le plugin Virtuel d&#8217;instal
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé dans votre Jeedom.
+This option only appears if you have the Virtual plugin installed and enabled in your Jeedom.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>It is possible to activate the pin user (automatic creation of orders for your personal Arduinos/IOPS skits).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This option only appears if you have the expert mode enabled in your Jeedom.
 </td>
 </tr>
 </table>
@@ -682,14 +682,14 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_dépendances">3.1.2. Onglet : Dépendances</h4>
+<h4 id="_tab_dependencies">3.1.2. Tab: Dependencies</h4>
 <div class="imageblock">
 <div class="content">
 <img src="../images/configuration0.png" alt="configuration0">
 </div>
 </div>
 <div class="paragraph">
-<p>Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.</p>
+<p>A link is available to go download the latest Arduino IDE to flash the skits on your boards.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -697,7 +697,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 <p><a href="https://www.arduino.cc/en/Main/Software" class="bare">https://www.arduino.cc/en/Main/Software</a></p>
 </li>
 <li>
-<p>Pour les cartes ESP8266, NodeMCU, Wemos vous pouvez aussi utiliser l&#8217;IDE Arduino en y ajoutant le support ESP8266.</p>
+<p>For ESP8266 cards NodeMCU, Wemos you can also use the Arduino IDE by adding the ESP8266 support.</p>
 <div class="ulist">
 <ul>
 <li>
@@ -709,7 +709,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 </ul>
 </div>
 <div class="paragraph">
-<p>Pour les GPIO du R.PI, un bouton est disponible pour l&#8217;installation des dépendances.</p>
+<p>For GPIO of the RPI, one button is available for the installation of dependencies.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -719,7 +719,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 </ul>
 </div>
 <div class="paragraph">
-<p>De même, un bouton est présent pour celles des cartes PiFace.</p>
+<p>Similarly, a button is provided for those of PiFace cards.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -727,7 +727,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 <p><a href="https://github.com/piface/pifacedigitalio" class="bare">https://github.com/piface/pifacedigitalio</a></p>
 </li>
 <li>
-<p>Il faudra aussi activer le module SPI.</p>
+<p>It will also require to enable SPI module.</p>
 <div class="ulist">
 <ul>
 <li>
@@ -742,7 +742,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 </ul>
 </div>
 <div class="paragraph">
-<p>Idem, un bouton est présent pour celles des cartes AB Electronics UK IO Pi Plus.</p>
+<p>Same, a button is present for those of AB Electronics UK Pi More IO cards.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -750,7 +750,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 <p><a href="https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi" class="bare">https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi</a></p>
 </li>
 <li>
-<p>Il faudra aussi activer le module I2C.</p>
+<p>It will also require to enable the I2C module.</p>
 <div class="ulist">
 <ul>
 <li>
@@ -768,7 +768,7 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Il n&#8217;est pas nécéssaire d&#8217;installer les dépendances sur tous vos Jeedom, uniquement ceux qui seront utilisés.
+It is not necessary to install the dependencies on all your Jeedom, only those that will be used.
 </td>
 </tr>
 </table>
@@ -780,16 +780,16 @@ Il n&#8217;est pas nécéssaire d&#8217;installer les dépendances sur tous vos 
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Deux raccourcis sont présents pour aller directement voir les logs du plugin, et pour aller à vos équipements (uniquement sur le maître)
+Two shortcuts are present to jump view the logs of the plugin, and to go to your equipment (only on master)
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_démons">3.1.3. Onglet : Démons</h4>
+<h4 id="_tab_daemons">3.1.3. Tab: Daemons</h4>
 <div class="paragraph">
-<p><em>Exemple de différents démons possibles:</em></p>
+<p>_ Example of different possible demons:_</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -797,10 +797,10 @@ Deux raccourcis sont présents pour aller directement voir les logs du plugin, e
 </div>
 </div>
 <div class="paragraph">
-<p>Ici, dès que vous aurez créer des équipements necéssitant l&#8217;utilisation de démons, apparaîtront ces derniers.</p>
+<p>Here, as soon as you create equipment requiring the use of demons, they will appear.</p>
 </div>
 <div class="paragraph">
-<p>Ils seront affichés avec un raccourci direct vers l&#8217;équipement, leur Jeedom hôte, l&#8217;état de fonctionnement et la possibilité de redémarrer ou arréter le démon.</p>
+<p>They will be displayed with a direct shortcut to the equipment, their host Jeedom, operating status and the ability to restart or shutdown the daemon.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -809,8 +809,8 @@ Deux raccourcis sont présents pour aller directement voir les logs du plugin, e
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Concernant les équipements Arduino connectés en USB, un lien supplémentaire permettant de télécharger le sketch sera présent.
-Il faudra donc le téléverser dans l&#8217;arduino correspondant.
+Regarding the Arduino USB connected equipment, an additional link to download the sketch will be present.
+It will therefore need to be uploaded in the corresponding Arduino.
 </td>
 </tr>
 </table>
@@ -822,7 +822,7 @@ Il faudra donc le téléverser dans l&#8217;arduino correspondant.
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Suite a un reboot/redémarrage du système hôte, les démons ne sont lancés que 4 minutes environ après le démarrage de Jeedom.
+Following a reboot / restart the host system, daemons are launched only about 4 minutes after starting Jeedom.
 </td>
 </tr>
 </table>
@@ -834,7 +834,7 @@ Suite a un reboot/redémarrage du système hôte, les démons ne sont lancés qu
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement des démons et de les redémarrer le cas échéeant est désormais disponible.
+An option to check every 5 minutes, the proper functioning of daemons and restart them at least is now available.
 </td>
 </tr>
 </table>
@@ -846,10 +846,10 @@ Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.4. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</h4>
+<h4 id="_tab_sketches_for_your_network_equipment_arduino_and_esp8266_nodemcu_wemos">3.1.4. Tab: Sketches for your network equipment (Arduino and ESP8266 / NodeMCU / Wemos)</h4>
 <div class="paragraph">
-<p>Les arduinos/ESP/NodeMCU/Wemos en réseau n&#8217;ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
-Uniquement ceux des équipements créés.</p>
+<p>The Arduinos / ESP / NodeMCU / network Wemos not needing daemons, here come the sketches for them.
+Only those of the created equipment.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -858,9 +858,9 @@ Uniquement ceux des équipements créés.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_configuration_docker">3.1.5. Onglet : Configuration Docker</h4>
+<h4 id="_tab_configuration_docker">3.1.5. Tab: Configuration Docker</h4>
 <div class="paragraph">
-<p>Si votre Jeedom est sous Docker, il faut activer l&#8217;option, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).</p>
+<p>If your Jeedom is on Docker, activate the option, and enter the host IP (The NAS usually) and the mapped port (often 9080).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -876,9 +876,9 @@ Uniquement ceux des équipements créés.</p>
 <h2 id="_use">4. Use</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_création_des_équipements">4.1. Création des équipements</h3>
+<h3 id="_creation_of_equipment">4.1. Creation of equipment</h3>
 <div class="paragraph">
-<p>La configuration des équipements Jeedouino est accessible à partir du menu Plugins :</p>
+<p>Jeedouino equipment configuration is available from the Plugins menu:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -886,7 +886,7 @@ Uniquement ceux des équipements créés.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) :</p>
+<p>This is the page of the Jeedouino plugin (here with equipment already):</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -900,13 +900,13 @@ Uniquement ceux des équipements créés.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche permet de faire apparaître un menu d&#8217;accès rapide (vous pouvez, à partir de votre profil, le laisser toujours visible).
+As in many places on Jeedom, place the mouse to the left allows to show a quick access menu (you can, from your profile, let it always visible).
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez :</p>
+<p>Once you click the + (Add a new equipment), and after giving a name to your device, you obtain:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -914,31 +914,31 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 </div>
 </div>
 <div class="paragraph">
-<p>Vous retrouvez ici toute la configuration de votre équipement :</p>
+<p>You will find here all the configuration of your equipment:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Nom de l&#8217;équipement</strong> : nom de votre équipement Jeedouino,</p>
+<p><strong>Name of the equipment</strong>: name of your Jeedouino equipment.</p>
 </li>
 <li>
-<p><strong>Objet parent</strong> : indique l&#8217;objet parent auquel appartient l&#8217;équipement,</p>
+<p><strong>Parent object</strong>: Specifies the parent object that owns the equipment,</p>
 </li>
 <li>
-<p><strong>Activer</strong> : permet de rendre votre équipement actif,</p>
+<p><strong>Activate</strong>: to make your equipment active,</p>
 </li>
 <li>
-<p><strong>Visible</strong> : rend votre équipement visible sur le dashboard.</p>
+<p><strong>Visible</strong>: makes your equipment visible on the dashboard.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>En-dessous vous retrouvez le paramétrage de votre équipement :</p>
+<p>Below you will find how to set up your equipment:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Modèle</strong> : le Modèle de la carte que vous souhaitez controler,</p>
+<p><strong>Model</strong>: the model of the board you want to control,</p>
 </li>
 </ul>
 </div>
@@ -948,7 +948,7 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 </div>
 </div>
 <div class="paragraph">
-<p><em>Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l&#8217;identifier (Si vous avez un piRack par ex.)</em></p>
+<p><em>For PiFace board, a number (0 to 3) is asked to identify it (If you have a piRack eg.)</em></p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -958,10 +958,10 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Port de connection</strong> : type de connection USB ou Réseau,</p>
+<p><strong>Connection Port</strong>: USB type connection or network,</p>
 </li>
 <li>
-<p><strong>Adresse IP et Port</strong> : pour la connection à la carte via le réseau,</p>
+<p><strong>Address IP and Port</strong>: for the connection to the card via the network.</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -969,8 +969,8 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d&#8217;un équipement, un port de libre vous est proposé.<br>
-<em>Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s&#8217;il s&#8217;avère impossible de l&#8217;utiliser.</em>
+Daemons (GPIO and Piface eg.) which could beings on the same Jeedom, make sure to use different ports for each. Normally, the creation of an equipment, a free port is offered.<br>
+<em>If necessary, the daemon will try to choose another port instead of the one indicated if it is impossible to use it.</em>
 </td>
 </tr>
 </table>
@@ -985,7 +985,7 @@ Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Le port doit aussi être différent de celui du Jeedom hôte.
+The port must be different from the host Jeedom.
 </td>
 </tr>
 </table>
@@ -997,8 +997,8 @@ Le port doit aussi être différent de celui du Jeedom hôte.
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<em>Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom.</em><br>
-Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adresse IP du Jeedom principal (maître).
+<em>Following browsers, an arrow appears to directly select an IP amongst your Jeedom.</em> +.
+You can also use <em>local</em> or <em>localhost</em> for the IP address of the Jeedom (master).
 </td>
 </tr>
 </table>
@@ -1011,14 +1011,14 @@ Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adr
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Port USB</strong> : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,</p>
+<p><strong>USB port</strong>: Local or remote, for connection of Jeedom master or slave to the board via its USB port,</p>
 </li>
 <li>
-<p><strong>Port local/Port déporté</strong> : Port USB physique ou est connectée la carte,</p>
+<p><strong>Port Local / Remote Port</strong>: Port USB physical where boad is connected,</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.</p>
+<p>If you unplug / plug in the USB port of the RPI , you need to restart the corresponding daemon.</p>
 </li>
 </ul>
 </div>
@@ -1033,7 +1033,7 @@ Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adr
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Port Démon</strong> : pour la connection au démon via le réseau, l&#8217;IP du démon étant celle du Jeedom hôte.</p>
+<p>*Daemon port *: for the connection to the daemon via the network, the IP of the daemon is the one of the Jeedom host.</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1041,8 +1041,8 @@ Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adr
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d&#8217;un équipement, un port de libre vous est proposé.<br>
-<em>Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s&#8217;il s&#8217;avère impossible de l&#8217;utiliser.</em>
+Daemons (Arduino USB eg.) which could beings on the same Jeedom, make sure to use different ports for each. Normally, the creation of an equipment, a free port is offered.<br>
+<em>If necessary, the daemon will try to choose another port instead of the one indicated if it is impossible to use it.</em>
 </td>
 </tr>
 </table>
@@ -1054,15 +1054,15 @@ Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut v
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Le port doit aussi être différent de celui du Jeedom hôte.
+The port must be different from the host Jeedom.
 </td>
 </tr>
 </table>
 </div>
 </li>
 <li>
-<p><strong>Sketch</strong> : Dans le cas d&#8217;une carte Arduino ou ESP8266, le sketch pour celle-ci est proposé au téléchargement aprés une première sauvegarde de l&#8217;équipement.<br>
-(NB. Rafraîchissement de la page, il peut être nécéssaire de faire un F5 pour voir apparaître le lien )</p>
+<p><strong>Sketch</strong>: in the case of a card Arduino or ESP8266, the sketch for it is proposed to download after a first backup of equipment.<br>
+(NB. Refreshing the page, it may be necessary to do an F5 to see the link)</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1070,8 +1070,8 @@ Le port doit aussi être différent de celui du Jeedom hôte.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tenant compte de l&#8217;adresse IP choisie, du port choisi, et d&#8217;une adresse mac unique.
- <em>Ainsi que de l&#8217;IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d&#8217;après votre configuration réseau dans Jeedom).</em>
+For Ethernet (Arduinos) models, it is specifically generated, taking into account the IP address chosen, the selected port, and a unique mac address.
+ _As IP, the add-in '/jeedom' (or not) and the port of the master Jeedom (according to your network in Jeedom configuration). _
 </td>
 </tr>
 </table>
@@ -1083,7 +1083,7 @@ Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tena
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<em>Le Sketch est par défaut prévu pour les shields avec chip W5100, mais il peut fonctionner aussi avec des ENC28J60. Dans ce cas, il faudra lire et appliquer la procédure présente en entête du sketch.</em>
+<em>The sketch is by default for the shields with W5100 chip, but it can work also with the ENC28J60. In this case, it is needed to read and apply the procedure in the header of the sketch.</em>
 </td>
 </tr>
 </table>
@@ -1103,9 +1103,9 @@ Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tena
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Pour les modèles WiFi (ESP8266), il est spécifiquement généré, en tenant compte du port, du SSID, et du mot de passe wifi, l&#8217;adresse IP étant renvoyée par la carte.
- <em>Ainsi que de l&#8217;IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d&#8217;après votre configuration réseau dans Jeedom).</em>
-<em>NB. Il faut tout de même renseigner l&#8217;adressse IP la premiére fois.</em>
+For WiFi models (ESP8266), it is specifically generated, taking into account the port, the SSID, and wifi password, the IP address is returned by the card (if dhcp mode).
+ <em>As IP, the add-in '/jeedom' (or not) and the port of the master Jeedom (according to your network in Jeedom configuration). _
+_NB. You must indicate the IP address the first time.</em>
 </td>
 </tr>
 </table>
@@ -1117,7 +1117,7 @@ Pour les modèles WiFi (ESP8266), il est spécifiquement généré, en tenant co
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espaces !
+The <em>SSID</em> and <em>password</em> should not contain spaces!
 </td>
 </tr>
 </table>
@@ -1128,25 +1128,25 @@ Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espac
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration_des_pins">4.1.1. Configuration des pins</h4>
+<h4 id="_pin_configuration">4.1.1. Pin Configuration</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>Modal Paramétrages / affectation des pins</p>
+<p>Modal Parameters / pin assignment</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).<br>
-<em>NB : Des compléments d&#8217;infomations sont disponibles dans la FAQ.</em><br></p>
+<p>Selects appropriate pin and assign a type input (info) or output (action).<br>
+<em>NB: The information supplements are available in the FAQ.</em><br></p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Entrées: Analogiques, Digitales, Compteur d&#8217;impulsions</p>
+<p>Inputs: Analog, Digital, Pulse Counter</p>
 </li>
 <li>
-<p>Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..).</p>
+<p>Outputs: Low (= 0 = GND), High (= Vcc = 1), Switch (reverse output), Pulse (the output to low or high for a limited time - ex.:activate momentarily, via a relay , a remote control switch, solenoid valve, a component, a dry contact, etc ..).</p>
 </li>
 </ul>
 </div>
@@ -1155,19 +1155,11 @@ Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espac
 <img src="../images/jeedouino_screenshot4.png" alt="jeedouino screenshot4">
 </div>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<strong><em>Les Pins seront configurables uniquement après une première sauvegarde de votre équipement.</em></strong><br>
-Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l&#8217;équipement générera toutes les commandes nécéssaires.
-</td>
-</tr>
-</table>
-</div>
+<div class="ulist IMPORTANT">
+<ul class="IMPORTANT">
+<li>
+<p><em>The pin will be configured only after an initial backup of your equipment .</em><br>
+Once configured and saved (in the modal window), a backup of the equipment will generate all necessary commands.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1175,11 +1167,14 @@ Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sa
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Il n&#8217;est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
-Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
+It is not useful to provide a function to each pin, but only those you need.
+This will prevent the generation of unnecessary controls and overload Jeedom.
 </td>
 </tr>
 </table>
+</div>
+</li>
+</ul>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1188,7 +1183,7 @@ Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Il est désormais possible de configurer les generic type directement, et d&#8217;affecter les pins à des groupes (équipements) virtuels, voir la FAQ.
+It is now possible to configure the generic kind directly and affect the pin to groups (equipment) Virtual, see the FAQ.
 </td>
 </tr>
 </table>
@@ -1196,7 +1191,7 @@ Il est désormais possible de configurer les generic type directement, et d&#821
 <div class="ulist">
 <ul>
 <li>
-<p>Modal Paramétrages / affectation des pins utilisateur</p>
+<p>Modal Settings / User pin assignment</p>
 </li>
 </ul>
 </div>
@@ -1208,32 +1203,32 @@ Il est désormais possible de configurer les generic type directement, et d&#821
 <div class="ulist">
 <ul>
 <li>
-<p>Onglet Pins / GPIO<br></p>
+<p>Tab Pins / GPIO<br></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Permet d&#8217;ajouter un certain nombre de pins utilisateur pour vos sketch Arduinos/ESPs : <em>0 à 100 max</em><br></p>
+<p>Allows you to add a number of pin user for your sketch Arduinos/ESP: <em>0 to 100 max</em> +.</p>
 </div>
 <div class="paragraph">
-<p>Il est possible d&#8217;activer ou non la génération automatique des commandes ALL_</p>
+<p>It is possible to activate or not the automatic generation of commandes ALL_*</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>ALL_LOW	Met toutes les pins output à LOW</p>
+<p>ALL_LOW puts all output pins to LOW</p>
 </li>
 <li>
-<p>ALL_HIGH	Met toutes les pins output à HIGH</p>
+<p>ALL_HIGH puts all output pins to HIGH</p>
 </li>
 <li>
-<p>ALL_SWITCH	Inverse toutes les pins output</p>
+<p>ALL_SWITCH reverse all the output pins</p>
 </li>
 <li>
-<p>ALL_PULSE_LOW	Met toutes les pins output à LOW pendant le temps choisi</p>
+<p>ALL_PULSE_LOW puts all output pins to LOW during the selected time</p>
 </li>
 <li>
-<p>ALL_PULSE_HIGH	Met toutes les pins output à HIGH pendant le temps choisi</p>
+<p>ALL_PULSE_HIGH puts all output pins to HIGH during the selected time</p>
 </li>
 </ul>
 </div>
@@ -1244,7 +1239,7 @@ Il est désormais possible de configurer les generic type directement, et d&#821
 </div>
 </div>
 <div class="sect3">
-<h4 id="_commandes">4.1.2. Commandes</h4>
+<h4 id="_commands">4.1.2. Commands</h4>
 <div class="imageblock">
 <div class="content">
 <img src="../images/jeedouino_screenshot5.png" alt="jeedouino screenshot5">
@@ -1253,15 +1248,15 @@ Il est désormais possible de configurer les generic type directement, et d&#821
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Sauvegarde de l&#8217;équipement</strong> : Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.
-Ansi, la roue crantée tournante peut rester affichée un bon moment. Il ne faut donc pas s&#8217;en inquièter.</p>
+<p><strong>Backup equipment</strong>: Commands are automatically generated, the daemon is started if necessary, the configuration of the pin is sent to the board (Arduino, RPI, PiFace) and some other settings.
+Ansi, the rotating cogwheel may not disappear for a while. So do not be concerned.</p>
 </li>
 <li>
-<p>Les commandes sont créées automatiquement lors de la sauvegarde de l&#8217;équipement.</p>
+<p>Commands are automatically created when saving equipment.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Il est bien sûr possible de renommer les commandes.</p>
+<p>It is of course possible to rename the controls.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1269,7 +1264,7 @@ Ansi, la roue crantée tournante peut rester affichée un bon moment. Il ne faut
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Pour chaque commande de type 'action', une commande de type 'info' de retour d&#8217;état est aussi créée <em>(si utile)</em>.
+For each control type 'action', a type of command 'info' of feedback state is also created _ (if useful) _.
 </td>
 </tr>
 </table>
@@ -1279,21 +1274,21 @@ Pour chaque commande de type 'action', une commande de type 'info' de retour d&#
 </div>
 </li>
 <li>
-<p>Les boutons <em>Afficher</em> et <em>Historiser</em> sont les boutons habituels d&#8217;affichage (ou non) de la commande sur le widget et de son historisation (ou non).</p>
+<p>The <em>Show</em> <em>Logging</em> buttons are the usual display buttons (or not) of the command on the widget and its logging (or not).</p>
 </li>
 <li>
-<p>Le bouton <em>Inverser (colonne Affichage)</em> permet d&#8217;inverser le résultat d&#8217;une commande info (sous-type binaire) sur le dashboard par ex.</p>
+<p>The Invert button (column display) _ can reverse the result of a command info (binary subtype) on the dashboard for example.</p>
 </li>
 <li>
-<p>Le bouton <em>Inverser (colonne Valeur)</em> permet d&#8217;inverser le résultat d&#8217;une commande info (sous-type binaire) avant de la fournir à Jeedom.</p>
+<p>The Invert button (Value column) _ can reverse the result of a command info (binary subtype) before providing it to Jeedom.</p>
 </li>
 <li>
-<p>Le bouton <em>Tester</em> permet de&#8230;&#8203;tester une commande action par ex.</p>
+<p>The Test button permit to test &#8230;&#8203; an action command.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Il n&#8217;est pour l&#8217;instant pas prévu de pouvoir ajouter des commandes manuellement.</p>
+<p>It is now not expected to be able to add commands manually.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1302,10 +1297,10 @@ Pour chaque commande de type 'action', une commande de type 'info' de retour d&#
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Pour les commandes info de type 'compteur', elles sont remises a la valeur stockée dans l&#8217;équipement à chaque sauvegarde de celui-ci.
-A l&#8217;inverse, après un reboot de l&#8217;arduino (par ex.), la derniére valeur est recupérée auprès du Jeedom maître.
-Si une erreur de communication survient a ce moment la, le compteur sera réinitialisé à zéro.<br>
-Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une valeur spécifique, une option "reset" est présente sur la commande de l&#8217;équipement concerné.
+For type info command 'counter', they are reset to the value stored in the equipment at each backup of it.
+Conversely, after a reboot of the Arduino (eg.), The last value is recovered from the master Jeedom.
+If a communication error occurs at this moment, the counter will be reset to zero.<br>
+Arduino / ESP / NodeMCU / Wemos, it is possible to re-initialize to a specific value, an option "reset" is present on the control of the equipment concerned.
 </td>
 </tr>
 </table>
@@ -1314,10 +1309,10 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 <div class="sect3">
 <h4 id="_widgets">4.1.3. Widgets</h4>
 <div class="paragraph">
-<p>Ce sont ceux par défaut de Jeedom.</p>
+<p>It is those by default of Jeedom.</p>
 </div>
 <div class="paragraph">
-<p>Les widgets desktop ressemblent à cela :</p>
+<p>Desktop widgets are similar to this:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1333,27 +1328,23 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 <h2 id="_health">5. Health</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</h3>
+<h3 id="_page_health_in_jeedom">5.1. Page health in Jeedom</h3>
 <div class="sect3">
-<h4 id="_etat_des_démons_du_plugin">5.1.1. Etat des démons du plugin</h4>
+<h4 id="_state_plugin_demons">5.1.1. State plugin demons</h4>
 <div class="paragraph">
-<p>Le plugin indique Ok si tous les démons et dépendances sont fonctionnels.<br>
-Il est possible d&#8217;ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../images/sante1.png" alt="sante1">
-</div>
+<p>The plugin shows Ok if all daemons and dependencies are functional.<br>
+It is possible to open the configuration of the plugin directly page by clicking Jeedouino.</p>
 </div>
 <div class="paragraph">
-<p>Il est possible de voir les états des équipements directement en cliquant sur l&#8217;cone à droite de Jeedouino.</p>
+<p>Image:&#8230;&#8203; /images/sante1.png]
+Il est possible de voir les états des équipements directement en cliquant sur l&#8217;icone à droite de Jeedouino.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</h4>
+<h4 id="_states_of_plugin_equipments">5.1.2. States of plugin equipments</h4>
 <div class="paragraph">
-<p>La liste donne tous les équipements avec leurs ID, IP, Ports, Modèles et dates de communication.<br>
-Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa page.</p>
+<p>The list give all equipments with their ID, IP, Ports, Models and communication dates.<br>
+It is possible to click on the device name to go to its page.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1361,23 +1352,23 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 </div>
 </div>
 <div class="paragraph">
-<p>Les dates de dernières commnunications sont colorisées:</p>
+<p>The dates of the latest communications are colorized:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Vertes si moins de 2h</p>
+<p>Green if less than 2 hours</p>
 </li>
 <li>
-<p>Orangées si moins de 24h</p>
+<p>Orange if less than 24 hours</p>
 </li>
 <li>
-<p>Rouges au-delà de 24h.</p>
+<p>Red beyond 24 hours.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>N.B. Un équipement grisé est un équipement désactivé.</p>
+<p>N.B. A gray equipment is a turned off equipment.</p>
 </div>
 <hr>
 </div>
@@ -1388,99 +1379,43 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <h2 id="_changelog">6. Changelog</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_15_10_2016_v0_97_2">6.1. 15/10/2016 v0.97.2</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Suppression des bootstrapswitch (boutons On/Off) pour compatibilité avec Jeedom.</p>
-</li>
-<li>
-<p>Mise à jour des visuels de la doc en conséquence.</p>
-</li>
-<li>
-<p>Correctifs divers.</p>
-</li>
-<li>
-<p>Arduino/ESP : Envoie de la trame téléinfo au plugin éponyme.</p>
-</li>
-</ul>
+<h3 id="_v0_97_2_15_10_2016">6.1. v0.97.2 15/10/2016</h3>
+<div class="paragraph">
+<p>-Suppression of the bootstrapswitch (button On / Off) for compatibility with Jeedom.
+-Updated the visuals of the doc as a result.
+-Various fixes.
+-Arduino/ESP: sends the frame to the eponymous plugin teleinfo.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_11_10_2016_v0_97">6.2. 11/10/2016 v0.97</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Refonte et optimisation de la gestion des démons.</p>
-</li>
-<li>
-<p>Ajout du support des Generic Type (pour l&#8217;app mobile) en mode automatique ou manuel.</p>
-</li>
-<li>
-<p>Ajout de la possibilité de créér des commandes virtuelles automatiquement dans différents virtuels afin de mieux gérer ses équipements multiples.</p>
-</li>
-<li>
-<p>Correctifs et améliorations diverses sur plugin et préparation à la disparition du mode maître / esclave de Jeedom.</p>
-</li>
-<li>
-<p>Ajout de mise à jour du système (nécéssaire pour les gpio/dht/ds18b20) lors de l&#8217;installation des dépendances.</p>
-</li>
-<li>
-<p>Corréctifs et améliorations sur tous les démons (ajout d&#8217;une option de redémarrage automatique par ex).</p>
-</li>
-<li>
-<p>Améliorations des sketchs USB, LAN et ESP:</p>
-</li>
-<li>
-<p>Arduino/ESP : Ajout du support d&#8217;une laison série pour téléinfo.</p>
-</li>
-<li>
-<p>Arduino/ESP : Ajout du support d&#8217;écran LCD type 16x2 pour envois de messages depuis Jeedom.</p>
-</li>
-<li>
-<p>Arduino/ESP : Ajout du support de sketchs perso pour les utilisateurs (détails dans les sketchs).</p>
-</li>
-<li>
-<p>Arduino/ESP : Ajout de pins/commandes utilisateur (0 à 100 max) pour vos sketchs perso.</p>
-</li>
-<li>
-<p>Arduino/ESP : Ajout de la possibilité dans les sketchs d&#8217;activer/désactiver certaines fonctionnalités pour libérer de l&#8217;espace par ex..</p>
-</li>
-<li>
-<p>Adaptations de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
-</li>
-<li>
-<p>Amélioration de la doc</p>
-</li>
-<li>
-<p>Ajout de nouvelles commandes globales ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>-Consolidation and optimization of the management of the demons.
+-Added support of the Generic Type (for the mobile app) in automatic or manual mode.
+-Added the ability to create virtual orders automatically in different virtual in order to better manage multiple facilities.
+-Fixes and improvements on plugin and preparation to the disappearance of master / slave of Jeedom.
+-Added update of the system (necessary for the gpio/dht/ds18b20) during the installation of the dependencies.
+-Fixes and improvements on all the demons (added an option to auto restart for example).
+-Improvements to USB, LAN, and ESP skits:
+-Arduino/ESP: added support for a laison series teleinfo.
+-Arduino/ESP: added support of LCD display type 16 x 2 for transmissions of messages from Jeedom.
+-Arduino/ESP: added support of skits personal for users (details in the skits).
+-Arduino/ESP: adding pine/commands (0 to 100 max) user for your personal sketches.
+-Arduino/ESP: added the ability in skits to toggle some features to free up space by ex..
+-Adaptations of the JeedouinoExt (RPI deported without Jeedom) option for advanced users, for TESTS only.
+-Improvement of the doc
+-Adding new commands global ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_21_06_2016_v0_96">6.3. 21/06/2016 v0.96</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Correctifs divers sur plugin, et sketchs.</p>
-</li>
-<li>
-<p>Ajout des dépendances Python-DHT et DS18B20.</p>
-</li>
-<li>
-<p>Ajout du support des sondes DHT 11, 22 (AM2302) et DS18B20 sur Raspberry PI (piGPIO).</p>
-</li>
-<li>
-<p>Ajout du support du capteur de distance HC-SR04.</p>
-</li>
-<li>
-<p>Améliorations diverses.</p>
-</li>
-<li>
-<p>Améliorations de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>-Various fixes on plugin, and skits.
+-Added Python-DHT and DS18B20 dependencies.
+-Added support of the probes DHT 11, 22 (AM2302) and DS18B20 on Raspberry PI (piGPIO).
+- Ajout du support du capteur de distance HC-SR04.
+- Améliorations diverses.
+-Improvements to JeedouinoExt (RPI deported without Jeedom) option for advanced users, for TESTS only.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1513,16 +1448,10 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Amélioration de la doc.</p>
-</li>
-<li>
-<p>Correctifs divers sur plugin.</p>
-</li>
-<li>
-<p>Ajout du support de la carte IO PiPlus (et donc des MCP23017) et de son démon.</p>
-</li>
-<li>
-<p>Améliorations sur la page santé de Jeedom.</p>
+<p>Amélioration de la doc.
+-Various fixes on plugin.
+-Added support of the IO PiPlus (and thus the MCP23017) card and his demon.
+-Improvements on the health of Jeedom page.</p>
 </li>
 </ul>
 </div>
@@ -1570,10 +1499,8 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <p>Amélioration de la doc.</p>
 </li>
 <li>
-<p>Réduction de la charge CPU des démons python, et amélioration de la réactivité.</p>
-</li>
-<li>
-<p>Correctifs divers.</p>
+<p>Réduction de la charge CPU des démons python, et amélioration de la réactivité.
+-Various fixes.</p>
 </li>
 <li>
 <p>Ajout de vérifications/validations supplémentaires.</p>
@@ -1643,10 +1570,8 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <p>Correctifs mineurs sur les commandes.</p>
 </li>
 <li>
-<p>Correction d&#8217;un bug affectant les piFaces en piRack.</p>
-</li>
-<li>
-<p>Amélioration de la récupération des valeurs des compteurs sur les démons.</p>
+<p>Correction d&#8217;un bug affectant les piFaces en piRack.
+-Improvement of the recovery of the values of the counters on the demons.</p>
 </li>
 <li>
 <p>Ajout de plus de flexibilité dans la communication entre sketchs/démons et Jeedom.</p>
@@ -1713,6 +1638,8 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <h3 id="_faq_2">7.1. FAQ</h3>
 <div class="sect3">
 <h4 id="_user_sketchs_and_user_commands">7.1.1. User Sketchs and user commands</h4>
+<div class="sect4">
+<h5 id="_entêtes_des_sketchs">Entêtes  des sketchs</h5>
 <div class="paragraph">
 <p>With the news fonctionnalities, sketch vould become too heavy for the smaller Arduinos.<br>
 So it is possible to disable some in order to light the sketchs if needed.<br>
@@ -1757,9 +1684,27 @@ or to force if necessary.</p>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_sketchs_et_pins_utilisateur">Sketchs et pins Utilisateur</h5>
 <div class="paragraph">
-<p>For your personal sketches, just look in them, they are fitted in with examples.<br>
-Commands related side Jeedom, just set them up as for material pine.</p>
+<p>For your personal sketches, just look in them, they are fitted in with examples.<br></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Pensez à activer l&#8217;option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l&#8217;onglet Pins/GPIO de votre équipement.<br>
+Elles apparaîtrons dans l&#8217;onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Commands related side Jeedom, just set them up as for material pine.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1793,6 +1738,7 @@ Commands related side Jeedom, just set them up as for material pine.</p>
 <div class="imageblock">
 <div class="content">
 <img src="../images/UserPins.png" alt="UserPins">
+</div>
 </div>
 </div>
 </div>
@@ -2180,7 +2126,7 @@ In this use case, if Teleinfo daemon stays on NOK, it&#8217;s normal, it is not 
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Envoi d&#8217;un message sur LCD16x2</strong> - Permet d&#8217;envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C</p>
+<p><strong>Send a message to LCD16x2</strong> - allows you to send a title + message (16 characters each) on a screen LCD 16 x 2. Standard or I2C</p>
 </li>
 </ul>
 </div>
@@ -2199,34 +2145,34 @@ In this use case, if Teleinfo daemon stays on NOK, it&#8217;s normal, it is not 
 <div class="ulist">
 <ul>
 <li>
-<p>Permet d&#8217;actionner un récepteur numérique ( relais, led, etc &#8230;&#8203; )</p>
+<p>Allows you to operate a digital receiver (relay, LED, etc &#8230;&#8203;)</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inverser la sortie (Switch)</strong>, Permet de mettre la sortie a LOW (=0) si elle est a HIGH (=1), et vice-versa. SANS connaître l&#8217;état précédent.</p>
+<p>* Invert output (Switch) * Puts the output to LOW (= 0) if it is a HIGH (= 1) and vice versa. WITHOUT knowing the previous state.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Pratique pour changer l&#8217;état d&#8217;une led (clignotement).</p>
+<p>convenient to change the State of an led (flashing).</p>
 </li>
 <li>
-<p>Actionner un relais comme un interrupteur (un coup, j&#8217;allume, un coup j&#8217;éteints.)</p>
+<p>Operate a relay as a switch.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>Sortie mise à LOW (HIGH générée aussi)</strong>, Permet d&#8217;avoir 2 commandes pour mettre la sortie a LOW (=0) ou a HIGH (=1).</p>
+<p>* Output setting to LOW (HIGH generated too) * Allows to have 2 commands to put out a LOW (= 0) or HIGH (= 1).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Pratique pour forcer l&#8217;état d&#8217;une sortie dans un scénario par ex.</p>
+<p>Convenient to force the state of an output in a scenario such.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>Sortie mise à LOW/HIGH avec temporisation (minuterie)</strong>. Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.</p>
+<p>* Output setting to LOW / HIGH with delay (timer) *. Turns out a LOW (= 0) or HIGH (= 1) for a limited time.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2234,7 +2180,7 @@ In this use case, if Teleinfo daemon stays on NOK, it&#8217;s normal, it is not 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.9s (env 166 minutes).
+Time expressed in tenths of seconds and 5 digits. Range from 0.1s to 9999.9s (about 166 minutes).
 </td>
 </tr>
 </table>
@@ -2246,7 +2192,7 @@ Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Une commande opposée (sans temporisation) est aussi créée afin de pouvoir stopper (plus tôt) la commande temporisée pré-citée (Stop Volets par ex.).
+An opposite order (without delay) is also created in order to stop (earlier) the command timed pre-quoted (Stop Shutters for ex.).
 </td>
 </tr>
 </table>
@@ -2254,22 +2200,22 @@ Une commande opposée (sans temporisation) est aussi créée afin de pouvoir sto
 <div class="ulist">
 <ul>
 <li>
-<p>Pratique pour actionner une lumiere x minutes/secondes.</p>
+<p>Convenient to power a light x minutes / seconds.</p>
 </li>
 <li>
-<p>Actionner un relais moins d&#8217;une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).</p>
+<p>Operate a relay less than a second for controlling a dry contact / toggle (eg 00007 for 0.7s).</p>
 </li>
 <li>
-<p>Actionner un relais d&#8217;une élèctrovanne pour commander l&#8217;arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).</p>
+<p>Operate a relay with a solenoid valve to control watering the garden for a fixed period (eg 06000 for 10min).</p>
 </li>
 <li>
-<p>Actionner des relais pour l&#8217;ouverture/fermeture de volets roulants (ex: 00400 pour 40s).</p>
+<p>Operate relay for opening / closing of shutters (eg 00400 for 40s).</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>HC-SR04 Trigger</strong> En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.</p>
+<p><strong>HC-SR04 Trigger</strong> In connection with the Echo pin, launch the distance measurement by the ultrasonic sensor.</p>
 </li>
 </ul>
 </div>
@@ -2278,11 +2224,11 @@ Une commande opposée (sans temporisation) est aussi créée afin de pouvoir sto
 </div>
 </li>
 <li>
-<p><strong>Numériques/pseudo-Analogiques</strong></p>
+<p><strong>Digital/pseudo-analog</strong>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Sortie PWM</strong>, Permet de régler l&#8217;intensité d&#8217;un ruban led compatible par ex.</p>
+<p><strong>Output PWM</strong>, adjusts the intensity of a compatible strip led by ex.</p>
 </li>
 </ul>
 </div>

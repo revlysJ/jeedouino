@@ -1,36 +1,36 @@
-=== 15/10/2016 v0.97.2
+=== v0.97.2 15/10/2016
 
-- Suppression des bootstrapswitch (boutons On/Off) pour compatibilité avec Jeedom.
-- Mise à jour des visuels de la doc en conséquence.
-- Correctifs divers.
-- Arduino/ESP : Envoie de la trame téléinfo au plugin éponyme.
+-Suppression of the bootstrapswitch (button On / Off) for compatibility with Jeedom.
+-Updated the visuals of the doc as a result.
+-Various fixes.
+-Arduino/ESP: sends the frame to the eponymous plugin teleinfo.
 
 === 11/10/2016 v0.97
 
-- Refonte et optimisation de la gestion des démons.
-- Ajout du support des Generic Type (pour l'app mobile) en mode automatique ou manuel.
-- Ajout de la possibilité de créér des commandes virtuelles automatiquement dans différents virtuels afin de mieux gérer ses équipements multiples.
-- Correctifs et améliorations diverses sur plugin et préparation à la disparition du mode maître / esclave de Jeedom.
-- Ajout de mise à jour du système (nécéssaire pour les gpio/dht/ds18b20) lors de l'installation des dépendances.
-- Corréctifs et améliorations sur tous les démons (ajout d'une option de redémarrage automatique par ex).
-- Améliorations des sketchs USB, LAN et ESP:
-- Arduino/ESP : Ajout du support d'une laison série pour téléinfo.
-- Arduino/ESP : Ajout du support d'écran LCD type 16x2 pour envois de messages depuis Jeedom.
-- Arduino/ESP : Ajout du support de sketchs perso pour les utilisateurs (détails dans les sketchs).
-- Arduino/ESP : Ajout de pins/commandes utilisateur (0 à 100 max) pour vos sketchs perso.
-- Arduino/ESP : Ajout de la possibilité dans les sketchs d'activer/désactiver certaines fonctionnalités pour libérer de l'espace par ex..
-- Adaptations de l'option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.
-- Amélioration de la doc
-- Ajout de nouvelles commandes globales ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.
+-Consolidation and optimization of the management of the demons.
+-Added support of the Generic Type (for the mobile app) in automatic or manual mode.
+-Added the ability to create virtual orders automatically in different virtual in order to better manage multiple facilities.
+-Fixes and improvements on plugin and preparation to the disappearance of master / slave of Jeedom.
+-Added update of the system (necessary for the gpio/dht/ds18b20) during the installation of the dependencies.
+-Fixes and improvements on all the demons (added an option to auto restart for example).
+-Improvements to USB, LAN, and ESP skits:
+-Arduino/ESP: added support for a laison series teleinfo.
+-Arduino/ESP: added support of LCD display type 16 x 2 for transmissions of messages from Jeedom.
+-Arduino/ESP: added support of skits personal for users (details in the skits).
+-Arduino/ESP: adding pine/commands (0 to 100 max) user for your personal sketches.
+-Arduino/ESP: added the ability in skits to toggle some features to free up space by ex..
+-Adaptations of the JeedouinoExt (RPI deported without Jeedom) option for advanced users, for TESTS only.
+-Improvement of the doc
+-Adding new commands global ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.
 
 === 21/06/2016 v0.96
 
-- Correctifs divers sur plugin, et sketchs.
-- Ajout des dépendances Python-DHT et DS18B20.
-- Ajout du support des sondes DHT 11, 22 (AM2302) et DS18B20 sur Raspberry PI (piGPIO).
+-Various fixes on plugin, and skits.
+-Added Python-DHT and DS18B20 dependencies.
+-Added support of the probes DHT 11, 22 (AM2302) and DS18B20 on Raspberry PI (piGPIO).
 - Ajout du support du capteur de distance HC-SR04.
 - Améliorations diverses.
-- Améliorations de l'option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.
+-Improvements to JeedouinoExt (RPI deported without Jeedom) option for advanced users, for TESTS only.
 
 === 21/04/2016 v0.95
 
@@ -44,9 +44,9 @@
 === 04/04/2016 v0.94
 
 - Amélioration de la doc.
-- Correctifs divers sur plugin.
-- Ajout du support de la carte IO PiPlus (et donc des MCP23017) et de son démon.
-- Améliorations sur la page santé de Jeedom.
+-Various fixes on plugin.
+-Added support of the IO PiPlus (and thus the MCP23017) card and his demon.
+-Improvements on the health of Jeedom page.
 
 === 21/03/2016 v0.93
 
@@ -65,7 +65,7 @@
 
 - Amélioration de la doc.
 - Réduction de la charge CPU des démons python, et amélioration de la réactivité.
-- Correctifs divers.
+-Various fixes.
 - Ajout de vérifications/validations supplémentaires.
 - Ajout du support des sondes DHT (11,21,22) et DS18x20 pour les Arduinos (Ethernet/USB) et ESP8266.
 * (1 sonde max par pin - peut impacter la réactivité de l'arduino.)
@@ -90,7 +90,7 @@
 
 - Correctifs mineurs sur les commandes.
 - Correction d'un bug affectant les piFaces en piRack.
-- Amélioration de la récupération des valeurs des compteurs sur les démons.
+-Improvement of the recovery of the values of the counters on the demons.
 - Ajout de plus de flexibilité dans la communication entre sketchs/démons et Jeedom.
 
 === 03/01/2016 v0.6

@@ -2,6 +2,7 @@
 
 ==== User Sketchs and user commands
 
+===== Entêtes  des sketchs
 With the news fonctionnalities, sketch vould become too heavy for the smaller Arduinos. +
 So it is possible to disable some in order to light the sketchs if needed. +
 You will find this possibility in the sketchs header : 
@@ -22,11 +23,15 @@ _UserLoop_ +
 
 For the ESP sketches, it is also possible to let the system get a free IP (DHCP)
 or to force if necessary.
-
 [TIP]
 *#define NODHCP 0*					// 0 for IP via DHCP, 1 for IP fixed in the sketch.
 
+===== Sketchs et pins Utilisateur
 For your personal sketches, just look in them, they are fitted in with examples. +
+[NOTE]
+Pensez à activer l'option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l'onglet Pins/GPIO de votre équipement. +
+Elles apparaîtrons dans l'onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+
 Commands related side Jeedom, just set them up as for material pine.
 
 * You can choose between 3 types of input and 3 types of output :
@@ -181,30 +186,30 @@ In this use case, if Teleinfo daemon stays on NOK, it's normal, it is not used.
 
 ===== Output pins: 
 * *Only on Arduino / ESP / NodeMCU / Wemos :*
-** *Envoi d'un message sur LCD16x2* - Permet d'envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C
+** *Send a message to LCD16x2* - allows you to send a title + message (16 characters each) on a screen LCD 16 x 2. Standard or I2C
 
 image::../images/lcd.png[]
 
 * *Digital*.
-** Permet d'actionner un récepteur numérique ( relais, led, etc ... )
-*** *Inverser la sortie (Switch)*, Permet de mettre la sortie a LOW (=0) si elle est a HIGH (=1), et vice-versa. SANS connaître l'état précédent.
-**** Pratique pour changer l'état d'une led (clignotement).
-**** Actionner un relais comme un interrupteur (un coup, j'allume, un coup j'éteints.)
-*** *Sortie mise à LOW (HIGH générée aussi)*, Permet d'avoir 2 commandes pour mettre la sortie a LOW (=0) ou a HIGH (=1).
-**** Pratique pour forcer l'état d'une sortie dans un scénario par ex.
-*** *Sortie mise à LOW/HIGH avec temporisation (minuterie)*. Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.
+** Allows you to operate a digital receiver (relay, LED, etc ...)
+*** * Invert output (Switch) * Puts the output to LOW (= 0) if it is a HIGH (= 1) and vice versa. WITHOUT knowing the previous state.
+**** convenient to change the State of an led (flashing).
+**** Operate a relay as a switch.
+*** * Output setting to LOW (HIGH generated too) * Allows to have 2 commands to put out a LOW (= 0) or HIGH (= 1).
+**** Convenient to force the state of an output in a scenario such.
+*** * Output setting to LOW / HIGH with delay (timer) *. Turns out a LOW (= 0) or HIGH (= 1) for a limited time.
 [NOTE]
-Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.9s (env 166 minutes).
+Time expressed in tenths of seconds and 5 digits. Range from 0.1s to 9999.9s (about 166 minutes).
 [TIP]
-Une commande opposée (sans temporisation) est aussi créée afin de pouvoir stopper (plus tôt) la commande temporisée pré-citée (Stop Volets par ex.).
+An opposite order (without delay) is also created in order to stop (earlier) the command timed pre-quoted (Stop Shutters for ex.).
 
-**** Pratique pour actionner une lumiere x minutes/secondes.
-**** Actionner un relais moins d'une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).
-**** Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).
-**** Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s). 
-*** *HC-SR04 Trigger* En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
-* *Numériques/pseudo-Analogiques*
-*** *Sortie PWM*, Permet de régler l'intensité d'un ruban led compatible par ex.
+**** Convenient to power a light x minutes / seconds.
+**** Operate a relay less than a second for controlling a dry contact / toggle (eg 00007 for 0.7s).
+**** Operate a relay with a solenoid valve to control watering the garden for a fixed period (eg 06000 for 10min).
+**** Operate relay for opening / closing of shutters (eg 00400 for 40s). 
+*** *HC-SR04 Trigger* In connection with the Echo pin, launch the distance measurement by the ultrasonic sensor.
+* *Digital/pseudo-analog*.
+*** *Output PWM*, adjusts the intensity of a compatible strip led by ex.
 
 
 

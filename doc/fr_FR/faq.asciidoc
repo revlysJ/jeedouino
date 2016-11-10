@@ -164,7 +164,11 @@ Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 En pull_up, l'état de l'entrée au repos est HIGH (=1), il faut la mettre à LOW (=0) pour déclencher un signal. +
 En pull_down, l'état de l'entrée au repos est LOW (=0), il faut la mettre à HIGH (=1) pour déclencher un signal.
 
-*** *Compteur d'impulsions* (Compteur d'eau , Compteur de courant, ... )
+*** *Compteur d'impulsions* (Compteur d'Eau , Electricité, Gaz, Portes, Fenêtres, Barrières IR, ... ) +
+Il est possible d'initialiser le compteur a une valeur donnée. +
+Le bouton Reset sert a l'envoyer à la carte.
+
+image::../images/compteur.png[]
 *** *Entrée Numérique en PULL-UP* (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
 *** *Entrée Numérique Variable (0-255 sur 10s)* (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)
 *** *HC-SR04 Echo* En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.

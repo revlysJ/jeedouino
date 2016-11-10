@@ -36,22 +36,22 @@
 
 -Various fixes on plugin and demons.
 -Added additional verifications.
-- Ajout de la dépendance Python-Serial.
+-Added Python-Serial dependence.
 -Improvements to the configuration page with adding tabs (tabs) for clarity.
-- Note : Certains onglets et options ne sont visibles qu'en mode expert de Jeedom.
+-Note: Some tabs and options are visible only in the expert mode of Jeedom.
 - Ajout de l'option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.
 
 === 04/04/2016 v0.94
 
-- Amélioration de la doc.
+-Improvement of the doc
 -Various fixes on plugin.
 -Added support of the IO PiPlus (and thus the MCP23017) card and his demon.
 -Improvements on the health of Jeedom page.
 
 === 21/03/2016 v0.93
 
-- Amélioration de la doc.
-- Correctifs divers sur plugin, sketchs et démons.
+-Improvement of the doc
+-Various fixes on plugin, skits, and demons.
 - Ajout du support de la carte NodeMCU.
 - Ajout du support de Docker ( cf. FAQ )
 
@@ -59,50 +59,50 @@
 
 -Various fixes on plugin and demons.
 - Ajout d'un ResetCompteur pour les cartes arduino/esp.
-- Ajout d'une entrée digitale variable (0-255 sur 0-10s) pour les cartes arduino/esp.
+-Added a variable digital input (0-255 to 0 - 10 s) for arduino/esp cards.
 
 === 03/02/2016 v0.9
 
-- Amélioration de la doc.
+-Improvement of the doc
 - Réduction de la charge CPU des démons python, et amélioration de la réactivité.
 -Various fixes.
 - Ajout de vérifications/validations supplémentaires.
 - Ajout du support des sondes DHT (11,21,22) et DS18x20 pour les Arduinos (Ethernet/USB) et ESP8266.
-* (1 sonde max par pin - peut impacter la réactivité de l'arduino.)
+* (1 probe max by pine - can impact the responsiveness of the arduino).
 - Ajout d'un slider sur les commandes pwm et changement de valeur à la volée (scenarii).
 - Amélioration de la page de configuration du plugin.
 
 === 12/01/2016 v0.8
 
-- Amélioration de la doc.
+-Improvement of the doc
 - Améliorations globale des démons python.
-- Correctifs cosmétiques.
+-Various fixes.
 - Ajout du retour d'état des commandes 'action'.
 - Amélioration des sketchs Arduinos (Ethernet/USB) et ESP8266.
 
 === 07/01/2016 v0.75
 
-- Amélioration de la doc.
+-Improvement of the doc
 - Amélioration de la gestion du redémarrage des démons en cas de reboot de plusieurs Jeedom esclaves en même temps.
-- Correctifs mineurs.
+-Various fixes.
 
 === 06/01/2016 v0.7
 
-- Correctifs mineurs sur les commandes.
+-Various fixes.
 - Correction d'un bug affectant les piFaces en piRack.
 -Improvement of the recovery of the values of the counters on the demons.
 - Ajout de plus de flexibilité dans la communication entre sketchs/démons et Jeedom.
 
 === 03/01/2016 v0.6
 
-- Correctifs mineurs.
-- Amélioration de la doc.
+-Various fixes.
+-Improvement of the doc
 - Ajout du support de la carte ESP8266-01.
 
 === 01/01/2016
 
 - Correction d'un bug sur le démon python ArduinoUSB.
-- Correctif mineur du plugin.
+-Various fixes on plugin and demons.
 
 === 31/12/2015
 
@@ -110,4 +110,4 @@
 
 === 20/12/2015
 
-- Création du plugin Jeedouino.
+- Creation of the Jeedouino plugin .

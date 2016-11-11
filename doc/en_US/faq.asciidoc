@@ -164,7 +164,11 @@ This will avoid the generation of unnecessary commands and to load too muwh Jeed
 In pull_up, the state of the input by default is HIGH (= 1), so put it to LOW (= 0) to trigger a signal. +
 In pull_down, sate of the input by default is LOW (= 0), then put it at HIGH (= 1) to trigger a signal.
 
-*** *Pulse meter* (water meter, power meter, ...)
+*** *Compteur d'impulsions* (Compteur d'Eau , Electricité, Gaz, Portes, Fenêtres, Barrières IR, ... ) +
+Il est possible d'initialiser le compteur a une valeur donnée. +
+Le bouton Reset sert a l'envoyer à la carte.
+
+image::../images/compteur.png[]
 *** *Digital Input in PULL-UP* (push button, switch, opening sensor, motion sensor ..)
 *** *Digital Input Variable (0-255 on 10s)* (Pushbutton maintained from 0 to 10s to control via a dimmer scenario eg)
 *** *HC-SR04 Echo* In connection with the trigger pin, retrieve the distance measured by the ultrasonic sensor.

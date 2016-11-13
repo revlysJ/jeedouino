@@ -39,7 +39,7 @@
 -Added Python-Serial dependence.
 -Improvements to the configuration page with adding tabs (tabs) for clarity.
 -Note: Some tabs and options are visible only in the expert mode of Jeedom.
-- Ajout de l'option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.
+-Added option JeedouinoExt (RPI deported without Jeedom) for advanced users, for TESTS only.
 
 === 04/04/2016 v0.94
 
@@ -52,8 +52,8 @@
 
 -Improvement of the doc
 -Various fixes on plugin, skits, and demons.
-- Ajout du support de la carte NodeMCU.
-- Ajout du support de Docker ( cf. FAQ )
+-Added support of the NodeMCU card.
+-Added support of Docker (see FAQ)
 
 === 02/03/2016 v0.92
 
@@ -64,7 +64,7 @@
 === 03/02/2016 v0.9
 
 -Improvement of the doc
-- Réduction de la charge CPU des démons python, et amélioration de la réactivité.
+-Reduction of the load CPU of the python demons, and improvement of responsiveness.
 -Various fixes.
 - Ajout de vérifications/validations supplémentaires.
 - Ajout du support des sondes DHT (11,21,22) et DS18x20 pour les Arduinos (Ethernet/USB) et ESP8266.
@@ -75,7 +75,7 @@
 === 12/01/2016 v0.8
 
 -Improvement of the doc
-- Améliorations globale des démons python.
+-Overall improvements to the python demons.
 -Various fixes.
 - Ajout du retour d'état des commandes 'action'.
 - Amélioration des sketchs Arduinos (Ethernet/USB) et ESP8266.

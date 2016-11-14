@@ -58,7 +58,7 @@
 === 02/03/2016 v0.92
 
 -Various fixes on plugin and demons.
-- Ajout d'un ResetCompteur pour les cartes arduino/esp.
+-Added a ResetCompteur for arduino/esp cards.
 -Added a variable digital input (0-255 to 0 - 10 s) for arduino/esp cards.
 
 === 03/02/2016 v0.9
@@ -66,47 +66,47 @@
 -Improvement of the doc
 -Reduction of the load CPU of the python demons, and improvement of responsiveness.
 -Various fixes.
-- Ajout de vérifications/validations supplémentaires.
-- Ajout du support des sondes DHT (11,21,22) et DS18x20 pour les Arduinos (Ethernet/USB) et ESP8266.
+-Added additional verifications/validations.
+-Added support of the DHT (11,21,22) and DS18x20 for Arduinos (Ethernet/USB) and ESP8266 probes.
 * (1 probe max by pine - can impact the responsiveness of the arduino).
-- Ajout d'un slider sur les commandes pwm et changement de valeur à la volée (scenarii).
-- Amélioration de la page de configuration du plugin.
+-Added a slider on pwm and orders change in value on the fly (scenarios).
+- Improve the configuration page of the plugin
 
 === 12/01/2016 v0.8
 
 -Improvement of the doc
 -Overall improvements to the python demons.
 -Various fixes.
-- Ajout du retour d'état des commandes 'action'.
-- Amélioration des sketchs Arduinos (Ethernet/USB) et ESP8266.
+-Added the return status of the orders 'action'.
+- Improvements to USB, LAN, and ESP8266 skits:
 
 === 07/01/2016 v0.75
 
 -Improvement of the doc
-- Amélioration de la gestion du redémarrage des démons en cas de reboot de plusieurs Jeedom esclaves en même temps.
+- Improvement of the management of the restart of the demons in the event of resetting several Jeedom slaves at the same time.
 -Various fixes.
 
 === 06/01/2016 v0.7
 
 -Various fixes.
-- Correction d'un bug affectant les piFaces en piRack.
+- Fixed a bug affecting piRacks.
 -Improvement of the recovery of the values of the counters on the demons.
-- Ajout de plus de flexibilité dans la communication entre sketchs/démons et Jeedom.
+- Added more flexibility in communication between sketches / demons and Jeedom
 
 === 03/01/2016 v0.6
 
 -Various fixes.
 -Improvement of the doc
-- Ajout du support de la carte ESP8266-01.
+- Added support of the ESP8266-01.
 
 === 01/01/2016
 
-- Correction d'un bug sur le démon python ArduinoUSB.
+- Fixed a bug on the ArduinoUSB python daemon.
 -Various fixes on plugin and demons.
 
 === 31/12/2015
 
-- Ajout de screenshots pour le market.
+- Added screenshots for the market.
 
 === 20/12/2015
 

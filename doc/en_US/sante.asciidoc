@@ -6,7 +6,7 @@ The plugin shows Ok if all daemons and dependencies are functional. +
 It is possible to open the configuration of the plugin directly page by clicking Jeedouino.
 
 Image:... /images/sante1.png]
-Il est possible de voir les états des équipements directement en cliquant sur l'icone à droite de Jeedouino. 
+It is possible to see the States of equipment directly by clicking on the icone right of Jeedouino. 
 
 ==== States of plugin equipments
 

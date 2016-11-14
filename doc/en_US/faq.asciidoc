@@ -2,7 +2,7 @@
 
 ==== User Sketchs and user commands
 
-===== Entêtes  des sketchs
+===== Headings of sketches
 With the news fonctionnalities, sketch vould become too heavy for the smaller Arduinos. +
 So it is possible to disable some in order to light the sketchs if needed. +
 You will find this possibility in the sketchs header : 
@@ -26,11 +26,11 @@ or to force if necessary.
 [TIP]
 *#define NODHCP 0*					// 0 for IP via DHCP, 1 for IP fixed in the sketch.
 
-===== Sketchs et pins Utilisateur
+===== User sketchs and pins 
 For your personal sketches, just look in them, they are fitted in with examples. +
 [NOTE]
-Pensez à activer l'option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l'onglet Pins/GPIO de votre équipement. +
-Elles apparaîtrons dans l'onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+Remember to activate the option in the plugin configuration page, and select the number of pins you want on the Pins / GPIO tab of your device. +
+They will appear in the User Pins tab (next to that of the Material Pins) in the modal window.
 
 Commands related side Jeedom, just set them up as for material pine.
 
@@ -164,9 +164,9 @@ This will avoid the generation of unnecessary commands and to load too muwh Jeed
 In pull_up, the state of the input by default is HIGH (= 1), so put it to LOW (= 0) to trigger a signal. +
 In pull_down, sate of the input by default is LOW (= 0), then put it at HIGH (= 1) to trigger a signal.
 
-*** *Compteur d'impulsions* (Compteur d'Eau , Electricité, Gaz, Portes, Fenêtres, Barrières IR, ... ) +
-Il est possible d'initialiser le compteur a une valeur donnée. +
-Le bouton Reset sert a l'envoyer à la carte.
+*** *Pulse counter* (Water meter, Electricity, Gas, Doors, Windows, IR gates, ...) +
+It is possible to initialize the counter to a given value. +
+The Reset button is used to send it to the card.
 
 image::../images/compteur.png[]
 *** *Digital Input in PULL-UP* (push button, switch, opening sensor, motion sensor ..)

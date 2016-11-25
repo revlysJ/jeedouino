@@ -2,19 +2,19 @@
 = Jeedouino v0.97
 
 == Beschreibung
-Ce plugin vous permet de contrôler de différents manières les pins entrées/sorties des cartes suivantes : 
+Dieser Plugin ermöglicht es Ihnen, die verschiedenen Arten von Ein-/Ausgänge der folgenden Karten zu kontrollieren:  
 
-* Arduinos (différents modèles) branchés en USB sur Raspberry PI.
-* Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, ENC28J60) sur votre réseau.
-* les ESP8266 / NodeMCU / Wemos (wifi).
-* les GPIO du Raspberry PI.
-* les cartes PiFace sur Raspberry PI.
-* les cartes IO PiPlus et les MCP23017 sur Raspberry PI.
+* Arduinos (verschiedene Modelle) angeschlossen an USB von Raspberry PI.
+* Arduinos (verschiedene Modelle) mit Ethernet shield (W5100, ENC28J60) angeschlossen an Ihrem Netz.
+* Der ESP8266 / NodeMCU / Wemos (wifi).
+* Den GPIO vom Raspberry PI.
+* Der PiFace-Karte am Raspberry PI.
+* Der Karten, IO-Pi-Plus und MCP23017 auf Raspberry PI.
 
 
-Il fonctionne en local ou en déporté (mode esclave de Jeedom) sur votre réseau.
+Es funktioniert lokal oder entfernt (Slave Modus von Jeedom) auf Ihrem Netz.
 
-Il est compatible avec le nouveau fonctionnement maître/esclave (plugin Jeedom Link) de Jeedom.
+Es ist mit den neuen Funktionen Meister/Sklaven (plugin Jeedom Link) von Jeedom kompatibel. 
 
 '''
 == Installation

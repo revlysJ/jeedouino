@@ -1,4 +1,4 @@
-=== 02/12/2016 v0.98
+=== 03/12/2016 v0.98
 
 - Correction BootMode sur démon PiGPIO.
 - Ajout BootMode sur démon PiPlus (pour tests).

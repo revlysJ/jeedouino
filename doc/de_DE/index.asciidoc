@@ -1,5 +1,5 @@
 :icons:
-= Jeedouino v0.97
+= Jeedouino v0.98
 
 == Beschreibung
 Dieser Plugin ermöglicht es Ihnen, die verschiedenen Arten von Ein-/Ausgänge der folgenden Karten zu kontrollieren:  

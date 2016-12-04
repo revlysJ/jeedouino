@@ -1,3 +1,11 @@
+=== 03/12/2016 v0.98
+
+- Correction BootMode sur démon PiGPIO.
+- Ajout BootMode sur démon PiPlus (pour tests).
+- Corrections sketchs.
+- Corrections Plugin.
+-Various improvements.
+
 === v0.97.2 15/10/2016
 
 -Suppression of the bootstrapswitch (button On / Off) for compatibility with Jeedom.
@@ -12,7 +20,7 @@
 -Added the ability to create virtual orders automatically in different virtual in order to better manage multiple facilities.
 -Fixes and improvements on plugin and preparation to the disappearance of master / slave of Jeedom.
 -Added update of the system (necessary for the gpio/dht/ds18b20) during the installation of the dependencies.
--Fixes and improvements on all the demons (added an option to auto restart for example).
+- Correctifs et améliorations sur tous les démons (ajout d'une option de redémarrage automatique par ex).
 -Improvements to USB, LAN, and ESP skits:
 -Arduino/ESP: added support for a laison series teleinfo.
 -Arduino/ESP: added support of LCD display type 16 x 2 for transmissions of messages from Jeedom.

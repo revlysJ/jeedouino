@@ -87,6 +87,9 @@ image::../images/ConfDemons.png[]
 Les arduinos/ESP/NodeMCU/Wemos en réseau n'ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
 Uniquement ceux des équipements créés.
 
+[IMPORTANT]
+Pour l'instant, les sketchs ne sont compatibles qu'avec l'ide de Arduino.cc (v1.6.7 recommandée).
+
 image::../images/configuration3.png[]
 
 ==== Onglet : Configuration Docker 

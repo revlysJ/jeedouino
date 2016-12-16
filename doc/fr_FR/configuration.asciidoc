@@ -27,6 +27,9 @@ Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flas
 
 * https://www.arduino.cc/en/Main/Software
 
+[IMPORTANT]
+Pour l'instant, les sketchs ne sont compatibles qu'avec l'ide de Arduino.cc. V1.6.7 recommandé.
+
 * Pour les cartes ESP8266, NodeMCU, Wemos vous pouvez aussi utiliser l'IDE Arduino en y ajoutant le support ESP8266.
 
 ** http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html

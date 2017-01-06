@@ -1,10 +1,10 @@
-=== Installation et mise à jour du plugin
+=== Installation und Update des Plugins
 [IMPORTANT]
 Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.
 Un reboot peut même être nécéssaire dans certains cas. +
 Il suffit de suivre les logs des dépendances pour surveiller la progression. 
 
-==== Installation du plugin
+==== Plugin Installation
 
 Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
 Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n'y a rien de plus a faire.
@@ -14,7 +14,7 @@ Pour les Arduinos connectées en USB sur le R.PI, les cartes PiFace, et les GPIO
 
 image::../images/configuration.png[]
 
-==== Mise à jour du plugin
+==== Update des Plugins
 
 Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier. + 
 Ensuite vous pouvez faire celle du Jeedom maître.

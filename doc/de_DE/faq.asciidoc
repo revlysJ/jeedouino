@@ -151,7 +151,7 @@ Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 ===== Pins Entrées (Input): 
 * *Analogiques*
 ** Permet de brancher un capteur analogique.
-** Exemples:
+** Beispiel:
 *** Capteur de distance IR
 *** Capteur d’intensité sonore
 *** Capteur de lumière ambiante

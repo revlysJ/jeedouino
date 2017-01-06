@@ -1,4 +1,4 @@
-=== Création des équipements
+=== Geräte erstellen
 
 La configuration des équipements Jeedouino est accessible à partir du menu Plugins : 
 
@@ -114,7 +114,7 @@ Il est possible d'activer ou non la génération automatique des commandes ALL_
 
 image::../images/ALLpins.png[]
 
-==== Commandes 
+==== Befehle 
 
 image::../images/jeedouino_screenshot5.png[]
 * *Sauvegarde de l'équipement* : Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.

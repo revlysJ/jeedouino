@@ -1,6 +1,6 @@
-=== Page santé dans Jeedom
+=== Jeedom Gesundheitsseite
 
-==== Etat des démons du plugin
+==== Zustand des Plugin Dämon
 
 Le plugin indique Ok si tous les démons et dépendances sont fonctionnels. +
 Il est possible d'ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.

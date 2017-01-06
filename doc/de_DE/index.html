@@ -419,17 +419,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_beschreibung">1. Beschreibung</a></li>
 <li><a href="#_installation">2. Installation</a>
 <ul class="sectlevel2">
-<li><a href="#_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</a>
+<li><a href="#_installation_und_update_des_plugins">2.1. Installation und Update des Plugins</a>
 <ul class="sectlevel3">
-<li><a href="#_installation_du_plugin">2.1.1. Installation du plugin</a></li>
-<li><a href="#_mise_à_jour_du_plugin">2.1.2. Mise à jour du plugin</a></li>
+<li><a href="#_plugin_installation">2.1.1. Plugin Installation</a></li>
+<li><a href="#_update_des_plugins">2.1.2. Update des Plugins</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_konfiguration">3. Konfiguration</a>
 <ul class="sectlevel2">
-<li><a href="#_configuration_du_plugin">3.1. Configuration du plugin</a>
+<li><a href="#_plugin_konfiguration">3.1. Plugin Konfiguration</a>
 <ul class="sectlevel3">
 <li><a href="#_onglet_options">3.1.1. Onglet : Options</a></li>
 <li><a href="#_onglet_dépendances">3.1.2. Onglet : Dépendances</a></li>
@@ -442,10 +442,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_verwendung">4. Verwendung</a>
 <ul class="sectlevel2">
-<li><a href="#_création_des_équipements">4.1. Création des équipements</a>
+<li><a href="#_geräte_erstellen">4.1. Geräte erstellen</a>
 <ul class="sectlevel3">
 <li><a href="#_configuration_des_pins">4.1.1. Configuration des pins</a></li>
-<li><a href="#_commandes">4.1.2. Commandes</a></li>
+<li><a href="#_befehle">4.1.2. Befehle</a></li>
 <li><a href="#_widgets">4.1.3. Widgets</a></li>
 </ul>
 </li>
@@ -453,9 +453,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_gesundheit">5. Gesundheit</a>
 <ul class="sectlevel2">
-<li><a href="#_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</a>
+<li><a href="#_jeedom_gesundheitsseite">5.1. Jeedom Gesundheitsseite</a>
 <ul class="sectlevel3">
-<li><a href="#_etat_des_démons_du_plugin">5.1.1. Etat des démons du plugin</a></li>
+<li><a href="#_zustand_des_plugin_dämon">5.1.1. Zustand des Plugin Dämon</a></li>
 <li><a href="#_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</a></li>
 </ul>
 </li>
@@ -544,7 +544,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_installation">2. Installation</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_installation_et_mise_à_jour_du_plugin">2.1. Installation et mise à jour du plugin</h3>
+<h3 id="_installation_und_update_des_plugins">2.1. Installation und Update des Plugins</h3>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -560,7 +560,7 @@ Il suffit de suivre les logs des dépendances pour surveiller la progression.
 </table>
 </div>
 <div class="sect3">
-<h4 id="_installation_du_plugin">2.1.1. Installation du plugin</h4>
+<h4 id="_plugin_installation">2.1.1. Plugin Installation</h4>
 <div class="paragraph">
 <p>Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
 Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n&#8217;y a rien de plus a faire.
@@ -576,7 +576,7 @@ De même si vous n&#8217;avez qu&#8217;un Jeedom.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_mise_à_jour_du_plugin">2.1.2. Mise à jour du plugin</h4>
+<h4 id="_update_des_plugins">2.1.2. Update des Plugins</h4>
 <div class="paragraph">
 <p>Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier.<br>
 Ensuite vous pouvez faire celle du Jeedom maître.</p>
@@ -606,9 +606,9 @@ Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les
 <h2 id="_konfiguration">3. Konfiguration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_configuration_du_plugin">3.1. Configuration du plugin</h3>
+<h3 id="_plugin_konfiguration">3.1. Plugin Konfiguration</h3>
 <div class="paragraph">
-<p>Sur la page configuration du plugin</p>
+<p>Auf der Konfigurationsseite des Plugins</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -902,7 +902,7 @@ Pour l&#8217;instant, les sketchs ne sont compatibles qu&#8217;avec l&#8217;ide 
 <h2 id="_verwendung">4. Verwendung</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_création_des_équipements">4.1. Création des équipements</h3>
+<h3 id="_geräte_erstellen">4.1. Geräte erstellen</h3>
 <div class="paragraph">
 <p>La configuration des équipements Jeedouino est accessible à partir du menu Plugins :</p>
 </div>
@@ -1270,7 +1270,7 @@ Il est désormais possible de configurer les generic type directement, et d&#821
 </div>
 </div>
 <div class="sect3">
-<h4 id="_commandes">4.1.2. Commandes</h4>
+<h4 id="_befehle">4.1.2. Befehle</h4>
 <div class="imageblock">
 <div class="content">
 <img src="../images/jeedouino_screenshot5.png" alt="jeedouino screenshot5">
@@ -1359,9 +1359,9 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 <h2 id="_gesundheit">5. Gesundheit</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_page_santé_dans_jeedom">5.1. Page santé dans Jeedom</h3>
+<h3 id="_jeedom_gesundheitsseite">5.1. Jeedom Gesundheitsseite</h3>
 <div class="sect3">
-<h4 id="_etat_des_démons_du_plugin">5.1.1. Etat des démons du plugin</h4>
+<h4 id="_zustand_des_plugin_dämon">5.1.1. Zustand des Plugin Dämon</h4>
 <div class="paragraph">
 <p>Le plugin indique Ok si tous les démons et dépendances sont fonctionnels.<br>
 Il est possible d&#8217;ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.</p>
@@ -2128,7 +2128,7 @@ Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 <p>Permet de brancher un capteur analogique.</p>
 </li>
 <li>
-<p>Exemples:</p>
+<p>Beispiel:</p>
 <div class="ulist">
 <ul>
 <li>

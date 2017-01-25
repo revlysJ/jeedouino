@@ -431,11 +431,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_plugin_konfiguration">3.1. Plugin Konfiguration</a>
 <ul class="sectlevel3">
-<li><a href="#_onglet_options">3.1.1. Onglet : Options</a></li>
-<li><a href="#_onglet_dépendances">3.1.2. Onglet : Dépendances</a></li>
-<li><a href="#_onglet_démons">3.1.3. Onglet : Démons</a></li>
-<li><a href="#_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.4. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</a></li>
-<li><a href="#_onglet_configuration_docker">3.1.5. Onglet : Configuration Docker</a></li>
+<li><a href="#_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.1. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</a></li>
+<li><a href="#_onglet_configuration_docker">3.1.2. Onglet : Configuration Docker</a></li>
 </ul>
 </li>
 </ul>
@@ -444,7 +441,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_geräte_erstellen">4.1. Geräte erstellen</a>
 <ul class="sectlevel3">
-<li><a href="#_configuration_des_pins">4.1.1. Configuration des pins</a></li>
+<li><a href="#_pin_konfiguration">4.1.1. Pin Konfiguration</a></li>
 <li><a href="#_befehle">4.1.2. Befehle</a></li>
 <li><a href="#_widgets">4.1.3. Widgets</a></li>
 </ul>
@@ -456,7 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_jeedom_gesundheitsseite">5.1. Jeedom Gesundheitsseite</a>
 <ul class="sectlevel3">
 <li><a href="#_zustand_des_plugin_dämon">5.1.1. Zustand des Plugin Dämon</a></li>
-<li><a href="#_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</a></li>
+<li><a href="#_plugin_gerätezustand">5.1.2. Plugin Gerätezustand</a></li>
 </ul>
 </li>
 </ul>
@@ -485,9 +482,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_faq_2">7.1. FAQ</a>
 <ul class="sectlevel3">
-<li><a href="#_sketchs_personnels_modifiables_et_commandes_utilisateur">7.1.1. Sketchs Personnels/Modifiables et Commandes Utilisateur</a></li>
+<li><a href="#_persönliche_modifizierbare_sketche_und_benutzerbefehle">7.1.1. Persönliche/modifizierbare Sketche und Benutzerbefehle</a></li>
 <li><a href="#_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</a></li>
-<li><a href="#_groupes_virtuels">7.1.3. Groupes Virtuels</a></li>
+<li><a href="#_virtuelle_gruppen">7.1.3. Virtuelle Gruppen</a></li>
 <li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</a></li>
 <li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ne_sont_pas_directement_fonctionnels_après_un_reboot">7.1.5. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.</a></li>
 <li><a href="#_les_démons_ne_démarrent_pas_aprés_un_reboot">7.1.6. Les démons  ne démarrent pas aprés un reboot ?</a></li>
@@ -552,9 +549,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.
-Un reboot peut même être nécéssaire dans certains cas.<br>
-Il suffit de suivre les logs des dépendances pour surveiller la progression.
+Bei eine Installation oder ein Update des Plugins, auf einem etwas älteren System, kann die Aktualisierung etwas dauern.
+Ein Neustart kann in einigen Fällen notwendig sein.<br>
+Folgen Sie einfach den Abhängigkeits Protokollen, um den Fortschritt zu überwachen.
 </td>
 </tr>
 </table>
@@ -562,9 +559,9 @@ Il suffit de suivre les logs des dépendances pour surveiller la progression.
 <div class="sect3">
 <h4 id="_plugin_installation">2.1.1. Plugin Installation</h4>
 <div class="paragraph">
-<p>Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
-Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n&#8217;y a rien de plus a faire.
-De même si vous n&#8217;avez qu&#8217;un Jeedom.</p>
+<p>Nach dem Download des Plugins auf Ihr Jeedom Master, müssen Sie es aktivieren.
+Wenn Sie nur Arduino-Boards mit Netzwerk Schild verwenden möchten, gibt es nichts mehr zu tun.
+Ebenso, wenn Sie nur eine Jeedom haben.</p>
 </div>
 <div class="paragraph">
 <p>Pour les Arduinos connectées en USB sur le R.PI, les cartes PiFace, et les GPIO du R.PI, il faudra aussi installer et activer le plugin sur les jeedom esclaves concernés uniquement.</p>
@@ -578,8 +575,8 @@ De même si vous n&#8217;avez qu&#8217;un Jeedom.</p>
 <div class="sect3">
 <h4 id="_update_des_plugins">2.1.2. Update des Plugins</h4>
 <div class="paragraph">
-<p>Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier.<br>
-Ensuite vous pouvez faire celle du Jeedom maître.</p>
+<p>Wenn Sie mehrere Jeedom haben, ist es ratsam, zuerst die Jeedom Slave zu aktualisieren.<br>
+Dann können Sie es auf dem Jeedom Master tun.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -588,7 +585,7 @@ Ensuite vous pouvez faire celle du Jeedom maître.</p>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Une mise à jour peut interférer momentanément sur le fonctionnement des équipement liés.
+Ein Update kann vorübergehend die Funktion des verbunden Gerätes beeinflussen.
 </td>
 </tr>
 </table>
@@ -615,12 +612,12 @@ Dans le cas d&#8217;Arduino/ESP/NodeMCU/Wemos, il peut être nécéssaire de les
 <img src="../images/ConfOptions.png" alt="ConfOptions">
 </div>
 </div>
-<div class="sect3">
-<h4 id="_onglet_options">3.1.1. Onglet : Options</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Vous pouvez activer les logs (attention trés verbeux).</p>
+<div class="literalblock">
+<div class="content">
+<pre> ==== Registerkarten : Optionen
+* Vous pouvez activer les logs (attention trés verbeux).</pre>
+</div>
+</div>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -645,7 +642,8 @@ Il faut aussi activer les logs de niveau "Debug" dans Jeedom ( Menu Configuratio
 </tr>
 </table>
 </div>
-</li>
+<div class="ulist">
+<ul>
 <li>
 <p>Il est possible d&#8217;activer les groupes virtuels (création automatique de commandes dans des virtuels pour simplifier vos équipements/installations).</p>
 <div class="admonitionblock note">
@@ -675,12 +673,14 @@ Cette option n&#8217;apparaît que si vous avez le mode expert d&#8217;activé d
 </tr>
 </table>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>==== Registerkarten : Abhängigkeiten</pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_onglet_dépendances">3.1.2. Onglet : Dépendances</h4>
 <div class="imageblock">
 <div class="content">
 <img src="../images/configuration0.png" alt="configuration0">
@@ -799,9 +799,11 @@ Deux raccourcis sont présents pour aller directement voir les logs du plugin, e
 </tr>
 </table>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>==== Registerkarten : Daemon</pre>
 </div>
-<div class="sect3">
-<h4 id="_onglet_démons">3.1.3. Onglet : Démons</h4>
+</div>
 <div class="paragraph">
 <p><em>Exemple de différents démons possibles:</em></p>
 </div>
@@ -858,9 +860,8 @@ Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement 
 <img src="../images/ConfDemons.png" alt="ConfDemons">
 </div>
 </div>
-</div>
 <div class="sect3">
-<h4 id="_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.4. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</h4>
+<h4 id="_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.1. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</h4>
 <div class="paragraph">
 <p>Les arduinos/ESP/NodeMCU/Wemos en réseau n&#8217;ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
 Uniquement ceux des équipements créés.</p>
@@ -884,7 +885,7 @@ Pour l&#8217;instant, les sketchs ne sont compatibles qu&#8217;avec l&#8217;ide 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_configuration_docker">3.1.5. Onglet : Configuration Docker</h4>
+<h4 id="_onglet_configuration_docker">3.1.2. Onglet : Configuration Docker</h4>
 <div class="paragraph">
 <p>Si votre Jeedom est sous Docker, il faut activer l&#8217;option, et renseigner l&#8217;IP de l&#8217;hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).</p>
 </div>
@@ -904,7 +905,7 @@ Pour l&#8217;instant, les sketchs ne sont compatibles qu&#8217;avec l&#8217;ide 
 <div class="sect2">
 <h3 id="_geräte_erstellen">4.1. Geräte erstellen</h3>
 <div class="paragraph">
-<p>La configuration des équipements Jeedouino est accessible à partir du menu Plugins :</p>
+<p>Die Jeedouino Geräte Konfiguration ist erreichbar über das Plugin-Menü :</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -912,7 +913,7 @@ Pour l&#8217;instant, les sketchs ne sont compatibles qu&#8217;avec l&#8217;ide 
 </div>
 </div>
 <div class="paragraph">
-<p>Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) :</p>
+<p>Dies ist die Seite des Jeedouino Plugins (hier bereits mit Geräten) :</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -926,13 +927,13 @@ Pour l&#8217;instant, les sketchs ne sont compatibles qu&#8217;avec l&#8217;ide 
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche permet de faire apparaître un menu d&#8217;accès rapide (vous pouvez, à partir de votre profil, le laisser toujours visible).
+Wie an vielen Stellen in Jeedom, bewegt man die Maus ganz nach links, erscheint ein Schnellzugangs Menü (Sie können es in Ihrem Profil immer sichtbar einstellen).
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez :</p>
+<p>Sobald Sie auf die Schaltfläche + (ein neues Gerät hinzufügen) geklickt und dann einen Namen für das Gerät eingegeben haben, sehen Sie :</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -940,31 +941,31 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 </div>
 </div>
 <div class="paragraph">
-<p>Vous retrouvez ici toute la configuration de votre équipement :</p>
+<p>Hier finden Sie die ganze Konfiguration des Geräts:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Nom de l&#8217;équipement</strong> : nom de votre équipement Jeedouino,</p>
+<p><strong>Gerätename</strong> : Name des Jeedouino Geräts,</p>
 </li>
 <li>
-<p><strong>Objet parent</strong> : indique l&#8217;objet parent auquel appartient l&#8217;équipement,</p>
+<p><strong>Elternobjekt</strong> : gibt das übergeordnete Objekt an, das zum Gerät gehört,</p>
 </li>
 <li>
-<p><strong>Activer</strong> : permet de rendre votre équipement actif,</p>
+<p><strong>Aktivieren</strong> : erlaubt es, Ihre Gerät zu aktivieren,</p>
 </li>
 <li>
-<p><strong>Visible</strong> : rend votre équipement visible sur le dashboard.</p>
+<p><strong>Sichtbar</strong> : macht Ihr Gerät auf dem Armaturenbrett sichtbar.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>En-dessous vous retrouvez le paramétrage de votre équipement :</p>
+<p>Darunter finden Sie die Parametrierung Ihrer Geräte wieder :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Modèle</strong> : le Modèle de la carte que vous souhaitez controler,</p>
+<p><strong>Model</strong> : Das Modell der Karte, die Sie steuern möchten,</p>
 </li>
 </ul>
 </div>
@@ -974,7 +975,7 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 </div>
 </div>
 <div class="paragraph">
-<p><em>Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l&#8217;identifier (Si vous avez un piRack par ex.)</em></p>
+<p><em>Für PiFace Karte, wird eine Nummer (0 bis 3) benötigt, zur Identifizierung (Wenn Sie z. B. eine PiRack haben)</em></p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -984,10 +985,10 @@ Comme à beaucoup d&#8217;endroits sur Jeedom, placer la souris tout à gauche p
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Port de connection</strong> : type de connection USB ou Réseau,</p>
+<p><strong>Verbindungs Typ</strong> : Verbindung Typ USB oder Netzwerk-,</p>
 </li>
 <li>
-<p><strong>Adresse IP et Port</strong> : pour la connection à la carte via le réseau,</p>
+<p><strong>IP Adresse und Port</strong> : für die Verbindung der Karte über das Netzwerk,</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1011,7 +1012,7 @@ Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Le port doit aussi être différent de celui du Jeedom hôte.
+Der Port muss sich vom Jeedom Host unterscheiden.
 </td>
 </tr>
 </table>
@@ -1023,8 +1024,8 @@ Le port doit aussi être différent de celui du Jeedom hôte.
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<em>Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom.</em><br>
-Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adresse IP du Jeedom principal (maître).
+<em>Als nächstes im Browser wird ein Pfeil angezeigt, um in Jeedom eine IP-Adresse direkt auswählen.</em><br>
+Sie können auch <em>lokal</em> oder <em>lokalhost</em> für die IP-Adresse des primär Jeedom (Master) verwenden.
 </td>
 </tr>
 </table>
@@ -1037,14 +1038,14 @@ Vous pouvez aussi utiliser <em>local</em> ou <em>localhost</em> pour l&#8217;adr
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Port USB</strong> : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,</p>
+<p><strong>USB Port</strong> : Lokale oder Remote, für den Anschluss vom Jeedom Master oder Slave an die Karte, über den USB-Port,</p>
 </li>
 <li>
-<p><strong>Port local/Port déporté</strong> : Port USB physique ou est connectée la carte,</p>
+<p><strong>Lokal Port/Remote Port</strong> : physischer USB-Anschluss oder eine Karte ist angeschlossen,</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.</p>
+<p>Wenn Sie den USB-Port von der RPI-Karte trennen/verbinden, müssen Sie den entsprechenden Daemon neu starten.</p>
 </li>
 </ul>
 </div>
@@ -1080,7 +1081,7 @@ Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut v
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Le port doit aussi être différent de celui du Jeedom hôte.
+Der Port muss sich vom Jeedom Host unterscheiden.
 </td>
 </tr>
 </table>
@@ -1154,7 +1155,7 @@ Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espac
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration_des_pins">4.1.1. Configuration des pins</h4>
+<h4 id="_pin_konfiguration">4.1.1. Pin Konfiguration</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1169,7 +1170,7 @@ Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espac
 <div class="ulist">
 <ul>
 <li>
-<p>Entrées: Analogiques, Digitales, Compteur d&#8217;impulsions</p>
+<p>Eingänge: Analog, Digital, Impulszähler</p>
 </li>
 <li>
 <p>Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..).</p>
@@ -1188,7 +1189,7 @@ Les <em>SSID</em> et <em>mot de passe</em> ne doivent pas contenir d&#8217;espac
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-<strong><em>Les Pins seront configurables uniquement après une première sauvegarde de votre équipement.</em></strong><br>
+<strong><em>Die Pins können erst nach einem ersten speichern des Gerätes konfiguriert werden.</em></strong><br>
 Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l&#8217;équipement générera toutes les commandes nécéssaires.
 </td>
 </tr>
@@ -1202,7 +1203,7 @@ Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sa
 </td>
 <td class="content">
 Il n&#8217;est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
-Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
+Das wird die Erstellung unnötiger Befehle vermeiden und Jeedom nicht zu sehr beladen.
 </td>
 </tr>
 </table>
@@ -1234,32 +1235,32 @@ Il est désormais possible de configurer les generic type directement, et d&#821
 <div class="ulist">
 <ul>
 <li>
-<p>Onglet Pins / GPIO<br></p>
+<p>Registerkarte Pins / GPIO<br></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Permet d&#8217;ajouter un certain nombre de pins utilisateur pour vos sketch Arduinos/ESPs : <em>0 à 100 max</em><br></p>
+<p>Erlaubt, einige Benutzer Pins für Ihre Arduino/ESP Sketche hinzuzufügen : <em>0 bis max 100</em><br></p>
 </div>
 <div class="paragraph">
-<p>Il est possible d&#8217;activer ou non la génération automatique des commandes ALL_</p>
+<p>Es ist möglich, die automatische Generierung der ALL_ Befehle zu aktivieren oder zu deaktivieren</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>ALL_LOW	Met toutes les pins output à LOW</p>
+<p>ALL_LOW	stellt alle Ausgangs Pins auf LOW</p>
 </li>
 <li>
-<p>ALL_HIGH	Met toutes les pins output à HIGH</p>
+<p>ALL_HIGH	stellt alle Ausgangs Pins auf HIGH</p>
 </li>
 <li>
-<p>ALL_SWITCH	Inverse toutes les pins output</p>
+<p>ALL_SWITCH	Invertiert alle Ausgangs Pins</p>
 </li>
 <li>
-<p>ALL_PULSE_LOW	Met toutes les pins output à LOW pendant le temps choisi</p>
+<p>ALL_PULSE_LOW	stellt alle Ausgangs Pins auf LOW, während der ausgewählten Zeit</p>
 </li>
 <li>
-<p>ALL_PULSE_HIGH	Met toutes les pins output à HIGH pendant le temps choisi</p>
+<p>ALL_PULSE_HIGH	stellt alle Ausgangs Pins auf HIGH, während der ausgewählten Zeit</p>
 </li>
 </ul>
 </div>
@@ -1340,10 +1341,10 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 <div class="sect3">
 <h4 id="_widgets">4.1.3. Widgets</h4>
 <div class="paragraph">
-<p>Ce sont ceux par défaut de Jeedom.</p>
+<p>Diese sind Standardmäßig in Jeedom.</p>
 </div>
 <div class="paragraph">
-<p>Les widgets desktop ressemblent à cela :</p>
+<p>Desktop-Widgets sind ähnlich wie dieses :</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1363,8 +1364,8 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 <div class="sect3">
 <h4 id="_zustand_des_plugin_dämon">5.1.1. Zustand des Plugin Dämon</h4>
 <div class="paragraph">
-<p>Le plugin indique Ok si tous les démons et dépendances sont fonctionnels.<br>
-Il est possible d&#8217;ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.</p>
+<p>Das Plugin zeigt "OK" an, wenn alle Dämonen und Abhängigkeiten funktionstüchtig sind.<br>
+Es ist möglich, die Plugin-Konfigurationsseite direkt zu öffnen, indem Sie auf Jeedouino klicken.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1372,14 +1373,14 @@ Il est possible d&#8217;ouvrir la page de configuration du plugin directement en
 </div>
 </div>
 <div class="paragraph">
-<p>Il est possible de voir les états des équipements directement en cliquant sur l&#8217;icone à droite de Jeedouino.</p>
+<p>Es ist möglich, die Zustände der Geräte zu sehen, klicken Sie auf das Symbol auf der rechten Seite von Jeedouino.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_etats_des_équipements_du_plugin">5.1.2. Etats des équipements du plugin</h4>
+<h4 id="_plugin_gerätezustand">5.1.2. Plugin Gerätezustand</h4>
 <div class="paragraph">
-<p>La liste donne tous les équipements avec leurs ID, IP, Ports, Modèles et dates de communication.<br>
-Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa page.</p>
+<p>Die Liste enthält alle Geräte mit ihrer ID, IP, Ports, Model und Kommunikationsdaten.
+Sie können auf den Namen des Gerätes klicken, um auf dessen Seite zu gelangen.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1387,23 +1388,23 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 </div>
 </div>
 <div class="paragraph">
-<p>Les dates de dernières commnunications sont colorisées:</p>
+<p>Die Zeitpunkte der letzten Kommunikation sind farbig :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Vertes si moins de 2h</p>
+<p>Grüne ist weniger als 2 Stunden</p>
 </li>
 <li>
-<p>Orangées si moins de 24h</p>
+<p>Orange ist weniger als 24 Stunden</p>
 </li>
 <li>
-<p>Rouges au-delà de 24h.</p>
+<p>Rot über 24 Stunden hinaus</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>N.B. Un équipement grisé est un équipement désactivé.</p>
+<p>Hinweis : Ein graues Gerät, ist ein ausgeschaltets Gerät.</p>
 </div>
 <hr>
 </div>
@@ -1418,19 +1419,19 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correction BootMode sur démon PiGPIO.</p>
+<p>Korrektur, BootMode auf PiGPIO Dämon.</p>
 </li>
 <li>
-<p>Ajout BootMode sur démon PiPlus (pour tests).</p>
+<p>BootMode auf PiPlus Daemon hinzugefügt (für Tests).</p>
 </li>
 <li>
-<p>Corrections sketchs.</p>
+<p>Sketchs Korrekturen.</p>
 </li>
 <li>
-<p>Corrections Plugin.</p>
+<p>Plugin Korrekturen.</p>
 </li>
 <li>
-<p>Améliorations diverses.</p>
+<p>Verschiedene Verbesserungen.</p>
 </li>
 </ul>
 </div>
@@ -1440,13 +1441,13 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Suppression des bootstrapswitch (boutons On/Off) pour compatibilité avec Jeedom.</p>
+<p>bootstrapswitch entfernt (Ein/Aus-Tasten) für die Kompatibilität mit Jeedom.</p>
 </li>
 <li>
 <p>Mise à jour des visuels de la doc en conséquence.</p>
 </li>
 <li>
-<p>Correctifs divers.</p>
+<p>verschiedene Korrekturen.</p>
 </li>
 <li>
 <p>Arduino/ESP : Envoie de la trame téléinfo au plugin éponyme.</p>
@@ -1459,49 +1460,47 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Refonte et optimisation de la gestion des démons.</p>
+<p>Redesign und die Verwaltung von Dämonen optimiert.</p>
 </li>
 <li>
-<p>Ajout du support des Generic Type (pour l&#8217;app mobile) en mode automatique ou manuel.</p>
+<p>Zusätzliche Unterstützung für den Generic Typ (für mobile App) im automatischen oder manuellen Modus.</p>
 </li>
 <li>
-<p>Ajout de la possibilité de créér des commandes virtuelles automatiquement dans différents virtuels afin de mieux gérer ses équipements multiples.</p>
+<p>Möglichkeit hinzugefügt, virtuelle Befehle automatisch in unterschiedlichen virtuelle zu erstellen, um seine vielfältigen Geräte besser zu verwalten.</p>
 </li>
 <li>
-<p>Correctifs et améliorations diverses sur plugin et préparation à la disparition du mode maître / esclave de Jeedom.</p>
+<p>Verschiedene Korrekturen und Verbesserungen am Plugin und Vorbereitung auf das entfernen des Master/Slave-Modus von Jeedom.
+Zusatz von System Aktualisierungen (Erforderlich für gpio/dht/DS18B20) beim Installieren der Abhängigkeiten.</p>
 </li>
 <li>
-<p>Ajout de mise à jour du système (nécéssaire pour les gpio/dht/ds18b20) lors de l&#8217;installation des dépendances.</p>
+<p>Fixes und Verbesserungen auf die Dämonen (Option hinzugefügt, um zum Beispiel auto-Neustart).</p>
 </li>
 <li>
-<p>Correctifs et améliorations sur tous les démons (ajout d&#8217;une option de redémarrage automatique par ex).</p>
+<p>Verbesserungen der USB, LAN und ESP Sketche:</p>
 </li>
 <li>
-<p>Améliorations des sketchs USB, LAN et ESP:</p>
+<p>Arduino/ESP : Unterstützung für eine serielle Teleinfo Verbindung.</p>
 </li>
 <li>
-<p>Arduino/ESP : Ajout du support d&#8217;une laison série pour téléinfo.</p>
+<p>Arduino/ESP : Unterstützung von LCD-Display-Typ 16x2 für die Nachrichtenübertragung von Jeedom hinzugefügt.</p>
 </li>
 <li>
-<p>Arduino/ESP : Ajout du support d&#8217;écran LCD type 16x2 pour envois de messages depuis Jeedom.</p>
+<p>Arduino/ESP : Unterstützung der persönlichen Sketche für Benutzer (Details in den Sketche) hinzugefügt.</p>
 </li>
 <li>
-<p>Arduino/ESP : Ajout du support de sketchs perso pour les utilisateurs (détails dans les sketchs).</p>
+<p>Arduino/ESP : Pin/Benutzerbefehle (0 bis 100 Max) für Ihre persönliche Sketchs hinzufügt.</p>
 </li>
 <li>
-<p>Arduino/ESP : Ajout de pins/commandes utilisateur (0 à 100 max) pour vos sketchs perso.</p>
+<p>Arduino/ESP : Hinzugefügt wurde die Fähigkeit in den Sketchen bestimmte Funktionen zu aktivieren/deaktivieren, z.B. Platz frei zu machen</p>
 </li>
 <li>
-<p>Arduino/ESP : Ajout de la possibilité dans les sketchs d&#8217;activer/désactiver certaines fonctionnalités pour libérer de l&#8217;espace par ex..</p>
+<p>Anpassungen der Option JeedouinoExt (RPI deportiert ohne Jeedom) für fortgeschrittene Benutzer, nur für TESTS.</p>
 </li>
 <li>
-<p>Adaptations de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
+<p>Verbesserte Doc</p>
 </li>
 <li>
-<p>Amélioration de la doc</p>
-</li>
-<li>
-<p>Ajout de nouvelles commandes globales ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.</p>
+<p>Zusätzliche neue globale Befehle ALL_SWITCH, ALL_PULSE_LOW, ALL_PULSE_HIGH.</p>
 </li>
 </ul>
 </div>
@@ -1511,22 +1510,22 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correctifs divers sur plugin, et sketchs.</p>
+<p>Verschiedene Plugin und Sketche Korrekturen.</p>
 </li>
 <li>
-<p>Ajout des dépendances Python-DHT et DS18B20.</p>
+<p>Abhängigkeiten von Python-DHT et DS18B20 hinzugefügt.</p>
 </li>
 <li>
-<p>Ajout du support des sondes DHT 11, 22 (AM2302) et DS18B20 sur Raspberry PI (piGPIO).</p>
+<p>Unterstützung für die Sonden DHT11, DHT22(AM2302) und DS18B20 für Raspberry PI (piGPIO).</p>
 </li>
 <li>
-<p>Ajout du support du capteur de distance HC-SR04.</p>
+<p>Unterstützung für HC-SR04-Distanzsensor hinzugefügt.</p>
 </li>
 <li>
-<p>Améliorations diverses.</p>
+<p>Verschiedene Verbesserungen.</p>
 </li>
 <li>
-<p>Améliorations de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
+<p>Option JeedouinoExt (RPI deportiert ohne Jeedom) für fortgeschrittene Benutzer, nur für TESTS verbessert.</p>
 </li>
 </ul>
 </div>
@@ -1536,22 +1535,22 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correctifs divers sur plugin et démons.</p>
+<p>Verschiedene Plugin und Dämon Korrekturen.</p>
 </li>
 <li>
-<p>Ajout de vérifications complémentaires.</p>
+<p>zusätzlichen Kontrollen hinzugefügt</p>
 </li>
 <li>
-<p>Ajout de la dépendance Python-Serial.</p>
+<p>Abhängigkeiten von Python-Serial hinzugefügt.</p>
 </li>
 <li>
-<p>Améliorations de la page configuration avec ajout d&#8217;onglets (tabs) pour plus de clarté.</p>
+<p>Verbesserung der Konfiguration Seite, Registerkarten(Tabs) hinzufügt, für bessere Übersicht.</p>
 </li>
 <li>
-<p>Note : Certains onglets et options ne sont visibles qu&#8217;en mode expert de Jeedom.</p>
+<p>Hinweis : Einige Registerkarten und Optionen sind nur im Experten-Modus von Jeedom sichtbar.</p>
 </li>
 <li>
-<p>Ajout de l&#8217;option JeedouinoExt (RPI déportés sans Jeedom) pour utilisateurs avancés, pour TESTS uniquement.</p>
+<p>Option JeedouinoExt (RPI deportiert ohne Jeedom) für fortgeschrittene Benutzer, nur für TESTS hinzugefügt.</p>
 </li>
 </ul>
 </div>
@@ -1561,16 +1560,16 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Amélioration de la doc.</p>
+<p>Verbesserte Doc.</p>
 </li>
 <li>
-<p>Correctifs divers sur plugin.</p>
+<p>Verschiedene Plugin Korrekturen.</p>
 </li>
 <li>
-<p>Ajout du support de la carte IO PiPlus (et donc des MCP23017) et de son démon.</p>
+<p>Unterstützung für die IO PiPlus Karte (mit MCP23017)  und seinen Daemon hinzugefügt.</p>
 </li>
 <li>
-<p>Améliorations sur la page santé de Jeedom.</p>
+<p>Verbesserungen auf derJeedom Gesundheits Seite.</p>
 </li>
 </ul>
 </div>
@@ -1580,16 +1579,16 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Amélioration de la doc.</p>
+<p>Verbesserte Doc.</p>
 </li>
 <li>
-<p>Correctifs divers sur plugin, sketchs et démons.</p>
+<p>Verschiedene Plugin, Sketchs und Daemon Korrekturen.</p>
 </li>
 <li>
-<p>Ajout du support de la carte NodeMCU.</p>
+<p>Unterstützung für die NodeMCU Karte hinzugefügt.</p>
 </li>
 <li>
-<p>Ajout du support de Docker ( cf. FAQ )</p>
+<p>Unterstützung für Docker hinzugefügt (siehe FAQ)</p>
 </li>
 </ul>
 </div>
@@ -1599,13 +1598,13 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correctifs divers sur plugin et démons.</p>
+<p>Verschiedene Plugin und Dämon Korrekturen.</p>
 </li>
 <li>
-<p>Ajout d&#8217;un ResetCompteur pour les cartes arduino/esp.</p>
+<p>Ein Reset-Zähler für Arduino/esp-Karten hinzugefügt.</p>
 </li>
 <li>
-<p>Ajout d&#8217;une entrée digitale variable (0-255 sur 0-10s) pour les cartes arduino/esp.</p>
+<p>Einen veränderlichen Digitaleingang (0-255 für 0-10s) für die Karten Arduino/ESP hinzugefügt.</p>
 </li>
 </ul>
 </div>
@@ -1615,32 +1614,32 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Amélioration de la doc.</p>
+<p>Verbesserte Doc.</p>
 </li>
 <li>
-<p>Réduction de la charge CPU des démons python, et amélioration de la réactivité.</p>
+<p>Verringerung der CPU-Belastung von der Python Daemonen und Verbesserung der Reaktionsfähigkeit.</p>
 </li>
 <li>
-<p>Correctifs divers.</p>
+<p>verschiedene Korrekturen.</p>
 </li>
 <li>
-<p>Ajout de vérifications/validations supplémentaires.</p>
+<p>Hinzugefügt, zusätzliche Überprüfungen/Validierungen.</p>
 </li>
 <li>
-<p>Ajout du support des sondes DHT (11,21,22) et DS18x20 pour les Arduinos (Ethernet/USB) et ESP8266.</p>
+<p>Unterstützung für die Sonden DHT(11,21,22) und DS18x20 für Arduinos(Ethernet/USB) und ESP8266.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>(1 sonde max par pin - peut impacter la réactivité de l&#8217;arduino.)</p>
+<p>(max 1 Sonde pro Pine - kann sich auf die Reaktionsfähigkeit des Arduino auswirken).</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Ajout d&#8217;un slider sur les commandes pwm et changement de valeur à la volée (scenarii).</p>
+<p>Einen Schieberegler für Pwm Befehle und Wertveränderung im laufenden Betrieb (Szenarien) hinzugefügt.</p>
 </li>
 <li>
-<p>Amélioration de la page de configuration du plugin.</p>
+<p>Verbesserungen der Plugin-Konfiguration-Seite.</p>
 </li>
 </ul>
 </div>
@@ -1650,19 +1649,19 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Amélioration de la doc.</p>
+<p>Verbesserte Doc.</p>
 </li>
 <li>
-<p>Améliorations globale des démons python.</p>
+<p>Allgemeine Verbesserungen der Python-Daemonen.</p>
 </li>
 <li>
-<p>Correctifs cosmétiques.</p>
+<p>Kosmetische Korrekturen.</p>
 </li>
 <li>
-<p>Ajout du retour d&#8217;état des commandes 'action'.</p>
+<p>Rückgabestatus vom Befehl "Aktion" hinzugefügt.</p>
 </li>
 <li>
-<p>Amélioration des sketchs Arduinos (Ethernet/USB) et ESP8266.</p>
+<p>Verbesserungen der Arduinos (Ethernet/USB) und ESP8266 Sketche.</p>
 </li>
 </ul>
 </div>
@@ -1672,13 +1671,13 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Amélioration de la doc.</p>
+<p>Verbesserte Doc.</p>
 </li>
 <li>
-<p>Amélioration de la gestion du redémarrage des démons en cas de reboot de plusieurs Jeedom esclaves en même temps.</p>
+<p>Verbesserte Verwaltung der Dämonen Neustarts, beim Neustart von mehreren Jeedom Slave zur gleichen Zeit.</p>
 </li>
 <li>
-<p>Correctifs mineurs.</p>
+<p>Kleinere Korrekturen.</p>
 </li>
 </ul>
 </div>
@@ -1688,16 +1687,16 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correctifs mineurs sur les commandes.</p>
+<p>Kleinere Korrekturen auf die Befehle.</p>
 </li>
 <li>
-<p>Correction d&#8217;un bug affectant les piFaces en piRack.</p>
+<p>Fehler behoben, betrifft das piFaces auf piRack.</p>
 </li>
 <li>
-<p>Amélioration de la récupération des valeurs des compteurs sur les démons.</p>
+<p>Verbesserte Wiederherstellung von Zählerwerten von den Daemonen.</p>
 </li>
 <li>
-<p>Ajout de plus de flexibilité dans la communication entre sketchs/démons et Jeedom.</p>
+<p>mehr Flexibilität in der Kommunikation zwischen Sketche/Daemonen und Jeedom hinzugefügt.</p>
 </li>
 </ul>
 </div>
@@ -1707,13 +1706,13 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correctifs mineurs.</p>
+<p>Kleinere Korrekturen.</p>
 </li>
 <li>
-<p>Amélioration de la doc.</p>
+<p>Verbesserte Doc.</p>
 </li>
 <li>
-<p>Ajout du support de la carte ESP8266-01.</p>
+<p>Unterstützung für die ESP8266-01 Karte.</p>
 </li>
 </ul>
 </div>
@@ -1723,10 +1722,10 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Correction d&#8217;un bug sur le démon python ArduinoUSB.</p>
+<p>Fehler behoben im ArduinoUSB Python Daemon</p>
 </li>
 <li>
-<p>Correctif mineur du plugin.</p>
+<p>Kleinere Korrekturen für das Plugin.</p>
 </li>
 </ul>
 </div>
@@ -1736,7 +1735,7 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Ajout de screenshots pour le market.</p>
+<p>Bildschirmfotos für den Markt hinzugefügt.</p>
 </li>
 </ul>
 </div>
@@ -1746,7 +1745,7 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="ulist">
 <ul>
 <li>
-<p>Création du plugin Jeedouino.</p>
+<p>Erstellung des Jeedouino Plugins.</p>
 </li>
 </ul>
 </div>
@@ -1760,13 +1759,13 @@ Il est possible de cliquer sur le nom de l&#8217;équipement pour aller sur sa p
 <div class="sect2">
 <h3 id="_faq_2">7.1. FAQ</h3>
 <div class="sect3">
-<h4 id="_sketchs_personnels_modifiables_et_commandes_utilisateur">7.1.1. Sketchs Personnels/Modifiables et Commandes Utilisateur</h4>
+<h4 id="_persönliche_modifizierbare_sketche_und_benutzerbefehle">7.1.1. Persönliche/modifizierbare Sketche und Benutzerbefehle</h4>
 <div class="sect4">
-<h5 id="_entêtes_des_sketchs">Entêtes  des sketchs</h5>
+<h5 id="_sketch_header">Sketch Header</h5>
 <div class="paragraph">
-<p>Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos.<br>
-Il est donc possible de désactiver certaines de ces fonctionnalités afin d&#8217;alléger les sketchs si besoin.<br>
-Vous trouverez en entête des sketchs cette possibilité :</p>
+<p>Mit den neuen Funktionalitäten können die Sketchs für die „kleinen“ Arduinos zu schwerfällig werden.<br>
+Es ist daher möglich, einige von diesen Funktionalitäten zu deaktivieren, wenn es erforderlich ist, um die Sketche zu entschärfen.<br>
+Diese Möglichkeiten finden Sie in der Sketch Header :</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1775,15 +1774,15 @@ Vous trouverez en entête des sketchs cette possibilité :</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<strong>#define DEBUGtoSERIAL 0</strong>	// 0, ou 1 pour debug dans la console serie<br>
+<strong>#define DEBUGtoSERIAL 0</strong>	// 0 oder 1 für Debug in der seriellen Konsole
 <strong>#define UseWatchdog 0</strong><br>
 <strong>#define UseDHT 1</strong><br>
 <strong>#define UseDS18x20 1</strong><br>
 <strong>#define UseTeleInfo 0</strong><br>
-<strong>#define UseLCD16x2 0</strong>	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C<br>
-<em>Vous permet d&#8217;inclure du sketch perso</em><br>
+<strong>#define UseLCD16x2 0</strong>	// 0 = None(kein) / 1 = LCD Standard 6 pins / 2 = LCD via I2C<br>
+<em>Ermöglicht Ihnen, persönlichen Sketche hinzuzufügen</em><br>
 <strong>#define UserSketch 0</strong><br>
-<em>Tags pour rechercher l&#8217;emplacement pour votre code :</em><br>
+<em>Tags, um den Ort für Ihren Code zu suchen :</em><br>
 <em>UserVars</em><br>
 <em>UserSetup</em><br>
 <em>UserLoop</em><br>
@@ -1792,8 +1791,8 @@ Vous trouverez en entête des sketchs cette possibilité :</p>
 </table>
 </div>
 <div class="paragraph">
-<p>Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
-ou de la forcer si besoin.</p>
+<p>Für ESP Sketche ist es auch möglich, von dem System eine freie IP-Adresse (DHCP) zuweisen zu lassen
+oder wenn nötig zu erzwingen.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1802,14 +1801,14 @@ ou de la forcer si besoin.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<strong>#define NODHCP 0</strong>					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
+<strong>#define NODHCP 0</strong>					// 0 für IP mit DHCP, 1 für in der Sketche fixierte IP.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_sketchs_et_pins_utilisateur">Sketchs et pins Utilisateur</h5>
+<h5 id="_sketche_und_benutzer_pins">Sketche und Benutzer Pins</h5>
 <div class="paragraph">
 <p>Pour vos Sketchs perso, il suffit d&#8217;aller voir dans les sketchs, tout est indiqué dedans avec des exemples.<br></p>
 </div>
@@ -1914,7 +1913,7 @@ Cela évoluera certainement avec les futures versions de celle-ci.<br>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_groupes_virtuels">7.1.3. Groupes Virtuels</h4>
+<h4 id="_virtuelle_gruppen">7.1.3. Virtuelle Gruppen</h4>
 <div class="paragraph">
 <p><strong>Pré-requis : avoir le plugin Virtuel installé et activé.</strong></p>
 </div>

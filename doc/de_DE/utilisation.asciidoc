@@ -1,52 +1,52 @@
 === Geräte erstellen
 
-La configuration des équipements Jeedouino est accessible à partir du menu Plugins : 
+Die Jeedouino Geräte Konfiguration ist erreichbar über das Plugin-Menü : 
 
 image::../images/menuplugin.png[]
 
-Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) : 
+Dies ist die Seite des Jeedouino Plugins (hier bereits mit Geräten) : 
 
 image::../images/equipements.png[]
 
 [TIP]
-Comme à beaucoup d'endroits sur Jeedom, placer la souris tout à gauche permet de faire apparaître un menu d'accès rapide (vous pouvez, à partir de votre profil, le laisser toujours visible).
+Wie an vielen Stellen in Jeedom, bewegt man die Maus ganz nach links, erscheint ein Schnellzugangs Menü (Sie können es in Ihrem Profil immer sichtbar einstellen).
 
-Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez : 
+Sobald Sie auf die Schaltfläche + (ein neues Gerät hinzufügen) geklickt und dann einen Namen für das Gerät eingegeben haben, sehen Sie : 
 
 image::../images/equipements0.png[]
 
-Vous retrouvez ici toute la configuration de votre équipement : 
+Hier finden Sie die ganze Konfiguration des Geräts: 
 
-* *Nom de l'équipement* : nom de votre équipement Jeedouino,
-* *Objet parent* : indique l'objet parent auquel appartient l'équipement,
-* *Activer* : permet de rendre votre équipement actif,
-* *Visible* : rend votre équipement visible sur le dashboard.
+* *Gerätename* : Name des Jeedouino Geräts,
+* *Elternobjekt* : gibt das übergeordnete Objekt an, das zum Gerät gehört,
+* *Aktivieren* : erlaubt es, Ihre Gerät zu aktivieren,
+* *Sichtbar* : macht Ihr Gerät auf dem Armaturenbrett sichtbar.
 
-En-dessous vous retrouvez le paramétrage de votre équipement : 
+Darunter finden Sie die Parametrierung Ihrer Geräte wieder : 
 
-* *Modèle* : le Modèle de la carte que vous souhaitez controler,
+* *Model* : Das Modell der Karte, die Sie steuern möchten,
 
 image::../images/modeles.png[]
 
-_Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si vous avez un piRack par ex.)_
+_Für PiFace Karte, wird eine Nummer (0 bis 3) benötigt, zur Identifizierung (Wenn Sie z. B. eine PiRack haben)_
 
 image::../images/piface.png[]
-* *Port de connection* : type de connection USB ou Réseau,
-* *Adresse IP et Port* : pour la connection à la carte via le réseau,
+* *Verbindungs Typ* : Verbindung Typ USB oder Netzwerk-,
+* *IP Adresse und Port* : für die Verbindung der Karte über das Netzwerk,
 [WARNING]
 Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé. +
 _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._
 
 [IMPORTANT]
-Le port doit aussi être différent de celui du Jeedom hôte.
+Der Port muss sich vom Jeedom Host unterscheiden.
 [TIP]
-_Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom._ +
-Vous pouvez aussi utiliser _local_ ou _localhost_ pour l'adresse IP du Jeedom principal (maître).
+_Als nächstes im Browser wird ein Pfeil angezeigt, um in Jeedom eine IP-Adresse direkt auswählen._ +
+Sie können auch _lokal_ oder _lokalhost_ für die IP-Adresse des primär Jeedom (Master) verwenden.
 
 image::../images/listeIP.png[]
-* *Port USB* : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,
-* *Port local/Port déporté* : Port USB physique ou est connectée la carte,
-** Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.
+* *USB Port* : Lokale oder Remote, für den Anschluss vom Jeedom Master oder Slave an die Karte, über den USB-Port,
+* *Lokal Port/Remote Port* : physischer USB-Anschluss oder eine Karte ist angeschlossen,
+** Wenn Sie den USB-Port von der RPI-Karte trennen/verbinden, müssen Sie den entsprechenden Daemon neu starten. 
 
 image::../images/listeUSB.png[]
 * *Port Démon* : pour la connection au démon via le réseau, l'IP du démon étant celle du Jeedom hôte.
@@ -54,7 +54,7 @@ image::../images/listeUSB.png[]
 Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé. +
 _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._
 [IMPORTANT]
-Le port doit aussi être différent de celui du Jeedom hôte.
+Der Port muss sich vom Jeedom Host unterscheiden.
 * *Sketch* : Dans le cas d'une carte Arduino ou ESP8266, le sketch pour celle-ci est proposé au téléchargement aprés une première sauvegarde de l'équipement. +
 (NB. Rafraîchissement de la page, il peut être nécéssaire de faire un F5 pour voir apparaître le lien )
 [NOTE]
@@ -74,24 +74,24 @@ Les _SSID_ et _mot de passe_ ne doivent pas contenir d'espaces !
 
 image::../images/ESP.png[]
 
-==== Configuration des pins
+==== Pin Konfiguration
 
 * Modal Paramétrages / affectation des pins
 
 Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action). + 
 _NB : Des compléments d'infomations sont disponibles dans la FAQ._ +
 
-** Entrées: Analogiques, Digitales, Compteur d'impulsions
+** Eingänge: Analog, Digital, Impulszähler
 ** Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..). 
 
 image::../images/jeedouino_screenshot4.png[]
 
 [IMPORTANT]
-*_Les Pins seront configurables uniquement après une première sauvegarde de votre équipement._* + 
+*_Die Pins können erst nach einem ersten speichern des Gerätes konfiguriert werden._* + 
 Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l'équipement générera toutes les commandes nécéssaires.
 [NOTE]
 Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
-Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
+Das wird die Erstellung unnötiger Befehle vermeiden und Jeedom nicht zu sehr beladen.
 
 [TIP]
 Il est désormais possible de configurer les generic type directement, et d'affecter les pins à des groupes (équipements) virtuels, voir la FAQ.
@@ -100,17 +100,17 @@ Il est désormais possible de configurer les generic type directement, et d'affe
 
 image::../images/UserPins.png[]
 
-* Onglet Pins / GPIO +
+* Registerkarte Pins / GPIO +
 
-Permet d'ajouter un certain nombre de pins utilisateur pour vos sketch Arduinos/ESPs : _0 à 100 max_ +
+Erlaubt, einige Benutzer Pins für Ihre Arduino/ESP Sketche hinzuzufügen : _0 bis max 100_ +
 
-Il est possible d'activer ou non la génération automatique des commandes ALL_
+Es ist möglich, die automatische Generierung der ALL_ Befehle zu aktivieren oder zu deaktivieren 
 
-** ALL_LOW	Met toutes les pins output à LOW
-** ALL_HIGH	Met toutes les pins output à HIGH
-** ALL_SWITCH	Inverse toutes les pins output
-** ALL_PULSE_LOW	Met toutes les pins output à LOW pendant le temps choisi
-** ALL_PULSE_HIGH	Met toutes les pins output à HIGH pendant le temps choisi
+** ALL_LOW	stellt alle Ausgangs Pins auf LOW
+** ALL_HIGH	stellt alle Ausgangs Pins auf HIGH
+** ALL_SWITCH	Invertiert alle Ausgangs Pins
+** ALL_PULSE_LOW	stellt alle Ausgangs Pins auf LOW, während der ausgewählten Zeit
+** ALL_PULSE_HIGH	stellt alle Ausgangs Pins auf HIGH, während der ausgewählten Zeit
 
 image::../images/ALLpins.png[]
 
@@ -146,8 +146,8 @@ Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une
 
 ==== Widgets
 
-Ce sont ceux par défaut de Jeedom.
+Diese sind Standardmäßig in Jeedom.
 
-Les widgets desktop ressemblent à cela :
+Desktop-Widgets sind ähnlich wie dieses :
 
 image::../images/desktop_widget.png[]

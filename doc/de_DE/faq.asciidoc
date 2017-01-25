@@ -1,32 +1,32 @@
 === FAQ
 
-==== Sketchs Personnels/Modifiables et Commandes Utilisateur
+==== Persönliche/modifizierbare Sketche und Benutzerbefehle
 
-===== Entêtes  des sketchs
-Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos. +
-Il est donc possible de désactiver certaines de ces fonctionnalités afin d'alléger les sketchs si besoin. +
-Vous trouverez en entête des sketchs cette possibilité : 
+===== Sketch Header
+Mit den neuen Funktionalitäten können die Sketchs für die „kleinen“ Arduinos zu schwerfällig werden. +
+Es ist daher möglich, einige von diesen Funktionalitäten zu deaktivieren, wenn es erforderlich ist, um die Sketche zu entschärfen. +
+Diese Möglichkeiten finden Sie in der Sketch Header : 
 
 [NOTE]
-*#define DEBUGtoSERIAL 0*	// 0, ou 1 pour debug dans la console serie +
+*#define DEBUGtoSERIAL 0*	// 0 oder 1 für Debug in der seriellen Konsole
 *#define UseWatchdog 0* +
 *#define UseDHT 1* +
 *#define UseDS18x20 1* +
 *#define UseTeleInfo 0* +
-*#define UseLCD16x2 0*	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C +
-_Vous permet d'inclure du sketch perso_ +
+*#define UseLCD16x2 0*	// 0 = None(kein) / 1 = LCD Standard 6 pins / 2 = LCD via I2C +
+_Ermöglicht Ihnen, persönlichen Sketche hinzuzufügen_ +
 *#define UserSketch 0* +
-_Tags pour rechercher l'emplacement pour votre code :_ +
+_Tags, um den Ort für Ihren Code zu suchen :_ +
 _UserVars_ +
 _UserSetup_ +
 _UserLoop_ +
 
-Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
-ou de la forcer si besoin.
+Für ESP Sketche ist es auch möglich, von dem System eine freie IP-Adresse (DHCP) zuweisen zu lassen
+oder wenn nötig zu erzwingen.
 [TIP]
-*#define NODHCP 0*					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
+*#define NODHCP 0*					// 0 für IP mit DHCP, 1 für in der Sketche fixierte IP.
 
-===== Sketchs et pins Utilisateur
+===== Sketche und Benutzer Pins
 Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqué dedans avec des exemples. +
 [NOTE]
 Pensez à activer l'option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l'onglet Pins/GPIO de votre équipement. +
@@ -67,7 +67,7 @@ il est possible que l'app mobile ne vous les affichent pas tous, ou génére une
 Cela évoluera certainement avec les futures versions de celle-ci. +
 _L'utilisation de *Groupes Virtuels* pour scinder les équipements est alors conseillée._ 
 
-==== Groupes Virtuels
+==== Virtuelle Gruppen
 *Pré-requis : avoir le plugin Virtuel installé et activé.*
 
 Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.

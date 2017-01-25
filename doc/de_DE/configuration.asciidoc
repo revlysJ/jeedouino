@@ -4,7 +4,7 @@ Auf der Konfigurationsseite des Plugins
 
 image::../images/ConfOptions.png[]
 
-==== Onglet : Options
+ ==== Registerkarten : Optionen
 * Vous pouvez activer les logs (attention trés verbeux).
 [IMPORTANT]
 Il n'est pas recommandé de laisser cette case en permanence cochée car cette option génère beaucoup d'écriture dans les fichiers de log.
@@ -19,7 +19,7 @@ Cette option n'apparaît que si vous avez le plugin Virtuel d'installé et d'act
 [NOTE]
 Cette option n'apparaît que si vous avez le mode expert d'activé dans votre Jeedom.
 
-==== Onglet : Dépendances
+ ==== Registerkarten : Abhängigkeiten
 
 image::../images/configuration0.png[]
 
@@ -61,7 +61,7 @@ Il n'est pas nécéssaire d'installer les dépendances sur tous vos Jeedom, uniq
 [TIP]
 Deux raccourcis sont présents pour aller directement voir les logs du plugin, et pour aller à vos équipements (uniquement sur le maître)
 
-==== Onglet : Démons
+ ==== Registerkarten : Daemon
 
 _Exemple de différents démons possibles:_
 

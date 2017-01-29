@@ -27,26 +27,26 @@ oder wenn nötig zu erzwingen.
 *#define NODHCP 0*					// 0 für IP mit DHCP, 1 für in der Sketche fixierte IP.
 
 ===== Sketche und Benutzer Pins
-Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqué dedans avec des exemples. +
+Für Ihre persönlichen Sketche reicht es aus, sich die Sketchen anzusehen, alles wird mit Beispielen angezeigt. +
 [NOTE]
 Pensez à activer l'option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l'onglet Pins/GPIO de votre équipement. +
-Elles apparaîtrons dans l'onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+Sie werden in der Registerkarte Benutzer Pins (neben den Hardware-Pins) im modalen Fenster angezeigt.
 
 Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour les pins matérielles.
 
-* Vous aurez le choix entre 3 types de pins entrées et 3 types de pins sorties :
-** Entrée Numérique (Sous-type : binaire)
-** Entrée Numérique (Sous-type : numérique)
-** Entrée Numérique (Sous-type : autre)
-** Sortie Numérique (Sous-type : défaut)
-** Sortie Numérique (Sous-type : curseur) 
-** Sortie Numérique (Sous-type : message)
+* Sie können aus 3 Typen von Eingangs-Pins und 3 Arten von Ausgangs-Pins wählen:
+** Digitaleingang (Unter-typ : binär)
+** Digitaleingang (Sous-type : numerisch)
+** Digitaleingang (Unter-typ : andere)
+** Digitalausgang (Unter-typ : Standard)
+** Digitalausgang (Unter-typ : Schieberegler) 
+** Digitalausgang (Unter-typ : Nachricht)
 
 image::../images/UserPins.png[]
 
-==== Generic Types & App mobile
-Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l'app mobile liée. +
-Pour plus d'informations les concernant, veuillez-vous reportez à leurs documentations respectives.
+==== Generische Typen & mobile App
+Die generischen Typen sind ein Zusatz von Jeedom für den Betrieb des Mobile-Plugin und der Verknüpfung der mobilen App.
+Weitere Informationen finden Sie in den jeweiligen Dokumentationen.
 
 Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée),  lors de la
 mise à jour, le plugin essaiera de les récupérer +
@@ -55,9 +55,9 @@ Sinon vous pouvez choisir le generic type dans le plugin, et lors de la créatio
 
 [TIP]
 Par exemple, si vous choisissez une pin en _Sortie mise à LOW (HIGH générée aussi)_ et le generic type _LIGHT ON_ , alors le plugin générera les commandes (et vice-versa): +
-Sortie mise à LOW avec _LIGHT ON_ +
-Sortie mise à HIGH avec _LIGHT OFF_ +
-Etat de la sortie avec _LIGHT STATE_ +
+Ausgang auf LOW mit _LIGHT ON_ +
+Ausgang auf HIGH mit _LIGHT ON_ +
+Ausgangsstatus mit _LIGHT STATE_ +
 
 image::../images/gt.png[]
 

@@ -151,7 +151,7 @@
         "Sonde DHT22 (AM2302)": "DHT22 (AM2302) Sonde",
         "Sonde DS18B20": "DS18B20 Sonde",
         "Boot Options": "Boot Optionen",
-        "Réservée Tests lib SomfyRTS (par Yogui).": "Réservée Tests lib SomfyRTS (par Yogui).",
+        "Réservée Tests lib SomfyRTS (par Yogui).": "Reservierte Test SomfyRTS lib (von Yogui).",
         "Choix de l'état des pins sorties au démarrage du démon piPlus. (En tests)": "Wählen Sie den Status der Ausgangs-Pins beim Start des piPlus Dämon. (Im Test)",
         "Toutes les pins sorties par défaut au démarrage du démon": "Alle Ausgangs-Pins beim starten des Dämon auf Standard setzen.",
         "Toutes les pins sorties inversées au démarrage du démon": "Alle Ausgangs-Pins beim starten des Dämon invertieren.",

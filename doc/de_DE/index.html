@@ -483,7 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_faq_2">7.1. FAQ</a>
 <ul class="sectlevel3">
 <li><a href="#_persönliche_modifizierbare_sketche_und_benutzerbefehle">7.1.1. Persönliche/modifizierbare Sketche und Benutzerbefehle</a></li>
-<li><a href="#_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</a></li>
+<li><a href="#_generische_typen_mobile_app">7.1.2. Generische Typen &amp; mobile App</a></li>
 <li><a href="#_virtuelle_gruppen">7.1.3. Virtuelle Gruppen</a></li>
 <li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</a></li>
 <li><a href="#_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ne_sont_pas_directement_fonctionnels_après_un_reboot">7.1.5. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.</a></li>
@@ -1810,7 +1810,7 @@ oder wenn nötig zu erzwingen.</p>
 <div class="sect4">
 <h5 id="_sketche_und_benutzer_pins">Sketche und Benutzer Pins</h5>
 <div class="paragraph">
-<p>Pour vos Sketchs perso, il suffit d&#8217;aller voir dans les sketchs, tout est indiqué dedans avec des exemples.<br></p>
+<p>Für Ihre persönlichen Sketche reicht es aus, sich die Sketchen anzusehen, alles wird mit Beispielen angezeigt.<br></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1820,7 +1820,7 @@ oder wenn nötig zu erzwingen.</p>
 </td>
 <td class="content">
 Pensez à activer l&#8217;option dans la page de configuration du plugin, et à selectionner le nombre de pins désirées sous l&#8217;onglet Pins/GPIO de votre équipement.<br>
-Elles apparaîtrons dans l&#8217;onglet Pins Utilisateur (à coté de celui des Pins Matérielles) dans la fenêtre de modale.
+Sie werden in der Registerkarte Benutzer Pins (neben den Hardware-Pins) im modalen Fenster angezeigt.
 </td>
 </tr>
 </table>
@@ -1831,26 +1831,26 @@ Elles apparaîtrons dans l&#8217;onglet Pins Utilisateur (à coté de celui des 
 <div class="ulist">
 <ul>
 <li>
-<p>Vous aurez le choix entre 3 types de pins entrées et 3 types de pins sorties :</p>
+<p>Sie können aus 3 Typen von Eingangs-Pins und 3 Arten von Ausgangs-Pins wählen:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Entrée Numérique (Sous-type : binaire)</p>
+<p>Digitaleingang (Unter-typ : binär)</p>
 </li>
 <li>
-<p>Entrée Numérique (Sous-type : numérique)</p>
+<p>Digitaleingang (Sous-type : numerisch)</p>
 </li>
 <li>
-<p>Entrée Numérique (Sous-type : autre)</p>
+<p>Digitaleingang (Unter-typ : andere)</p>
 </li>
 <li>
-<p>Sortie Numérique (Sous-type : défaut)</p>
+<p>Digitalausgang (Unter-typ : Standard)</p>
 </li>
 <li>
-<p>Sortie Numérique (Sous-type : curseur)</p>
+<p>Digitalausgang (Unter-typ : Schieberegler)</p>
 </li>
 <li>
-<p>Sortie Numérique (Sous-type : message)</p>
+<p>Digitalausgang (Unter-typ : Nachricht)</p>
 </li>
 </ul>
 </div>
@@ -1865,10 +1865,10 @@ Elles apparaîtrons dans l&#8217;onglet Pins Utilisateur (à coté de celui des 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_generic_types_app_mobile">7.1.2. Generic Types &amp; App mobile</h4>
+<h4 id="_generische_typen_mobile_app">7.1.2. Generische Typen &amp; mobile App</h4>
 <div class="paragraph">
-<p>Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l&#8217;app mobile liée.<br>
-Pour plus d&#8217;informations les concernant, veuillez-vous reportez à leurs documentations respectives.</p>
+<p>Die generischen Typen sind ein Zusatz von Jeedom für den Betrieb des Mobile-Plugin und der Verknüpfung der mobilen App.
+Weitere Informationen finden Sie in den jeweiligen Dokumentationen.</p>
 </div>
 <div class="paragraph">
 <p>Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée),  lors de la
@@ -1884,9 +1884,9 @@ Sinon vous pouvez choisir le generic type dans le plugin, et lors de la créatio
 </td>
 <td class="content">
 Par exemple, si vous choisissez une pin en <em>Sortie mise à LOW (HIGH générée aussi)</em> et le generic type <em>LIGHT ON</em> , alors le plugin générera les commandes (et vice-versa):<br>
-Sortie mise à LOW avec <em>LIGHT ON</em><br>
-Sortie mise à HIGH avec <em>LIGHT OFF</em><br>
-Etat de la sortie avec <em>LIGHT STATE</em><br>
+Ausgang auf LOW mit <em>LIGHT ON</em><br>
+Ausgang auf HIGH mit <em>LIGHT ON</em><br>
+Ausgangsstatus mit <em>LIGHT STATE</em><br>
 </td>
 </tr>
 </table>

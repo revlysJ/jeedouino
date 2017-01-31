@@ -48,10 +48,10 @@ image::../images/UserPins.png[]
 Die generischen Typen sind ein Zusatz von Jeedom für den Betrieb des Mobile-Plugin und der Verknüpfung der mobilen App.
 Weitere Informationen finden Sie in den jeweiligen Dokumentationen.
 
-Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée),  lors de la
-mise à jour, le plugin essaiera de les récupérer +
-Vous pouvez aussi utiliser le mode auto, dans lequel le plugin essaiera de trouver le generic type le plus adapté. +
-Sinon vous pouvez choisir le generic type dans le plugin, et lors de la création des commandes le plugin s'adaptera si possible.
+Wenn Sie Jeedouino Geräte haben, für die Sie bereits den generischen Typ (in der erweiterten Konfiguration) konfiguriert haben, wird das Plugin 
+während der Aktualisierung versuchen sie wieder herzustellen. +
+Sie können auch den Auto-Modus benutzen, mit dem das Plugin versuchen wird, den am besten Angepassten generischen Typ zu finden. + 
+Andernfalls können Sie den generischen Typ im Plugin wählen, und bei der Erstellung der Befehle wird das Plugin wenn möglich sie anpassen.
 
 [TIP]
 Par exemple, si vous choisissez une pin en _Sortie mise à LOW (HIGH générée aussi)_ et le generic type _LIGHT ON_ , alors le plugin générera les commandes (et vice-versa): +

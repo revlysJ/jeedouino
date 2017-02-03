@@ -64,8 +64,8 @@ image::../images/gt.png[]
 [NOTE]
 Si sur *un même équipement* vous avez beaucoup de commandes ainsi que beaucoup de generic type différents ( par ex. LIGHT, ENERGY, FLAP, SIREN, etc..)
 il est possible que l'app mobile ne vous les affichent pas tous, ou génére une erreur. +
-Cela évoluera certainement avec les futures versions de celle-ci. +
-_L'utilisation de *Groupes Virtuels* pour scinder les équipements est alors conseillée._ 
+Das wird sich mit den zukünftigen Versionen sicherlich ´weiterentwickeln.
+_Die Benutzung *Virtueller Gruppen*, um die Ausrüstungen aufzuteilen, ist dann empfohlen._ 
 
 ==== Virtuelle Gruppen
 *Pré-requis : avoir le plugin Virtuel installé et activé.*

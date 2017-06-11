@@ -67,8 +67,8 @@ $port =  jeedouino::GetJeedomPort();
 		<form class="form-horizontal">
 			<fieldset> 
 				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Activer les logs}}</label>
-						<div class="col-lg-5">
+						<label class="col-lg-7 control-label">{{Activer les logs}}</label>
+						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveLog" />
 						</div>            
 				</div>
@@ -76,18 +76,26 @@ $port =  jeedouino::GetJeedomPort();
 						{
 				?>
 				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Activer les groupes virtuels}}</label>
-						<div class="col-lg-5">
+						<label class="col-lg-7 control-label">{{Activer les groupes virtuels}}</label>
+						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveVirtual" />
 						</div>            
 				</div>		
 				<?php } ?>
 				<div class="form-group" >
-					<label class="col-lg-5 control-label expertModeVisible">{{Activer les commandes utilisateur (Arduinos/Esp...)}}</label>
-					<div class="col-lg-5 expertModeVisible">
+					<label class="col-lg-7 control-label expertModeVisible">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}}</label>
+					<div class="col-lg-3 expertModeVisible">
 						<input type="checkbox" class="configKey  expertModeVisible" data-l1key="ActiveUserCmd" name="ActiveUserCmd"/>
 					</div>            
 				</div>
+				<!-- 
+				<div class="form-group" >
+					<label class="col-lg-7 control-label expertModeVisible text-warning">{{Maintenir les commandes en double lors d'un changement de fonction (Pour TESTS - NON recommandé).}}</label>
+					<div class="col-lg-3 expertModeVisible">
+						<input type="checkbox" class="configKey  expertModeVisible" data-l1key="MultipleCmd" name="MultipleCmd"/>
+					</div>            
+				</div>
+				-->
 				<div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#configuration_logMessage"><i class="fa fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
 			</fieldset> 
 		</form>
@@ -95,14 +103,78 @@ $port =  jeedouino::GetJeedomPort();
 	
 	<div class="tab-pane" id="tab_dep">
 	<br/>
+		<div class="alert alert-warning"><i class="fa fa-arrow-right"></i> {{ A n'installer que si nécéssaire.}} </div>
 		<form class="form-horizontal">
 			<fieldset> 
-				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Télécharger l'Arduino IDE}}</label>
-						<div class="col-lg-5">
-							<a href="https://www.arduino.cc/en/Main/Software" target="_blank" class="btn btn-success" ><i class='fa fa-floppy-o'></i>{{ Aller sur le site }}</a>
-						</div>         
-				</div>  
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr class="info">
+							<th>{{Dépendances spécifiques}}</th>
+							<th>{{Matériel support}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="form-group" >
+										<label class="col-lg-5 control-label">{{Télécharger l'Arduino IDE}}</label>
+										<div class="col-lg-5">
+											<a href="https://www.arduino.cc/en/Main/Software" target="_blank" class="btn btn-success" ><i class='fa fa-floppy-o'></i>{{ Aller sur le site }}</a>
+										</div>         
+								</div>
+							</td>
+							<td>{{Arduinos}}</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group" >
+										<label class="col-lg-5 control-label">{{Install Python-Serial}}</label>
+										<div class="col-lg-5">
+												<a class="btn btn-info bt_installSerial" ><i class="fa fa-play"></i> {{sudo apt-get install python-serial}}</a>
+										</div>            
+								</div>
+							</td>
+							<td>{{Arduinos sur port USB d'un Raspberry PI}}</td>
+						</tr>
+						<tr class="info">
+							<td colspan=2>{{Dépendances spécifiques Raspberry PI}}</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group" >
+										<label class="col-lg-5 control-label">{{RPi.GPIO Installation}}</label>
+										<div class="col-lg-5">
+												<a class="btn btn-info bt_installGPIO" ><i class="fa fa-play"></i> {{sudo pip install RPi.GPIO}}</a>
+										</div>            
+								</div>
+							</td>
+							<td>{{Raspberry PI (gpio)}}</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group" >
+										<label class="col-lg-5 control-label">{{Pifacedigitalio Installation}}</label>
+										<div class="col-lg-5">
+												<a class="btn btn-info bt_installPIFACE" ><i class="fa fa-play"></i> {{sudo apt-get install python-pifacedigitalio}}</a>
+										</div>            
+								</div>
+							</td>
+							<td>{{Raspberry PI avec carte(s) PiFace}}</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group" >
+										<label class="col-lg-5 control-label">{{IO.PiPlus smbus Installation}}</label>
+										<div class="col-lg-5">
+												<a class="btn btn-info bt_installPiPlus" ><i class="fa fa-play"></i> {{sudo install python-smbus}}</a>
+										</div>            
+								</div>
+							</td>
+							<td>{{Raspberry PI avec carte(s) Pi.Plus ou MCP23017 (I2C)}}</td>
+						</tr>
+					</tbody>
+				</table>
+
 			<?php
 			/* 	
 				<div class="form-group" >
@@ -113,30 +185,8 @@ $port =  jeedouino::GetJeedomPort();
 				</div> 	
 			*/
 			?>	
-				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Dépendance : RPi.GPIO Installation}}</label>
-						<div class="col-lg-5">
-								<a class="btn btn-info bt_installGPIO" ><i class="fa fa-play"></i> {{sudo pip install RPi.GPIO}}</a>
-						</div>            
-				</div> 
-				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Dépendance : pifacedigitalio Installation}}</label>
-						<div class="col-lg-5">
-								<a class="btn btn-info bt_installPIFACE" ><i class="fa fa-play"></i> {{sudo apt-get install python-pifacedigitalio}}</a>
-						</div>            
-				</div>      
-				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Dépendance : IO.PiPlus smbus Installation}}</label>
-						<div class="col-lg-5">
-								<a class="btn btn-info bt_installPiPlus" ><i class="fa fa-play"></i> {{sudo install python-smbus}}</a>
-						</div>            
-				</div> 	
-				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Install Python-Serial}}</label>
-						<div class="col-lg-5">
-								<a class="btn btn-info bt_installSerial" ><i class="fa fa-play"></i> {{sudo apt-get install python-serial}}</a>
-						</div>            
-				</div> 	
+
+
 			</fieldset> 
 		</form>
 	</div>
@@ -300,7 +350,7 @@ $port =  jeedouino::GetJeedomPort();
 							if ($StatusDemon) echo '<span class="label label-success" style="font-size : 1em;" >OK</span>';
 							else 
 							{
-								if (($CronStepArr!='') and (in_array($board_id,$CronStepArr)))echo '<span class="label label-warning " style="font-size : 1em;" ><i class="fa fa-refresh"></i> 4min</span>';
+								if (($CronStepArr!='') and (in_array($board_id,$CronStepArr)))echo '<span class="label label-warning " style="font-size : 1em;" ><i class="fa fa-play"></i> 4min</span>';
 								else echo '<span class="label label-danger " style="font-size : 1em;" >NOK</span>';
 							}
 						?>
@@ -390,7 +440,7 @@ $port =  jeedouino::GetJeedomPort();
 
 	 <div class="tab-pane" id="tab_docker">
         <br/>
-        <div class="alert alert-warning"><i class="fa fa-rss"></i>{{ Uniquement pour utilisateurs avancés.}} </div>
+        <div class="alert alert-warning"><i class="fa fa-rss"></i>{{ Uniquement pour utilisateurs avertis.}} </div>
 	 
 		<form class="form-horizontal">
 			<fieldset> 

@@ -1,0 +1,16 @@
+<div style="width:110px;min-height:40px;" class="cmd #history# tooltips cmd-widget" data-type="action" data-subtype="slider" data-cmd_id="#id#">
+    <center>
+      <span class='cmdName' style="font-weight: bold;font-size : 12px;">#name_display#</span>
+      <span class="cursor iconCmd#id#" style="font-size: 2em;"></span>
+      <div class="slider" style="margin : 5px 10px 5px 10px;width: 80px;" value="#state#" ></div>
+    </center>
+    <script>
+        $(".cmd[data-cmd_id=#id#] .slider").bootstrapSlider({
+            min: ('#minValue#' == '') ? 0 : parseInt('#minValue#'),
+            max: ('#maxValue#' == '') ? 255 : parseInt('#maxValue#'),
+            value: ('#state#' == '') ? 0 : parseInt('#state#')
+        }).on('slideStop', function (ev) {
+            jeedom.cmd.execute({id: '#id#', value: {slider: ev.value}});
+        });
+    </script>
+</div>

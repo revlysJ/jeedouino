@@ -1,0 +1,10 @@
+{
+	"id" : "jeedouino",
+	"name" : "Jeedouino",
+	"description" : "Plugin Jeedouino pour gérer une/des carte(s) Arduino (via Ethernet ou USB ), les GPIO du R.PI, les cartes PiFace (piRack), les cartes RPI IO Plus 32e/s, les MCP23017 (sur RPI) ou les ESP8266 / NodeMCU/ Wemos.",
+	"licence" : "AGPL",
+	"author" : "Revlys",
+	"require" : "1.209",
+	"category" : "automation protocol",
+	"hasDependency" : true
+}

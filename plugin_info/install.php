@@ -33,20 +33,22 @@ function jeedouino_update()
 			if ($eqLogic->getIsEnable() == 0) continue;
 			$arduino_id=$eqLogic->getId();
 			list(,$board,$usb) = jeedouino::GetPinsByBoard($arduino_id);
-			jeedouino::log( 'debug','-=-= '.$board.'  ( '.$arduino_id.' ) =-=-');	
+			jeedouino::log( 'debug','-=-= '.$board.'  ( '.$arduino_id.' ) =-=-');
 			switch ($board)
 			{
 				case 'arduino':
-					if ($usb) jeedouino::StartBoardDemon($arduino_id, 0, $board);	
+					if ($usb) jeedouino::StartBoardDemon($arduino_id, 0, $board);
 					else jeedouino::GenerateLanArduinoSketchFile($arduino_id);
 					break;   
-				case 'piface':
 				case 'gpio':
-				case 'piplus':	
-					jeedouino::StartBoardDemon($arduino_id, 0, $board);	
+					$oldKey = config::byKey($arduino_id.'_piGPIO_boot', 'jeedouino', 'none');
+					if (($oldKey != 'none') and (config::byKey($arduino_id.'_PiGpio_boot', 'jeedouino', 'none') == 'none')) config::save($arduino_id.'_PiGpio_boot', $oldKey, 'jeedouino');
+				case 'piplus':
+				case 'piface':
+					jeedouino::StartBoardDemon($arduino_id, 0, $board);
 					break;  			
 				case 'esp':
-					if (!$usb) jeedouino::GenerateESP8266SketchFile($arduino_id);	
+					if (!$usb) jeedouino::GenerateESP8266SketchFile($arduino_id);
 					break;   					
 			}
 			sleep(2);			

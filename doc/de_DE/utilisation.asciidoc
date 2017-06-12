@@ -31,7 +31,7 @@ image::../images/modeles.png[]
 _Für PiFace Karte, wird eine Nummer (0 bis 3) benötigt, zur Identifizierung (Wenn Sie z. B. eine PiRack haben)_
 
 image::../images/piface.png[]
-* *Verbindungs Typ* : Verbindung Typ USB oder Netzwerk-,
+* *Type de connection* : port de connection USB ou Réseau,
 * *IP Adresse und Port* : für die Verbindung der Karte über das Netzwerk,
 [WARNING]
 Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé. +

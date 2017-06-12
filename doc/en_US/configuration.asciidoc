@@ -27,9 +27,6 @@ A link is available to go download the latest Arduino IDE to flash the skits on 
 
 * https://www.arduino.cc/en/Main/Software
 
-[IMPORTANT]
-At the moment, the sketchs are only compatibles with Arduino.cc IDE (v1.6.7 recommended).
-
 * For ESP8266 cards NodeMCU, Wemos you can also use the Arduino IDE by adding the ESP8266 support.
 
 ** http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html
@@ -86,9 +83,6 @@ image::../images/ConfDemons.png[]
 
 The Arduinos / ESP / NodeMCU / network Wemos not needing daemons, here come the sketches for them.
 Only those of the created equipment.
-
-[IMPORTANT]
-At the moment, the sketchs are only compatibles with Arduino.cc IDE (v1.6.7 recommended).
 
 image::../images/configuration3.png[]
 

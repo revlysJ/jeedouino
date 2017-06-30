@@ -20,6 +20,14 @@
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.jeedouino
  */
+ $('#bt_graphEqLogic').off('click').on('click', function () {
+  $('#md_modal').dialog({title: "{{Graphique de lien}}"});
+  $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=eqLogic&filter_id='+$('.eqLogicAttr[data-l1key=id]').value()).dialog('open');
+});
+$('#bt_exportEq').on('click', function() { 
+	$('#md_modal').dialog({title: "{{Exportation de l'équipement}}"});
+	$('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=export&id=' + $('.eqLogicAttr[data-l1key=id]').value() + '&board=' + $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value()).dialog('open');
+});
  $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',function(){
 	 if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value() != '')
 	 {

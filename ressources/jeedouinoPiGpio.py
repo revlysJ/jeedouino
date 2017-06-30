@@ -35,6 +35,11 @@ JeedomPort=80
 JeedomCPL=''
 pin2gpio = [0,0,2,0,3,0,4,14,0,15,17,18,27,0,22,23,0,24,10,0,9,25,11,8,0,7,0,0,5,0,6,12,13,0,19,16,26,20,0,21]
 BootMode = False
+ProbeDelay = 5
+
+# Tests Threads alives
+thread_1 = 0
+thread_2 = 0
 
 def log(level,message):
 	print('[%s][Demon GPIO] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
@@ -72,7 +77,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		print("Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -109,6 +114,7 @@ class myThread1 (threading.Thread):
 
 		s.listen(5)								# Now wait for client connection.
 		while exit==0:
+			thread_1 = 1
 			c, addr = s.accept()			 # Establish connection with client.
 			if exit==1:
 				break			
@@ -339,9 +345,10 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		print("Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2
 		
 		while exit==0:
+			thread_2 = 1
 			pinStr = ''
 			for i in range(1,41):
 				if TempoPinHIGH[i]!=0 and TempoPinHIGH[i]<int(time.time()*10):
@@ -405,9 +412,9 @@ class myThread2 (threading.Thread):
 			if pinStr!='':
 				SimpleSend(pinStr)
 
-			# Renvois des sondes toutes les 300s
+			# Renvois des sondes toutes les 300s par defaut
 			if NextRefresh<time.time():
-				NextRefresh=time.time()+300  #300s environ
+				NextRefresh=time.time()+(60*ProbeDelay)  #300s environ par defaut
 				pinStr=''
 				pinDHT=0
 				for i in range(0,40):
@@ -519,8 +526,14 @@ def GetDistance(u,v):
 # Debut
 if __name__ == "__main__":
 	# get the arguments
+	if len(sys.argv) > 6:   
+		ProbeDelay = int(sys.argv[6])
+		if ProbeDelay<1 or ProbeDelay>1000:
+			ProbeDelay = 5
 	if len(sys.argv) > 5:   
 		JeedomCPL = sys.argv[5]
+		if JeedomCPL == '.':
+			JeedomCPL = ''
 	if len(sys.argv) > 4:      
 		JeedomPort = int(sys.argv[4])
 	if len(sys.argv) > 3: 
@@ -575,13 +588,24 @@ if __name__ == "__main__":
 	# Add threads to thread list
 	threads.append(thread1)
 	threads.append(thread2)
+	
+	thread_refresh = time.time() + 900
 
 	print("Jeedouino daemon waiting...")
 	try:
 		while exit==0:
+			if thread_refresh<time.time():
+				thread_refresh = time.time() + 900
+				if thread_1 == 0 or thread_2 == 0:
+					exit = 1
+					log('erreur' , 'Threads dead, shutting down daemon server')
+					time.sleep(2)
+					break
+				thread_1 = 0
+				thread_2 = 0
 			time.sleep(2)
 	except KeyboardInterrupt:
-		print('^C received, shutting down server')
+		print('^C received, shutting down daemon server')
 		exit=1  # permet de sortir du thread aussi
 		time.sleep(4)
 		

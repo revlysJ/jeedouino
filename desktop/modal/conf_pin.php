@@ -123,6 +123,13 @@ if (isset($_GET['id']))
 		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
 			<?php if (substr($ModeleArduino,0,2)!='pi' or (substr($ModeleArduino,0,6)=='piGPIO') or ($ModeleArduino == 'piPlus'))
 			{
+				$_ProbeDelay = '
+				<div class="form-group">
+					<label class="col-sm-4 control-label "><p class="hidden-xs"><br/>{{Délai de renvoi des valeurs des sondes T°/H en minutes. <br>(En tests)}}</p></label>
+					<div class="col-sm-8">
+						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1 à 1000 max." min="1" max="1000"/> 
+					</div>
+				</div>';
 			?>
 			<div role="tabpanel" class="tab-pane" id="optionstab">
 				<?php if (substr($ModeleArduino,0,2)!='pi')
@@ -150,6 +157,7 @@ if (isset($_GET['id']))
                     </div>
                 </div>		
 				<?php
+					if ($PortArduino != 'usbarduino') echo $_ProbeDelay;
 				}
 				elseif (substr($ModeleArduino,0,6)=='piGPIO')
 				{
@@ -168,6 +176,7 @@ if (isset($_GET['id']))
                     </div>
                 </div>		
 				<?php
+					echo $_ProbeDelay;
 				}
 				elseif ($ModeleArduino == 'piPlus')
 				{

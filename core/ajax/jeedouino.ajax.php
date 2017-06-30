@@ -83,7 +83,12 @@ try {
     {
         exec('sudo apt-get -y --yes --force-yes install python-smbus >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	}    	
+	} 
+ 	if (init('action') == 'installDS18B20') 
+    {
+        exec('sudo chmod 755 ' . dirname(__FILE__) . '/../../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+		ajax::success();
+	}       	
     // action qui permet d'effectuer la sauvegarde des données en asynchrone
     if (init('action') == 'saveStack') {
         $params = init('params');

@@ -218,7 +218,7 @@ class jeedouino extends eqLogic {
 		{
 			//$EqLogicArr = json_decode($EqLogicArr, true);
 			if (self::Networkmode() == 'master')  self::StartAllDemons($EqLogicArr);
-			elseif (method_exists('jeeNetwork', 'getJsonRpcMaster'))
+			elseif (class_exists ('jeeNetwork', false))
 			{
 				$jsonrpc = jeeNetwork::getJsonRpcMaster();
 				if (!$jsonrpc->sendRequest('StartAllDemons', array('plugin'=>'jeedouino' ,'EqLogics' => $EqLogicArr)))
@@ -410,6 +410,7 @@ class jeedouino extends eqLogic {
 				else	// Un peu plus long en déporté
 				{
 					if ($portusbdeporte=='none') return;	// pas la peine de continuer, le port usb de connection n'est pas choisi.
+					if (!class_exists ('jeeNetwork', false)) return;
 					$p=strpos($portusbdeporte,'_');
 					if ($p) // Pas de vérification stricte car je ne veux pas de position à 0 non plus
 					{
@@ -836,7 +837,7 @@ class jeedouino extends eqLogic {
 		$SlaveName = '';
 		if ($SlaveNetworkID == 0)
 		{
-			if (method_exists('jeeNetwork', 'getIp'))
+			if (class_exists ('jeeNetwork', false))
 			{
 				foreach (jeeNetwork::all() as $jeeNetwork)
 				{
@@ -855,7 +856,7 @@ class jeedouino extends eqLogic {
 	{
 		if ($SlaveNetworkID)
 		{
-			if (method_exists('jeeNetwork', 'sendRawRequest'))
+			if (class_exists ('jeeNetwork', false))
 			{
 				$jeeNetwork = jeeNetwork::byId($SlaveNetworkID);
 				if (!is_object($jeeNetwork))
@@ -1083,21 +1084,27 @@ class jeedouino extends eqLogic {
 		}
 
 		self::StopBoardDemonCMD($board_id, $DemonType); // Stoppe le(s) processus du Démon local
+		$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '5');
+		if ($JeedomCPL == '') $JeedomCPL = '.';
 		switch ($DemonTypeF)
 		{
 			case 'USB':
-				$portUSB = jeedom::getUsbMapping($_portUSB);
+				$portUSB = trim(jeedom::getUsbMapping($_portUSB));
+				if ($portUSB == '') 
+				{
+					jeedouino::log( 'error', 'Appel démon ArduinoUsb impossible - port USB vide !.');
+					return false;
+				}
 				$baudrate = 115200;
 				if (config::byKey($board_id . '_SomfyRTS', 'jeedouino', 0)) $baudrate /=  2;
 				jeedouino::log( 'debug', 'Appel démon ArduinoUsb sur port :' . $_portUSB . ' ( ' . $portUSB . ' ) - Baudrate : ' . $baudrate);
-				if ($JeedomCPL == '') $JeedomCPL = '.';
-				$cmd = $PortDemon.' '.$portUSB.' '.$board_id.' '.$jeedomIP.' '.$JeedomPort.' '.$JeedomCPL.' '.$baudrate;
+				$cmd = $PortDemon.' '.$portUSB.' '.$board_id.' '.$jeedomIP.' '.$JeedomPort.' '.$JeedomCPL.' '.$baudrate.' '.$_ProbeDelay;
 				break;
 			case 'PiFace':
 				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$PiFaceBoardID.' '.$JeedomPort.' '.$JeedomCPL;
 				break;
 			case 'PiGpio':
-				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$JeedomPort.' '.$JeedomCPL;
+				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$JeedomPort.' '.$JeedomCPL.' '.$_ProbeDelay;
 				break;
 			case 'PiPlus':
 				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$PiPlusBoardID.' '.$JeedomPort.' '.$JeedomCPL;
@@ -1307,6 +1314,7 @@ class jeedouino extends eqLogic {
 	public function preSave()
 	{
 		jeedouino::log( "debug",' >>>preSave');
+
 		if ($this->getIsEnable() == 0)
 		{
 			jeedouino::log( 'debug','L\'équipement ID '.$this->getId().' est désactivé. Pas la peine de continuer.');
@@ -1461,9 +1469,55 @@ class jeedouino extends eqLogic {
 	 * dans la base de données pour une nouvelle entrée */
 	public function postInsert()
 	{
-		jeedouino::log( "debug",' >>>postInsert');
-		$arduino_id=$this->getId();
-		config::save($arduino_id.'_EqCfgSaveStep', 1, 'jeedouino');	// A la création de l'équipement, permetra de savoir à quelle étape on est.
+		jeedouino::log( "debug", ' >>>postInsert');
+		$arduino_id = $this->getId();
+		config::save($arduino_id . '_EqCfgSaveStep', 1, 'jeedouino');	// A la création de l'équipement, permetra de savoir à quelle étape on est.
+		
+		// On verifie si l'equipement resulte d'une duplication
+		$Original_ID = $this->getConfiguration('Original_ID');
+		if ($Original_ID == '')
+		{
+			// pas d'id original, donc surement creation d'un nouvel equipement
+			$this->setConfiguration('Original_ID' , $arduino_id);
+			$this->save(true);
+			jeedouino::log( 'debug','Pas de ID original, donc surement création d un nouvel équipement.');
+		}
+		elseif ($Original_ID != $arduino_id)
+		{
+			jeedouino::log( 'debug',' arduino_id = ' . $arduino_id);
+			jeedouino::log( 'debug',' Original_ID = ' . $Original_ID);
+			jeedouino::log( 'debug','ID original différent de celui de l\'ID courant, donc résultat d\'une duplication.');
+			$this->setConfiguration('Original_ID' , $arduino_id);
+			$this->save(true);
+			// id original different de celui de l'id courant, donc resultat d'une duplication.
+			//
+			// pins de la carte (normalement deja definie)
+			list($Arduino_pins , $board , $usb) = self::GetPinsByBoard($arduino_id);
+			// pins utilisateur
+			if (($board == 'arduino') or ($board == 'esp'))
+			{
+				$UserPinsMax = $this->getConfiguration('UserPinsMax');
+				if ($UserPinsMax < 0 or $UserPinsMax>100) $UserPinsMax = 0;
+				$Arduino_pins = $Arduino_pins + jeedouino::GiveMeUserPins($UserPinsMax);
+			}
+			// copie des datas des pins
+			foreach ($Arduino_pins as $pins_id => $pin_datas)
+			{
+				$myPin = config::byKey($Original_ID . '_' . $pins_id, 'jeedouino', 'not_used');
+				$generic_type = config::byKey('GT_' . $Original_ID . '_' . $pins_id, 'jeedouino', '');
+				$virtual = config::byKey('GV_' . $Original_ID . '_' . $pins_id, 'jeedouino', '');
+				
+				config::save($arduino_id . '_' . $pins_id, $myPin, 'jeedouino');
+				config::save('GT_' . $arduino_id . '_' . $pins_id, $generic_type, 'jeedouino');
+				config::save('GV_' . $arduino_id . '_' . $pins_id, $virtual, 'jeedouino');
+			}
+			// copie des options
+			$choix_boot = config::byKey($Original_ID . '_choix_boot', 'jeedouino', '2');
+			config::save($arduino_id . '_choix_boot', $choix_boot, 'jeedouino');
+			$_ProbeDelay = config::byKey($Original_ID . '_ProbeDelay', 'jeedouino', '5');
+			config::save($arduino_id . '_ProbeDelay', $_ProbeDelay, 'jeedouino');
+		}
+
 	}
 	public function GiveMeUserPins($UserPinsMax, $UserPinsBase = 500)
 	{
@@ -1482,7 +1536,14 @@ class jeedouino extends eqLogic {
 	/* fonction appelé après la fin de la séquence de sauvegarde */
 	public function postSave()
 	{
-		jeedouino::log( "debug",' >>>postSave');
+		jeedouino::log( "debug" , 'Debut de postSave');
+		
+		$arduino_id = $this->getId();
+		
+		// petit correctif concernant le delai de renvoi des temp des sondes
+		$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', '5');
+		if ($_ProbeDelay < 1 or $_ProbeDelay>1000) $_ProbeDelay = 5;
+		config::save($arduino_id . '_ProbeDelay', $_ProbeDelay, 'jeedouino');
 
 		if ($this->getIsEnable() == 0)
 		{
@@ -1491,7 +1552,6 @@ class jeedouino extends eqLogic {
 			return;
 		}
 
-		$arduino_id=$this->getId();
 		$ModeleArduino = $this->getConfiguration('arduino_board');
 		$PortArduino = $this->getConfiguration('datasource');
 		$LocalArduino = $this->getConfiguration('arduinoport');
@@ -2323,6 +2383,8 @@ class jeedouino extends eqLogic {
 	}
 	public function postAjax()
 	{
+		jeedouino::log( 'debug','Debut de postAjax()');
+		
 		if ($this->getConfiguration('AutoOrder') == '1')
 		{
 			foreach ($this->getCmd() as $cmd)
@@ -2333,6 +2395,8 @@ class jeedouino extends eqLogic {
 				$cmd->save();
 			}
 		}
+
+		jeedouino::log( 'debug','Fin de postAjax()');
 	}
 	public function DelCmdOfVirtual($cmd_def, $LogicalId)
 	{
@@ -2547,6 +2611,7 @@ class jeedouino extends eqLogic {
 				$TeleInfoTX = config::byKey($board_id.'_TeleInfoTX', 'jeedouino', 0);
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
+				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
 
 				if ($TeleInfoRX)
 				{
@@ -2555,6 +2620,7 @@ class jeedouino extends eqLogic {
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
+				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
 				// if ($DHTxx==0)
 				// {
 					// $MasterFile = str_replace('#define UseDHT 1' , '#define UseDHT 0' , $MasterFile);	// Sketch ligne 8
@@ -2620,6 +2686,7 @@ class jeedouino extends eqLogic {
 				$TeleInfoTX = config::byKey($board_id.'_TeleInfoTX', 'jeedouino', 0);
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
+				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
 
 				if ($TeleInfoRX)
 				{
@@ -2628,6 +2695,7 @@ class jeedouino extends eqLogic {
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
+				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
 				// if ($DHTxx==0)
 				// {
 					// $MasterFile = str_replace('#define UseDHT 1' , '#define UseDHT 0' , $MasterFile);	// Sketch ligne 8
@@ -2705,12 +2773,45 @@ class jeedouino extends eqLogic {
 		}
 		// On efface les commandes dans les virtuels
 		foreach ($this->getCmd() as $cmd)  jeedouino::DelCmdOfVirtual($cmd, $cmd->getLogicalId());
+		
+		// pins utilisateur
+		if (($board == 'arduino') or ($board == 'esp'))
+		{
+			$UserPinsMax = $this->getConfiguration('UserPinsMax');
+			if ($UserPinsMax < 0 or $UserPinsMax>100) $UserPinsMax = 0;
+			$Arduino_pins = $Arduino_pins + jeedouino::GiveMeUserPins($UserPinsMax);
+		}
+		// On efface les variables dans la table config (pins et autres)
+		foreach ($Arduino_pins as $pins_id => $pin_datas)
+		{
+			config::remove($arduino_id . '_' . $pins_id, 'jeedouino');
+			config::remove('GT_' . $arduino_id . '_' . $pins_id, 'jeedouino');
+			config::remove('GV_' . $arduino_id . '_' . $pins_id, 'jeedouino');
+		}
+		config::remove($arduino_id . '_choix_boot', 'jeedouino');
+		config::remove($arduino_id . '_DHTxx', 'jeedouino');
+		config::remove($arduino_id . '_DS18x20', 'jeedouino');
+		config::remove($arduino_id . '_TeleInfoRX', 'jeedouino');
+		config::remove($arduino_id . '_TeleInfoTX', 'jeedouino');
+		config::remove($arduino_id . '_Send2LCD', 'jeedouino');
+		config::remove($arduino_id . '_UserSketch', 'jeedouino');
+		config::remove($arduino_id . '_SomfyRTS', 'jeedouino');
+		config::remove($arduino_id . '_HasDemon', 'jeedouino');
+		config::remove($arduino_id . '_oID', 'jeedouino');
+		config::remove($arduino_id . '_PinMode', 'jeedouino');
+		config::remove($arduino_id . '-ForceStart', 'jeedouino');
+		config::remove($arduino_id . '-ForceSuppr', 'jeedouino');
+		config::remove($arduino_id . '_EqCfgSaveStep', 'jeedouino');
+		config::remove($arduino_id . '_ProbeDelay', 'jeedouino');
+		config::remove('REP_' . $arduino_id, 'jeedouino');
+		
+		config::remove($arduino_id . 'remove', 'jeedouino');
 	}
 
 	/* fonction appelé après l'effacement d'une entrée */
 	public function postRemove()
 	{
-		config::remove( $this->getId() . 'remove', 'jeedouino');		// arduino_id
+		//config::remove( $this->getId() . 'remove', 'jeedouino');		// arduino_id
 	}
 
 	/*	 * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin

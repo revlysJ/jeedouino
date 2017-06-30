@@ -20,6 +20,10 @@ eqLogic=''
 JeedomPort=80
 JeedomCPL=''
 
+# Tests Threads alives
+thread_1 = 0
+thread_2 = 0
+
 def log(level,message):
 	print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
 	# print(str(level)+" | " + str(message))
@@ -57,7 +61,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		print("Starting " + self.name)
-		global exit,Arduino_reponse,USBArduino,port,s
+		global exit,Arduino_reponse,USBArduino,port,s,thread_1
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -94,6 +98,7 @@ class myThread1 (threading.Thread):
 
 		s.listen(5)								# Now wait for client connection.
 		while exit==0:
+			thread_1 = 1
 			c, addr = s.accept()			 # Establish connection with client.
 			if exit==1:
 				break			
@@ -163,20 +168,23 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		print("Starting " + self.name)
-		global exit,Arduino_reponse,USBArduino,cmd_list,s
+		global exit,Arduino_reponse,USBArduino,cmd_list,s,thread_2
 		rep=''
 		while exit==0:
 			while rep=='':
+				thread_2 = 1
 				if exit==1:
 					break
 				try:
 					rep=USBArduino.readline()
 				except serial.SerialException as e:
 					rep=''
+					exit=1	
+					break
 				except TypeError as e:
 					rep=''
 					exit=1	
-					break						
+					break
 
 			log ('Reponse brute recue',str(rep)) 
 			
@@ -263,18 +271,27 @@ if __name__ == "__main__":
 	# Add threads to thread list
 	threads.append(thread1)
 	threads.append(thread2)
+	
+	thread_refresh = time.time() + 900
 
 	print("Jeedouino daemon waiting...")
 	try:
 		while exit==0:
+			if thread_refresh<time.time():
+				thread_refresh = time.time() + 900
+				if thread_1 == 0 or thread_2 == 0:
+					exit = 1
+					log('erreur' , 'Threads dead, shutting down daemon server')
+					time.sleep(2)
+					break
+				thread_1 = 0
+				thread_2 = 0
 			time.sleep(2)
 	except KeyboardInterrupt:
-		print('^C received, shutting down server')
+		print('^C received, shutting down daemon server')
 		exit=1  # permet de sortir du thread aussi
-		
-	# Wait for all threads to complete
-	#for t in threads:
-	#	t.join()
+		time.sleep(2)
+
 	USBArduino.close()
 	s.close()
 	sys.exit

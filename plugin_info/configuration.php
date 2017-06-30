@@ -172,6 +172,17 @@ $port =  jeedouino::GetJeedomPort();
 							</td>
 							<td>{{Raspberry PI avec carte(s) Pi.Plus ou MCP23017 (I2C)}}</td>
 						</tr>
+						<tr>
+							<td>
+								<div class="form-group" >
+										<label class="col-lg-5 control-label">{{Correction droits DS18B20}}</label>
+										<div class="col-lg-5">
+												<a class="btn btn-info bt_installDS18B20" ><i class="fa fa-play"></i> {{sudo chmod 755 DS18B20Scan}}</a>
+										</div>            
+								</div>
+							</td>
+							<td>{{Raspberry PI (gpio) avec sonde(s) DS18B20}}</td>
+						</tr>
 					</tbody>
 				</table>
 
@@ -649,6 +660,28 @@ $port =  jeedouino::GetJeedomPort();
             }
             $('#ul_plugin .li_plugin[data-plugin_id=jeedouino]').click();   // recharge la page config du plugin
             $('#div_alert').showAlert({message: '{{Les dépendances IO.PiPlus sont en cours d\'installation.}}', level: 'success'});
+        }
+    });
+    });
+
+   $('.bt_installDS18B20').on('click', function () {
+        $.ajax({// fonction permettant de faire de l'ajax
+            type: "POST", // methode de transmission des données au fichier php
+            url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php", // url du fichier php
+            data: {
+                action: "installDS18B20",
+            },
+            dataType: 'json',
+            error: function (request, status, error) {
+                handleAjaxError(request, status, error);
+            },
+            success: function (data) { // si l'appel a bien fonctionné
+            if (data.state != 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            $('#ul_plugin .li_plugin[data-plugin_id=jeedouino]').click();   // recharge la page config du plugin
+            $('#div_alert').showAlert({message: '{{Les corrections de droits de DS18B20Scan sont en cours.}}', level: 'success'});
         }
     });
     });

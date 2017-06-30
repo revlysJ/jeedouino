@@ -14,7 +14,7 @@ $cpl = jeedouino::GetJeedomComplement();
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
                 <a class="btn btn-warning " style="width : 100%;margin-top : 5px;margin-bottom: 5px;" href="<?php echo $cpl; ?>/index.php?v=d&p=plugin&id=jeedouino">
-                    <i class="fa fa-cogs"></i> {{Configuration du plugin}} 
+                    <i class="fa fa-cogs"></i> {{Config. du plugin}} 
                 </a>   
                 <a class="btn btn-warning bt_plugin_view_log " style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-slaveid="-1" data-log="jeedouino">
                     <i class="fa fa-comment"></i> {{Logs du plugin}} 
@@ -90,18 +90,23 @@ $cpl = jeedouino::GetJeedomComplement();
 		?>
 		</div>
 	</div>
-
     <!-- Affichage de l'eqLogic sélectionné -->
     <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
-		<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fa fa-check-circle"></i> {{Sauver et/ou Générer}}</a>
-		<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>
-		<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-cogs"></i> </a>
-		<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fa fa-wrench"></i> </a>
-		<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i> </a>
-		<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i> </a>
-		<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
-		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8VRBWX5A5PM7Q"  target="_blank" class="btn btn-success eqLogicAction pull-right" title="{{Faire un don pour soutenir le développement du plugin. Merci.}}"><i class="fa fa-paypal"></i> </a>
-
+		<div style="padding-bottom:40px;">
+			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fa fa-check-circle"></i> {{Sauver / Générer}}</a>
+			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fa fa-minus-circle"></i> </a>
+			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fa fa-files-o"></i> </a>
+			<!-- <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a> -->
+			<?php if (version_compare(jeedom::version(), '3.0.0', '>=')) echo '<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fa fa-object-group"></i> </a>'; ?>
+			
+			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-cogs"></i> </a>
+			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fa fa-wrench"></i> </a>
+			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i> </a>
+			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i> </a>
+			<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
+			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8VRBWX5A5PM7Q"  target="_blank" class="btn btn-success eqLogicAction pull-right" title="{{Faire un don pour soutenir le développement du plugin. Merci.}}"><i class="fa fa-paypal"></i> </a>
+		</div>
+		
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
 			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
@@ -121,6 +126,7 @@ $cpl = jeedouino::GetJeedomComplement();
                     <label class="col-sm-3 control-label">{{Nom de l'équipement jeedouino}}</label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
+						<input type="text" class="eqLogicAttr form-control" data-l1key="Original_ID" style="display : none;" />
                         <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement jeedouino}}"/>
                     </div>
                 </div>
@@ -237,7 +243,7 @@ $cpl = jeedouino::GetJeedomComplement();
 							<select class="eqLogicAttr form-control"  data-l1key="configuration" data-l2key="portusblocal">
 								<option value="none">{{Aucun}}</option>
                                     <?php
-                                    foreach (jeedom::getUsbMapping('', true) as $name => $value) 
+                                    foreach (jeedom::getUsbMapping() as $name => $value) 
                                     {
                                         echo '<option value="' . $name . '">' . $name . ' (' . $value . ')</option>';
                                     }
@@ -253,7 +259,7 @@ $cpl = jeedouino::GetJeedomComplement();
                                 <?php
                                 $plugin_jeedouino_deporte=false;
 								// sur Jeedom esclave
-								if (method_exists('jeeNetwork', 'sendRawRequest'))
+								if (class_exists ('jeeNetwork', false))
 								{
 									foreach (jeeNetwork::byPlugin('jeedouino') as $jeeNetwork) 
 									{
@@ -336,7 +342,7 @@ $cpl = jeedouino::GetJeedomComplement();
                             <datalist id="jeeReseau">
                 <?php
                     echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >Jeedom Master</option>';
-					if (method_exists('jeeNetwork', 'getIp'))
+					if (class_exists ('jeeNetwork', false))
 					{
 						foreach (jeeNetwork::all() as $jeeNetwork) 
 						{
@@ -504,7 +510,7 @@ $cpl = jeedouino::GetJeedomComplement();
 								echo '<div class="form-group sketchs sketchLAN'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-10">
-									<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Réseau) pour cet équipement.}}</a>
+									<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Réseau) pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 									<br>
 									<br><i>Note : Ce sketch est prévu pour les shields réseaux basés sur un chip W5100.</i>
@@ -530,7 +536,7 @@ $cpl = jeedouino::GetJeedomComplement();
 								echo '<div class="form-group sketchs sketchESP'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-6">
-									<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'ESP8266 pour cet équipement.}}</a>
+									<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'ESP8266 pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 								</div></div>';
 							}
@@ -549,12 +555,12 @@ $cpl = jeedouino::GetJeedomComplement();
 						echo '<br><br><div class="form-group sketchs sketchUSB " style="display : none;">
 						<label class="col-sm-2 control-label">{{ Sketch }}</label>
 						<div class="col-sm-6">
-							<a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
+							<a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
 						</div></div>';			
 						echo '<br><br><div class="form-group sketchsLib " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Librairies pour vos Sketchs }}</label>
 								<div class="col-sm-6">
-									<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" ><i class="fa fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
+									<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
 								</div></div>';
 					}
 

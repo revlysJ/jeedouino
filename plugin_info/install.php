@@ -26,12 +26,24 @@ function jeedouino_update()
 {
 	if (jeedouino::Networkmode() == 'master') 
 	{
+		// correction droits fichier DS18B20Scan
+		exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+		//
 		$eqLogics = eqLogic::byType('jeedouino');
 		jeedouino::log( 'debug','-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-');
 		foreach ($eqLogics as $eqLogic) 
 		{
+			$arduino_id = $eqLogic->getId();
+			
+			// On verifie si l'equipement a un tag "Original_ID"
+			$Original_ID = $eqLogic->getConfiguration('Original_ID');
+			if ($Original_ID == '')
+			{
+				$eqLogic->setConfiguration('Original_ID' , $arduino_id);
+				$eqLogic->save(true);
+			}
 			if ($eqLogic->getIsEnable() == 0) continue;
-			$arduino_id=$eqLogic->getId();
+			
 			list(,$board,$usb) = jeedouino::GetPinsByBoard($arduino_id);
 			jeedouino::log( 'debug','-=-= '.$board.'  ( '.$arduino_id.' ) =-=-');
 			switch ($board)

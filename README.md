@@ -1,5 +1,5 @@
 # Jeedouino v0.99
-plugin for jeedom
+Plugin pour Jeedom
 
 Description
 Ce plugin vous permet de contrôler de différents manières les pins entrées/sorties des cartes suivantes : 

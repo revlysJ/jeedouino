@@ -14,7 +14,7 @@ Dieser Plugin ermöglicht es Ihnen, die verschiedenen Arten von Ein-/Ausgänge d
 
 Es funktioniert lokal oder entfernt (Slave Modus von Jeedom) auf Ihrem Netz.
 
-Es ist mit den neuen Funktionen Meister/Sklaven (plugin Jeedom Link) von Jeedom kompatibel. 
+Es ist mit den neuen Funktionen Meister/Sklaven (Jeedom Link Plugin) von Jeedom kompatibel. 
 
 '''
 == Installation

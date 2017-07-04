@@ -1,3 +1,15 @@
+=== 01/07/2017 v0.99
+
+- Correctifs divers + compatibilité Jeedom V3.
+- Ajout de la fonction "Dupliquer" pour les équipements.
+- Ajout d'un paramétrage de délai pour les sondes de température (Onglet "Options" dans "Pins /GPIO") pour Arduinos/Esp réseaux et piGpio.
+- Ajout d'un graphique de liens (Jeedom V3 requis).
+- Correctifs démons.
+
+=== 13/06/2017 v0.98.5
+
+- Compatibilité Jeedom V3 béta ajoutée.
+
 === 03/12/2016 v0.98
 
 - Correction BootMode sur démon PiGPIO.

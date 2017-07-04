@@ -1,5 +1,5 @@
 : icons:
-= Jeedouino v0.98
+= Jeedouino v0.99
 
 == Description
 This plugin enable you to control in many ways the input/output of the following boards : 

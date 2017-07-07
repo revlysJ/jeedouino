@@ -1,3 +1,9 @@
+=== 07/07/2017 v0.99.1
+
+- Correctif detection port usb.
+- Correctif (test) démons thread hs.
+- Correctif léger JeedouinoExt.
+
 === 01/07/2017 v0.99
 
 - Correctifs divers + compatibilité Jeedom V3.

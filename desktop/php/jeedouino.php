@@ -96,7 +96,7 @@ $cpl = jeedouino::GetJeedomComplement();
 			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fa fa-check-circle"></i> {{Sauver / Générer}}</a>
 			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fa fa-minus-circle"></i> </a>
 			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fa fa-files-o"></i> </a>
-			<!-- <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a> -->
+			<!--  <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a> -->
 			<?php if (version_compare(jeedom::version(), '3.0.0', '>=')) echo '<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fa fa-object-group"></i> </a>'; ?>
 			
 			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-cogs"></i> </a>
@@ -243,7 +243,7 @@ $cpl = jeedouino::GetJeedomComplement();
 							<select class="eqLogicAttr form-control"  data-l1key="configuration" data-l2key="portusblocal">
 								<option value="none">{{Aucun}}</option>
                                     <?php
-                                    foreach (jeedom::getUsbMapping() as $name => $value) 
+                                    foreach (jeedom::getUsbMapping('', true) as $name => $value) 
                                     {
                                         echo '<option value="' . $name . '">' . $name . ' (' . $value . ')</option>';
                                     }

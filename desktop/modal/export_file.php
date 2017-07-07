@@ -14,24 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Plugin Jeedouino for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
-}
-if (init('id') == '') {
+if (!isset($_GET['id'])){
 	throw new Exception('{{EqLogic ID ne peut être vide}}');
 }
-$arduino_id = init('id');
+$arduino_id = $_GET['id'];
 $eqLogic = eqLogic::byId($arduino_id);
 
 if (!is_object($eqLogic)) {
 	throw new Exception('{{EqLogic non trouvé}}');
 }
-echo '<div>';
-echo '<br><a class="btn btn-success" href="/plugins/jeedouino/desktop/modal/export_file.php?id=' . $arduino_id .'" target="_blank">Téléchargement</a><br>';
-//echo json_encode(utils::o2a($eqLogic));
-echo '<br>EqLogic & Cmds :<br>';
-echo json_encode($eqLogic->export());
+header("Content-type: json/force-download");
+header("Content-disposition: attachment; filename=Jeedouino_" . $arduino_id . ".json");
+$export = $eqLogic->export();
+
 //echo '<br>getcmd : <br>';
 //echo json_encode(utils::o2a($eqLogic->getCmd()));
 
@@ -63,9 +60,8 @@ echo json_encode($eqLogic->export());
 //											'choix_boot' 			=> $choix_boot,
 //											'_ProbeDelay' 		=> $_ProbeDelay
 //										);
-echo '<br> Datas Pins : <br>';
-echo json_encode($myPin);
-echo '</div>';
-?>
-<div id="div_export"></div>
+$export['MyPins'] = $myPin;
+echo json_encode($export);
+//echo json_encode($myPin);
 
+?>

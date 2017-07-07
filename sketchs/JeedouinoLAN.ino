@@ -11,7 +11,7 @@
 #define UseDS18x20 1
 #define UseTeleInfo 0
 #define UseLCD16x2 0	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C
-#define UseENC28J60 0 // Choix de la lib suivant shield ethernet : 0 = W5100 / 1 = ENC28J60 - Voir note ci-dessous
+#define UseEthernet 0 // Choix de la lib suivant shield ethernet : 0 = W5100 / 1 = ENC28J60  / 2 = W5500 - Voir note ci-dessous
 #define UseHCSR04 0
 #define UsePwm_input 0 // Code obsolete (sera supprimé) - Entrée Numérique Variable (0-255 sur 10s) en PULL-UP 
 
@@ -30,10 +30,13 @@
 
 #include <SPI.h>
 // Pour shield avec W5100
-#if (UseENC28J60 == 0)
+#if (UseEthernet == 0)
 	#include <Ethernet.h>
 #endif
-
+// Pour shield avec W5500
+#if (UseEthernet == 2)
+	#include <Ethernet2.h>
+#endif
 // Pour shield avec ENC28J60 - Note : il faut passer NODHCP à 1 ci-dessus.
 // Attention, problèmes de mémoire possibles sur arduino nano/uno/328 avec cette lib (v1.59)!
 // Pour la récupérer, et l'installer dans l'IDE, voir : https://github.com/ntruchsess/arduino_uip/tree/Arduino_1.5.x
@@ -44,7 +47,7 @@
 //#define UIP_CONF_MAX_CONNECTIONS 2
 //#define UIP_CONF_UDP						 0
 //
-#if (UseENC28J60 == 1)
+#if (UseEthernet == 1)
 	#include <UIPEthernet.h>	// v1.59
 #endif
 // Traitement spécifique a cette librairie (pb de deconnection):

@@ -101,6 +101,11 @@ if (isset($_GET['BoardEQ']))
 			return;
 		}
 		// Informations fournies par les démons
+		if (isset($_GET['THREADSDEAD']))
+		{
+			jeedouino::log( 'error', $CALLBACK . 'Les threads du démon sont hs. Tentative de redémarrage du démon en cours...');
+			jeedouino::ReStartBoardDemon($arduino_id, 0, $ModeleArduino);
+		}
 		if (isset($_GET['PORTINUSE']))
 		{
 			jeedouino::log( 'error', $CALLBACK . 'Le port ' . $_GET['PORTINUSE'] . ' est probablement utilisé. Nouvel essai en mode auto-découverte dans 7s.');

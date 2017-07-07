@@ -1618,6 +1618,8 @@ class jeedouino extends eqLogic {
 				if ($reponse!='OK') jeedouino::log( 'error','Pb Envoi cmd SetJeedomCFG sur Jeedouino déporté eqID ( '.$arduino_id.' ) - Réponse :'.$reponse);
 
 				$ToSend = false;
+				$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', '5');
+				if ($JeedomCPL == '') $JeedomCPL = '.';
 				if ($board == 'arduino' and $usb)
 				{
 					$DemonName = 'USB';
@@ -1639,7 +1641,9 @@ class jeedouino extends eqLogic {
 					$UsbMap=config::byKey('uMap-'.$ip, 'jeedouino', '');
 					if (is_array($UsbMap))  $portUSB = $UsbMap[$portUSB];
 					else $portUSB = '"'.$portUSB.'"';
-					$setprm = $PortDemon.' '.$portUSB.' '.$arduino_id.' '.$JeedomIP.' '.$JeedomPort.' '.$JeedomCPL;
+					$baudrate = 115200;
+					if (config::byKey($arduino_id . '_SomfyRTS', 'jeedouino', 0)) $baudrate /=  2;
+					$setprm = $PortDemon.' '.$portUSB.' '.$arduino_id.' '.$JeedomIP.' '.$JeedomPort.' '.$JeedomCPL.' '.$baudrate.' '.$_ProbeDelay;
 					$ToSend = true;
 				}
 				if ($board == 'piface')
@@ -1652,7 +1656,7 @@ class jeedouino extends eqLogic {
 				if ($board == 'gpio')
 				{
 					$DemonName = 'PiGpio';
-					$setprm = $ipPort.' '.$arduino_id.' '.$JeedomIP.' '.$JeedomPort.' '.$JeedomCPL;
+					$setprm = $ipPort.' '.$arduino_id.' '.$JeedomIP.' '.$JeedomPort.' '.$JeedomCPL.' '.$_ProbeDelay;
 					$ToSend = true;
 				}
 				if ($board == 'piplus')

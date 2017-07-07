@@ -452,18 +452,25 @@ if __name__ == "__main__":
 	threads.append(thread1)
 	threads.append(thread2)
 	
-	thread_refresh = time.time() + 900
+	thread_delay = 900
+	thread_refresh = time.time() + thread_delay
+	thread_tries = 0
 
 	print("Jeedouino PiPlus daemon waiting for inputs...")
 	try:
 		while exit==0:
 			if thread_refresh<time.time():
-				thread_refresh = time.time() + 900
+				thread_refresh = time.time() + thread_delay
 				if thread_1 == 0 or thread_2 == 0:
-					exit = 1
-					log('erreur' , 'Threads dead, shutting down daemon server')
-					time.sleep(2)
-					break
+					if thread_tries < 2:
+						thread_tries += 1
+						log('erreur' , 'Threads maybe dead, wait for one more try.')
+					else:
+						exit = 1
+						log('erreur' , 'Threads dead, shutting down daemon server')
+						time.sleep(2)
+						SimpleSend('&THREADSDEAD=1')
+						break
 				thread_1 = 0
 				thread_2 = 0
 			# Boucle qui remplace le listener (qui bug avec plusieurs piPlus)

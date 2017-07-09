@@ -31,7 +31,7 @@ image::../images/modeles.png[]
 _For PiFace board, a number (0 to 3) is asked to identify it (If you have a piRack eg.)_
 
 image::../images/piface.png[]
-* *Type de connection* : port de connection USB ou Réseau,
+* *Connection type* : USB or LAN port,
 * *Address IP and Port*: for the connection to the card via the network.
 [WARNING]
 Daemons (GPIO and Piface eg.) which could beings on the same Jeedom, make sure to use different ports for each. Normally, the creation of an equipment, a free port is offered. +

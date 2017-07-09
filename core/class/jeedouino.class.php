@@ -31,7 +31,18 @@ class jeedouino extends eqLogic {
 		if (config::byKey('jeeNetwork::mode') == 'slave') return 'slave';
 		return 'master';
 	}
-
+	
+	public function getImage() 
+	{
+		if (file_exists(dirname(__FILE__) . '/../../doc/images/jeedouino_' . $this->getConfiguration('arduino_board') . '.png')) 
+		{
+			return 'plugins/jeedouino/doc/images/jeedouino_' . $this->getConfiguration('arduino_board') . '.png';
+		}
+		else
+		{
+			return 'plugins/jeedouino/doc/images/jeedouino_icon.png';
+		}
+	}
 	public static function event()
 	{
 		$cmd = jeedouino::byId(init('id'));

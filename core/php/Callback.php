@@ -101,6 +101,11 @@ if (isset($_GET['BoardEQ']))
 			return;
 		}
 		// Informations fournies par les démons
+		if (isset($_GET['PINGME']))
+		{
+			jeedouino::log( 'error', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');
+			$result = jeedouino::StatusBoardDemon($arduino_id, 0, $ModeleArduino);
+		}
 		if (isset($_GET['THREADSDEAD']))
 		{
 			jeedouino::log( 'error', $CALLBACK . 'Les threads du démon sont hs. Tentative de redémarrage du démon en cours...');

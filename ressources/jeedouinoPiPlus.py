@@ -62,7 +62,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		print("Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,SetAllLOW,SetAllHIGH,CounterPinValue,s,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,BootMode,thread_1
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,SetAllLOW,SetAllHIGH,CounterPinValue,s,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,BootMode,thread_1,thread_tries
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -104,6 +104,7 @@ class myThread1 (threading.Thread):
 			if exit==1:
 				break			
 			m = c.recv(1024)
+			thread_tries = 0
 			query=SimpleParse(m)
 			if query:
 				log ('Requete :',str(query))
@@ -461,16 +462,24 @@ if __name__ == "__main__":
 		while exit==0:
 			if thread_refresh<time.time():
 				thread_refresh = time.time() + thread_delay
-				if thread_1 == 0 or thread_2 == 0:
+				if thread_1 == 0:
 					if thread_tries < 2:
 						thread_tries += 1
-						log('erreur' , 'Threads maybe dead, wait for one more try.')
+						log('erreur' , '1st Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
+						time.sleep(2)
+						SimpleSend('&PINGME=1')
 					else:
 						exit = 1
-						log('erreur' , 'Threads dead, shutting down daemon server')
+						log('erreur' , '1st Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
 						time.sleep(2)
 						SimpleSend('&THREADSDEAD=1')
 						break
+				if thread_2 == 0:
+					exit = 1
+					log('erreur' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
+					time.sleep(2)
+					SimpleSend('&THREADSDEAD=1')
+					break
 				thread_1 = 0
 				thread_2 = 0
 			# Boucle qui remplace le listener (qui bug avec plusieurs piPlus)

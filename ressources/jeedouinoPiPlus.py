@@ -465,18 +465,18 @@ if __name__ == "__main__":
 				if thread_1 == 0:
 					if thread_tries < 2:
 						thread_tries += 1
-						log('erreur' , '1st Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
+						log('Warning' , '1st Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
 						time.sleep(2)
 						SimpleSend('&PINGME=1')
 					else:
 						exit = 1
-						log('erreur' , '1st Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
+						log('Error' , '1st Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
 						time.sleep(2)
 						SimpleSend('&THREADSDEAD=1')
 						break
 				if thread_2 == 0:
 					exit = 1
-					log('erreur' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
+					log('Error' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
 					time.sleep(2)
 					SimpleSend('&THREADSDEAD=1')
 					break

@@ -5,7 +5,7 @@ if (!isConnect('admin')) {
 sendVarToJS('eqType', 'jeedouino');
 $eqLogics = eqLogic::byType('jeedouino');
 
-$cpl = jeedouino::GetJeedomComplement();	
+$cpl = jeedouino::GetJeedomComplement();
 //include_file('desktop', 'jeedouino', 'css', 'jeedouino');
 ?>
 
@@ -14,22 +14,22 @@ $cpl = jeedouino::GetJeedomComplement();
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
                 <a class="btn btn-warning " style="width : 100%;margin-top : 5px;margin-bottom: 5px;" href="<?php echo $cpl; ?>/index.php?v=d&p=plugin&id=jeedouino">
-                    <i class="fa fa-cogs"></i> {{Config. du plugin}} 
-                </a>   
+                    <i class="fa fa-cogs"></i> {{Config. du plugin}}
+                </a>
                 <a class="btn btn-warning bt_plugin_view_log " style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-slaveid="-1" data-log="jeedouino">
-                    <i class="fa fa-comment"></i> {{Logs du plugin}} 
-                </a> 
+                    <i class="fa fa-comment"></i> {{Logs du plugin}}
+                </a>
                 <a class="btn btn-default eqLogicAction" style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-action="add">
                     <i class="fa fa-plus-circle"></i> {{Ajouter un jeedouino}} <!-- changer pour votre type d'équipement -->
                 </a>
                 <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
                 <?php
-				foreach ($eqLogics as $eqLogic) 
+				foreach ($eqLogics as $eqLogic)
 				{
 					$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 					echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 				}
-				?>				
+				?>
             </ul>
             <ul id="ul_eqLogicView" class="nav nav-pills nav-stacked"></ul> <!-- la sidebar -->
         </div>
@@ -50,36 +50,36 @@ $cpl = jeedouino::GetJeedomComplement();
 					<i class="fa fa-wrench" style="font-size : 7em;color:#00979C;"></i>
 				</center>
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Configuration}}</center></span>
-			</div>		
+			</div>
 			<div class="cursor eqLogicAction" data-action="bt_healthSpecific" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
 				<center>
 					<i class="fa fa-medkit" style="font-size : 7em;color:#00979C;"></i>
-				</center> 
+				</center>
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Santé}}</center></span>
 			</div>
 			<div class="cursor eqLogicAction" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
 				<a target="_blank" style="text-decoration: none!important;" href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html">
 				<center>
 					<i class="fa fa-book" style="font-size : 7em;color:#00979C;"></i>
-				</center> 
+				</center>
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Documentation}}</center></span>
 				</a>
-			</div>			
+			</div>
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes équipements Jeedouino}}</legend>
-		<div class="eqLogicThumbnailContainer">			
+		<div class="eqLogicThumbnailContainer">
 		<?php
-		foreach ($eqLogics as $eqLogic) 
+		foreach ($eqLogics as $eqLogic)
 		{
 			$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
 			$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 			echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
 			echo "<center>";
-			if (file_exists(dirname(__FILE__) . '/../../doc/images/jeedouino_'.$ModeleArduino.'.png')) 
+			if (file_exists(dirname(__FILE__) . '/../../doc/images/jeedouino_'.$ModeleArduino.'.png'))
 			{
 				echo '<img class="lazy" src="plugins/jeedouino/doc/images/jeedouino_'.$ModeleArduino.'.png" height="105" width="95" />';
 			}
-			else 
+			else
 			{
 				echo '<img class="lazy" src="plugins/jeedouino/doc/images/jeedouino_icon.png" height="105" width="95" />';
 			}
@@ -96,17 +96,16 @@ $cpl = jeedouino::GetJeedomComplement();
 			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fa fa-check-circle"></i> {{Sauver / Générer}}</a>
 			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fa fa-minus-circle"></i> </a>
 			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fa fa-files-o"></i> </a>
-			<!--  <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a> -->
+			<a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a>
 			<?php if (version_compare(jeedom::version(), '3.0.0', '>=')) echo '<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fa fa-object-group"></i> </a>'; ?>
-			
+
 			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-cogs"></i> </a>
 			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fa fa-wrench"></i> </a>
 			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i> </a>
 			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i> </a>
 			<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
-			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8VRBWX5A5PM7Q"  target="_blank" class="btn btn-success eqLogicAction pull-right" title="{{Faire un don pour soutenir le développement du plugin. Merci.}}"><i class="fa fa-paypal"></i> </a>
-		</div>
-		
+	      </div>
+
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
 			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
@@ -116,7 +115,7 @@ $cpl = jeedouino::GetJeedomComplement();
 		</ul>
 
 		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-			<div role="tabpanel" class="tab-pane active" id="eqlogictab">	
+			<div role="tabpanel" class="tab-pane active" id="eqlogictab">
 			<br>
 
         <form class="form-horizontal">
@@ -154,18 +153,18 @@ $cpl = jeedouino::GetJeedomComplement();
                         }
                         ?>
                     </div>
-                </div>				
+                </div>
                 <div class="form-group">
 				  <label class="col-sm-3 control-label"></label>
 				  <div class="col-sm-9">
 					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activé?}}</label>
 					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible?}}</label>
-				  
+
 					<?php if (config::byKey('ActiveExt', 'jeedouino', false))
 					{
-					?>	
+					?>
 					<label class="checkbox-inline expertModeVisible ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
-					<?php }  ?>						
+					<?php }  ?>
 					</div>
                 </div>
                     <div class="form-group">
@@ -190,18 +189,20 @@ $cpl = jeedouino::GetJeedomComplement();
                                 <option value="esp01" id="select_arduino_board" >ESP8266-01</option>
 								<option value="esp07" id="select_arduino_board" >ESP8266-All I/O (Pour tests)</option>
 								<option value="espMCU01" id="select_arduino_board" >NodeMCU / Wemos</option>
+                                <option value="espsonoffpow" id="select_arduino_board">SONOFF POW (Pour tests)</option>
+                                <option value="espsonoff4ch" id="select_arduino_board">SONOFF 4CH (Pour tests)</option>
 								</optgroup>
-								
-                            </select> 
+
+                            </select>
                         </div>
-                    </div>	
+                    </div>
 				<div class="piFacePortID form-group">
 					 <label class="col-sm-3 control-label" >{{Numéro de la carte piFace}}</label>
 						<div class="col-sm-1">
 							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortID" placeholder="ex : 0"  title="{{ 0 par défaut, 0 à 3 si PiRack }}"/>
-						</div>                        
+						</div>
 				</div>
-				<div class="piPlusPortI2C form-group"> 
+				<div class="piPlusPortI2C form-group">
 					<label class="col-sm-3 control-label" >{{Adresse I2C du MCP23017}}</label>
 					<div class="col-sm-2">
 					   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="PortI2C">
@@ -212,11 +213,11 @@ $cpl = jeedouino::GetJeedomComplement();
 							<option value="36" id="select_i2c_board">0x24 (36) </option>
 							<option value="37" id="select_i2c_board">0x25 (37) </option>
 							<option value="38" id="select_i2c_board">0x26 (38) </option>
-							<option value="39" id="select_i2c_board">0x27 (39) </option>										
+							<option value="39" id="select_i2c_board">0x27 (39) </option>
 							</optgroup>
-						</select> 							
-					</div>                        
-				</div>    				
+						</select>
+					</div>
+				</div>
 				 <div class="form-group">
 					 <label class="col-sm-3 control-label">{{Type de connection de la carte}}</label>
 					 <div class="col-sm-3">
@@ -236,14 +237,14 @@ $cpl = jeedouino::GetJeedomComplement();
 							</select>
 						</div>
 					</div>
-					
+
 					<div class="form-group arduinoport usblocal">
 						<label class="col-sm-3 control-label">{{Port local USB carte }}</label>
 						<div class="col-sm-3">
 							<select class="eqLogicAttr form-control"  data-l1key="configuration" data-l2key="portusblocal">
 								<option value="none">{{Aucun}}</option>
                                     <?php
-                                    foreach (jeedom::getUsbMapping('', true) as $name => $value) 
+                                    foreach (jeedom::getUsbMapping('', true) as $name => $value)
                                     {
                                         echo '<option value="' . $name . '">' . $name . ' (' . $value . ')</option>';
                                     }
@@ -261,19 +262,19 @@ $cpl = jeedouino::GetJeedomComplement();
 								// sur Jeedom esclave
 								if (class_exists ('jeeNetwork', false))
 								{
-									foreach (jeeNetwork::byPlugin('jeedouino') as $jeeNetwork) 
+									foreach (jeeNetwork::byPlugin('jeedouino') as $jeeNetwork)
 									{
 										echo '<optgroup label="Jeedouino sur '.$jeeNetwork->getName().'">';
 										$plugin_jeedouino_deporte=true;
 										$UsbMap=$jeeNetwork->sendRawRequest('jeedom::getUsbMapping',array('gpio' => true));
 										if (is_array($UsbMap))
 										{
-											foreach ($UsbMap as $name => $value) 
+											foreach ($UsbMap as $name => $value)
 											{
 												echo '<option value="' . $jeeNetwork->getId() . '_' . $name . '">' . $name . ' (' . $value . ')</option>';
-											} 
-										}	
-										echo '</optgroup>';	
+											}
+										}
+										echo '</optgroup>';
 									}
 								}
 
@@ -286,38 +287,38 @@ $cpl = jeedouino::GetJeedomComplement();
 									{
 										// un petit nettoyage
 										$ListExtIPCleaned = array();
-										foreach ($ListExtIP as $_ip) 
+										foreach ($ListExtIP as $_ip)
 										{
 											if (filter_var($_ip, FILTER_VALIDATE_IP) === false) continue;
 											$ListExtIPCleaned[]=$_ip;
 										}
 										$ListExtIP = $ListExtIPCleaned;
 										config::save('ListExtIP', $ListExtIP, 'jeedouino');
-									}									
+									}
 									if ($ListExtIP != '')
 									{
-										foreach ($ListExtIP as $ip) 
+										foreach ($ListExtIP as $ip)
 										{
 											echo '<optgroup label="JeedouinoExt sur '.$ip.'">';
 											$plugin_jeedouino_deporte=true;
 											$UsbMap=config::byKey('uMap-'.$ip, 'jeedouino', '');
 											if (is_array($UsbMap))
 											{
-												foreach ($UsbMap as $name => $value) 
+												foreach ($UsbMap as $name => $value)
 												{
 													echo '<option value="'.$ip.'_' . $name . '">' . $name . ' (' . $value . ')</option>';
-												} 
+												}
 											}
-		 
-											echo '</optgroup>';	
-										}			
-									}	
+
+											echo '</optgroup>';
+										}
+									}
 								}
                                 ?>
                             </select>
-                        </div>   
-				<?php            
-         
+                        </div>
+				<?php
+
 			if (!$plugin_jeedouino_deporte)
 			{
 				?>
@@ -325,15 +326,15 @@ $cpl = jeedouino::GetJeedomComplement();
 				<?php
 			}
 	//	}
-		?>				
+		?>
 					</div>
                     <div class="form-group arduinoport usblocal usbdeporte">
 						<label class="col-lg-3 control-label">{{Port réseau du démon}}</label>
 						<div class="col-lg-3">
 							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortDemon" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('PortDemon'); ?>"/>
-						</div>    
+						</div>
                     </div>
-				</div>	
+				</div>
 				<div class="datasource rj45arduino">
 				   <div class="form-group">
 						<label class="col-sm-3 control-label">{{Adresse IP de la carte }}</label>
@@ -344,7 +345,7 @@ $cpl = jeedouino::GetJeedomComplement();
                     echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >Jeedom Master</option>';
 					if (class_exists ('jeeNetwork', false))
 					{
-						foreach (jeeNetwork::all() as $jeeNetwork) 
+						foreach (jeeNetwork::all() as $jeeNetwork)
 						{
 							echo '<option value="' . $jeeNetwork->getIp() . '">' . $jeeNetwork->getName() . '</option>';
 						}
@@ -353,18 +354,18 @@ $cpl = jeedouino::GetJeedomComplement();
 					$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
 					if ($ListExtIP != '')
 					{
-						foreach ($ListExtIP as $ip) 
+						foreach ($ListExtIP as $ip)
 						{
 							echo '<option value="' . $ip . '">JeedouinoExt</option>';
 						}
-					}			
-                ?>                            
+					}
+                ?>
                             </datalist>
 						</div>
 						<label class="col-sm-1 control-label">{{Port}}</label>
 						<div class="col-sm-2">
 							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
-						</div>                        
+						</div>
 					</div>
 				</div>
 				<div class="esp8266">
@@ -372,27 +373,27 @@ $cpl = jeedouino::GetJeedomComplement();
 						<label class="col-sm-3 control-label">{{SSID WIFI}}</label>
 						<div class="col-sm-2">
 							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="wifi_ssid" placeholder="Mon wifi"/>
-						</div>  
+						</div>
 						<label class="col-sm-2 control-label">{{Mot de passe WIFI}}</label>
 						<div class="col-sm-2">
 							<input type="password" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="wifi_pass" placeholder="Mot de passe"/>
-						</div>                        
+						</div>
 					</div>
-				</div>	
+				</div>
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Memento}}</label>
               <div class="col-sm-3">
                 <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="memento" placeholder="Vos notes personnelles"></textarea>
               </div>
-            </div>				
+            </div>
 
             </fieldset>
         </form>
-		
+
 			</div>
 		<div role="tabpanel" class="tab-pane" id="commandtab">
 
-        <legend>{{Commandes de la carte}}</legend> 
+        <legend>{{Commandes de la carte}}</legend>
 			<form class="form-horizontal">
 				<div class="form-group">
 				  <label class="col-sm-3 control-label"></label>
@@ -401,7 +402,7 @@ $cpl = jeedouino::GetJeedomComplement();
 				  </div>
 				</div>
 			</form>
-		<!-- 
+		<!--
 		<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i>{{ Ajouter une commande Jeedouino}}</a><br/><br/>
 		 -->
 		 <!--
@@ -422,7 +423,7 @@ $cpl = jeedouino::GetJeedomComplement();
                 </tr>
             </thead>
             <tbody>
-			
+
             </tbody>
         </table>
 		</div>
@@ -440,7 +441,7 @@ $cpl = jeedouino::GetJeedomComplement();
 				</div>
 				-->
 			</div>
-			
+
 				<?php	if (config::byKey('ActiveUserCmd', 'jeedouino', false))
 				{ ?>
 				<form class="form-horizontal sketchstab">
@@ -457,8 +458,8 @@ $cpl = jeedouino::GetJeedomComplement();
 						<td>{{Ajoute autant de pins utilisateur (que le nombre choisi) à la liste des pins configurables dans l'onglet <i class="fa fa-wrench"></i> Pins/GPIO.}}</td>
 					</tr>
 				</table>
-				
-		<?php 
+
+		<?php
 				} ?>
 			<form class="form-horizontal">
 				<div class="form-group">
@@ -497,15 +498,15 @@ $cpl = jeedouino::GetJeedomComplement();
 					<?php
 					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
 					$ArduinoEspTag = false;
-					foreach ($eqLogics as $eqLogic)  
+					foreach ($eqLogics as $eqLogic)
 					{
-						$board_id = $eqLogic->getId();	
-						$ModeleArduino = $eqLogic->getConfiguration('arduino_board'); 
+						$board_id = $eqLogic->getId();
+						$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
 						if (substr($ModeleArduino,0,1)=='a')
 						{
 							$ArduinoEspTag = true;
 							$SketchFileName=$jeedouinoPATH.'/JeedouinoLAN_'.$board_id.'.ino';
-							if (file_exists($SketchFileName)) 
+							if (file_exists($SketchFileName))
 							{
 								echo '<div class="form-group sketchs sketchLAN'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
@@ -516,7 +517,7 @@ $cpl = jeedouino::GetJeedomComplement();
 									<br><i>Note : Ce sketch est prévu pour les shields réseaux basés sur un chip W5100.</i>
 									<br><i> Pour un chip ENC28J60 (ou autre), il faudra modifier/adapter le sketch.</i>
 									<br>
-								</div></div><br>';					
+								</div></div><br>';
 							}
 							else
 							{
@@ -525,13 +526,13 @@ $cpl = jeedouino::GetJeedomComplement();
 								<div class="col-sm-6">
 									<i>/!\ Merci de réactualiser la page (F5) après la sauvegarde pour avoir le lien du sketch !</i>
 								</div></div>';
-							}							
+							}
 						}
 						elseif (substr($ModeleArduino,0,1)=='e')
 						{
 							$ArduinoEspTag = true;
 							$SketchFileName=$jeedouinoPATH.'/JeedouinoESP_'.$board_id.'.ino';
-							if (file_exists($SketchFileName)) 
+							if (file_exists($SketchFileName))
 							{
 								echo '<div class="form-group sketchs sketchESP'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
@@ -556,7 +557,7 @@ $cpl = jeedouino::GetJeedomComplement();
 						<label class="col-sm-2 control-label">{{ Sketch }}</label>
 						<div class="col-sm-6">
 							<a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
-						</div></div>';			
+						</div></div>';
 						echo '<br><br><div class="form-group sketchsLib " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Librairies pour vos Sketchs }}</label>
 								<div class="col-sm-6">
@@ -565,13 +566,13 @@ $cpl = jeedouino::GetJeedomComplement();
 					}
 
 					?>
-		
+
 			</div>
 		</div>
 	</div>
 </div>
 
 <?php
- include_file('desktop', 'jeedouino', 'js', 'jeedouino'); 
+ include_file('desktop', 'jeedouino', 'js', 'jeedouino');
  include_file('core', 'plugin.template', 'js');
 ?>

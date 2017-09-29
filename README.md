@@ -12,6 +12,6 @@ Ce plugin vous permet de contrôler de différents manières les pins entrées/s
 * les cartes IO PiPlus et les MCP23017 sur Raspberry PI.
 
 
-Il fonctionne en local ou en déporté (mode esclave de Jeedom) sur votre réseau.
+Il fonctionne en local ou en déporté sur votre réseau.
 
-Il est compatible avec le nouveau fonctionnement maître/esclave (plugin Jeedom Link) de Jeedom.
+Il est compatible avec le fonctionnement maître/esclave (plugin Jeedom Link) de Jeedom.

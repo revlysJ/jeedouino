@@ -1,93 +1,93 @@
-=== The plugin configuration
+=== Configuration du plugin
 
-On the configuration page of the plugin
+Sur la page configuration du plugin
 
 image::../images/ConfOptions.png[]
 
-==== Tab: Options
-* You can activate logs (attention very verbose).
+==== Onglet : Options
+* Vous pouvez activer les logs (attention trés verbeux).
 [IMPORTANT]
-It is not recommended to leave this box checked constantly because this option generates a lot of writing in the log files.
+Il n'est pas recommandé de laisser cette case en permanence cochée car cette option génère beaucoup d'écriture dans les fichiers de log.
 [NOTE]
-You must also activate "Debug" level logs in Jeedom (Menu Configuration-> Configuration of log & messages).
+Il faut aussi activer les logs de niveau "Debug" dans Jeedom ( Menu Configuration->Configuration des logs & messages ).
 
-* It is possible to activate the virtual groups (automatic creation of orders in virtual to simplify your equipment / facilities).
+* Il est possible d'activer les groupes virtuels (création automatique de commandes dans des virtuels pour simplifier vos équipements/installations).
 [NOTE]
-This option only appears if you have the Virtual plugin installed and enabled in your Jeedom.
+Cette option n'apparaît que si vous avez le plugin Virtuel d'installé et d'activé dans votre Jeedom.
 
-* It is possible to activate the pin user (automatic creation of orders for your personal Arduinos/IOPS skits).
+* Il est possible d'activer les pins utilisateur (création automatique de commandes pour vos sketchs perso Arduinos/ESPs).
 [NOTE]
-This option only appears if you have the expert mode enabled in your Jeedom.
+Cette option n'apparaît que si vous avez le mode expert d'activé dans votre Jeedom.
 
-==== Tab: Dependencies
+==== Onglet : Dépendances
 
 image::../images/configuration0.png[]
 
-A link is available to go download the latest Arduino IDE to flash the skits on your boards.
+Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.
 
 * https://www.arduino.cc/en/Main/Software
 
-* For ESP8266 cards NodeMCU, Wemos you can also use the Arduino IDE by adding the ESP8266 support.
+* Pour les cartes ESP8266, NodeMCU, Wemos vous pouvez aussi utiliser l'IDE Arduino en y ajoutant le support ESP8266.
 
 ** http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html
 
-For GPIO of the RPI, one button is available for the installation of dependencies.
+Pour les GPIO du R.PI, un bouton est disponible pour l'installation des dépendances.
 
 * http://sourceforge.net/p/raspberry-gpio-python/wiki/install/ 
 
-Similarly, a button is provided for those of PiFace cards.
+De même, un bouton est présent pour celles des cartes PiFace.
 
 * https://github.com/piface/pifacedigitalio
 
-* It will also require to enable SPI module.
+* Il faudra aussi activer le module SPI.
 
 ** http://piface.github.io/pifacecommon/installation.html#enable-the-spi-module
 ** http://www.piface.org.uk/guides/Install_PiFace_Software/Enabling_SPI/	
 
-Same, a button is present for those of AB Electronics UK Pi More IO cards.
+Idem, un bouton est présent pour celles des cartes AB Electronics UK IO Pi Plus.
 
 * https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi
 
-* It will also require to enable the I2C module.
+* Il faudra aussi activer le module I2C.
 
 ** https://www.abelectronics.co.uk/kb/article/1/i2c--smbus-and-raspbian-wheezy	
 
 [IMPORTANT]
-It is not necessary to install the dependencies on all your Jeedom, only those that will be used.
+Il n'est pas nécéssaire d'installer les dépendances sur tous vos Jeedom, uniquement ceux qui seront utilisés.
 
 [TIP]
-Two shortcuts are present to jump view the logs of the plugin, and to go to your equipment (only on master)
+Deux raccourcis sont présents pour aller directement voir les logs du plugin, et pour aller à vos équipements (uniquement sur le maître)
 
-==== Tab: Daemons
+==== Onglet : Démons
 
-_ Example of different possible demons:_
+_Exemple de différents démons possibles:_
 
 image::../images/configuration1.png[]
 
-Here, as soon as you create equipment requiring the use of demons, they will appear.
+Ici, dès que vous aurez créer des équipements necéssitant l'utilisation de démons, apparaîtront ces derniers.
 
-They will be displayed with a direct shortcut to the equipment, their host Jeedom, operating status and the ability to restart or shutdown the daemon.
+Ils seront affichés avec un raccourci direct vers l'équipement, leur Jeedom hôte, l'état de fonctionnement et la possibilité de redémarrer ou arréter le démon.
 [TIP]
-Regarding the Arduino USB connected equipment, an additional link to download the sketch will be present.
-It will therefore need to be uploaded in the corresponding Arduino.
+Concernant les équipements Arduino connectés en USB, un lien supplémentaire permettant de télécharger le sketch sera présent.
+Il faudra donc le téléverser dans l'arduino correspondant.
 
 [IMPORTANT]
-Following a reboot / restart the host system, daemons are launched only about 4 minutes after starting Jeedom.
+Suite a un reboot/redémarrage du système hôte, les démons ne sont lancés que 4 minutes environ après le démarrage de Jeedom.
 
 [NOTE]
-An option to check every 5 minutes, the proper functioning of daemons and restart them at least is now available.
+Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement des démons et de les redémarrer le cas échéeant est désormais disponible.
 
 image::../images/ConfDemons.png[]
 
-==== Tab: Sketches for your network equipment (Arduino and ESP8266 / NodeMCU / Wemos)
+==== Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)
 
-The Arduinos / ESP / NodeMCU / network Wemos not needing daemons, here come the sketches for them.
-Only those of the created equipment.
+Les arduinos/ESP/NodeMCU/Wemos en réseau n'ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
+Uniquement ceux des équipements créés.
 
 image::../images/configuration3.png[]
 
-==== Tab: Configuration Docker 
+==== Onglet : Configuration Docker 
 
-If your Jeedom is on Docker, activate the option, and enter the host IP (The NAS usually) and the mapped port (often 9080).
+Si votre Jeedom est sous Docker, il faut activer l'option, et renseigner l'IP de l'hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).
 
 image::../images/configuration4.png[]

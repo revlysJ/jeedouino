@@ -1,11 +1,10 @@
 === FAQ
 
-==== User Sketchs and user commands
+==== Sketchs Personnels/Modifiables et Commandes Utilisateur
 
-===== Headings of sketches
-With the news fonctionnalities, sketch vould become too heavy for the smaller Arduinos. +
-So it is possible to disable some in order to light the sketchs if needed. +
-You will find this possibility in the sketchs header : 
+Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos. +
+Il est donc possible de désactiver certaines de ces fonctionnalités afin d'alléger les sketchs si besoin. +
+Vous trouverez en entête des sketchs cette possibilité : 
 
 [NOTE]
 *#define DEBUGtoSERIAL 0*	// 0, ou 1 pour debug dans la console serie +
@@ -14,47 +13,43 @@ You will find this possibility in the sketchs header :
 *#define UseDS18x20 1* +
 *#define UseTeleInfo 0* +
 *#define UseLCD16x2 0*	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C +
-_For your user sketch_ +
+_Vous permet d'inclure du sketch perso_ +
 *#define UserSketch 0* +
-_Tags to seek place for your code :_ +
+_Tags pour rechercher l'emplacement pour votre code :_ +
 _UserVars_ +
 _UserSetup_ +
 _UserLoop_ +
 
-For the ESP sketches, it is also possible to let the system get a free IP (DHCP)
-or to force if necessary.
+Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
+ou de la forcer si besoin.
+
 [TIP]
-*#define NODHCP 0*					// 0 for IP via DHCP, 1 for IP fixed in the sketch.
+*#define NODHCP 0*					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
 
-===== User sketchs and pins 
-For your personal sketches, just look in them, they are fitted in with examples. +
-[NOTE]
-Remember to activate the option in the plugin configuration page, and select the number of pins you want on the Pins / GPIO tab of your device. +
-They will appear in the User Pins tab (next to that of the Material Pins) in the modal window.
+Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqué dedans avec des exemples. +
+Pour les commandes liées coté Jeedom, il suffit de les configurer comme pour les pins matérielles.
 
-Commands related side Jeedom, just set them up as for material pine.
-
-* You can choose between 3 types of input and 3 types of output :
-** Input digital (subtype: binary)
-** Input digital (subtype: digital)
-** Input digital (sub-type: other)
-** Output digital (subtype: default)
-** Output digital (subtype: cursor) 
-** Output digital (subtype: message)
+* Vous aurez le choix entre 3 types de pins entrées et 3 types de pins sorties :
+** Entrée Numérique (Sous-type : binaire)
+** Entrée Numérique (Sous-type : numérique)
+** Entrée Numérique (Sous-type : autre)
+** Sortie Numérique (Sous-type : défaut)
+** Sortie Numérique (Sous-type : curseur) 
+** Sortie Numérique (Sous-type : message)
 
 image::../images/UserPins.png[]
 
 ==== Generic Types & App mobile
-The generic types are an addition of Jeedom for the operation of the mobile plug and the linked mobile app. +
-For more information about them, please refer to their respective documentations.
+Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l'app mobile liée. +
+Pour plus d'informations les concernant, veuillez-vous reportez à leurs documentations respectives.
 
-If you have Jeedouino equipment for which you have already configured the generic type (in advanced setup) during the
-update the plugin will try to recover them +
-You can also use auto mode in which the plugin will try to find the generic type of most suitable. +
-Otherwise you can choose the generic type in the plugin, and when creating commands the plugin will fit if possible.
+Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée),  lors de la
+mise à jour, le plugin essaiera de les récupérer +
+Vous pouvez aussi utiliser le mode auto, dans lequel le plugin essaiera de trouver le generic type le plus adapté. +
+Sinon vous pouvez choisir le generic type dans le plugin, et lors de la création des commandes le plugin s'adaptera si possible.
 
 [TIP]
-For example, if you choose a pine _Sortie mise à LOW  (HIGH generated too) _ and the generic kind _LIGHT ON_, then the plugin will generate the commands (and vice versa): +
+Par exemple, si vous choisissez une pin en _Sortie mise à LOW (HIGH générée aussi)_ et le generic type _LIGHT ON_ , alors le plugin générera les commandes (et vice-versa): +
 Sortie mise à LOW avec _LIGHT ON_ +
 Sortie mise à HIGH avec _LIGHT OFF_ +
 Etat de la sortie avec _LIGHT STATE_ +
@@ -62,158 +57,155 @@ Etat de la sortie avec _LIGHT STATE_ +
 image::../images/gt.png[]
 
 [NOTE]
-If on * a same equipment * you have a lot of orders as well as a lot of generic different type (e.g. LIGHT, ENERGY, FLAP, SIREN, etc..)
-it is possible that the mobile app will not show you all, or generates an error. +
-That certainly changes with future versions thereof. +
-_Use of * groups virtual * to split the equipment is then adviced._ 
+Si sur *un même équipement* vous avez beaucoup de commandes ainsi que beaucoup de generic type différents ( par ex. LIGHT, ENERGY, FLAP, SIREN, etc..)
+il est possible que l'app mobile ne vous les affichent pas tous, ou génére une erreur. +
+Cela évoluera certainement avec les futures versions de celle-ci. +
+_L'utilisation de *Groupes Virtuels* pour scinder les équipements est alors conseillée._ 
 
-==== Virtual groups
-* Prerequisite: have the virtual plugin installed and active.*
+==== Groupes Virtuels
+*Pré-requis : avoir le plugin Virtuel installé et activé.*
 
-To activate the virtual groups, an option is present on the configuration page of the plugin.
+Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.
 
 image::../images/configuration5.png[]
 
-You must then create the virtual equipment you need (with the plugin of course Virtual).
+Il faut ensuite créer les équipements virtuels dont vous aurez besoin (avec le plugin Virtuel bien-sûr).
 
-Later, when configuring the pines in your Jeedouino equipment, suffice to choose for each pine in which Virtual it must be duplicated.
+Par la suite, lors de la configuration des pins dans vos équipements Jeedouino, il suffira d'indiquer pour chaque pin dans quel Virtuel, elle doit  être dupliquée.
 
 image::../images/jeedouino_screenshot4.png[]
 
 [TIP]
-* An example to understand: * +
-Example if you have in your garden in two places: +. 
-NodeMCU a card with 8 relays that control 4 solenoid valves, 2 lights and a pond pump. +
-A Raspberry with 4 relays card that control 2 solenoid valves, 1 lighting. +
+*Un exemple pour bien comprendre :* +
+Mettons que vous avez dans votre jardin en deux endroits : + 
+Un NoneMCU avec une carte 8 relais qui commande 4 electrovannes, 2 éclairages et une pompe de bassin. +
+Un Raspberry avec une carte 4 relais qui commande 2 electrovannes, 1 éclairage. +
  +
-_So you have two separate equipment but with similar features you would like to group by fonction._ +
-The Virtuals in Jeedom are there for that, but you need to copy the commands _manually_ . +
-The Jeedouino virtual groups allow you to select them with a click, and let the plugin automatically does it. +
-In this example you need to create the virtual: _Watering, Lighting, Pond._ +.
-Then for each pin of each Jeedouino equipment  you set the corresponding virtual, and you save. +
-_It remains for you to use your virtuals._
+_Vous avez donc 2 équipements séparés mais avec des fonctionalitées similaires que vous aimeriez regrouper par fonction._ +
+Les virtuels de Jeedom sont là pour ça, mais il vous faut copier les commandes _manuellement_. +
+Les groupes virtuels de Jeedouino vous permettent de les sélectionner d'un clic, et de laisser faire le plugin automatiquement. +
+Dans cet exemple vous n'avez qu'à créer les virtuels : _Arrosage, Eclairage, Bassin._ +
+Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtuel, et vous sauvez. +
+_Il ne vous reste plus qu'à utiliser vos virtuels._
 
 image::../images/virtuels.png[]
 
-==== Equipment with daemons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) have changed port connection alone.
-That is possible. +
-Indeed, when starting a daemon tries to use the selected port 2 times with a waiting time of approximately 11s. +
-If after these two attempts the port is still not available, so he tries to get one automatically. +
-And if it finds one, it uses it and update the suitable equipment.
+==== Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.
+Cela est possible. +
+En effet, lors du démarrage, un démon essaye d'utiliser le port choisi a 2 reprises avec un délai d'attente d'environ 11s. +
+Si au bout de ces 2 tentatives le port n'est toujours pas disponible, alors il essaie d'en trouver un de libre automatiquement. +
+Et s'il en trouve un, il l'utilise et met à jour l'équipement idoine.
 
-==== Equipment with demons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) are not directly functional after a reboot.
-See below.
+==== Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.
+Voir ci-dessous.
 
-==== The daemons do not start after a reboot?
-Daemons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) are only launched *about 4 minutes* after launching Jeedom.
-This allows to try to ensure compatibility with somewhat slower systems (Ex: RPI 1, overloaded systems, etc...). + 
+==== Les démons  ne démarrent pas aprés un reboot ?
+Les démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont relancés *qu'environ 4 minutes* après le lancement de Jeedom.
+Cela permet d'essayer d'assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc...). + 
 [NOTE]
-If Jeedom slaves start also, the 4-minute time period begins after the last started Jeedom.
+Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
 [TIP]
-An *AutoReStart* option for the automatic start of daemons is present on the plugin configuration page (Daemons tab).
+Une option *AutoReStart* permettant le redémarrage automatique des démons est présente sur la page de configuration du plugin (onglet Démons).
 
 image::../images/configuration2.png[]
 
-==== Is the plugin compatible with Docker?
-Basically, not because of the specific configuration of Jeedom under Docker.
+==== Le plugin est-il compatible Docker ?
+A la base, non à cause de la configuration spécifique du Jeedom sous docker.
 
-However an option in the plugin configuration page has been added to compensate for this. +
-Must activate it, and fill in the IP Address of the host (one of NAS most often) and the port mapped (often 9080).
+Cependant une option, dans la page de configuration du plugin a été ajoutée pour pallier à cela. +
+Il faut l'activer, et renseigner l'IP de l'hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).
 
 image::../images/docker1.png[]
-In Jeedom network configuration, disable network management by Jeedom +
-(Normally this is already the case, if your Docker operates properly).
+Dans la configuration réseau de Jeedom, il faut désactiver la gestion du réseau par Jeedom +
+( Normalement c'est déja la cas, si votre installation docker fonctionne correctement).
 
 image::../images/docker2.png[]
 
-==== What means HIGH or LOW?
-* Simply Low = 0 = GND, so it's setting to the low state of the pin.
-* Simply High = 1 = Vcc, so setting the higher of the pin state.
+==== Que signifient LOW ou HIGH ?
+* Pour faire simple Low = 0 = Gnd, c'est donc la mise à l'état bas de la pin.
+* Pour faire simple High = 1 = Vcc , c'est donc la mise à l'état haut de la pin.
 
-==== What means Pull_Up or Pull_Down ?
-* Simply Pull Up means that there is a resistance (internal circulation) between the data and the Vcc pin of the microcontroller.
-This keeps the pin in the high state (= High = 1 = Vcc) and avoid interference voltages.
-** This mode is often available, otherwise, simply put yourself in your electronic assembly a resistance.
-* Simple Pull_Down means that there is a resistance (internal circulation) between the pine concerned and the Gnd of the microcontroller.
-This keeps the pin in low state (= Low = 0 = GND) and avoid interference voltages.
-** This mode is not often available, and in this case, simply put yourself in your electronic assembly a resistance.
+==== Que signifient Pull_Up ou Pull_Down ?
+* Pour faire simple Pull_Up signifie qu'il y a une résistance (interne de tirage) entre la pin concernée et le Vcc du Microcontrôleur.
+Cela permet de maintenir la pin à l'etat haut (=High=1=Vcc) et d'éviter des tensions parasites.
+** Ce mode est souvent disponible, dans le cas contraire, il vous suffit de mettre vous même une résistance dans votre montage.
+* Pour faire simple Pull_Down signifie qu'il y a une résistance (interne de tirage) entre la pin concernée et le Gnd du Microcontrôleur.
+Cela permet de maintenir la pin à l'etat bas (=Low=0=Gnd) et d'éviter des tensions parasites.
+** Ce mode n'est pas souvent disponible, et dans ce cas, il vous suffit de mettre vous même une résistance dans votre montage.
 
-==== What is the configuration (detailed) of pine as possible?
-* *Pine Configuration*: Select the appropriate pins and assign them an input type function (info) or output (action).
+==== Quelle est la configuration (détaillée) des pins possible ?
+* *Configuration des pins* : Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).
 
 [IMPORTANT]
-* All functions of the pines are not available on all cards / microcontrollers, each ones having its own caracteristiques.*
+*Toutes les fonctions des pins ne sont pas forcément disponibles sur toutes les cartes / microcontrôleurs, chacun ayant ses propres caractéristiques.*
 
 [NOTE]
-*Reminder*: it is not useful to have a function to each pin, but only those you need.
-This will avoid the generation of unnecessary commands and to load too muwh Jeedom.
+*Rappel* : Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
+Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 
-===== Input Pins: 
-* *Analog*
-** Allows to connect an analog sensor.
-** Examples:
-*** IR distance sensor
-*** Sound intensity sensor
-*** Ambient light sensor
-*** Analog Rotary sensor
+===== Pins Entrées (Input): 
+* *Analogiques*
+** Permet de brancher un capteur analogique.
+** Exemples:
+*** Capteur de distance IR
+*** Capteur d’intensité sonore
+*** Capteur de lumière ambiante
+*** Capteur rotatif analogique
 *** Etc..
 
-* *Digital*.
-** Allows you to connect a digital sensor (which returns a binary 0 / 1 i.e. low / high).
+* *Numériques*
+** Permet de brancher un capteur numérique (qui renvoie un binaire 0 / 1 i.e low / high).
 [NOTE]
-In pull_up, the state of the input by default is HIGH (= 1), so put it to LOW (= 0) to trigger a signal. +
-In pull_down, sate of the input by default is LOW (= 0), then put it at HIGH (= 1) to trigger a signal.
+En pull_up, l'état de l'entrée au repos est HIGH (=1), il faut la mettre à LOW (=0) pour déclencher un signal. +
+En pull_down, l'état de l'entrée au repos est LOW (=0), il faut la mettre à HIGH (=1) pour déclencher un signal.
 
-*** *Pulse counter* (Water meter, Electricity, Gas, Doors, Windows, IR gates, ...) +
-It is possible to initialize the counter to a given value. +
-The Reset button is used to send it to the card.
-
-image::../images/compteur.png[]
-*** *Digital Input in PULL-UP* (push button, switch, opening sensor, motion sensor ..)
-*** *Digital Input Variable (0-255 on 10s)* (Pushbutton maintained from 0 to 10s to control via a dimmer scenario eg)
-*** *HC-SR04 Echo* In connection with the trigger pin, retrieve the distance measured by the ultrasonic sensor.
+*** *Compteur d'impulsions* (Compteur d'eau , Compteur de courant, ... )
+*** *Entrée Numérique en PULL-UP* (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
+*** *Entrée Numérique Variable (0-255 sur 10s)* (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)
+*** *HC-SR04 Echo* En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.
 
 image::../images/hc_sr04.png[]
 
-*** *Only on Arduino / ESP / NodeMCU / Wemos :*
-**** *Probe DHT11,21,22* - Allows for two commands, one for temperature and one for humidity.
-**** *Probe DS18x20* - Allows for a command with temperature -. *1 probe max per pin*
-**** *Input Teleinfo ERDF (RX pin)* - Allows for a message receiving order for the serial Teleinfo.
+*** *Uniquement sur Arduino / ESP / NodeMCU / Wemos :*
+**** *Sonde DHT11,21,22* - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
+**** *Sonde DS18x20* - Permet d'avoir une commande avec la température - *1 sonde max par pin.*
+**** *Entrée téléinfo ERDF ( pin RX )* - Permet d'avoir une commande de réception de message série pour la téléinfo.
 [TIP]
-If you have Teleinfo plugin installed and activated, it will automatically create a Teleinfo equipment with the received serial
-(It will need to activate the auto controls in this equipment). +
-In this use case, if Teleinfo daemon stays on NOK, it's normal, it is not used.
+Si vous avez le plugin Téléinfo d'installé et d'activé, cela crééra automatiquement un équipement téléinfo avec la trame reçue
+(il faudra activer les commandes auto dans cet équipement). +
+Dans ce cas d'utilisation, si le démon Téléinfo reste sur NOK, c'est normal, il n'est pas utilisé.
 
-*** *Only on Raspberry PI GPIO :*
-**** *Probe DHT 11, 22 (AM2302)* - allows to have 2 commands, one for temperature, and one for the humidity.
-**** *Sensor DS18B20* - allows to have a command  with temperature - *1 probe max by pin.*
+*** *Uniquement sur Raspberry PI GPIO :*
+**** *Sonde DHT 11, 22 (AM2302)* - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
+**** *Sonde DS18B20* - Permet d'avoir une commande avec la température - *1 sonde max par pin.*
 
-===== Output pins: 
-* *Only on Arduino / ESP / NodeMCU / Wemos :*
-** *Send a message to LCD16x2* - allows you to send a title + message (16 characters each) on a screen LCD 16 x 2. Standard or I2C
+===== Pins Sorties (output): 
+* *Uniquement sur Arduino / ESP / NodeMCU / Wemos :*
+** *Envoi d'un message sur LCD16x2* - Permet d'envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C
 
 image::../images/lcd.png[]
 
-* *Digital*.
-** Allows you to operate a digital receiver (relay, LED, etc ...)
-*** * Invert output (Switch) * Puts the output to LOW (= 0) if it is a HIGH (= 1) and vice versa. WITHOUT knowing the previous state.
-**** convenient to change the State of an led (flashing).
-**** Operate a relay as a switch.
-*** * Output setting to LOW (HIGH generated too) * Allows to have 2 commands to put out a LOW (= 0) or HIGH (= 1).
-**** Convenient to force the state of an output in a scenario such.
-*** * Output setting to LOW / HIGH with delay (timer) *. Turns out a LOW (= 0) or HIGH (= 1) for a limited time.
+* *Numériques*
+** Permet d'actionner un récepteur numérique ( relais, led, etc ... )
+*** *Inverser la sortie (Switch)*, Permet de mettre la sortie a LOW (=0) si elle est a HIGH (=1), et vice-versa. SANS connaître l'état précédent.
+**** Pratique pour changer l'état d'une led (clignotement).
+**** Actionner un relais comme un interrupteur (un coup, j'allume, un coup j'éteints.)
+*** *Sortie mise à LOW (HIGH générée aussi)*, Permet d'avoir 2 commandes pour mettre la sortie a LOW (=0) ou a HIGH (=1).
+**** Pratique pour forcer l'état d'une sortie dans un scénario par ex.
+*** *Sortie mise à LOW/HIGH avec temporisation (minuterie)*. Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.
 [NOTE]
-Time expressed in tenths of seconds and 5 digits. Range from 0.1s to 9999.9s (about 166 minutes).
+Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.9s (env 166 minutes).
 [TIP]
-An opposite order (without delay) is also created in order to stop (earlier) the command timed pre-quoted (Stop Shutters for ex.).
+Une commande opposée (sans temporisation) est aussi créée afin de pouvoir stopper (plus tôt) la commande temporisée pré-citée (Stop Volets par ex.).
 
-**** Convenient to power a light x minutes / seconds.
-**** Operate a relay less than a second for controlling a dry contact / toggle (eg 00007 for 0.7s).
-**** Operate a relay with a solenoid valve to control watering the garden for a fixed period (eg 06000 for 10min).
-**** Operate relay for opening / closing of shutters (eg 00400 for 40s). 
-*** *HC-SR04 Trigger* In connection with the Echo pin, launch the distance measurement by the ultrasonic sensor.
-* *Digital/pseudo-analog*.
-*** *Output PWM*, adjusts the intensity of a compatible strip led by ex.
+**** Pratique pour actionner une lumiere x minutes/secondes.
+**** Actionner un relais moins d'une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).
+**** Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).
+**** Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s). 
+*** *HC-SR04 Trigger* En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
+* *Numériques/pseudo-Analogiques*
+*** *Sortie PWM*, Permet de régler l'intensité d'un ruban led compatible par ex.
+
 
 
 

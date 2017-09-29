@@ -1,153 +1,154 @@
-=== Creation of equipment
+=== Création des équipements
 
-Jeedouino equipment configuration is available from the Plugins menu: 
+La configuration des équipements Jeedouino est accessible à partir du menu Plugins : 
 
 image::../images/menuplugin.png[]
 
-This is the page of the Jeedouino plugin (here with equipment already): 
+Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) : 
 
 image::../images/equipements.png[]
 
 [TIP]
-As in many places on Jeedom, place the mouse to the left allows to show a quick access menu (you can, from your profile, let it always visible).
+Comme à beaucoup d'endroits sur Jeedom, placer la souris tout à gauche permet de faire apparaître un menu d'accès rapide (vous pouvez, à partir de votre profil, le laisser toujours visible).
 
-Once you click the + (Add a new equipment), and after giving a name to your device, you obtain: 
+Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez : 
 
 image::../images/equipements0.png[]
 
-You will find here all the configuration of your equipment: 
+Vous retrouvez ici toute la configuration de votre équipement : 
 
-* *Name of the equipment*: name of your Jeedouino equipment.
-* *Parent object*: Specifies the parent object that owns the equipment,
-* *Activate*: to make your equipment active,
-* *Visible*: makes your equipment visible on the dashboard.
+* *Nom de l'équipement* : nom de votre équipement Jeedouino,
+* *Objet parent* : indique l'objet parent auquel appartient l'équipement,
+* *Activer* : permet de rendre votre équipement actif,
+* *Visible* : rend votre équipement visible sur le dashboard.
 
-Below you will find how to set up your equipment: 
+En-dessous vous retrouvez le paramétrage de votre équipement : 
 
-* *Model*: the model of the board you want to control,
+* *Modèle* : le Modèle de la carte que vous souhaitez controler,
 
 image::../images/modeles.png[]
 
-_For PiFace board, a number (0 to 3) is asked to identify it (If you have a piRack eg.)_
+_Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si vous avez un piRack par ex.)_
 
 image::../images/piface.png[]
-* *Connection type* : USB or LAN port,
-* *Address IP and Port*: for the connection to the card via the network.
+* *Port de connection* : type de connection USB ou Réseau,
+* *Adresse IP et Port* : pour la connection à la carte via le réseau,
 [WARNING]
-Daemons (GPIO and Piface eg.) which could beings on the same Jeedom, make sure to use different ports for each. Normally, the creation of an equipment, a free port is offered. +
-_If necessary, the daemon will try to choose another port instead of the one indicated if it is impossible to use it._
+Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé. +
+_Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._
 
 [IMPORTANT]
-The port must be different from the host Jeedom.
+Le port doit aussi être différent de celui du Jeedom hôte.
 [TIP]
-_Following browsers, an arrow appears to directly select an IP amongst your Jeedom._ +.
-You can also use _local_ or _localhost_ for the IP address of the Jeedom (master).
+_Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom._ +
+Vous pouvez aussi utiliser _local_ ou _localhost_ pour l'adresse IP du Jeedom principal (maître).
 
 image::../images/listeIP.png[]
-* *USB port*: Local or remote, for connection of Jeedom master or slave to the board via its USB port,
-* *Port Local / Remote Port*: Port USB physical where boad is connected,
-** If you unplug / plug in the USB port of the RPI , you need to restart the corresponding daemon.
+* *Port USB* : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,
+* *Port local/Port déporté* : Port USB physique ou est connectée la carte,
+** Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.
 
 image::../images/listeUSB.png[]
-* *Daemon port *: for the connection to the daemon via the network, the IP of the daemon is the one of the Jeedom host.
+* *Port Démon* : pour la connection au démon via le réseau, l'IP du démon étant celle du Jeedom hôte.
 [WARNING]
-Daemons (Arduino USB eg.) which could beings on the same Jeedom, make sure to use different ports for each. Normally, the creation of an equipment, a free port is offered. +
-_If necessary, the daemon will try to choose another port instead of the one indicated if it is impossible to use it._
+Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé. +
+_Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._
 [IMPORTANT]
-The port must be different from the host Jeedom.
-* *Sketch*: in the case of a card Arduino or ESP8266, the sketch for it is proposed to download after a first backup of equipment. +
-(NB. Refreshing the page, it may be necessary to do an F5 to see the link)
+Le port doit aussi être différent de celui du Jeedom hôte.
+* *Sketch* : Dans le cas d'une carte Arduino ou ESP8266, le sketch pour celle-ci est proposé au téléchargement aprés une première sauvegarde de l'équipement. +
+(NB. Rafraîchissement de la page, il peut être nécéssaire de faire un F5 pour voir apparaître le lien )
 [NOTE]
-For Ethernet (Arduinos) models, it is specifically generated, taking into account the IP address chosen, the selected port, and a unique mac address. 
- _As IP, the add-in '/jeedom' (or not) and the port of the master Jeedom (according to your network in Jeedom configuration). _
+Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tenant compte de l'adresse IP choisie, du port choisi, et d'une adresse mac unique. 
+ _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._
 [TIP]
-_The sketch is by default for the shields with W5100 chip, but it can work also with the ENC28J60. In this case, it is needed to read and apply the procedure in the header of the sketch._
+_Le Sketch est par défaut prévu pour les shields avec chip W5100, mais il peut fonctionner aussi avec des ENC28J60. Dans ce cas, il faudra lire et appliquer la procédure présente en entête du sketch._
 
 image::../images/sketch.png[]
 [NOTE]
-For WiFi models (ESP8266), it is specifically generated, taking into account the port, the SSID, and wifi password, the IP address is returned by the card (if dhcp mode).
- _As IP, the add-in '/jeedom' (or not) and the port of the master Jeedom (according to your network in Jeedom configuration). _
-_NB. You must indicate the IP address the first time._
+Pour les modèles WiFi (ESP8266), il est spécifiquement généré, en tenant compte du port, du SSID, et du mot de passe wifi, l'adresse IP étant renvoyée par la carte.
+ _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._
+_NB. Il faut tout de même renseigner l'adressse IP la premiére fois._
 
 [WARNING]
-The _SSID_ and _password_ should not contain spaces!
+Les _SSID_ et _mot de passe_ ne doivent pas contenir d'espaces !
 
 image::../images/ESP.png[]
 
-==== Pin Configuration
+==== Configuration des pins
 
-* Modal Parameters / pin assignment
+* Modal Paramétrages / affectation des pins
 
-Selects appropriate pin and assign a type input (info) or output (action). + 
-_NB: The information supplements are available in the FAQ._ +
+Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action). + 
+_NB : Des compléments d'infomations sont disponibles dans la FAQ._ +
 
-** Inputs: Analog, Digital, Pulse Counter
-** Outputs: Low (= 0 = GND), High (= Vcc = 1), Switch (reverse output), Pulse (the output to low or high for a limited time - ex.:activate momentarily, via a relay , a remote control switch, solenoid valve, a component, a dry contact, etc ..). 
+** Entrées: Analogiques, Digitales, Compteur d'impulsions
+** Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..). 
 
 image::../images/jeedouino_screenshot4.png[]
 
 [IMPORTANT]
-* _The pin will be configured only after an initial backup of your equipment ._ + 
-Once configured and saved (in the modal window), a backup of the equipment will generate all necessary commands.
+*_Les Pins seront configurables uniquement après une première sauvegarde de votre équipement._* + 
+Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l'équipement générera toutes les commandes nécéssaires.
 [NOTE]
-It is not useful to provide a function to each pin, but only those you need.
-This will prevent the generation of unnecessary controls and overload Jeedom.
+Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
+Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 
 [TIP]
-It is now possible to configure the generic kind directly and affect the pin to groups (equipment) Virtual, see the FAQ.
+Il est désormais possible de configurer les generic type directement, et d'affecter les pins à des groupes (équipements) virtuels, voir la FAQ.
 
-* Modal Settings / User pin assignment
+* Modal Paramétrages / affectation des pins utilisateur
 
 image::../images/UserPins.png[]
 
-* Tab Pins / GPIO +
+* Onglet Pins / GPIO +
 
-Allows you to add a number of pin user for your sketch Arduinos/ESP: _0 to 100 max_ +.
+Permet d'ajouter un certain nombre de pins utilisateur pour vos sketch Arduinos/ESPs : _0 à 100 max_ +
 
-It is possible to activate or not the automatic generation of commandes ALL_*
+Il est possible d'activer ou non la génération automatique des commandes ALL_
 
-** ALL_LOW puts all output pins to LOW
-** ALL_HIGH puts all output pins to HIGH
-** ALL_SWITCH reverse all the output pins
-** ALL_PULSE_LOW puts all output pins to LOW during the selected time
-** ALL_PULSE_HIGH puts all output pins to HIGH during the selected time
+** ALL_LOW	Met toutes les pins output à LOW
+** ALL_HIGH	Met toutes les pins output à HIGH
+** ALL_SWITCH	Inverse toutes les pins output
+** ALL_PULSE_LOW	Met toutes les pins output à LOW pendant le temps choisi
+** ALL_PULSE_HIGH	Met toutes les pins output à HIGH pendant le temps choisi
 
 image::../images/ALLpins.png[]
 
-==== Commands 
+==== Commandes 
 
 image::../images/jeedouino_screenshot5.png[]
-* *Backup equipment*: Commands are automatically generated, the daemon is started if necessary, the configuration of the pin is sent to the board (Arduino, RPI, PiFace) and some other settings.
-Ansi, the rotating cogwheel may not disappear for a while. So do not be concerned.
+* *Sauvegarde de l'équipement* : Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.
+Ansi, la roue crantée tournante peut rester affichée un bon moment. Il ne faut donc pas s'en inquièter.
 
 
 
-* Commands are automatically created when saving equipment.
+* Les commandes sont créées automatiquement lors de la sauvegarde de l'équipement.
 
-** It is of course possible to rename the controls.
+** Il est bien sûr possible de renommer les commandes.
 [NOTE]
-For each control type 'action', a type of command 'info' of feedback state is also created _ (if useful) _.
+Pour chaque commande de type 'action', une commande de type 'info' de retour d'état est aussi créée _(si utile)_.
 
-* The _Show_ _Logging_ buttons are the usual display buttons (or not) of the command on the widget and its logging (or not).
+* Les boutons _Afficher_ et _Historiser_ sont les boutons habituels d'affichage (ou non) de la commande sur le widget et de son historisation (ou non).
 
-* The Invert button (column display) _ can reverse the result of a command info (binary subtype) on the dashboard for example.
+* Le bouton _Inverser (colonne Affichage)_ permet d'inverser le résultat d'une commande info (sous-type binaire) sur le dashboard par ex.
 
-* The Invert button (Value column) _ can reverse the result of a command info (binary subtype) before providing it to Jeedom.
+* Le bouton _Inverser (colonne Valeur)_ permet d'inverser le résultat d'une commande info (sous-type binaire) avant de la fournir à Jeedom.
 
-* The Test button permit to test ... an action command.
+* Le bouton _Tester_ permet de...tester une commande action par ex.
 
-It is now not expected to be able to add commands manually.
+Il n'est pour l'instant pas prévu de pouvoir ajouter des commandes manuellement.
 
 [TIP]
-For type info command 'counter', they are reset to the value stored in the equipment at each backup of it.
-Conversely, after a reboot of the Arduino (eg.), The last value is recovered from the master Jeedom.
-If a communication error occurs at this moment, the counter will be reset to zero. + 
-Arduino / ESP / NodeMCU / Wemos, it is possible to re-initialize to a specific value, an option "reset" is present on the control of the equipment concerned.
+Pour les commandes info de type 'compteur', elles sont remises a la valeur stockée dans l'équipement à chaque sauvegarde de celui-ci.
+A l'inverse, après un reboot de l'arduino (par ex.), la derniére valeur est recupérée auprès du Jeedom maître.
+Si une erreur de communication survient a ce moment la, le compteur sera réinitialisé à zéro. + 
+Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une valeur spécifique, une option "reset" est présente sur la commande de l'équipement concerné.
 
 ==== Widgets
 
-It is those by default of Jeedom.
+Ce sont ceux par défaut de Jeedom.
 
-Desktop widgets are similar to this:
+Les widgets desktop ressemblent à cela :
 
 image::../images/desktop_widget.png[]
+

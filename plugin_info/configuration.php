@@ -292,6 +292,11 @@ $port =  jeedouino::GetJeedomPort();
 					$a_lan=true;
 					$esp=true;
 					break;
+                case 'esp32dev':
+					$Sketch  .= 'ESP32Dev';
+					$a_lan=true;
+					$esp=true;
+					break;
 				case 'piface':
 					$a_lan=false;
 					$Sketch  = '';

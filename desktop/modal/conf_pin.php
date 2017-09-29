@@ -5,7 +5,7 @@
 * Jeedom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version. 
+* (at your option) any later version.
 *
 * Jeedom is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,22 +23,23 @@ if (isset($_GET['id']))
 {
 	$arduino_board = '';
 	if (isset($_GET['board'])) $arduino_board = trim($_GET['board']);
-	
+
 	include_file('core', 'jeedouino', 'config', 'jeedouino');
     global $ArduinoMODEpins,$Arduino328pins,$ArduinoMEGApins,$ArduinoESPanalogPins;
     global $PifaceMODEpinsIN,$PifaceMODEpinsOUT,$Pifacepins;
     global $PiGPIOpins,$PiGPIO26pins,$PiGPIO40pins;
-	global $ESP8266pins,$ESP01pins,$ESP07pins,$espMCU01pins;
+	global $ESP8266pins,$ESP01pins,$ESP07pins,$espMCU01pins,$ESP32pins;
+    global $SonoffPow,$SonoffPowPins,$Sonoff4ch,$Sonoff4chPins;
 	global $PiPluspins,$PiPlus16pins;
 	global $UserModePins;
-    
+
 	$arduino_id = $_GET['id'];
-	$my_arduino = eqLogic::byid($arduino_id);		
-	$ModeleArduino = $my_arduino->getConfiguration('arduino_board'); 
-	$PortArduino = $my_arduino->getConfiguration('datasource'); 
-	$LocalArduino = $my_arduino->getConfiguration('arduinoport'); 
-	$IPArduino = $my_arduino->getConfiguration('iparduino'); 	
-	
+	$my_arduino = eqLogic::byid($arduino_id);
+	$ModeleArduino = $my_arduino->getConfiguration('arduino_board');
+	$PortArduino = $my_arduino->getConfiguration('datasource');
+	$LocalArduino = $my_arduino->getConfiguration('arduinoport');
+	$IPArduino = $my_arduino->getConfiguration('iparduino');
+
 	// On verifie que l'utilisateur n'a pas changé de modèle de carte après la 1ère sauvegarde sans resauver derrière.
 	if ($arduino_board != '')
 	{
@@ -54,25 +55,25 @@ if (isset($_GET['id']))
 			$message_a=' USB ';
 			if ($LocalArduino=='usblocal') $message_a.=' sur port local. ';
 			elseif ($LocalArduino=='usbdeporte') $message_a.=' sur port déporté. ';
-			else 
+			else
 			{
 				$non_defini=false;
 				$message_a.=' NON DEFINI ! ';
 			}
 		}
-		else 
+		else
 		{
 			$non_defini=false;
 			$message_a=' NON DEFINI ! ';
 		}
 	}
-	else 
+	else
 	{
 		$non_defini=false;
 		$message_a=' NON DEFINI ! ';
 	}
-	
-	
+
+
 	if ($non_defini)
 	{
 		// Pins utilisateur
@@ -83,29 +84,29 @@ if (isset($_GET['id']))
 		{
 			$UserPinsMax = trim($my_arduino->getConfiguration('UserPinsMax'));
 			if (!is_numeric($UserPinsMax)) $UserPinsMax = 0;
-			if ($UserPinsMax > 0 and $UserPinsMax<101) $UserPinsStatus = true; 
+			if ($UserPinsMax > 0 and $UserPinsMax<101) $UserPinsStatus = true;
 			else $UserPinsMax = 0;
-			$my_arduino->setConfiguration('UserPinsMax', $UserPinsMax); 
+			$my_arduino->setConfiguration('UserPinsMax', $UserPinsMax);
 			$my_arduino->save(true);
-			
+
 			$user_pins = jeedouino::GiveMeUserPins($UserPinsMax, $UserPinsBase);
 		}
 ?>
 
 <div class="tab-content" id="backup_pins" >
 			<div id='div_alertpins' style="display: none;"></div>
-			<div class="form-group"  style="    ">	
+			<div class="form-group"  style="    ">
 				<label class="col-sm-4 control-label ">Paramétrage des pins de l'arduino/esp/rpi <?php echo $message_a; ?></label>
 				<div class="col-sm-8">
 					<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html#_sketchs_personnels_modifiables_et_commandes_utilisateur" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
 					<a class="btn btn-success pull-right bt_savebackup_pins" id="bt_savebackup_pins1" title="Pensez à sauver l'équipement pour envoyer la config à la carte">* Sauvegarde</a>
 				</div>
-			</div>	
-		
+			</div>
+
 		<ul class="nav nav-tabs" role="tablist">
 				<?php if (substr($ModeleArduino,0,2)!='pi' or (substr($ModeleArduino,0,6)=='piGPIO') or ($ModeleArduino == 'piPlus'))
 				{
-				?>	
+				?>
 			<li role="presentation"><a href="#optionstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin"><i class="fa fa-wrench"></i> {{Options}}</a></li>
 				<?php
 				}
@@ -113,7 +114,7 @@ if (isset($_GET['id']))
 			<li role="presentation" class="active"><a href="#boardpinstab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Pins Matérielles}}</a></li>
 				<?php if ($UserPinsStatus)
 				{
-				?>	
+				?>
 			<li role="presentation"><a href="#userpinstab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-code"></i> {{Pins Utilisateur}}</a></li>
 				<?php
 				}
@@ -127,7 +128,7 @@ if (isset($_GET['id']))
 				<div class="form-group">
 					<label class="col-sm-4 control-label "><p class="hidden-xs"><br/>{{Délai de renvoi des valeurs des sondes T°/H en minutes. <br>(En tests)}}</p></label>
 					<div class="col-sm-8">
-						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1 à 1000 max." min="1" max="1000"/> 
+						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1 à 1000 max." min="1" max="1000"/>
 					</div>
 				</div>';
 			?>
@@ -135,13 +136,13 @@ if (isset($_GET['id']))
 				<?php if (substr($ModeleArduino,0,2)!='pi')
 				{
 				?>
-                <div class="form-group">	 
+                <div class="form-group">
                     <label class="col-sm-4 control-label "><p class="hidden-xs"><br/>{{Choix de sauvegarde de l'état des pins suite a un redémarrage de l'Arduino/esp (Coupure de courant, reset,etc...)}}</p></label>
                     <div class="col-sm-8">
 						<?php
 							if (config::byKey($arduino_id.'_choix_boot', 'jeedouino', 'none')!='none') $message_a='';
 							else $message_a=' selected ';
-							
+
 							echo '<br><br>';
 							echo '<select class="form-control  configKeyPins" data-l1key="'.$arduino_id.'_choix_boot">';
 							echo '<option value="0">{{Pas de sauvegarde - Toutes les pins sorties non modifiées au démarrage.}}</option>';
@@ -155,14 +156,14 @@ if (isset($_GET['id']))
 						 ?>
 					<br>
                     </div>
-                </div>		
+                </div>
 				<?php
-					if ($PortArduino != 'usbarduino') echo $_ProbeDelay;
+					if ($PortArduino != 'usbarduino' && $ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
 				}
 				elseif (substr($ModeleArduino,0,6)=='piGPIO')
 				{
 				?>
-                <div class="form-group">	 
+                <div class="form-group">
                     <label class="col-sm-4 control-label "><p class="hidden-xs"><br/>{{Choix de l'état des pins sorties au démarrage du démon piGPIO. (En tests)}}</p></label>
                     <div class="col-sm-8">
 						<?php
@@ -174,14 +175,14 @@ if (isset($_GET['id']))
 						 ?>
 					<br>
                     </div>
-                </div>		
+                </div>
 				<?php
 					echo $_ProbeDelay;
 				}
 				elseif ($ModeleArduino == 'piPlus')
 				{
 				?>
-                <div class="form-group">	 
+                <div class="form-group">
                     <label class="col-sm-4 control-label "><p class="hidden-xs"><br/>{{Choix de l'état des pins sorties au démarrage du démon piPlus. (En tests)}}</p></label>
                     <div class="col-sm-8">
 						<?php
@@ -193,7 +194,7 @@ if (isset($_GET['id']))
 						 ?>
 					<br>
                     </div>
-                </div>		
+                </div>
 				<?php
 				}
 				echo '</div>'; // end tabpanel
@@ -215,29 +216,38 @@ if (isset($_GET['id']))
                     case 'a1280':
                     case 'a2560':
                         $Arduino_pins = $ArduinoMEGApins + $user_pins;
-                        break;   
+                        break;
                     case 'piface':
                         $Arduino_pins = $Pifacepins;
-                        break;  
+                        break;
                     case 'piGPIO26':
                         $Arduino_pins = $PiGPIO26pins;
-                        break;   
+                        break;
                     case 'piGPIO40':
                         $Arduino_pins = $PiGPIO40pins;
-                        break;  
+                        break;
 					case 'piPlus':
 						$Arduino_pins = $PiPlus16pins;
-						break;  							
+						break;
 					case 'esp01':
 						$Arduino_pins = $ESP01pins + $user_pins;
-						break;   
+						break;
 					case 'esp07':
 						$Arduino_pins = $ESP07pins + $user_pins;
-						break;  		
+						break;
 					case 'espMCU01':
 						$Arduino_pins = $espMCU01pins + $user_pins;
-						break;  							
-					default:	
+						break;
+                    case 'espsonoffpow':
+						$Arduino_pins = $SonoffPowPins + $user_pins;
+						break;
+                    case 'espsonoff4ch':
+						$Arduino_pins = $Sonoff4chPins + $user_pins;
+						break;
+                    case 'esp32dev':
+						$Arduino_pins = $ESP32pins + $user_pins;
+						break;
+					default:
 						$Arduino_pins = '';
 					break;
                 }
@@ -245,10 +255,10 @@ if (isset($_GET['id']))
 				if (method_exists('virtual', 'copyFromEqLogic'))
 				{
 					$Virtuels = '';
-					foreach (object::all() as $object) 
+					foreach (object::all() as $object)
 					{
 						$options = '';
-						foreach (eqLogic::byType('virtual', true) as $eqLogic) 
+						foreach (eqLogic::byType('virtual', true) as $eqLogic)
 						{
 							if ($eqLogic->getObject_id() == $object->getId()) $options .= '<option value="' . $eqLogic->getId() . '" >' . $eqLogic->getName() . '</option>';
 						}
@@ -262,7 +272,7 @@ if (isset($_GET['id']))
 					// Orphelins = Virtuels sans parents déclarés
 					$options = '';
 					$Orphelins = '';
-					foreach (eqLogic::byType('virtual', true) as $eqLogic) 
+					foreach (eqLogic::byType('virtual', true) as $eqLogic)
 					{
 						if ($eqLogic->getObject_id() == null) $options .= '<option value="' . $eqLogic->getId() . '" >' . $eqLogic->getName() . '</option>';
 					}
@@ -276,7 +286,7 @@ if (isset($_GET['id']))
 				}
 
 				// On traite les pins
-				foreach ($Arduino_pins as $pins_id => $pin_datas) 
+				foreach ($Arduino_pins as $pins_id => $pin_datas)
 				{
 					$TmpPins = '<tr class="pinoche" data-logicalId="'.$pins_id.'">';
 					if ($pin_datas['option']!='') $TmpPins .= '<td>'.$pin_datas['Nom_pin'].' - ( '.$pin_datas['option'].' ) </td>';
@@ -285,68 +295,82 @@ if (isset($_GET['id']))
 					// pins non disponibles
 					if ($pin_datas['disable']=='1')
 					{
-						$TmpPins .= '<td><input disabled class="form-control configKeyPins" name="'.$arduino_id.'_'.$pins_id.'" value="{{Pin réservée !}}"></td>';
+                        // cas particulier GPIO RPI disabled sur SDA (i2c)
+                        if (substr($pin_datas['option'], 0, 3) == 'SDA')
+                        {
+                            $TmpPins .= '<td>';
+                            $TmpPins .= '<select class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_' . $pins_id . '">';
+                            $TmpPins .= '<option value="not_used">{{Non utilisée}}</option>';
+                            $TmpPins .= '<option value="bmp180">{{Capteur Pression BMP085/180}}</option>';
+                            $TmpPins .= '</select>';
+                            $TmpPins .= '</td>';
+                        }
+						else
+                        {
+                            $TmpPins = str_replace('<tr class="', '<tr class="hide ', $TmpPins );
+                            $TmpPins .= '<td><input disabled class="form-control configKeyPins" name="'.$arduino_id.'_'.$pins_id.'" value="{{Pin réservée !}}"></td>';
+                        }
 						if ($pins_id < $UserPinsBase) $BoardPinsTab .= $TmpPins;
 						else $UserPinsTab .= $TmpPins;
 						continue;
 					}
 					// pins reservee pour la carte ethernet sur arduino
-					if (($PortArduino=='rj45arduino') and ($pin_datas['ethernet']=='1')) 
+					if (($PortArduino=='rj45arduino') and ($pin_datas['ethernet']=='1'))
 					{
-						$TmpPins .= '<td><input disabled class="form-control configKeyPins" name="'.$arduino_id.'_'.$pins_id.'" value="{{Pin réservée pour le shield ethernet !}}"></td>';    
+						$TmpPins .= '<td><input disabled class="form-control configKeyPins" name="'.$arduino_id.'_'.$pins_id.'" value="{{Pin réservée pour le shield ethernet !}}"></td>';
 						if ($pins_id < $UserPinsBase) $BoardPinsTab .= $TmpPins;
 						else $UserPinsTab .= $TmpPins;
-						continue;						
+						continue;
 					}
-					
+
 					$InfoPins = array();
 					$ActionPins = array();
 					$OtherPins = array();
 					$TmpPins .= '<td>';
 					$TmpPins .= '<select class="form-control  configKeyPins" data-l1key="'.$arduino_id.'_'.$pins_id.'">';
-					
+
 					if ($pins_id < $UserPinsBase)
 					{
-						if ($ModeleArduino=='piface')
+						if ($ModeleArduino == 'piface')
 						{
 							if ($pin_datas['option']!='IN')
 							{
-								foreach ($PifaceMODEpinsOUT as $mode_value => $mode_name) 
+								foreach ($PifaceMODEpinsOUT as $mode_value => $mode_name)
 								{
 									$ActionPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
-								}                 
-							}   
+								}
+							}
 							else
 							{
-								foreach ($PifaceMODEpinsIN as $mode_value => $mode_name) 
+								foreach ($PifaceMODEpinsIN as $mode_value => $mode_name)
 								{
 									$InfoPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
-								}                 
-							}    
+								}
+							}
 						}
-						else if ($ModeleArduino=='piGPIO26' or $ModeleArduino=='piGPIO40' )
-						{              
-							foreach ($PiGPIOpins as $mode_value => $mode_name) 
+						else if ($ModeleArduino == 'piGPIO26' or $ModeleArduino == 'piGPIO40' )
+						{
+							foreach ($PiGPIOpins as $mode_value => $mode_name)
 							{
 								if (substr($mode_name,0,1)=='i') $InfoPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 								elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 								else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
 							}
 						}
-						else if ($ModeleArduino=='piPlus')
+						else if ($ModeleArduino == 'piPlus')
 						{
-							foreach ($PiPluspins as $mode_value => $mode_name) 
+							foreach ($PiPluspins as $mode_value => $mode_name)
 							{
 								if (substr($mode_name,0,1)=='i') $InfoPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 								elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 								else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
-							}                      
-						}					
-						else if ($ModeleArduino=='esp01' or $ModeleArduino=='esp07' or $ModeleArduino=='espMCU01' )
+							}
+						}
+						else if ($ModeleArduino == 'esp01' or $ModeleArduino == 'esp07' or $ModeleArduino == 'espMCU01' or $ModeleArduino == 'esp32dev')
 						{
 							if ($pin_datas['option']!='ANA')
 							{
-								foreach ($ESP8266pins as $mode_value => $mode_name) 
+								foreach ($ESP8266pins as $mode_value => $mode_name)
 								{
 									if ($pin_datas['option'] == 'R/W') 	// Palliatif pin gpio16 (or D0)
 									{
@@ -359,49 +383,104 @@ if (isset($_GET['id']))
 									elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 									else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
 								}
+                                if (substr($pin_datas['option'], 0, 3) == 'SDA') $InfoPins[] = '<option value="bmp180">{{Capteur Pression BMP085/180}}</option>';
 							}
 							else
 							{
 								// pinoche analogique ADC = A0
 								$OtherPins[] = '<option value="not_used">{{Non utilisée}}</option>';
-								$OtherPins[] = '<option value="analog_input">{{Entrée Analogique}}</option>';			
-							}							
-						}   
+								$OtherPins[] = '<option value="analog_input">{{Entrée Analogique}}</option>';
+							}
+						}
+                        else if ($ModeleArduino == 'espsonoffpow')
+						{
+							if ($pin_datas['option'] != 'HLW8012')
+							{
+								foreach ($SonoffPow as $mode_value => $mode_name)
+								{
+                                    $f = substr($mode_name, 0, 1);
+                                    $m = '<option value="' . $mode_value . '">{{' . substr($mode_name, 1) . '}}</option>';
+                                    switch ($pin_datas['option'])
+                                    {
+                                        case 'IN':
+                                            if ($f == 'i') $InfoPins[] = $m;
+                                            elseif ($f == ' ') $OtherPins[] = $m;
+                                            break;
+                                        case 'OUT':
+                                            if ($f == 'o') $ActionPins[] = $m;
+                                            elseif ($f == ' ') $OtherPins[] = $m;
+                                            break;
+                                        default:
+                                            if ($f == 'i') $InfoPins[] = $m;
+                                            elseif ($f == 'o') $ActionPins[] = $m;
+                                            else $OtherPins[] = $m;
+                                            break;
+                                    }
+								}
+							}
+							else
+							{
+								//$OtherPins[] = '<option value="not_used">{{Non utilisée}}</option>';
+								$OtherPins[] = '<option value="input_numeric">{{Entrée Numérique}}</option>';
+							}
+						}
+                        else if ($ModeleArduino == 'espsonoff4ch' )
+						{
+							foreach ($Sonoff4ch as $mode_value => $mode_name)
+                            {
+                                $f = substr($mode_name, 0, 1);
+                                $m = '<option value="' . $mode_value . '">{{' . substr($mode_name, 1) . '}}</option>';
+                                switch ($pin_datas['option'])
+                                {
+                                    case 'IN':
+                                        if ($f == 'i') $InfoPins[] = $m;
+                                        elseif ($f == ' ') $OtherPins[] = $m;
+                                        break;
+                                    case 'OUT':
+                                        if ($f == 'o') $ActionPins[] = $m;
+                                        elseif ($f == ' ') $OtherPins[] = $m;
+                                        break;
+                                    default:
+                                        if ($f == 'i') $InfoPins[] = $m;
+                                        elseif ($f == 'o') $ActionPins[] = $m;
+                                        else $OtherPins[] = $m;
+                                        break;
+                                }
+                            }
+						}
 						else
 						{
-							if ($pin_datas['option']!='ANA')
+                            if (strpos($pin_datas['option'], 'SDA') !== false ) $InfoPins[] = '<option value="bmp180">{{Capteur Pression BMP085/180}}</option>';
+                            if (strpos($pin_datas['option'], 'ANA') === false )
 							{
-								foreach ($ArduinoMODEpins as $mode_value => $mode_name) 
-								{							
+								foreach ($ArduinoMODEpins as $mode_value => $mode_name)
+								{
 									if (substr($mode_name,0,1)=='i') $InfoPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 									elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
-									else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';						
+									else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
 								}
-								if (substr($pin_datas['option'],0,3)=='PWM') $ActionPins[] ='<option value="pwm_output">{{Sortie PWM}}</option>';
+								if (substr($pin_datas['option'], 0, 3) == 'PWM') $ActionPins[] = '<option value="pwm_output">{{Sortie PWM}}</option>';
 							}
 							else
 							{
 								// pinoches analogiques
-	/* 							$OtherPins[] = '<option value="not_used">{{Non utilisée}}</option>';
-								$OtherPins[] = '<option value="analog_input">{{Entrée Analogique}}</option>';
-								$ActionPins[] = '<option value="output">{{Sortie Numérique}}</option>';		 */
-								foreach ($ArduinoESPanalogPins as $mode_value => $mode_name) 
-								{							
+								foreach ($ArduinoESPanalogPins as $mode_value => $mode_name)
+								{
 									if (substr($mode_name,0,1)=='i') $InfoPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 									elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
-									else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';						
-								}							
+									else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
+								}
 							}
 						}
 					}
 					else
 					{
-						foreach ($UserModePins as $mode_value => $mode_name) 
+						foreach ($UserModePins as $mode_value => $mode_name)
 						{
 							if (substr($mode_name,0,1)=='i') $InfoPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 							elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 							else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
-						}     
+						}
 					}
 					foreach ($OtherPins as $pins_option) $TmpPins .= $pins_option;
 					$options = '';
@@ -411,7 +490,7 @@ if (isset($_GET['id']))
 						$TmpPins .= '<optgroup label="{{Sorties Numériques (action)}}">';
 						$TmpPins .= $options;
 						$TmpPins .= '</optgroup>';
-					}					
+					}
 					$options = '';
 					foreach ($InfoPins as $pins_option) $options .= $pins_option;
 					if ($options != '')
@@ -423,27 +502,35 @@ if (isset($_GET['id']))
 					$TmpPins .= '</select>';
 					$TmpPins .= '<span class="HC_trigger hide"><i class="fa fa-arrow-right"></i> {{Pensez à selectionner la pin $TmpPins .=.}}</span>';
 					$TmpPins .= '</td>';
-					
+
 					// Type Générique pour App Mobile
 					$G_T = '';
 					$InfoPins = array();
 					$ActionPins = array();
-					$OtherPins = array();		
-					
+					$OtherPins = array();
+
 					foreach (jeedom::getConfiguration('cmd::generic_type') as $key => $value)
-					{		
-						$Gvalue=strtolower($value['type']);
-						if ($Gvalue=='info') $InfoPins[$key] = $value['name'];
-						elseif ($Gvalue=='action') $ActionPins[$key] = $value['name'];
+					{
+						$Gvalue = strtolower($value['type']);
+						if ($Gvalue == 'info') $InfoPins[$key] = $value['name'];
+						elseif ($Gvalue == 'action') $ActionPins[$key] = $value['name'];
 						else $OtherPins[$key] = $value['name'];
 					}
-					// cas particulier
-					if ($ModeleArduino=='piface')
+					// cas particuliers
+					switch ($ModeleArduino)
                     {
-                        if ($pin_datas['option']!='IN') $InfoPins = array();
-						else $ActionPins = array();
+					    case 'piface':
+                            if ($pin_datas['option'] != 'IN') $InfoPins = array();
+    						else $ActionPins = array();
+					        break;
+                        case 'espsonoffpow':
+                        case 'espsonoff4ch':
+                            if ($pin_datas['option'] == 'IN') $ActionPins = array();
+                            elseif ($pin_datas['option'] == 'HLW8012') $ActionPins = array();
+    						elseif ($pin_datas['option'] == 'OUT') $InfoPins = array();
+					        break;
 					}
-				
+
 					$G_T .= '<td>';
 					$G_T .=  '<select class="form-control  configKeyPins" data-l1key="GT_' . $arduino_id . '_' . $pins_id . '">';
 					// On essaye de récup les generic_type déja saisis en config avancée
@@ -453,14 +540,14 @@ if (isset($_GET['id']))
 					$generic_type = config::byKey('GT_' . $arduino_id . '_' . $pins_id, 'jeedouino', $generic_type);
 					if ($generic_type == '') $generic_type = '0';
 					config::save('GT_'.$arduino_id . '_' . $pins_id, $generic_type, 'jeedouino'); // pour les équipements sans GT_....
-					
+
 					$OtherPins['configGT'] = "{{Comme la Configuration avancée.}}";
 					asort($OtherPins);
 					array_unshift($OtherPins, "{{Auto-paramétrage.}}");
 					$options = '';
 					foreach ($OtherPins as $key => $value) $options .= '<option value="' . $key . '" ' . ($key ==  $generic_type ? ' selected="selected" ':''). '>' . __($value, 'common') . '</option>';
 					if ($options != '') $G_T .=  $options;
-					
+
 					asort($ActionPins);
 					$options = '';
 					foreach ($ActionPins as $key => $value) $options .= '<option value="' . $key . '" ' . ($key ==  $generic_type ? ' selected="selected" ':''). '>' . __($value, 'common') . ' (Action)</option>';
@@ -469,8 +556,8 @@ if (isset($_GET['id']))
 						$G_T .=  '<optgroup label="{{Types Action}}">';
 						$G_T .=  $options;
 						$G_T .=  '</optgroup>';
-					}				
-					
+					}
+
 					asort($InfoPins);
 					$options = '';
 					foreach ($InfoPins as $key => $value) $options .= '<option value="' . $key . '" ' . ($key ==  $generic_type ? ' selected="selected" ':''). '>' . __($value, 'common') . ' (Info)</option>';
@@ -480,26 +567,26 @@ if (isset($_GET['id']))
 						$G_T .=  $options;
 						$G_T .=  '</optgroup>';
 					}
-					$G_T .=  '</select>';					
+					$G_T .=  '</select>';
 					$G_T .=  '</td>';
-					
+
 					$TmpPins .= $G_T;
 					// Groupes Virtuels
 					$Virtuals = '';
-					if (config::byKey('ActiveVirtual', 'jeedouino', false)) 
+					if (config::byKey('ActiveVirtual', 'jeedouino', false))
 					{
 						if (method_exists('virtual', 'copyFromEqLogic'))
 						{
 							$Virtuals .= '<td>';
 							$Virtuals .=  '<select class="form-control  configKeyPins" data-l1key="GV_' . $arduino_id . '_' . $pins_id . '">';
 							$Virtuals .=  $Virtuels;
-							$Virtuals .= '</td>';		
+							$Virtuals .= '</td>';
 						}
 						else $Virtuals .= '<td>{{Plugin Virtual non trouvé !}}</td>';
 						$TmpPins .= $Virtuals;
 					}
                     $TmpPins .= '</tr>';
-					// On affecte la ligne pin au bon onglet 
+					// On affecte la ligne pin au bon onglet
 					if ($pins_id < $UserPinsBase) $BoardPinsTab .= $TmpPins;
 					else $UserPinsTab .= $TmpPins;
 				}
@@ -598,14 +685,14 @@ if (isset($_GET['id']))
 			}
 //			$('#md_modal').dialog('close');
 			$('#jqueryLoadingDiv').hide();		// A surveiller, élimine la "roue" qui tourne mais laisse celle lors de la sauvegarde de équipement. bug ??
-			
+
 			modifyWithoutSave = false;
 		}
-		});		
+		});
 		//$('#md_modal').dialog('close');
 		//$('#jqueryLoadingDiv').hide();
 	});
-	
+
 	jeedom.config.load({
 		configuration: $('#backup_pins').getValues('.configKeyPins')[0],
 		plugin: 'jeedouino',
@@ -618,7 +705,7 @@ if (isset($_GET['id']))
 			//$('#div_alertpins').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
 		}
 	});
-		
+
 	$("#bt_adduser_pins").on('click', function (event) {
 		var tr = $('#user_cmd tbody tr:first');
 	});

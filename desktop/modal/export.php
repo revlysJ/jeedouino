@@ -28,17 +28,14 @@ if (!is_object($eqLogic)) {
 	throw new Exception('{{EqLogic non trouvé}}');
 }
 echo '<div>';
-echo '<br><a class="btn btn-success" href="/plugins/jeedouino/desktop/modal/export_file.php?id=' . $arduino_id .'" target="_blank">Téléchargement</a><br>';
-//echo json_encode(utils::o2a($eqLogic));
-echo '<br>EqLogic & Cmds :<br>';
-echo json_encode($eqLogic->export());
-//echo '<br>getcmd : <br>';
-//echo json_encode(utils::o2a($eqLogic->getCmd()));
+echo json_encode(utils::o2a($eqLogic));
+echo '<br>***<br>';
+echo json_encode(utils::o2a($eqLogic->getCmd()));
 
 			// pins de la carte (normalement deja definie)
 			$myPin = array();
-//			$generic_type = array();
-//			$virtual = array();
+			$generic_type = array();
+			$virtual = array();
 			list($Arduino_pins , $board , $usb) = jeedouino::GetPinsByBoard($arduino_id);
 			// pins utilisateur
 			if (($board == 'arduino') or ($board == 'esp'))
@@ -50,21 +47,21 @@ echo json_encode($eqLogic->export());
 			// copie des datas des pins
 			foreach ($Arduino_pins as $pins_id => $pin_datas)
 			{
-				$myPin['EL_' . $pins_id] = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
-//				$generic_type['EL_' . $pins_id] = config::byKey('GT_' . $arduino_id . '_' . $pins_id, 'jeedouino', '');
-//				$virtual['EL_' . $pins_id] = config::byKey('GV_' . $arduino_id . '_' . $pins_id, 'jeedouino', '');
+				$myPin[$arduino_id . '_' . $pins_id] = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
+				$generic_type[$arduino_id . '_' . $pins_id] = config::byKey('GT_' . $arduino_id . '_' . $pins_id, 'jeedouino', '');
+				$virtual[$arduino_id . '_' . $pins_id] = config::byKey('GV_' . $arduino_id . '_' . $pins_id, 'jeedouino', '');
 			}
 			// copie des options
-			$myPin['EL__choix_boot'] = config::byKey($arduino_id . '_choix_boot', 'jeedouino', '2');
-			$myPin['EL__ProbeDelay'] = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', '5');
-//			$MesPins = array(	'myPin' 				=> $myPin ,
-//											'generic_type' 		=> $generic_type,
-//											'virtual' 				=> $virtual,
-//											'choix_boot' 			=> $choix_boot,
-//											'_ProbeDelay' 		=> $_ProbeDelay
-//										);
-echo '<br> Datas Pins : <br>';
-echo json_encode($myPin);
+			$choix_boot = config::byKey($arduino_id . '_choix_boot', 'jeedouino', '2');
+			$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', '5');
+			$MesPins = array(	'myPin' 				=> $myPin ,
+										'generic_type' 	=> $generic_type,
+										'virtual' 				=> $virtual,
+										'choix_boot' 		=> $choix_boot,
+										'_ProbeDelay' 	=> $_ProbeDelay
+										);
+echo '<br>***<br>';
+echo json_encode($MesPins);
 echo '</div>';
 ?>
 <div id="div_export"></div>

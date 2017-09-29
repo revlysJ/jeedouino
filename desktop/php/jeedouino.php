@@ -189,8 +189,9 @@ $cpl = jeedouino::GetJeedomComplement();
                                 <option value="esp01" id="select_arduino_board" >ESP8266-01</option>
 								<option value="esp07" id="select_arduino_board" >ESP8266-All I/O (Pour tests)</option>
 								<option value="espMCU01" id="select_arduino_board" >NodeMCU / Wemos</option>
-                                <!-- <option value="espsonoffpow" id="select_arduino_board">SONOFF POW (Pour tests)</option> -->
-                                <!-- <option value="espsonoff4ch" id="select_arduino_board">SONOFF 4CH (Pour tests)</option> -->
+                                <option value="espsonoffpow" id="select_arduino_board">SONOFF POW (Pour tests)</option>
+                                <option value="espsonoff4ch" id="select_arduino_board">SONOFF 4CH (Pour tests)</option>
+                                <option value="esp32dev" id="select_arduino_board">ESP32 Dev (Pour tests)</option>
 								</optgroup>
 
                             </select>

@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php"; 
+require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
 
 // TODO : Verifier l'origine de l'appel
 jeedouino::log( 'debug','CALLBACK - Requête reçue : ?'.$_SERVER['QUERY_STRING']);
 if (isset($_GET['BoardEQ']))
 {
 	$arduino_id = trim($_GET['BoardEQ']);
-	if ($arduino_id == '' or $arduino_id == null or $arduino_id == 0) 
+	if ($arduino_id == '' or $arduino_id == null or $arduino_id == 0)
 	{
 		jeedouino::log( 'error', 'CALLBACK - BoardEQ non défini : *' . $arduino_id . '*');
 		return;
 	}
 	$eqLogic = eqLogic::byId($arduino_id);
-	
+
 	if ($eqLogic!==false and $eqLogic!==null)
 	{
 		// paliatif manque lastCommunication
@@ -42,7 +42,7 @@ if (isset($_GET['BoardEQ']))
 			case 'auno':
 			case 'a2009':
 			case 'anano':
-			case 'auno':	
+			case 'auno':
 				$ard328 = true;
 			break;
 		}
@@ -50,10 +50,10 @@ if (isset($_GET['BoardEQ']))
 		if (isset($_GET['REP'])) config::save('REP_'.$arduino_id, $_GET['REP'], 'jeedouino'); 	// Pour Double vérif
 
 		list($Arduino_pins,$board,$usb) = jeedouino::GetPinsByBoard($arduino_id);
-		
+
 		$BOARDNAME = strtoupper($eqLogic->getName()) . ' eqID ( '.$arduino_id.' ) ';
 		$CALLBACK = 'CALLBACK - ' . $BOARDNAME . '- ';
-		
+
 		// Cas de la téléinfo recue, on tente de l'envoyer au plugin teleinfo
 		if (isset($_GET['ADCO']))
 		{
@@ -94,8 +94,8 @@ if (isset($_GET['BoardEQ']))
 					$JeedomCPL =jeedouino::GetJeedomComplement();
 					$url = $http_ . $JeedomIP . ':' . $JeedomPort . $JeedomCPL . '/plugins/teleinfo/core/php/jeeTeleinfo.php?api=' . $ApiKey . $message;
 					jeedouino::log( 'debug', 'Appel de : ' . $url);
-					return trim(@file_get_contents($url));					
-				}				
+					return trim(@file_get_contents($url));
+				}
 			}
 			else jeedouino::log( 'error', $CALLBACK . ' - Impossible de trouver le plugin téléinfo.');
 			return;
@@ -103,7 +103,7 @@ if (isset($_GET['BoardEQ']))
 		// Informations fournies par les démons
 		if (isset($_GET['PINGME']))
 		{
-			jeedouino::log( 'error', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');
+			jeedouino::log( 'debug', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');
 			$result = jeedouino::StatusBoardDemon($arduino_id, 0, $ModeleArduino);
 		}
 		if (isset($_GET['THREADSDEAD']))
@@ -113,11 +113,11 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['PORTINUSE']))
 		{
-			jeedouino::log( 'error', $CALLBACK . 'Le port ' . $_GET['PORTINUSE'] . ' est probablement utilisé. Nouvel essai en mode auto-découverte dans 7s.');
+			jeedouino::log( 'debug', $CALLBACK . 'Le port ' . $_GET['PORTINUSE'] . ' est probablement utilisé. Nouvel essai en mode auto-découverte dans 7s.');
 		}
 		if (isset($_GET['PORTISUSED']))
 		{
-			jeedouino::log( 'error', $CALLBACK . 'Le port ' . $_GET['PORTISUSED'] . ' est peut-être utilisé. Nouvel essai dans 11s.');
+			jeedouino::log( 'debug', $CALLBACK . 'Le port ' . $_GET['PORTISUSED'] . ' est peut-être utilisé. Nouvel essai dans 11s.');
 		}
 		if (isset($_GET['NOPORTFOUND']))
 		{
@@ -125,23 +125,23 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['PORTFOUND']))
 		{
-			jeedouino::log( 'error', $CALLBACK . 'Un port libre (' . $_GET['PORTFOUND'] . ') est disponible. Je met à jour l\'équipement.');
-			$eqLogic->setConfiguration('ipPort', $_GET['PORTFOUND']); 
-			$eqLogic->setConfiguration('PortDemon', $_GET['PORTFOUND']); 
+			jeedouino::log( 'debug', $CALLBACK . 'Un port libre (' . $_GET['PORTFOUND'] . ') est disponible. Je met à jour l\'équipement.');
+			$eqLogic->setConfiguration('ipPort', $_GET['PORTFOUND']);
+			$eqLogic->setConfiguration('PortDemon', $_GET['PORTFOUND']);
 			$eqLogic->save(true);
-		}		
+		}
 		// Informations fournies par les Arduinos/Esp
 		if (isset($_GET['ASK']))
 		{
 			//jeedouino::ConfigureAllPinsValues($arduino_id);
-			
+
 			if (($board=='arduino') or ($board=='esp'))	// Petite verif : seulement Arduinos / ESP (pour l'instant)
 			{
 				$message='';
-				foreach ($Arduino_pins as $pins_id => $pin_datas) 
+				foreach ($Arduino_pins as $pins_id => $pin_datas)
 				{
 					$cmd = $eqLogic->getCmd(null, 'ID'.$pins_id.'i');	// Uniquement les commandes info (retour d'etat) liées aux commandes action
-					if (is_object($cmd)) 
+					if (is_object($cmd))
 					{
 						$myMode=$cmd->getConfiguration('modePIN');
 						//jeedouino::log( 'debug','myMode (pins_id : '.$pins_id.') '.$myMode);
@@ -156,11 +156,11 @@ if (isset($_GET['BoardEQ']))
 							case 'low_pulse':
 								if ($cmd->getDisplay('invertBinare')) $message.=sprintf("%01s", 1-$cmd->getConfiguration('value'));
 								else $message.=sprintf("%01s", $cmd->getConfiguration('value'));
-								break;		
+								break;
 							default:
 								$message.='.';
-								break;						
-						}	
+								break;
+						}
 					}
 					else $message.='.';
 				}
@@ -169,9 +169,9 @@ if (isset($_GET['BoardEQ']))
 					$message='S'.$message.'F';
 					jeedouino::log( 'debug','Envoi des valeurs des pins suite à la demande de la carte (Reboot?) '.$BOARDNAME.'- Message : '. $message);
 					$reponse=jeedouino::SendToBoard($arduino_id,$message);
-					if ($reponse!='SFOK') jeedouino::log( 'error','ERREUR CONFIGURATION ConfigureAllPinsValues  '.$BOARDNAME.'- Réponse :'.$reponse);	
+					if ($reponse!='SFOK') jeedouino::log( 'error','ERREUR CONFIGURATION ConfigureAllPinsValues  '.$BOARDNAME.'- Réponse :'.$reponse);
 				}
-			}		
+			}
 		}
 		if (isset($_GET['ipwifi']))
 		{
@@ -180,34 +180,37 @@ if (isset($_GET['BoardEQ']))
 			jeedouino::log( 'debug',$BOARDNAME.' vient d\'envoyer son adresse IP : '.$_GET['ipwifi']);
 		}
 		else // Informations fournies par tous
-		{	
-			foreach ($eqLogic->getCmd('info') as $cmd) 
+		{
+			foreach ($eqLogic->getCmd('info') as $cmd)
 			{
-				if (is_object($cmd)) 
+				if (is_object($cmd))
 				{
-					$pins_id=$cmd->getConfiguration('pins_id');			
+					$pins_id = $cmd->getConfiguration('pins_id');
 					//jeedouino::log( 'debug','$pins_id = '.$pins_id.' - Liste $_GET = '. json_encode($_GET));
 
 					// Specifique Analog to Digital pins OUT - Etat
 					if ($ard328 and $cmd->getConfiguration('modePIN')!='analog_input')
 					{
-						if ($pins_id<100 and $pins_id>53) $pins_id -= 40; 
-						elseif ($pins_id<1100 and $pins_id>1053) $pins_id -= 40; 
+						if ($pins_id<100 and $pins_id>53) $pins_id -= 40;
+						elseif ($pins_id<1100 and $pins_id>1053) $pins_id -= 40;
 					}
-					
-					if (array_key_exists($pins_id, $_GET)) 
+
+					// Specifique ESPxx entree analogique
+					if ( $board == 'esp' and $cmd->getConfiguration('modePIN') == 'analog_input') $pins_id += 40;
+
+					if (array_key_exists($pins_id, $_GET))
 					{
 						$_board = strtoupper($board);
 						$recu = trim($_GET[$pins_id]);
 						$MaJ = true;
-						$MaJLog = $CALLBACK . '** NoOp **-  '.$BOARDNAME.'- Pin n° '.$pins_id.' = '.$recu;
-						if ($recu=='') 
+						$MaJLog = $CALLBACK . '** NoOp **-  ' . $BOARDNAME . '- Pin n° ' . $pins_id . ' = ' . $recu;
+						if ($recu=='')
 						{
 							$MaJ = false;
 							$MaJLog = $CALLBACK . ' a envoyé une valeur vide de la Pin n° '.$pins_id;
 						}
-						
-						if (substr($cmd->getConfiguration('modePIN'),0,3)=='dht') 
+
+						if (substr($cmd->getConfiguration('modePIN'), 0, 3) == 'dht')
 						{
 							$recu = round($recu/100,1);	// 1 chiffre apres la virgule.
 							if ($recu>255)	// valeur arbitraire
@@ -216,9 +219,9 @@ if (isset($_GET['BoardEQ']))
 								$MaJ = false;
 							}
 						}
-						if (substr($cmd->getConfiguration('modePIN'),0,4)=='ds18') 
+						if (substr($cmd->getConfiguration('modePIN'), 0, 4) == 'ds18')
 						{
-							if ($recu>32767) 
+							if ($recu>32767)
 							{
 								//jeedouino::log( 'debug',$CALLBACK . 'Pin n° '.$pins_id.' = '.decbin($recu));
 								$recu = -(($recu ^ 0xFFFF)+1);
@@ -229,9 +232,9 @@ if (isset($_GET['BoardEQ']))
 							{
 								$MaJLog = $CALLBACK . 'La sonde DS18x20 de la Pin n° '.$pins_id.' a envoyée une valeur erronée : '.$recu. '. Veuillez vérifier votre sonde et/ou son alimentation. ';
 								$MaJ = false;
-							}							
+							}
 						}
-						if ($cmd->getConfiguration('modePIN')=='compteur_pullup')
+						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup')
 						{
 							$value=$cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
 							$RSTvalue=$cmd->getConfiguration('RSTvalue');
@@ -240,17 +243,17 @@ if (isset($_GET['BoardEQ']))
 						}
 						if ($MaJ)
 						{
-							if ($cmd->getDisplay('invertBinare')) 
+							if ($cmd->getDisplay('invertBinare'))
 							{
 								$recu = 1 - $recu;
-								jeedouino::log( 'debug',$CALLBACK . ' *** Valeur inversée demandée pour la Pin n° '.$pins_id.' = '.$recu);
+								jeedouino::log( 'debug',$CALLBACK . ' *** Valeur inversée demandée pour la Pin n° ' . $pins_id . ' = ' . $recu);
 							}
-							$cmd->setCollectDate(date('Y-m-d H:i:s'));						
-							$cmd->event($recu);		
-							$cmd->setConfiguration('value',$recu);
+							$cmd->setCollectDate(date('Y-m-d H:i:s'));
+							$cmd->event($recu);
+							$cmd->setConfiguration('value', $recu);
 							$cmd->save();
 							$eqLogic->refreshWidget();
-							jeedouino::log( 'debug',$CALLBACK . 'Pin n° '.$pins_id.' = '.$recu);
+							jeedouino::log('debug', $CALLBACK . 'Pin n° ' . $pins_id . ' = ' . $recu);
 						}
 						else
 						{
@@ -258,26 +261,26 @@ if (isset($_GET['BoardEQ']))
 						}
 
 					}
-					elseif (array_key_exists('IN_'.$pins_id, $_GET)) 
+					elseif (array_key_exists('IN_'.$pins_id, $_GET))
 					{
 						$recu=$_GET['IN_'.$pins_id];
 						if (substr($cmd->getConfiguration('modePIN'),0,5)=='input')
 						{
-							$cmd->setCollectDate(date('Y-m-d H:i:s'));						
-							$cmd->event($recu);		
+							$cmd->setCollectDate(date('Y-m-d H:i:s'));
+							$cmd->event($recu);
 							$cmd->setConfiguration('value',$recu);
 							//$cmd->save();
 							$eqLogic->refreshWidget();
 							jeedouino::log( 'debug',$CALLBACK . 'Pin n° '.$pins_id.' = '.$recu);
-						}			
-					}				
-					elseif (array_key_exists('CPT_'.$pins_id, $_GET)) 
-					{		
+						}
+					}
+					elseif (array_key_exists('CPT_'.$pins_id, $_GET))
+					{
 						if ($cmd->getConfiguration('modePIN')=='compteur_pullup') // uniquement les valeurs de compteur
 						{
 							$value=$cmd->getConfiguration('value');
 							list(,$board) = jeedouino::GetPinsByBoard($arduino_id);
-							
+
 							jeedouino::log( 'debug',$CALLBACK . 'Compteur sur pin n° '.$pins_id.' - Valeur réclamée : '.$value);
 							$log_txt = 'Pin Compteur - Envoi de la dernière valeur connue suite à la demande de la carte (Reboot?)  '.$BOARDNAME.'- Message : ';
 
@@ -286,26 +289,26 @@ if (isset($_GET['BoardEQ']))
 								case 'arduino':
 								case 'esp':
 									sleep(2);
-									$message = 'S' . sprintf("%02s", $pins_id) . $value . 'C'; 
+									$message = 'S' . sprintf("%02s", $pins_id) . $value . 'C';
 									jeedouino::log( 'debug', $log_txt . $message);
 									$reponse = jeedouino::SendToBoard($arduino_id, $message);
-									break;   
+									break;
 								case 'piface':
 								case 'gpio':
 								case 'piplus':
-									$message  = 'SetCPT=' . $pins_id;	
-									$message .= '&ValCPT=' . $value;		
+									$message  = 'SetCPT=' . $pins_id;
+									$message .= '&ValCPT=' . $value;
 									jeedouino::log( 'debug', $log_txt . $message);
-									$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);				
-									break;  											
+									$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+									break;
 							}
-							if ($reponse!='SCOK') jeedouino::log( 'error','ERREUR ENVOI GetCompteurPinValue '.$BOARDNAME.'- Réponse :'.$reponse);			
-						}						
-					}				
+							if ($reponse!='SCOK') jeedouino::log( 'error','ERREUR ENVOI GetCompteurPinValue '.$BOARDNAME.'- Réponse :'.$reponse);
+						}
+					}
 				}
-			}		
+			}
 		}
-		
+
 	}
 	else jeedouino::log( 'error','CALLBACK - L\'équipement ID '.$arduino_id.' est introuvable.');
 }

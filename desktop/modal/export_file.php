@@ -37,13 +37,7 @@ $export = $eqLogic->export();
 //			$generic_type = array();
 //			$virtual = array();
 			list($Arduino_pins , $board , $usb) = jeedouino::GetPinsByBoard($arduino_id);
-			// pins utilisateur
-			if (($board == 'arduino') or ($board == 'esp'))
-			{
-				$UserPinsMax = $eqLogic->getConfiguration('UserPinsMax');
-				if ($UserPinsMax < 0 or $UserPinsMax>100) $UserPinsMax = 0;
-				$Arduino_pins = $Arduino_pins + jeedouino::GiveMeUserPins($UserPinsMax);
-			}
+
 			// copie des datas des pins
 			foreach ($Arduino_pins as $pins_id => $pin_datas)
 			{

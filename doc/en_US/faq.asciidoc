@@ -188,6 +188,16 @@ In this use case, if Teleinfo daemon stays on NOK, it's normal, it is not used.
 **** *Probe DHT 11, 22 (AM2302)* - allows to have 2 commands, one for temperature, and one for the humidity.
 **** *Sensor DS18B20* - allows to have a command  with temperature - *1 probe max by pin.*
 
+*** *Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :*
+**** *Entrée Bouton poussoir avec PULL-DOWN*
+**** *Entrée Bouton poussoir avec PULL-UP*
+[NOTE]
+Permet d'avoir une commande dont la valeur est le nombre d'appuis détectés successivement. +
+Pour un appui long la valeur sera de 99.
+[IMPORTANT]
+*Sur piGpio, le fonctionnement multitâche du système ne permet pas une fiabilité à 100% de la détection des appuis.* +
+J'essaierai d'améliorer ce point-là mais sans garantie. Pour tests uniquements.
+
 ===== Output pins: 
 * *Only on Arduino / ESP / NodeMCU / Wemos :*
 ** *Send a message to LCD16x2* - allows you to send a title + message (16 characters each) on a screen LCD 16 x 2. Standard or I2C

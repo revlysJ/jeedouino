@@ -1,3 +1,7 @@
+=== 30/11/2017 v1.00
+
+- Correctif affichage sur piGPIO : Entrée Bouton poussoir multi-clics + clic-long.
+
 === 29/09/2017 v1.00
 
 - Suppression des boutons de dons.

@@ -188,6 +188,16 @@ Dans ce cas d'utilisation, si le démon Téléinfo reste sur NOK, c'est normal, 
 **** *Sonde DHT 11, 22 (AM2302)* - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
 **** *Sonde DS18B20* - Permet d'avoir une commande avec la température - *1 sonde max par pin.*
 
+*** *Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :*
+**** *Entrée Bouton poussoir avec PULL-DOWN*
+**** *Entrée Bouton poussoir avec PULL-UP*
+[NOTE]
+Permet d'avoir une commande dont la valeur est le nombre d'appuis détectés successivement. +
+Pour un appui long la valeur sera de 99.
+[IMPORTANT]
+*Sur piGpio, le fonctionnement multitâche du système ne permet pas une fiabilité à 100% de la détection des appuis.* +
+J'essaierai d'améliorer ce point-là mais sans garantie. Pour tests uniquements.
+
 ===== Pins Sorties (output): 
 * *Uniquement sur Arduino / ESP / NodeMCU / Wemos :*
 ** *Envoi d'un message sur LCD16x2* - Permet d'envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C

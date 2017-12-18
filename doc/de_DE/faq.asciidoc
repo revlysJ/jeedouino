@@ -176,21 +176,21 @@ image::../images/compteur.png[]
 image::../images/hc_sr04.png[]
 
 *** *Uniquement sur Arduino / ESP / NodeMCU / Wemos :*
-**** *Sonde DHT11,21,22* - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
-**** *Sonde DS18x20* - Permet d'avoir une commande avec la température - *1 sonde max par pin.*
-**** *Entrée téléinfo ERDF ( pin RX )* - Permet d'avoir une commande de réception de message série pour la téléinfo.
+**** *DHT11,21,22 Sonde* - Ermöglicht Ihnen, zwei Befehle zu haben, einen für die Temperatur und einen für die Luftfeuchtigkeit.
+**** *DS18x20 Sonde* - Ermöglicht einen Befehl für die Temperatur - *max 1 Sonde pro Pin.*
+**** *ERDF Teleinfo Eingang ( RX Pin )* - Ermöglicht Ihnen einen Befehl zum seriellen Empfang von Nachrichten für Teleinfo zu haben.
 [TIP]
 Si vous avez le plugin Téléinfo d'installé et d'activé, cela crééra automatiquement un équipement téléinfo avec la trame reçue
 (il faudra activer les commandes auto dans cet équipement). +
 Dans ce cas d'utilisation, si le démon Téléinfo reste sur NOK, c'est normal, il n'est pas utilisé.
 
 *** *Uniquement sur Raspberry PI GPIO :*
-**** *Sonde DHT 11, 22 (AM2302)* - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
-**** *Sonde DS18B20* - Permet d'avoir une commande avec la température - *1 sonde max par pin.*
+**** *DHT 11, 22 Sonde (AM2302)* - Ermöglicht Ihnen, zwei Befehle zu haben, einen für die Temperatur und einen für die Luftfeuchtigkeit.
+**** *DS18B20 Sond* - Ermöglicht einen Befehl für die Temperatur - *max 1 Sonde pro Pin.*
 
 *** *Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :*
-**** *Entrée Bouton poussoir avec PULL-DOWN*
-**** *Entrée Bouton poussoir avec PULL-UP*
+**** *Taster Eingang inklusive PULL-DOWN*
+**** *Taster Eingang inklusive PULL-UP*
 [NOTE]
 Permet d'avoir une commande dont la valeur est le nombre d'appuis détectés successivement. +
 Pour un appui long la valeur sera de 99.
@@ -207,8 +207,8 @@ image::../images/lcd.png[]
 * *Numériques*
 ** Permet d'actionner un récepteur numérique ( relais, led, etc ... )
 *** *Inverser la sortie (Switch)*, Permet de mettre la sortie a LOW (=0) si elle est a HIGH (=1), et vice-versa. SANS connaître l'état précédent.
-**** Pratique pour changer l'état d'une led (clignotement).
-**** Actionner un relais comme un interrupteur (un coup, j'allume, un coup j'éteints.)
+**** Praktisch, um den Status einer LED zu ändern (blinken)
+**** Ein Relais wie einen Schalter betätigen (ein Impuls zum anschalten, ein Impuls zum ausschalten).
 *** *Sortie mise à LOW (HIGH générée aussi)*, Permet d'avoir 2 commandes pour mettre la sortie a LOW (=0) ou a HIGH (=1).
 **** Pratique pour forcer l'état d'une sortie dans un scénario par ex.
 *** *Sortie mise à LOW/HIGH avec temporisation (minuterie)*. Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.
@@ -217,10 +217,10 @@ Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.
 [TIP]
 Une commande opposée (sans temporisation) est aussi créée afin de pouvoir stopper (plus tôt) la commande temporisée pré-citée (Stop Volets par ex.).
 
-**** Pratique pour actionner une lumiere x minutes/secondes.
-**** Actionner un relais moins d'une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).
-**** Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).
-**** Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s). 
+**** Praktisch, um ein Licht x Minuten/Sekunden zu betreiben.
+**** Ein Relais für weniger als eine Sekunde betätigen, zum ansteuern eines potenzialfreien Kontakts / Fernbedienung (z. B. 00007 für 0,7 s).
+**** Ein Relais eines Elektroventils einschalten, um die Bewässerung des Gartens während einer bestimmten Zeit zu steuern (zB 06000 für 10 Minuten).
+**** Ein Relais zum Öffnen/Schließen der Rollläden zu verwenden (Bsp: 00400 für 40 s). 
 *** *HC-SR04 Trigger* En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
 * *Numériques/pseudo-Analogiques*
 *** *Sortie PWM*, Permet de régler l'intensité d'un ruban led compatible par ex.

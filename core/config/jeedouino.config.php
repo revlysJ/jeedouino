@@ -57,6 +57,9 @@ $ArduinoMODEpins = array(	"not_used" 			=> "Non utilisée",
 							"low_relais" 		=> "oSortie mise à LOW (HIGH générée aussi) ",
 							"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 							"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+							"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+							"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
+							//"servo" 		=> "oEnvoi valeur au servo par slider",
 							"teleinfoRX"		=> "iEntrée téléinfo EDF ( pin RX )",
 							"SomfyRTS"			=> "Réservée Tests lib SomfyRTS (par Yogui).",
 							"Send2LCD"			=> "Envoi d'un message sur LCD16x2"
@@ -66,6 +69,8 @@ $ArduinoESPanalogPins = array(	"not_used" 			=> "Non utilisée",
 								"low_relais" 		=> "oSortie mise à LOW (HIGH générée aussi) ",
 								"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 								"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+								"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+								"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
 								"analog_input" 		=> "Entrée Analogique"
 							);
 $PifaceMODEpinsIN = array(
@@ -79,7 +84,9 @@ $PifaceMODEpinsOUT = array(
 							"low_relais" 		=> "Sortie mise à LOW (HIGH générée aussi) ",
 							"high_relais" 		=> "Sortie mise à HIGH (LOW générée aussi) ",
 							"low_pulse" 		=> "Sortie mise à LOW avec temporisation (minuterie) ",
-							"high_pulse" 		=> "Sortie mise à HIGH avec temporisation (minuterie) "
+							"high_pulse" 		=> "Sortie mise à HIGH avec temporisation (minuterie) ",
+							"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+							"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
 							);
 $PiGPIOpins = array(
 					"not_used" 			=> "Non utilisée",
@@ -98,6 +105,8 @@ $PiGPIOpins = array(
 					"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
 					"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 					"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
 					);
 $PiPluspins = array(
 					"not_used" 			=> "Non utilisée",
@@ -109,6 +118,8 @@ $PiPluspins = array(
 					"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
 					"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 					"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
 					);
 $ESP8266pins = array(
 						"not_used" 			=> "Non utilisée",
@@ -129,6 +140,8 @@ $ESP8266pins = array(
 						"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
 						"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 						"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+						"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+						"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
 						"pwm_output"		=> "oSortie PWM",
 						"teleinfoRX"		=> "iEntrée téléinfo EDF ( pin RX )",
 						//"teleinfoTX"		=> "oSortie téléinfo EDF ( pin TX réservée mais inutilisée)",
@@ -146,6 +159,8 @@ $SonoffPow = array(
 					"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
 					"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 					"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
 					);
 $Sonoff4ch = array(
 					"not_used" 			=> " Non utilisée",
@@ -163,6 +178,8 @@ $Sonoff4ch = array(
 					"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
 					"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
 					"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
 					);
 $ESP01pins = array(
 	'0' 	=> array('Nom_pin' => 'GPIO 0',		'disable' => 0, 'ethernet' => 0, 'option' => ''),

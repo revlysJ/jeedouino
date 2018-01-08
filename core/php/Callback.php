@@ -101,6 +101,16 @@ if (isset($_GET['BoardEQ']))
 			return;
 		}
 		// Informations fournies par les démons
+		if (isset($_GET['NODEP']))
+		{
+			$message = __('Dépendances ' . ucfirst(strtolower($_GET['NODEP'])) . ' introuvables. Veuillez les reinstaller.' , __FILE__);
+			event::add('jeedom::error', array(
+				'level' => 'warning',
+				'page' => 'jeedouino',
+				'message' => $message
+				));
+			jeedouino::log( 'error', $message);
+		}
 		if (isset($_GET['PINGME']))
 		{
 			jeedouino::log( 'debug', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');

@@ -76,7 +76,9 @@ try {
 	}   
  	if (init('action') == 'installPIFACE') 
     {
-        exec('sudo apt-get -y --yes --force-yes install python-pifacedigitalio >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo apt-get -y --yes --force-yes install python-pifacedigitalio >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+		exec('sudo pip install pifacecommon >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+		exec('sudo pip install pifacedigitalio >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
 	}      
  	if (init('action') == 'installPiPlus') 

@@ -1,15 +1,15 @@
 :icons:
-= Jeedouino v1.00
+= Jeedouino v1.02
 
 == Beschreibung
 Dieser Plugin ermöglicht es Ihnen, die verschiedenen Arten von Ein-/Ausgänge der folgenden Karten zu kontrollieren: 
 
-* Arduinos (verschiedene Modelle) angeschlossen an USB von Raspberry PI.
+* Arduinos (différents modèles) branchés en USB sur *Raspberry PI*.
 * Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, W5500, ENC28J60) sur votre réseau.
 * Der ESP8266 / NodeMCU / Wemos (wifi).
-* Den GPIO vom Raspberry PI.
-* Der PiFace-Karte am Raspberry PI.
-* Der Karten, IO-Pi-Plus und MCP23017 auf Raspberry PI.
+* les GPIO du *Raspberry PI*.
+* les cartes PiFace sur *Raspberry PI*.
+* les cartes IO PiPlus et les MCP23017 sur *Raspberry PI*.
 
 
 Il fonctionne en local ou en déporté sur votre réseau.

@@ -1,3 +1,18 @@
+=== 08/01/2018 v1.02
+
+- Amélioration du démarrage du démon usb.
+- Corrections diverses.
+- /!\ A corriger : piGPIO : Entrée Bouton poussoir multi-clics + clic-long.
+
+=== 02/01/2018 v1.01
+
+- Ajout des commandes :  
+** Sortie mise à LOW avec temporisation (minuterie) par slider.
+** Sortie mise à HIGH avec temporisation (minuterie) par slider.
+** Permet de modifier la valeur à la volée dans un scénario par ex.
+- Amélioration de la détection des cartes sur port usb.
+- Corrections diverses.
+
 === 30/11/2017 v1.00
 
 - Correctif affichage sur piGPIO : Entrée Bouton poussoir multi-clics + clic-long.

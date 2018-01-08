@@ -163,7 +163,7 @@ $cpl = jeedouino::GetJeedomComplement();
 					<?php if (config::byKey('ActiveExt', 'jeedouino', false))
 					{
 					?>
-					<label class="checkbox-inline expertModeVisible ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
+					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
 					<?php }  ?>
 					</div>
                 </div>
@@ -244,12 +244,22 @@ $cpl = jeedouino::GetJeedomComplement();
 						<div class="col-sm-3">
 							<select class="eqLogicAttr form-control"  data-l1key="configuration" data-l2key="portusblocal">
 								<option value="none">{{Aucun}}</option>
+								<optgroup label="Detection par Jeedom">
                                     <?php
                                     foreach (jeedom::getUsbMapping('', true) as $name => $value)
                                     {
                                         echo '<option value="' . $name . '">' . $name . ' (' . $value . ')</option>';
                                     }
                                     ?>
+									</optgroup>
+								<optgroup label="Detection par Jeedouino">
+                                    <?php
+                                    foreach (jeedouino::getUsbMapping() as $name => $value)
+                                    {
+                                        echo '<option value="' . $name . '">' . $name . ' (' . $value . ')</option>';
+                                    }
+                                    ?>
+									</optgroup>
 							</select>
 						</div>
 					</div>
@@ -446,7 +456,7 @@ $cpl = jeedouino::GetJeedomComplement();
 				<?php	if (config::byKey('ActiveUserCmd', 'jeedouino', false))
 				{ ?>
 				<form class="form-horizontal sketchstab">
-					<div class="form-group  expertModeVisible">
+					<div class="form-group">
 						<label class="col-sm-3 control-label"></label>
 						<div class="col-sm-9">
 							<label class="checkbox-inline"><input type="number" class="eqLogicAttr configuration" data-l1key="configuration" data-l2key="UserPinsMax" placeholder="0 à 100 max." min="0" max="100"/> {{Nombre de pins utilisateur (Arduinos/Esp...) 0 - 100 max}}</label>

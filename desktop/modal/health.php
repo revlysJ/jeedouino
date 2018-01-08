@@ -36,58 +36,60 @@ $eqLogics = jeedouino::byType('jeedouino');
 	</thead>
 	<tbody>
 	 <?php
-foreach ($eqLogics as $eqLogic) 
+foreach ($eqLogics as $eqLogic)
 {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 	$board = strtolower($eqLogic->getConfiguration('arduino_board'));
 	$modele = $board;
 	$port = $eqLogic->getConfiguration('ipPort');
-	if (substr($board,0,1)=='a') 
+	if (substr($board,0,1)=='a')
 	{
 		$modele = 'Arduino '.ucfirst(substr($board,1));
 		if ($eqLogic->getConfiguration('datasource')=='usbarduino') $port = $eqLogic->getConfiguration('PortDemon');
 	}
-	elseif (substr($board,0,3)=='esp') 
+	elseif (substr($board,0,3)=='esp')
 	{
 		$modele = 'ESP 8266';
 		if (strpos($board,'mcu')!==false ) $modele = 'NodeMCU / Wemos';
+		elseif (strpos($board,'sonoff')!==false ) $modele = 'SONOFF';
+		elseif (strpos($board,'32')!==false ) $modele = 'ESP 32';
 	}
 	elseif (substr($board,0,2)=='pi') $modele = 'RPI pi'.strtoupper(substr($board,2));
-	
+
 	$eqTime = trim($eqLogic->getStatus('lastCommunication'));
 	if ($eqTime=='') $eqTime = config::byKey('lastCommunication'.$eqLogic->getId(), 'jeedouino', '');
-	
-	if (($timestamp = strtotime($eqTime)) !== false) 
+
+	if (($timestamp = strtotime($eqTime)) !== false)
 	{
 		$timestamp = time() - $timestamp;
 		if ($timestamp<2*3600) $eqSpan = 'success';
 		elseif ($timestamp<24*3600) $eqSpan = 'warning';
-		else $eqSpan = 'danger';		
+		else $eqSpan = 'danger';
 	}
-	else 
+	else
 	{
 		//$timestamp = 0;
-		$eqSpan = 'info'; 
+		$eqSpan = 'info';
 	}
 	$JeedouinoAlone = $eqLogic->getConfiguration('alone');
 	if ($JeedouinoAlone == '1')	// Jeedouino sur un Rpi sans Jeedom.
 	{
 		$ip = trim($eqLogic->getConfiguration('iparduino'));
 		$_path = trim(config::byKey('path-'.$ip, 'jeedouino', ''));
-		if ($_path == '') $_path = '/';		
+		if ($_path == '') $_path = '/';
 		$_port = trim(config::byKey('PORT-'.$ip, 'jeedouino', ''));
-		if ($_port == '') $_port = '80';			
+		if ($_port == '') $_port = '80';
 		$ip = '<span class="label label-success" style="font-size : 1em; cursor : default;"><a href="http://' . $ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fa fa-home"></i> ' . $eqLogic->getConfiguration('iparduino') . '</a></span>';
 	}
 	else
 	{
 		$ip = '<span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('iparduino') . '</span>';
 	}
-	
+
 	echo '<tr style="' . $opacity . '"><td><a href="' . $eqLogic->getLinkToConfiguration() . '" style="text-decoration: none;">' . $eqLogic->getHumanName(true) . '</a></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getId() . '</span></td>';
 	$status = '<span class="label label-success" style="font-size : 1em; cursor : default;">{{Oui}}</span>';
-	if ($eqLogic->getIsEnable()==0) 	
+	if ($eqLogic->getIsEnable()==0)
 	{
 		$status = '<span class="label label-warning" style="font-size : 1em; cursor : default;">{{Non}}</span>';
 	}

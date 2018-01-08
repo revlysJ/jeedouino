@@ -15,6 +15,7 @@
 #define UsePwm_input 0 	// Code obsolete (sera supprimé) - Entrée Numérique Variable (0-255 sur 10s) en PULL-UP
 #define UseHLW8012 0	// pour SONOFF POW
 #define UseBMP180 0		// pour BMP085/180 Barometric Pressure & Temp Sensor
+#define UseServo 0
 
 // Vous permet d'inclure du sketch perso - voir Doc / FAQ.
 // Il faut activer l'option dans la configuration du plugin.
@@ -165,6 +166,11 @@ char myIpString[24];
 
 #if (UseDHT == 1)
 	DHT *myDHT[NB_TOTALPIN];
+#endif
+
+#if (UseServo == 1)
+	#include <Servo.h>
+	Servo myServo[NB_TOTALPIN];
 #endif
 
 #if (UseTeleInfo == 1)
@@ -1009,6 +1015,13 @@ void Set_OutputPin(int i)
 
 	switch (Status_pins[i])
 	{
+		#if (UseServo == 1)
+		case 'x': 
+			pinTempo = 100 * int(c[3]) + 10 * int(c[4]) + int(c[5]);
+			myServo[i].write(pinTempo);
+			delay(15);
+			break;
+		#endif
 		case 'o':		//	output				// S131S pin 13 set to 1 (ou S130S pin 13 set to 0)
 		case 'l':	 //	low_relais		// S13S pin 13 set to 0
 		case 'h':	 //	high_relais	 // S13S pin 13 set to 1
@@ -1176,6 +1189,11 @@ void Load_EEPROM(int k)
 				PinNextSend[i]=millis()+60000;
 				break;
 		#endif
+			#if (UseServo == 1)
+			case 'x': 
+				myServo[i].attach(i);
+				break;
+			#endif
 			case 't':		// trigger pin
 				pinMode(i, OUTPUT);
 				digitalWrite(i, LOW);

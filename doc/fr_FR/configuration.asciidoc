@@ -44,6 +44,15 @@ De même, un bouton est présent pour celles des cartes PiFace.
 ** http://piface.github.io/pifacecommon/installation.html#enable-the-spi-module
 ** http://www.piface.org.uk/guides/Install_PiFace_Software/Enabling_SPI/	
 
+[IMPORTANT]
+Les paquets pifacecommon et pifacedigitalio pour la carte PiFace ne sont pas dispo sur le dépôt stretch. +
+Il faut donc installer les packages via pip +
+https://www.raspberrypi.org/forums/viewtopic.php?t=194332 +
+il faut aussi modifier la vitesse du bus SPI dans spi.py +
+https://www.raspberrypi.org/forums/viewtopic.php?t=196248#p1228166 +
+Merci à *@joopa* pour la résolution de ce problème. +
+https://www.jeedom.com/forum/viewtopic.php?f=133&t=14056&p=568991#p565395 +
+
 Idem, un bouton est présent pour celles des cartes AB Electronics UK IO Pi Plus.
 
 * https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi
@@ -72,10 +81,10 @@ Concernant les équipements Arduino connectés en USB, un lien supplémentaire p
 Il faudra donc le téléverser dans l'arduino correspondant.
 
 [IMPORTANT]
-Suite a un reboot/redémarrage du système hôte, les démons ne sont lancés que 4 minutes environ après le démarrage de Jeedom.
+Suite a un reboot/redémarrage du système hôte, les démons ne sont lancés que *4 minutes* environ après le démarrage de Jeedom.
 
 [NOTE]
-Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement des démons et de les redémarrer le cas échéeant est désormais disponible.
+Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement des démons et de les redémarrer le cas échéant est désormais disponible.
 
 image::../images/ConfDemons.png[]
 

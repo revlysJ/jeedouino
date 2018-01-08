@@ -569,7 +569,10 @@ class jeedouino extends eqLogic {
 				$myPin=config::byKey($arduino_id.'_'. $pins_id, 'jeedouino', 'not_used');
 				switch ($myPin)
 				{
-					// dispo : xy
+					// dispo : y
+					case 'servo':
+						$PinMode .= 'x';
+					break;
 					case 'bmp180':
 						$PinMode .= 'r';
 					break;
@@ -735,6 +738,7 @@ class jeedouino extends eqLogic {
 					case 'compteur_pullup':
 					case 'pwm_output':
 					case 'switch':
+					case 'servo':
 						$message.='.';
 						break;
 					case 'output':
@@ -850,6 +854,7 @@ class jeedouino extends eqLogic {
 				$PinValue='S' . sprintf("%02s", $pins_id) . $value.'S';
 				if ($myPin == 'trigger') $PinValue='T' . sprintf("%02s", $pins_id) . sprintf("%02s", substr($value,-2)) . 'E';	// Trigger pin + pin Echo -> HC-SR04 (ex:T0203E)
 				if ($myPin == 'Send2LCD') $PinValue='S' . sprintf("%02s", $pins_id) . $value . 'M'; //S17Title|MessageM >>> S 17 Title | Message M	// Title & Message <16chars chacun
+				//if ($myPin == 'servo') $PinValue = 'S' . sprintf("%02s", $pins_id) . $value . 'V'; // S09180V >>>Servo sur pin 09 valeur 180
 			}
 			jeedouino::log( 'debug','ConfigurePinValue '.$ModeleArduino.' ( '.$arduino_id.' ) '. "PinValue : ".$PinValue);
 			$reponse=self::SendToBoard($arduino_id,$PinValue);
@@ -1888,6 +1893,7 @@ class jeedouino extends eqLogic {
 			$UserSketch = 0;	// Pour génération sketch
 			$SomfyRTS = 0;		// Pour génération sketch
 			$bmp180 = 0;		// Pour génération sketch
+			$servo = 0;			// Pour génération sketch
 
 			jeedouino::log( 'debug','EqID '.$arduino_id.' Création de la liste des commandes.');
 			//sleep(2);	//
@@ -2142,6 +2148,9 @@ class jeedouino extends eqLogic {
 							$double_cmd='low_relais';
 							$value2='0';
 						break;
+						
+						case 'servo':
+							$servo = 1;			// Pour génération sketch
 						case 'pwm_output':
 							$myType='action';
 							$mySubType='slider';
@@ -2218,7 +2227,7 @@ class jeedouino extends eqLogic {
 						$old_list[$pin_datas['Nom_pin'].'2'] = $LogicalId.'b';
 						$double_cmd='';
 					}
-					if (($myType == 'action') and ($mySubType == 'other' or $mySubType == 'slider') and ($myPin != 'trigger'))
+					if (($myType == 'action') and ($mySubType == 'other' or $mySubType == 'slider') and ($myPin != 'trigger') and ($myPin != 'servo'))
 					{
 						// Tentative d'adapter le generic_type pour le retour d'etat
 						$GT = array('_ON', '_OFF', '_UP', '_DOWN', '_TOGGLE', '_OPEN', '_CLOSE', '_SET_STATE');
@@ -2276,6 +2285,7 @@ class jeedouino extends eqLogic {
 			config::save($arduino_id.'_UserSketch', $UserSketch, 'jeedouino');	// Pour génération sketch
 			config::save($arduino_id.'_SomfyRTS', $SomfyRTS, 'jeedouino');		// Pour génération sketch
 			config::save($arduino_id.'_BMP180', $bmp180, 'jeedouino');			// Pour génération sketch
+			config::save($arduino_id.'_SERVO', $servo, 'jeedouino');			// Pour génération sketch
 
 			if ($this->getConfiguration('ActiveCmdAll'))
 			{
@@ -2472,6 +2482,7 @@ class jeedouino extends eqLogic {
 						$generic_type = 'GENERIC_INFO';
 						break;
 					case 'pwm_output':
+					case 'servo':
 						$cmd->setTemplate('dashboard', 'default');
 						$cmd->setTemplate('mobile', 'default');
 						$generic_type = 'LIGHT_SLIDER';
@@ -2538,6 +2549,10 @@ class jeedouino extends eqLogic {
 					case 'pwm_output':
 						$cmd->setConfiguration('minValue',0);
 						$cmd->setConfiguration('maxValue',255);
+						break;
+					case 'servo':
+						$cmd->setConfiguration('minValue',0);
+						$cmd->setConfiguration('maxValue',180);
 						break;
 					case 'compteur_pullup':
 						if ($cmd->getConfiguration('RSTvalue')!='') $cmd->setConfiguration('value',$cmd->getConfiguration('RSTvalue'));
@@ -2845,6 +2860,8 @@ class jeedouino extends eqLogic {
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
 				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
 				$bmp180 = config::byKey($board_id.'_BMP180', 'jeedouino', 0);
+				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
+				
 
 				if ($TeleInfoRX)
 				{
@@ -2857,6 +2874,10 @@ class jeedouino extends eqLogic {
 				if ($bmp180)
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
+				}
+				if ($servo)
+				{
+				 	$MasterFile = str_replace('#define UseServo 0' , '#define UseServo 1' , $MasterFile);
 				}
 				// if ($DHTxx==0)
 				// {
@@ -2926,6 +2947,7 @@ class jeedouino extends eqLogic {
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
 				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
 				$bmp180 = config::byKey($board_id.'_BMP180', 'jeedouino', 0);
+				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 
 				if ($ModeleArduino == 'espsonoffpow')
 				{
@@ -2949,6 +2971,10 @@ class jeedouino extends eqLogic {
 				if ($bmp180)
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
+				}
+				if ($servo)
+				{
+				 	$MasterFile = str_replace('#define UseServo 0' , '#define UseServo 1' , $MasterFile);
 				}
 				// if ($DHTxx==0)
 				// {
@@ -3051,6 +3077,7 @@ class jeedouino extends eqLogic {
 		config::remove($arduino_id . '_EqCfgSaveStep', 'jeedouino');
 		config::remove($arduino_id . '_ProbeDelay', 'jeedouino');
 		config::remove($arduino_id . '_BMP180', 'jeedouino');
+		config::remove($arduino_id . '_SERVO', 'jeedouino');
 		config::remove('REP_' . $arduino_id, 'jeedouino');
 
 		config::remove($arduino_id . 'remove', 'jeedouino');

@@ -53,8 +53,8 @@ $port =  jeedouino::GetJeedomPort();
 	?>
 	<li><a href="#tab_demon"><i class="fa fa-university"></i> {{Démons}}</a></li>
 	<li><a href="#tab_sketch"><i class="fa fa-download"></i> {{Sketchs Réseau}}</a></li>
-	<li><a href="#tab_docker" class="expertModeVisible"><i class="fa fa-rss"></i> {{Conf. Docker}}</a></li>
-	<li><a href="#tab_JeedouinoExt" class="expertModeVisible"><i class="fa fa-code"></i> {{JeedouinoExt}}</a></li>
+	<li><a href="#tab_docker"><i class="fa fa-rss"></i> {{Conf. Docker}}</a></li>
+	<li><a href="#tab_JeedouinoExt"><i class="fa fa-code"></i> {{JeedouinoExt}}</a></li>
 
 <?php
 	}
@@ -82,16 +82,16 @@ $port =  jeedouino::GetJeedomPort();
 				</div>
 				<?php } ?>
 				<div class="form-group" >
-					<label class="col-lg-7 control-label expertModeVisible">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}}</label>
-					<div class="col-lg-3 expertModeVisible">
-						<input type="checkbox" class="configKey  expertModeVisible" data-l1key="ActiveUserCmd" name="ActiveUserCmd"/>
+					<label class="col-lg-7 control-label">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}}</label>
+					<div class="col-lg-3">
+						<input type="checkbox" class="configKey" data-l1key="ActiveUserCmd" name="ActiveUserCmd"/>
 					</div>
 				</div>
 				<!--
 				<div class="form-group" >
-					<label class="col-lg-7 control-label expertModeVisible text-warning">{{Maintenir les commandes en double lors d'un changement de fonction (Pour TESTS - NON recommandé).}}</label>
-					<div class="col-lg-3 expertModeVisible">
-						<input type="checkbox" class="configKey  expertModeVisible" data-l1key="MultipleCmd" name="MultipleCmd"/>
+					<label class="col-lg-7 control-label  text-warning">{{Maintenir les commandes en double lors d'un changement de fonction (Pour TESTS - NON recommandé).}}</label>
+					<div class="col-lg-3 ">
+						<input type="checkbox" class="configKey " data-l1key="MultipleCmd" name="MultipleCmd"/>
 					</div>
 				</div>
 				-->
@@ -154,7 +154,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Pifacedigitalio Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPIFACE" ><i class="fa fa-play"></i> {{sudo apt-get install python-pifacedigitalio}}</a>
+												<a class="btn btn-info bt_installPIFACE" ><i class="fa fa-play"></i> {{sudo apt-get/pip install python-pifacedigitalio}}</a>
 										</div>
 								</div>
 							</td>

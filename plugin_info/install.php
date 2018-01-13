@@ -30,11 +30,16 @@ function jeedouino_update()
 		exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		//
 		$eqLogics = eqLogic::byType('jeedouino');
+		$IPJeedom = jeedouino::GetJeedomIP();
 		jeedouino::log( 'debug','-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-');
 		foreach ($eqLogics as $eqLogic) 
 		{
 			$arduino_id = $eqLogic->getId();
-			
+
+			// On verifie si l'equipement est local
+			if ($IPJeedom == $eqLogic->getConfiguration('iparduino')) config::save($arduino_id . '_IpLocale', 1, 'jeedouino');
+			else config::save($arduino_id . '_IpLocale', 0, 'jeedouino');
+
 			// On verifie si l'equipement a un tag "Original_ID"
 			$Original_ID = $eqLogic->getConfiguration('Original_ID');
 			if ($Original_ID == '')
@@ -49,7 +54,11 @@ function jeedouino_update()
 			switch ($board)
 			{
 				case 'arduino':
-					if ($usb) jeedouino::StartBoardDemon($arduino_id, 0, $board);
+					if ($usb) 
+					{
+						jeedouino::GenerateUSBArduinoSketchFile($arduino_id);
+						jeedouino::StartBoardDemon($arduino_id, 0, $board);
+					}
 					else jeedouino::GenerateLanArduinoSketchFile($arduino_id);
 					break;   
 				case 'gpio':

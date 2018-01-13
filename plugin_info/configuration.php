@@ -52,7 +52,7 @@ $port =  jeedouino::GetJeedomPort();
 	{
 	?>
 	<li><a href="#tab_demon"><i class="fa fa-university"></i> {{Démons}}</a></li>
-	<li><a href="#tab_sketch"><i class="fa fa-download"></i> {{Sketchs Réseau}}</a></li>
+	<li><a href="#tab_sketch"><i class="fa fa-download"></i> {{Sketchs}}</a></li>
 	<li><a href="#tab_docker"><i class="fa fa-rss"></i> {{Conf. Docker}}</a></li>
 	<li><a href="#tab_JeedouinoExt"><i class="fa fa-code"></i> {{JeedouinoExt}}</a></li>
 
@@ -292,6 +292,11 @@ $port =  jeedouino::GetJeedomPort();
 					$a_lan=true;
 					$esp=true;
 					break;
+                case 'espElectroDragonSPDT':
+					$Sketch  .= 'ElectroDragon-2CH';
+					$a_lan=true;
+					$esp=true;
+					break;
                 case 'esp32dev':
 					$Sketch  .= 'ESP32Dev';
 					$a_lan=true;
@@ -399,7 +404,22 @@ $port =  jeedouino::GetJeedomPort();
 						<?php
 							if ($Sketch != '')
 							{
-								echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}"><i class="fa fa-download"></i> SketchUSB</a></div>';
+								$jeedouinoPATH = realpath(dirname(__FILE__) . '/../sketchs/');
+								$SketchFileName = $jeedouinoPATH.'/JeedouinoUSB_'.$board_id.'.ino';
+								if (file_exists($SketchFileName))
+								{
+									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
+									$Arduino_reseaux .= '<div class="form-group">
+									<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( USB )' . '}}</label>
+									<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-usb"></i></a></div>
+									<div class="col-lg-5">
+										<a href="plugins/jeedouino/sketchs/JeedouinoUSB_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+									</div></div>';
+								}
+								else
+								{
+									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}"><i class="fa fa-download"></i> SketchUSB</a></div>';
+								}
 							}
 						?>
 					</td>
@@ -415,8 +435,8 @@ $port =  jeedouino::GetJeedomPort();
 				if ($esp)
 				{
 					$Arduino_reseaux .= '<div class="form-group">
-					<label class="col-lg-4 control-label">{{ '.$Sketch.'}}</label>
-					<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-sitemap"></i></a></div>
+					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( WIFI )' . '}}</label>
+					<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-wifi"></i></a></div>
 					<div class="col-lg-5">
 						<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
@@ -424,7 +444,7 @@ $port =  jeedouino::GetJeedomPort();
 				else
 				{
 					$Arduino_reseaux .= '<div class="form-group">
-					<label class="col-lg-4 control-label">{{ '.$Sketch.'}}</label>
+					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( LAN )' . '}}</label>
 					<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-sitemap"></i></a></div>
 					<div class="col-lg-5">
 						<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
@@ -451,7 +471,7 @@ $port =  jeedouino::GetJeedomPort();
 
 	 <div class="tab-pane" id="tab_sketch">
         <br/>
-        <div class="alert alert-primary"><i class="fa fa-download"></i> {{ Sketchs pour vos équipements Arduino réseau / ESP8266 / NodeMCU / Wemos.}} </div>
+        <div class="alert alert-primary"><i class="fa fa-download"></i> {{ Sketchs pour vos équipements Arduino / ESP8266 / NodeMCU / Wemos.}} </div>
 
 		<form class="form-horizontal">
 			<fieldset>

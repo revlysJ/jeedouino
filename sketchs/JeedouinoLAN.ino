@@ -3,6 +3,7 @@
 // Sketch Arduino pour le Plugin JEEDOUINO v097+ de JEEDOM
 // Connection via Ethernet
 //
+// JeEdUiNoTaG
 ////////
 #define DEBUGtoSERIAL 0	// 0, ou 1 pour debug dans la console serie
 #define UseWatchdog 0
@@ -11,11 +12,12 @@
 #define UseDS18x20 1
 #define UseTeleInfo 0
 #define UseLCD16x2 0	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C
-#define UseEthernet 0 // Choix de la lib suivant shield ethernet : 0 = W5100 / 1 = ENC28J60  / 2 = W5500 - Voir note ci-dessous
+#define UseEthernet 0 	// Choix de la lib suivant shield ethernet : 0 = W5100 / 1 = ENC28J60	/ 2 = W5500 - Voir note ci-dessous
 #define UseHCSR04 0
 #define UsePwm_input 0 // Code obsolete (sera supprimé) - Entrée Numérique Variable (0-255 sur 10s) en PULL-UP
-#define UseBMP180 0		// pour BMP085/180 Barometric Pressure & Temp Sensor
-#define UseServo 0
+#define UseBMP180 0	// pour BMP085/180 Barometric Pressure & Temp Sensor
+#define UseServo 0		// Pour controler la postion d'un servo.
+#define UseWS2811 0	// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel
 
 // Vous permet d'inclure du sketch perso - voir Doc / FAQ.
 // Il faut activer l'option dans la configuration du plugin.
@@ -129,6 +131,21 @@ unsigned long timeout = 0;
 	Servo myServo[NB_TOTALPIN];
 #endif
 
+#if (UseWS2811 == 1)
+	// More info at https://github.com/adafruit/Adafruit_NeoPixel
+	#include <Adafruit_NeoPixel.h>
+	// Parameter 1 = number of pixels in strip
+	// Parameter 2 = Arduino pin number (most are valid)
+	// Parameter 3 = pixel type flags, add together as needed:
+	//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
+	//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
+	//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
+	//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
+	//   NEO_RGBW    Pixels are wired for RGBW bitstream (NeoPixel RGBW products)
+	#define WS2811PIN 6
+	Adafruit_NeoPixel strip = Adafruit_NeoPixel(50, WS2811PIN, NEO_GRB + NEO_KHZ800);
+#endif
+
 #if (UseTeleInfo == 1)
 	// TeleInfo / Software serial
 	#include <SoftwareSerial.h>
@@ -143,14 +160,14 @@ unsigned long timeout = 0;
 	LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 #endif
 #if (UseLCD16x2 == 2)
-	// LiquidCrystal  i2c
+	// LiquidCrystal	i2c
 	#include <Wire.h>
 	#include <LiquidCrystal_I2C.h>
 	LiquidCrystal_I2C lcd(0x27,16,2);
 #endif
 #if (UseBMP180 == 1)
-	//  BMP085/180 Barometric Pressure & Temp Sensor
-	//  https://learn.adafruit.com/bmp085/downloads
+	//	BMP085/180 Barometric Pressure & Temp Sensor
+	//	https://learn.adafruit.com/bmp085/downloads
 	#include <Wire.h>
 	#include <Adafruit_BMP085.h>
 	Adafruit_BMP085 bmp;
@@ -234,6 +251,11 @@ void setup()
 	#if (UseBMP180 == 1)
 		bmp.begin();
 	#endif
+	
+	#if (UseWS2811 == 1)
+		strip.begin();
+		strip.show(); 
+	#endif
 
 	#if (UserSketch == 1)
 		UserSetup(); // Appel de votre setup()
@@ -287,7 +309,7 @@ void loop()
 				if (c[n]=='\r') c[n]='\n';
 				if (c[n]=='\n')
 				{
-					while  (client.available()) c[n+1] = client.read();
+					while	(client.available()) c[n+1] = client.read();
 					break;
 				}
 				n++;
@@ -434,7 +456,7 @@ void loop()
 			}
 			else if (c[0]=='S' && (c[n]=='L' || c[n]=='H' || c[n]=='A')) // Modifie la valeur de toutes les pins sortie a LOW / HIGH / SWITCH / PULSE
 			{
-				if (n==2 || n==7)			// Petite securite  : S2L / S2H / S2A / SP00007L /SP00007H
+				if (n==2 || n==7)			// Petite securite	: S2L / S2H / S2A / SP00007L /SP00007H
 				{
 					jeedom+=F("&REP=SOK");
 					for (int i = 1; i < n; i++)
@@ -543,6 +565,50 @@ void loop()
 					lcd.print(Message);
 			}
 		#endif
+		#if (UseWS2811 == 1)
+			else if (c[0]=='C' && c[n]=='R')	// COLOR : C09LFF00FFR ou C09M12R pin 09 color L or effect M
+			{
+				for (int i = 1; i < n; i++)
+				{
+					if (isDigit(c[i])) c[i]=c[i]-'0';
+					if ((c[i] >= 'A') && (c[i] <= 'F')) c[i]=c[i] - 'A' + 10; // For hex
+				}
+				if (c[3]=='M')
+				{
+					client.print(F("SOK"));	// On reponds a JEEDOM avant le TIMEOUT
+					pinTempo = 10 * int(c[4]) + int(c[5]);
+					#if (DEBUGtoSERIAL == 1)
+						Serial.print(F("\startShow: "));
+						Serial.println(pinTempo);
+					#endif
+					startShow(pinTempo);
+				}
+				else if (c[3]=='L')
+				{
+					client.print(F("SOK"));	// On reponds a JEEDOM avant le TIMEOUT
+					if (n == 10)			 // Petite securite
+					{
+						uint8_t r = 16 * int(c[4]) + int(c[5]);
+						uint8_t g = 16 * int(c[6]) + int(c[7]);
+						uint8_t b = 16 * int(c[8]) + int(c[9]);
+						#if (DEBUGtoSERIAL == 1)
+							Serial.print(F("\R: "));
+							Serial.println(r);
+							Serial.print(F("\G: "));
+							Serial.println(g);
+							Serial.print(F("\B: "));
+							Serial.println(b);
+						#endif
+						for(uint16_t z = 0; z < strip.numPixels(); z++) 
+						{
+							strip.setPixelColor(z, r, b, g);
+						}
+						strip.show();
+					}
+				}
+				else client.print(F("NOK"));	// On reponds a JEEDOM 
+			}
+		#endif		
 		#if (UserSketch == 1)
 			else if (c[0]=='U' && c[n]=='R')	// UseR Action
 			{
@@ -550,6 +616,7 @@ void loop()
 				UserAction();
 			}
 		#endif
+
 			else
 			{
 				client.print(F("NOK"));									 // On reponds a JEEDOM
@@ -584,14 +651,14 @@ void loop()
 			PinValue = digitalRead(i);
 			if (PinValue != OLDPinValue[i])
 			{
-				PinNextSend[i] = millis() + 50;   // Delai antirebond
+				PinNextSend[i] = millis() + 50;	 // Delai antirebond
 				OLDPinValue[i] = PinValue;
 				ProbeNextSend = millis() + 5000; // decale la lecture des sondes pour eviter un conflit
 			}
 			if (PinNextSend[i] < millis() && PinValue != swtch[i])
 			{
 				if (PinValue == BPvalue) CounterPinValue[i] += 1;
-				OLDAnalogPinValue[i] = millis() + 250;   // Delai entre clicks
+				OLDAnalogPinValue[i] = millis() + 250;	 // Delai entre clicks
 				swtch[i] = PinValue;
 			}
 			if (OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0)
@@ -835,7 +902,7 @@ void loop()
 		// jeedom += '&';
 		// jeedom += 506;	// pin 506
 		// jeedom += '=';
-		// jeedom += "Jeedouino%20speaking%20to%20Jeedom...";   // valeur string
+		// jeedom += "Jeedouino%20speaking%20to%20Jeedom...";	 // valeur string
 
 		// /!\ attention de ne pas mettre de code bloquant (avec trop de "delays") - max time 2s
 	}
@@ -1380,5 +1447,137 @@ int read_DSx(int pinD)
 	Serial.println(raw/16);
 	#endif
 	return raw;
+}
+#endif
+
+#if (UseWS2811 == 1)
+// Code below is from https://github.com/adafruit/Adafruit_NeoPixel/blob/master/examples/buttoncycler/buttoncycler.ino
+// More info at https://github.com/adafruit/Adafruit_NeoPixel
+void startShow(int i) {
+	switch(i){
+		case 0: colorWipe(strip.Color(0, 0, 0), 50);		// Black/off
+						break;
+		case 1: colorWipe(strip.Color(255, 0, 0), 50);	// Red
+						break;
+		case 2: colorWipe(strip.Color(0, 255, 0), 50);	// Green
+						break;
+		case 3: colorWipe(strip.Color(0, 0, 255), 50);	// Blue
+						break;
+		case 4: colorWipe(strip.Color(255, 255, 255), 50);	// White
+						break;
+		case 5: colorWipe(strip.Color(255, 255, 0), 50);	// Magenta
+						break;
+		case 6: colorWipe(strip.Color(255, 0, 255), 50);	// Yellow
+						break;
+		case 7: colorWipe(strip.Color(0, 255, 255), 50);	// Cyan
+						break;
+
+		case 8: theaterChase(strip.Color(127, 0, 0), 50); // Red
+						break;
+		case 9: theaterChase(strip.Color(0, 127, 0), 50); // Green
+						break;
+		case 10: theaterChase(strip.Color(0, 0, 127), 50); // Blue
+						break;
+		case 11: theaterChase(strip.Color(127, 127, 127), 50); // White
+						break;
+		case 12: theaterChase(strip.Color(127, 127, 0), 50); // Magenta
+						break;
+		case 13: theaterChase(strip.Color(127, 0, 127), 50); // Yellow
+						break;
+		case 14: theaterChase(strip.Color(0, 127, 127), 50); // Cyan
+						break;
+						
+		case 15: rainbow(20);
+						break;
+		case 16: rainbowCycle(20);
+						break;
+		case 17: theaterChaseRainbow(50);
+						break;
+	}
+}
+
+// Fill the dots one after the other with a color
+void colorWipe(uint32_t c, uint8_t wait) {
+	for(uint16_t i=0; i<strip.numPixels(); i++) {
+		strip.setPixelColor(i, c);
+		strip.show();
+		delay(wait);
+	}
+}
+
+void rainbow(uint8_t wait) {
+	uint16_t i, j;
+
+	for(j=0; j<256; j++) {
+		for(i=0; i<strip.numPixels(); i++) {
+			strip.setPixelColor(i, Wheel((i+j) & 255));
+		}
+		strip.show();
+		delay(wait);
+	}
+}
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycle(uint8_t wait) {
+	uint16_t i, j;
+
+	for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
+		for(i=0; i< strip.numPixels(); i++) {
+			strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
+		}
+		strip.show();
+		delay(wait);
+	}
+}
+
+//Theatre-style crawling lights.
+void theaterChase(uint32_t c, uint8_t wait) {
+	for (int j=0; j<10; j++) {	//do 10 cycles of chasing
+		for (int q=0; q < 3; q++) {
+			for (int i=0; i < strip.numPixels(); i=i+3) {
+				strip.setPixelColor(i+q, c);		//turn every third pixel on
+			}
+			strip.show();
+
+			delay(wait);
+
+			for (int i=0; i < strip.numPixels(); i=i+3) {
+				strip.setPixelColor(i+q, 0);				//turn every third pixel off
+			}
+		}
+	}
+}
+
+//Theatre-style crawling lights with rainbow effect
+void theaterChaseRainbow(uint8_t wait) {
+	for (int j=0; j < 256; j++) {		 // cycle all 256 colors in the wheel
+		for (int q=0; q < 3; q++) {
+			for (int i=0; i < strip.numPixels(); i=i+3) {
+				strip.setPixelColor(i+q, Wheel( (i+j) % 255));		//turn every third pixel on
+			}
+			strip.show();
+
+			delay(wait);
+
+			for (int i=0; i < strip.numPixels(); i=i+3) {
+				strip.setPixelColor(i+q, 0);				//turn every third pixel off
+			}
+		}
+	}
+}
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+	WheelPos = 255 - WheelPos;
+	if(WheelPos < 85) {
+		return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+	}
+	if(WheelPos < 170) {
+		WheelPos -= 85;
+		return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+	}
+	WheelPos -= 170;
+	return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
 #endif

@@ -185,13 +185,14 @@ $cpl = jeedouino::GetJeedomComplement();
                                 <option value="piGPIO40" id="select_arduino_board">Raspberry PI2/3 A+/B+ GPIO</option>
 								<option value="piPlus" id="select_arduino_board" >AB-Elec. IO Pi plus / MCP23017</option>
 								</optgroup>
-								<optgroup label="Pour ESP8266">
+								<optgroup label="Pour ESP826x">
                                 <option value="esp01" id="select_arduino_board" >ESP8266-01</option>
 								<option value="esp07" id="select_arduino_board" >ESP8266-All I/O (Pour tests)</option>
 								<option value="espMCU01" id="select_arduino_board" >NodeMCU / Wemos</option>
                                 <option value="espsonoffpow" id="select_arduino_board">SONOFF POW (Pour tests)</option>
                                 <option value="espsonoff4ch" id="select_arduino_board">SONOFF 4CH (Pour tests)</option>
                                 <option value="esp32dev" id="select_arduino_board">ESP32 Dev (Pour tests)</option>
+								<option value="espElectroDragonSPDT" id="select_arduino_board">ElectroDragon 2CH (Pour tests)</option>
 								</optgroup>
 
                             </select>
@@ -516,7 +517,8 @@ $cpl = jeedouino::GetJeedomComplement();
 						if (substr($ModeleArduino,0,1)=='a')
 						{
 							$ArduinoEspTag = true;
-							$SketchFileName=$jeedouinoPATH.'/JeedouinoLAN_'.$board_id.'.ino';
+							$SketchFileName = $jeedouinoPATH . '/JeedouinoLAN_' . $board_id . '.ino';
+							$SketchFileNameUSB = $jeedouinoPATH . '/JeedouinoUSB_' . $board_id . '.ino';
 							if (file_exists($SketchFileName))
 							{
 								echo '<div class="form-group sketchs sketchLAN'.$board_id.' " style="display : none;">
@@ -528,7 +530,17 @@ $cpl = jeedouino::GetJeedomComplement();
 									<br><i>Note : Ce sketch est prévu pour les shields réseaux basés sur un chip W5100.</i>
 									<br><i> Pour un chip ENC28J60 (ou autre), il faudra modifier/adapter le sketch.</i>
 									<br>
-								</div></div><br>';
+								</div></div>';
+							}
+							elseif (file_exists($SketchFileNameUSB))
+							{
+								echo '<div class="form-group sketchs sketchUSB' . $board_id . ' " style="display : none;">
+								<label class="col-sm-2 control-label">{{ Sketch }}</label>
+								<div class="col-sm-10">
+									<a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Usb) pour cet équipement.}}</a>
+									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
+									<br>
+								</div></div>';
 							}
 							else
 							{

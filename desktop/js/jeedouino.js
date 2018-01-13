@@ -37,7 +37,8 @@ $('#bt_exportEq').on('click', function() {
 		//$('.esp8266').hide();
 		if ($(this).value()=='usbarduino')
 		{
-			$('.sketchUSB').show();
+			$('.sketchUSB' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+			//$('.sketchUSB').show();
 			$('.ActiveExt').show();
 		}
 		else
@@ -118,7 +119,8 @@ $('#bt_exportEq').on('click', function() {
 			 }
 			 else
 			 {
-				$('.sketchUSB').show();
+				 $('.sketchUSB' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+				//$('.sketchUSB').show();
 				$('.ActiveExt').show();
 			 }
 		}
@@ -241,6 +243,8 @@ function addCmdToTable(_cmd) {
 			case 'low_relais':
 			case 'teleinfoTX':
 			case 'output_slider':
+			case 'WSmode':
+			case 'WS2811':
 				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
 				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
 				break;
@@ -262,6 +266,7 @@ function addCmdToTable(_cmd) {
 				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
 				break;
 			case 'pwm_output':
+			case 'servo':
 				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" >';
 				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
 			//	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="Min" title="Min"   style="display : none;">';

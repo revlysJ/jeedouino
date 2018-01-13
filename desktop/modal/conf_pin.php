@@ -25,12 +25,13 @@ if (isset($_GET['id']))
 	if (isset($_GET['board'])) $arduino_board = trim($_GET['board']);
 
 	include_file('core', 'jeedouino', 'config', 'jeedouino');
-    global $ArduinoMODEpins,$Arduino328pins,$ArduinoMEGApins,$ArduinoESPanalogPins;
-    global $PifaceMODEpinsIN,$PifaceMODEpinsOUT,$Pifacepins;
-    global $PiGPIOpins,$PiGPIO26pins,$PiGPIO40pins;
-	global $ESP8266pins,$ESP01pins,$ESP07pins,$espMCU01pins,$ESP32pins;
-    global $SonoffPow,$SonoffPowPins,$Sonoff4ch,$Sonoff4chPins;
-	global $PiPluspins,$PiPlus16pins;
+	global $ArduinoMODEpins, $Arduino328pins, $ArduinoMEGApins, $ArduinoESPanalogPins;
+	global $PifaceMODEpinsIN, $PifaceMODEpinsOUT, $Pifacepins;
+	global $PiGPIOpins, $PiGPIO26pins, $PiGPIO40pins;
+	global $ESP8266pins, $ESP01pins, $ESP07pins, $espMCU01pins, $ESP32pins;
+	global $SonoffPow, $SonoffPowPins, $Sonoff4ch, $Sonoff4chPins;
+	global $ElectroDragonSPDT, $ElectroDragonSPDTPins;
+	global $PiPluspins, $PiPlus16pins;
 	global $UserModePins;
 
 	$arduino_id = $_GET['id'];
@@ -244,6 +245,9 @@ if (isset($_GET['id']))
                     case 'espsonoff4ch':
 						$Arduino_pins = $Sonoff4chPins + $user_pins;
 						break;
+                    case 'espElectroDragonSPDT':
+						$Arduino_pins = $ElectroDragonSPDTPins + $user_pins;
+						break;
                     case 'esp32dev':
 						$Arduino_pins = $ESP32pins + $user_pins;
 						break;
@@ -424,7 +428,7 @@ if (isset($_GET['id']))
 								$OtherPins[] = '<option value="input_numeric">{{Entrée Numérique}}</option>';
 							}
 						}
-                        else if ($ModeleArduino == 'espsonoff4ch' )
+                        else if ($ModeleArduino == 'espsonoff4ch' or $ModeleArduino == 'espElectroDragonSPDT')
 						{
 							foreach ($Sonoff4ch as $mode_value => $mode_name)
                             {
@@ -525,6 +529,7 @@ if (isset($_GET['id']))
 					        break;
                         case 'espsonoffpow':
                         case 'espsonoff4ch':
+						case 'espElectroDragonSPDT':
                             if ($pin_datas['option'] == 'IN') $ActionPins = array();
                             elseif ($pin_datas['option'] == 'HLW8012') $ActionPins = array();
     						elseif ($pin_datas['option'] == 'OUT') $InfoPins = array();

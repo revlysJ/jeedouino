@@ -369,7 +369,7 @@ $port =  jeedouino::GetJeedomPort();
 					</td>
 					<td>
 						<?php
-							echo '<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-sitemap"></i> '.$name.'</a></div>';
+							echo '<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank"><i class="fa fa-sitemap"></i> '.$name.'</a></div>';
 						?>
 					</td>
 					<td class="deamonState">
@@ -408,17 +408,17 @@ $port =  jeedouino::GetJeedomPort();
 								$SketchFileName = $jeedouinoPATH.'/JeedouinoUSB_'.$board_id.'.ino';
 								if (file_exists($SketchFileName))
 								{
-									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
+									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
 									$Arduino_reseaux .= '<div class="form-group">
 									<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( USB )' . '}}</label>
-									<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-usb"></i></a></div>
+									<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fa fa-usb"></i> '.$name.'</a></div>
 									<div class="col-lg-5">
-										<a href="plugins/jeedouino/sketchs/JeedouinoUSB_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+										<a href="plugins/jeedouino/sketchs/JeedouinoUSB_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
 									</div></div>';
 								}
 								else
 								{
-									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}"><i class="fa fa-download"></i> SketchUSB</a></div>';
+									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}" download target="_blank"><i class="fa fa-download"></i> SketchUSB</a></div>';
 								}
 							}
 						?>
@@ -436,18 +436,18 @@ $port =  jeedouino::GetJeedomPort();
 				{
 					$Arduino_reseaux .= '<div class="form-group">
 					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( WIFI )' . '}}</label>
-					<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-wifi"></i></a></div>
+					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fa fa-wifi"></i> '.$name.'</a></div>
 					<div class="col-lg-5">
-						<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
+						<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
 				}
 				else
 				{
 					$Arduino_reseaux .= '<div class="form-group">
 					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( LAN )' . '}}</label>
-					<div class="col-lg-1"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-sitemap"></i></a></div>
+					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fa fa-sitemap"></i> '.$name.'</a></div>
 					<div class="col-lg-5">
-						<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+						<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
 				}
 			}
@@ -459,7 +459,7 @@ $port =  jeedouino::GetJeedomPort();
 			$Arduino_reseaux .= '<div class="form-group">
 							<label class="col-lg-5 control-label">{{ Librairies pour vos Sketchs }}</label>
 							<div class="col-lg-5">
-								<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" ><i class="fa fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
+								<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank"  download><i class="fa fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
 							</div></div>';
 
 		}

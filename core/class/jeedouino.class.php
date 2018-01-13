@@ -1367,7 +1367,7 @@ class jeedouino extends eqLogic {
 			usleep(1000000);  // 1s , petite pause pour laisser au script python le temps de stopper
 			jeedouino::log( 'debug','Le démon ' . $DemonTypeF . ' est stoppé (SOFT EXIT) - Réponse :'. $reponse);
 		}
-		config::save($arduino_id . '_OLDPORT', '', 'jeedouino');
+		config::save($board_id . '_OLDPORT', '', 'jeedouino');
 		// est il toujours en marche (processus)? Arrét hard.
 		self::ForceStopBoardDemon($board_id, $SlaveNetworkID, $DemonType);
 	}
@@ -1811,7 +1811,7 @@ class jeedouino extends eqLogic {
 
 		if ($this->getIsEnable() == 0)
 		{
-			list(, $board, ) = self::GetPinsByBoard($arduino_id);
+			list(, $board, $usb) = self::GetPinsByBoard($arduino_id);
 			switch ($board)
 			{
 				case 'arduino':
@@ -1841,7 +1841,7 @@ class jeedouino extends eqLogic {
 		if (($ModeleArduino != '') and (($PortArduino == 'rj45arduino') or ($PortArduino == 'usbarduino')))
 		{
 			// ok une carte est definie
-			list($Arduino_pins,$board,$usb) = self::GetPinsByBoard($arduino_id);
+			list($Arduino_pins, $board, $usb) = self::GetPinsByBoard($arduino_id);
 
 			$CfgStep = config::byKey($arduino_id.'_EqCfgSaveStep', 'jeedouino', 0);
 			if ($CfgStep == 1)

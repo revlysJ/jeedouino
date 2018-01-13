@@ -103,6 +103,7 @@ if (isset($_GET['BoardEQ']))
 		// Informations fournies par les démons
 		if (isset($_GET['NODEP']))
 		{
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino); 
 			$message = __('Dépendances ' . ucfirst(strtolower($_GET['NODEP'])) . ' introuvables. Veuillez les reinstaller.' , __FILE__);
 			event::add('jeedom::error', array(
 				'level' => 'warning',
@@ -113,11 +114,13 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['PINGME']))
 		{
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino); 
 			jeedouino::log( 'debug', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');
 			$result = jeedouino::StatusBoardDemon($arduino_id, 0, $ModeleArduino);
 		}
 		if (isset($_GET['THREADSDEAD']))
 		{
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino); 
 			jeedouino::log( 'error', $CALLBACK . 'Les threads du démon sont hs. Tentative de redémarrage du démon en cours...');
 			jeedouino::ReStartBoardDemon($arduino_id, 0, $ModeleArduino);
 		}

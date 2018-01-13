@@ -23,12 +23,13 @@
  *
  *
  */
-global $ArduinoMODEpins,$Arduino328pins,$ArduinoMEGApins,$ArduinoESPanalogPins;
-global $PifaceMODEpinsIN,$PifaceMODEpinsOUT,$Pifacepins;
-global $PiGPIOpins,$PiGPIO26pins,$PiGPIO40pins;
-global $ESP8266pins,$ESP01pins,$ESP07pins,$espMCU01pins,$ESP32pins;
-global $SonoffPow,$SonoffPowPins,$Sonoff4ch,$Sonoff4chPins;
-global $PiPluspins,$PiPlus16pins;
+global $ArduinoMODEpins, $Arduino328pins, $ArduinoMEGApins, $ArduinoESPanalogPins;
+global $PifaceMODEpinsIN, $PifaceMODEpinsOUT, $Pifacepins;
+global $PiGPIOpins, $PiGPIO26pins, $PiGPIO40pins;
+global $ESP8266pins, $ESP01pins, $ESP07pins, $espMCU01pins, $ESP32pins;
+global $SonoffPow, $SonoffPowPins, $Sonoff4ch, $Sonoff4chPins;
+global $ElectroDragonSPDT, $ElectroDragonSPDTPins;
+global $PiPluspins, $PiPlus16pins;
 global $UserModePins;
 
 $UserModePins = array(	"not_used" 			=> "Non utilisée",
@@ -60,6 +61,7 @@ $ArduinoMODEpins = array(	"not_used" 			=> "Non utilisée",
 							"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
 							"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
 							"servo" 		=> "oEnvoi valeur au servo par slider",
+							"WS2811" 		=> "oCommande pour RGB LED Strip",
 							"teleinfoRX"		=> "iEntrée téléinfo EDF ( pin RX )",
 							"SomfyRTS"			=> "Réservée Tests lib SomfyRTS (par Yogui).",
 							"Send2LCD"			=> "Envoi d'un message sur LCD16x2"
@@ -143,44 +145,68 @@ $ESP8266pins = array(
 						"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
 						"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
 						"servo" 		=> "oEnvoi valeur au servo par slider",
+						"WS2811" 		=> "oCommande pour RGB LED Strip",
 						"pwm_output"		=> "oSortie PWM",
 						"teleinfoRX"		=> "iEntrée téléinfo EDF ( pin RX )",
 						//"teleinfoTX"		=> "oSortie téléinfo EDF ( pin TX réservée mais inutilisée)",
 						"Send2LCD"			=> "Envoi d'un message sur LCD16x2"
 						);
 $SonoffPow = array(
-					"not_used" 			=> " Non utilisée",
-					"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-					"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
+					"not_used" 				=> " Non utilisée",
+					"input" 						=> "iEntrée Numérique avec PULL-DOWN",
+					"input_pullup"			=> "iEntrée Numérique avec PULL-UP ",
+					"bp_input" 				=> "iEntrée Bouton poussoir avec PULL-DOWN",
 					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
 					"compteur_pullup" 	=> "iEntrée compteur impulsions avec PULL-UP",
-					"switch" 			=> "oInverser la Sortie (SWITCH ON/OFF)",
-					"low_relais" 		=> "oSortie mise à LOW (HIGH générée aussi) ",
-					"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
-					"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
-					"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
-					"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
-					"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
+					"switch" 					=> "oInverser la Sortie (SWITCH ON/OFF)",
+					"low_relais" 				=> "oSortie mise à LOW (HIGH générée aussi) ",
+					"high_relais" 			=> "oSortie mise à HIGH (LOW générée aussi) ",
+					"low_pulse" 				=> "oSortie mise à LOW avec temporisation (minuterie) ",
+					"high_pulse" 			=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 	=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 	=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
 					);
 $Sonoff4ch = array(
-					"not_used" 			=> " Non utilisée",
-					"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-					"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
+					"not_used" 				=> " Non utilisée",
+					"input" 						=> "iEntrée Numérique avec PULL-DOWN",
+					"input_pullup"			=> "iEntrée Numérique avec PULL-UP ",
+					"bp_input" 				=> "iEntrée Bouton poussoir avec PULL-DOWN",
 					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
 					"compteur_pullup"	=> "iEntrée compteur impulsions avec PULL-UP",
-					"dht11" 			=> "jSonde DHT11",
-					"dht21" 			=> "jSonde DHT21 (AM2301)",
-					"dht22" 			=> "jSonde DHT22 (AM2302, AM2321)",
-					"ds18b20" 			=> "jSonde DS18S20/DS18B20/DS1822",
-					"switch" 			=> "oInverser la Sortie (SWITCH ON/OFF)",
-					"low_relais" 		=> "oSortie mise à LOW (HIGH générée aussi) ",
-					"high_relais" 		=> "oSortie mise à HIGH (LOW générée aussi) ",
-					"low_pulse" 		=> "oSortie mise à LOW avec temporisation (minuterie) ",
-					"high_pulse" 		=> "oSortie mise à HIGH avec temporisation (minuterie) ",
-					"low_pulse_slide" 		=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
-					"high_pulse_slide" 		=> "oSortie mise à HIGH avec temporisation (minuterie) par slider"
+					"dht11" 					=> "jSonde DHT11",
+					"dht21" 					=> "jSonde DHT21 (AM2301)",
+					"dht22" 					=> "jSonde DHT22 (AM2302, AM2321)",
+					"ds18b20" 				=> "jSonde DS18S20/DS18B20/DS1822",
+					"switch" 					=> "oInverser la Sortie (SWITCH ON/OFF)",
+					"low_relais" 				=> "oSortie mise à LOW (HIGH générée aussi) ",
+					"high_relais" 			=> "oSortie mise à HIGH (LOW générée aussi) ",
+					"low_pulse" 				=> "oSortie mise à LOW avec temporisation (minuterie) ",
+					"high_pulse" 			=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 	=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 	=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
+					"servo" 					=> "jEnvoi valeur au servo par slider",
+					"WS2811" 				=> "jCommande pour RGB LED Strip"
+					);
+$$ElectroDragonSPDT = array(
+					"not_used" 				=> " Non utilisée",
+					"input" 						=> "iEntrée Numérique avec PULL-DOWN",
+					"input_pullup"			=> "iEntrée Numérique avec PULL-UP ",
+					"bp_input" 				=> "iEntrée Bouton poussoir avec PULL-DOWN",
+					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+					"compteur_pullup"	=> "iEntrée compteur impulsions avec PULL-UP",
+					"dht11" 					=> "jSonde DHT11",
+					"dht21" 					=> "jSonde DHT21 (AM2301)",
+					"dht22" 					=> "jSonde DHT22 (AM2302, AM2321)",
+					"ds18b20" 				=> "jSonde DS18S20/DS18B20/DS1822",
+					"switch" 					=> "oInverser la Sortie (SWITCH ON/OFF)",
+					"low_relais" 				=> "oSortie mise à LOW (HIGH générée aussi) ",
+					"high_relais" 			=> "oSortie mise à HIGH (LOW générée aussi) ",
+					"low_pulse" 				=> "oSortie mise à LOW avec temporisation (minuterie) ",
+					"high_pulse" 			=> "oSortie mise à HIGH avec temporisation (minuterie) ",
+					"low_pulse_slide" 	=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
+					"high_pulse_slide" 	=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
+					"servo" 					=> "jEnvoi valeur au servo par slider",
+					"WS2811" 				=> "jCommande pour RGB LED Strip"
 					);
 $ESP01pins = array(
 	'0' 	=> array('Nom_pin' => 'GPIO 0',		'disable' => 0, 'ethernet' => 0, 'option' => ''),
@@ -282,6 +308,26 @@ $Sonoff4chPins = array(
 	'15' 	=> array('Nom_pin' => 'Relay 3', 'disable' => 0, 'ethernet' => 0, 'option' => 'OUT'),
 	'16' 	=> array('Nom_pin' => 'GPIO 16', 'disable' => 1, 'ethernet' => 0, 'option' => ''),
 	'17' 	=> array('Nom_pin' => 'ADC (A0)','disable' => 1, 'ethernet' => 0, 'option' => '')
+	);
+$ElectroDragonSPDTPins = array(
+	'0' 	=> array('Nom_pin' => 'Button 2','disable' => 0, 'ethernet' => 0, 'option' => 'IN'),
+	'1' 	=> array('Nom_pin' => 'GPIO 1',  'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'2' 	=> array('Nom_pin' => 'Button 1',  'disable' => 0, 'ethernet' => 0, 'option' => 'IN'),
+	'3' 	=> array('Nom_pin' => 'GPIO 3',  'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'4' 	=> array('Nom_pin' => 'GPIO 4' ,'disable' => 0, 'ethernet' => 0, 'option' => ''),
+	'5' 	=> array('Nom_pin' => 'GPIO 5', 'disable' => 0, 'ethernet' => 0, 'option' => ''),
+	'6' 	=> array('Nom_pin' => 'GPIO 6',  'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'7' 	=> array('Nom_pin' => 'GPIO 7',  'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'8' 	=> array('Nom_pin' => 'GPIO 8',  'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'9' 	=> array('Nom_pin' => 'GPIO 9','disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'10' 	=> array('Nom_pin' => 'GPIO 10','disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'11' 	=> array('Nom_pin' => 'GPIO 11', 'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'12' 	=> array('Nom_pin' => 'Relay 0', 'disable' => 0, 'ethernet' => 0, 'option' => 'OUT'),
+	'13' 	=> array('Nom_pin' => 'Relay 1',  'disable' => 0, 'ethernet' => 0, 'option' => 'OUT'),
+	'14' 	=> array('Nom_pin' => 'GPIO 14','disable' => 0, 'ethernet' => 0, 'option' => ''),
+	'15' 	=> array('Nom_pin' => 'GPIO 15', 'disable' => 0, 'ethernet' => 0, 'option' => ''),
+	'16' 	=> array('Nom_pin' => 'GPIO 16', 'disable' => 1, 'ethernet' => 0, 'option' => ''),
+	'17' 	=> array('Nom_pin' => 'ADC (A0)','disable' => 1, 'ethernet' => 0, 'option' => 'ANA')
 	);
 $ESP32pins = array(
 	'0' 	=> array('Nom_pin' => 'GPIO 00','disable' => 0, 'ethernet' => 0, 'option' => 'BOOT'),

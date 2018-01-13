@@ -174,12 +174,16 @@ if (isset($_GET['BoardEQ']))
 					}
 					else $message.='.';
 				}
-				if ($message!='')
+				if ($message != '' and config::byKey('SENDING_'.$arduino_id, 'jeedouino', 0) == 0)
 				{
+					config::save('SENDING_'.$arduino_id, 1, 'jeedouino');
+					jeedouino::log( 'debug', "Pause de 4s pour laisser l'arduino finir de communiquer avec le démon qui vient de demarrer");
+					sleep(4);					
 					$message='S'.$message.'F';
-					jeedouino::log( 'debug','Envoi des valeurs des pins suite à la demande de la carte (Reboot?) '.$BOARDNAME.'- Message : '. $message);
+					jeedouino::log( 'debug','Envoi les valeurs des pins suite à la demande de la carte (Reboot?) '.$BOARDNAME.'- Message : '. $message);
 					$reponse=jeedouino::SendToBoard($arduino_id,$message);
-					if ($reponse!='SFOK') jeedouino::log( 'error','ERREUR CONFIGURATION ConfigureAllPinsValues  '.$BOARDNAME.'- Réponse :'.$reponse);
+					if ($reponse!='SFOK') jeedouino::log( 'debug','ERREUR CONFIGURATION ConfigureAllPinsValues  '.$BOARDNAME.'- Réponse :'.$reponse);
+					config::save('SENDING_'.$arduino_id, 0, 'jeedouino');
 				}
 			}
 		}

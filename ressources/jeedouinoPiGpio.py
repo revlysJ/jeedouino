@@ -163,11 +163,11 @@ class myThread1 (threading.Thread):
 						elif Status_pins[i]=='n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j,GPIO.BOTH, callback=toggle_inputs)
+							GPIO.add_event_detect(j,GPIO.RISING, callback=toggle_inputs)
 						elif Status_pins[i]=='q':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j,GPIO.BOTH, callback=toggle_inputs)
+							GPIO.add_event_detect(j,GPIO.FALLING, callback=toggle_inputs)
 						elif Status_pins[i]=='i':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
@@ -363,12 +363,12 @@ def toggle_inputs(u):
 		while TimeOut > time.time():
 			v = GPIO.input(u)
 			if v != PinValue[u]:
-				PinNextSend[u] = t + 0.150  									# (ms) Delai antirebond
+				PinNextSend[u] = t + 0.250  									# (ms) Delai antirebond
 				PinValue[u] = v
 			if PinNextSend[u] < time.time() and v != swtch[u]:
 				if v == BPvalue:
 					CounterPinValue[u] += 1
-				TimeValue[u] = time.time() + 0.400 								# (ms) Delai entre clicks
+				TimeValue[u] = time.time() + 0.500 								# (ms) Delai entre clicks
 				swtch[u] = v
 			if TimeValue[u] < time.time() and CounterPinValue[u] != 0:
 				if v == BPvalue:
@@ -377,7 +377,12 @@ def toggle_inputs(u):
 				CounterPinValue[u] = 0
 				break
 
-		GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_inputs)
+		if Status_pins[u-1] == 'n':
+			GPIO.add_event_detect(u, GPIO.RISING, callback=toggle_inputs)
+		elif Status_pins[u-1] == 'q':
+			GPIO.add_event_detect(u, GPIO.FALLING, callback=toggle_inputs)
+		else:
+			GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_inputs)
 	else:
 		pinStr = '&' + str(u) + '=' + str(v)
 

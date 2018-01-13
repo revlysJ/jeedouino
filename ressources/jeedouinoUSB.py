@@ -1,5 +1,5 @@
 """
-JEEDOUINO ARDUINO USB DEMON v0.6 Dec2015-Novembre 2016
+JEEDOUINO ARDUINO USB DEMON v0.7 , Dec 2015 - Oct 2017
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original :	https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -252,10 +252,17 @@ if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		port = int(sys.argv[1])
 
-	# set Serial port for Arduino USB
-	USBArduino = serial.Serial(portusb, baudrate, timeout=1, rtscts=1)
-	time.sleep(0.5)
-	USBArduino.flush()
+	# set Serial port for Arduino USB if possible
+	try:
+		USBArduino = serial.Serial(portusb, baudrate, timeout=1, rtscts=1)
+		time.sleep(0.5)
+		USBArduino.flush()
+	except:
+		USBArduino = ''
+		SimpleSend('&NODEP=SERIAL')
+		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller.')
+		time.sleep(7)
+		sys.exit
 
 	# inits
 	exit=0

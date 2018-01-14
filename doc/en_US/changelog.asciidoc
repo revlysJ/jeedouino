@@ -1,7 +1,15 @@
-=== 08/01/2018 v1.02
+=== 13/01/2018 v1.02
 
+- Ajout support ELECTRODRAGON Wifi IoT Relay Board Based on ESP8266 (esp).
+- Ajout des commandes pour cartes arduino et esp826x:  
+** Envoi valeur au servo par slider, permet de commander un servo avec une valeur entre 0 et 180 par ex.
+** Commande pour RGB LED Strip a base de WS2811 (1 strip max par carte).
+** Permet d'envoyer une valeur de couleur, ou de selectionner parmi 17 effets. 
+** Attention un effet est bloquant, il vaux mieux dédier un arduino/esp.
+- Ajout génération Sketch USB.
 - Amélioration du démarrage du démon usb.
 - Corrections diverses.
+- Amélioration des libéllés des logs.
 - /!\ A corriger : piGPIO : Entrée Bouton poussoir multi-clics + clic-long.
 
 === 02/01/2018 v1.01

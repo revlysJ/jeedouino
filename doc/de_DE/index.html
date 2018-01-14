@@ -431,7 +431,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_plugin_konfiguration">3.1. Plugin Konfiguration</a>
 <ul class="sectlevel3">
-<li><a href="#_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.1. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</a></li>
+<li><a href="#_onglet_sketchs_pour_vos_équipements_arduino_et_esp8266_ex_nodemcu_wemos_sonoff_electrodragon">3.1.1. Onglet : Sketchs pour vos équipements Arduino et ESP8266 (ex: NodeMCU / Wemos / Sonoff / Electrodragon)</a></li>
 <li><a href="#_onglet_configuration_docker">3.1.2. Onglet : Configuration Docker</a></li>
 </ul>
 </li>
@@ -460,7 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_Änderungsprotokoll">6. Änderungsprotokoll</a>
 <ul class="sectlevel2">
-<li><a href="#_08_01_2018_v1_02">6.1. 08/01/2018 v1.02</a></li>
+<li><a href="#_13_01_2018_v1_02">6.1. 13/01/2018 v1.02</a></li>
 <li><a href="#_02_01_2018_v1_01">6.2. 02/01/2018 v1.01</a></li>
 <li><a href="#_30_11_2017_v1_00">6.3. 30/11/2017 v1.00</a></li>
 <li><a href="#_29_09_2017_v1_00">6.4. 29/09/2017 v1.00</a></li>
@@ -523,7 +523,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, W5500, ENC28J60) sur votre réseau.</p>
 </li>
 <li>
-<p>Der ESP8266 / NodeMCU / Wemos (wifi).</p>
+<p>les ESP8266 (wifi) ex:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>NodeMCU , Wemos, etc.</p>
+</li>
+<li>
+<p>SONOFF 4CH &amp; POW, ELECTRODRAGON 2CH.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>les GPIO du <strong>Raspberry PI</strong>.</p>
@@ -871,9 +881,9 @@ Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_onglet_sketchs_pour_vos_équipements_réseaux_arduino_et_esp8266_nodemcu_wemos">3.1.1. Onglet : Sketchs pour vos équipements réseaux (Arduino et ESP8266 / NodeMCU / Wemos)</h4>
+<h4 id="_onglet_sketchs_pour_vos_équipements_arduino_et_esp8266_ex_nodemcu_wemos_sonoff_electrodragon">3.1.1. Onglet : Sketchs pour vos équipements Arduino et ESP8266 (ex: NodeMCU / Wemos / Sonoff / Electrodragon)</h4>
 <div class="paragraph">
-<p>Les arduinos/ESP/NodeMCU/Wemos en réseau n&#8217;ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
+<p>Les Arduinos et Esp8266 en réseau wifi n&#8217;ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
 Uniquement ceux des équipements créés.</p>
 </div>
 <div class="imageblock">
@@ -1039,7 +1049,7 @@ Sie können auch <em>lokal</em> oder <em>lokalhost</em> für die IP-Adresse des 
 <p><strong>USB Port</strong> : Lokale oder Remote, für den Anschluss vom Jeedom Master oder Slave an die Karte, über den USB-Port,</p>
 </li>
 <li>
-<p><strong>Lokal Port/Remote Port</strong> : physischer USB-Anschluss oder eine Karte ist angeschlossen,</p>
+<p><strong>Port local/Port déporté</strong> : Port USB physique où est connectée la carte,</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1413,14 +1423,42 @@ Sie können auf den Namen des Gerätes klicken, um auf dessen Seite zu gelangen.
 <h2 id="_Änderungsprotokoll">6. Änderungsprotokoll</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_08_01_2018_v1_02">6.1. 08/01/2018 v1.02</h3>
+<h3 id="_13_01_2018_v1_02">6.1. 13/01/2018 v1.02</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>Ajout support ELECTRODRAGON Wifi IoT Relay Board Based on ESP8266 (esp).</p>
+</li>
+<li>
+<p>Ajout des commandes pour cartes arduino et esp826x:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Envoi valeur au servo par slider, permet de commander un servo avec une valeur entre 0 et 180 par ex.</p>
+</li>
+<li>
+<p>Commande pour RGB LED Strip a base de WS2811 (1 strip max par carte).</p>
+</li>
+<li>
+<p>Permet d&#8217;envoyer une valeur de couleur, ou de selectionner parmi 17 effets.</p>
+</li>
+<li>
+<p>Attention un effet est bloquant, il vaux mieux dédier un arduino/esp.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Ajout génération Sketch USB.</p>
+</li>
 <li>
 <p>Amélioration du démarrage du démon usb.</p>
 </li>
 <li>
 <p>Corrections diverses.</p>
+</li>
+<li>
+<p>Amélioration des libéllés des logs.</p>
 </li>
 <li>
 <p>/!\ A corriger : piGPIO : Entrée Bouton poussoir multi-clics + clic-long.</p>
@@ -1919,9 +1957,14 @@ Diese Möglichkeiten finden Sie in der Sketch Header :</p>
 <strong>#define UseDS18x20 1</strong><br>
 <strong>#define UseTeleInfo 0</strong><br>
 <strong>#define UseLCD16x2 0</strong>	// 0 = None(kein) / 1 = LCD Standard 6 pins / 2 = LCD via I2C<br>
+<strong>#define UseHCSR04 0</strong><br>
+<strong>#define UsePwm_input 0</strong> // Code obsolete (sera supprimé) <br>
+<strong>#define UseBMP180 0</strong>		// pour BMP085/180 Barometric Pressure &amp; Temp Sensor<br>
+<strong>#define UseServo 0</strong><br>
+<strong>#define UseWS2811 0</strong>	// Pour gerer les led stips a base de WS2811/2 avec l&#8217;excellente lib Adafruit_NeoPixel<br>
 <em>Ermöglicht Ihnen, persönlichen Sketche hinzuzufügen</em><br>
 <strong>#define UserSketch 0</strong><br>
-<em>Tags, um den Ort für Ihren Code zu suchen :</em><br>
+<em>Tags pour rechercher (CTRL + F) l&#8217;emplacement pour votre code :</em><br>
 <em>UserVars</em><br>
 <em>UserSetup</em><br>
 <em>UserLoop</em><br>
@@ -2106,7 +2149,7 @@ Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtue
 <div class="sect3">
 <h4 id="_les_équipements_avec_démons_pigpio_piface_piplus_mcp23017_arduinousb_ont_changés_de_port_de_connection_tout_seuls">7.1.4. Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.</h4>
 <div class="paragraph">
-<p>Cela est possible.<br>
+<p>Cela est possible et normal.<br>
 En effet, lors du démarrage, un démon essaye d&#8217;utiliser le port choisi a 2 reprises avec un délai d&#8217;attente d&#8217;environ 11s.<br>
 Si au bout de ces 2 tentatives le port n&#8217;est toujours pas disponible, alors il essaie d&#8217;en trouver un de libre automatiquement.<br>
 Et s&#8217;il en trouve un, il l&#8217;utilise et met à jour l&#8217;équipement idoine.</p>
@@ -2442,6 +2485,25 @@ J&#8217;essaierai d&#8217;améliorer ce point-là mais sans garantie. Pour tests
 <p><strong>Uniquement sur Arduino / ESP / NodeMCU / Wemos :</strong></p>
 <div class="ulist">
 <ul>
+<li>
+<p><strong>Envoi valeur au servo par slider</strong> - permet de commander un servo avec une valeur entre 0 et 180 par ex.</p>
+</li>
+<li>
+<p><strong>Commande pour RGB LED Strip a base de WS2811</strong> - Permet d&#8217;envoyer une valeur de couleur, ou de sélectionner parmi 17 effets.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Attention un effet est bloquant, il vaux mieux dédier un arduino/esp pour l&#8217;instant.<br>
+Limité à un ruban led (strip) par arduino/esp pour l&#8217;instant.
+</td>
+</tr>
+</table>
+</div>
+</li>
 <li>
 <p><strong>Envoi d&#8217;un message sur LCD16x2</strong> - Permet d&#8217;envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C</p>
 </li>

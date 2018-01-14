@@ -45,7 +45,7 @@ Sie können auch _lokal_ oder _lokalhost_ für die IP-Adresse des primär Jeedom
 
 image::../images/listeIP.png[]
 * *USB Port* : Lokale oder Remote, für den Anschluss vom Jeedom Master oder Slave an die Karte, über den USB-Port,
-* *Lokal Port/Remote Port* : physischer USB-Anschluss oder eine Karte ist angeschlossen,
+* *Port local/Port déporté* : Port USB physique où est connectée la carte,
 ** Wenn Sie den USB-Port von der RPI-Karte trennen/verbinden, müssen Sie den entsprechenden Daemon neu starten. 
 
 image::../images/listeUSB.png[]

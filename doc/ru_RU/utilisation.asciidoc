@@ -45,7 +45,7 @@ Vous pouvez aussi utiliser _local_ ou _localhost_ pour l'adresse IP du Jeedom pr
 
 image::../images/listeIP.png[]
 * *Port USB* : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,
-* *Port local/Port déporté* : Port USB physique ou est connectée la carte,
+* *Port local/Port déporté* : Port USB physique où est connectée la carte,
 ** Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.
 
 image::../images/listeUSB.png[]

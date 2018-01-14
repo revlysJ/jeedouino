@@ -88,9 +88,9 @@ Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement 
 
 image::../images/ConfDemons.png[]
 
-==== Tab: Sketches for your network equipment (Arduino and ESP8266 / NodeMCU / Wemos)
+==== Onglet : Sketchs pour vos équipements Arduino et ESP8266 (ex: NodeMCU / Wemos / Sonoff / Electrodragon)
 
-The Arduinos / ESP / NodeMCU / network Wemos not needing daemons, here come the sketches for them.
+Les Arduinos et Esp8266 en réseau wifi n'ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
 Only those of the created equipment.
 
 image::../images/configuration3.png[]

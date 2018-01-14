@@ -14,9 +14,14 @@ You will find this possibility in the sketchs header :
 *#define UseDS18x20 1* +
 *#define UseTeleInfo 0* +
 *#define UseLCD16x2 0*	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C +
+*#define UseHCSR04 0* +
+*#define UsePwm_input 0* // Code obsolete (sera supprimé)  +
+*#define UseBMP180 0*		// pour BMP085/180 Barometric Pressure & Temp Sensor +
+*#define UseServo 0* +
+*#define UseWS2811 0*	// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel +
 _For your user sketch_ +
 *#define UserSketch 0* +
-_Tags to seek place for your code :_ +
+_Tags pour rechercher (CTRL + F) l'emplacement pour votre code :_ +
 _UserVars_ +
 _UserSetup_ +
 _UserLoop_ +
@@ -96,7 +101,7 @@ _It remains for you to use your virtuals._
 image::../images/virtuels.png[]
 
 ==== Equipment with daemons (rpi GPIO, piFace, pi Plus / MCP23017, Arduino USB) have changed port connection alone.
-That is possible. +
+Cela est possible et normal. +
 Indeed, when starting a daemon tries to use the selected port 2 times with a waiting time of approximately 11s. +
 If after these two attempts the port is still not available, so he tries to get one automatically. +
 And if it finds one, it uses it and update the suitable equipment.
@@ -200,6 +205,12 @@ J'essaierai d'améliorer ce point-là mais sans garantie. Pour tests uniquements
 
 ===== Output pins: 
 * *Only on Arduino / ESP / NodeMCU / Wemos :*
+** *Envoi valeur au servo par slider* - permet de commander un servo avec une valeur entre 0 et 180 par ex.
+** *Commande pour RGB LED Strip a base de WS2811* - Permet d'envoyer une valeur de couleur, ou de sélectionner parmi 17 effets.
+[IMPORTANT]
+Attention un effet est bloquant, il vaux mieux dédier un arduino/esp pour l'instant. +
+Limité à un ruban led (strip) par arduino/esp pour l'instant.
+
 ** *Send a message to LCD16x2* - allows you to send a title + message (16 characters each) on a screen LCD 16 x 2. Standard or I2C
 
 image::../images/lcd.png[]

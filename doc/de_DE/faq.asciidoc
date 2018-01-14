@@ -14,9 +14,14 @@ Diese Möglichkeiten finden Sie in der Sketch Header :
 *#define UseDS18x20 1* +
 *#define UseTeleInfo 0* +
 *#define UseLCD16x2 0*	// 0 = None(kein) / 1 = LCD Standard 6 pins / 2 = LCD via I2C +
+*#define UseHCSR04 0* +
+*#define UsePwm_input 0* // Code obsolete (sera supprimé)  +
+*#define UseBMP180 0*		// pour BMP085/180 Barometric Pressure & Temp Sensor +
+*#define UseServo 0* +
+*#define UseWS2811 0*	// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel +
 _Ermöglicht Ihnen, persönlichen Sketche hinzuzufügen_ +
 *#define UserSketch 0* +
-_Tags, um den Ort für Ihren Code zu suchen :_ +
+_Tags pour rechercher (CTRL + F) l'emplacement pour votre code :_ +
 _UserVars_ +
 _UserSetup_ +
 _UserLoop_ +
@@ -96,7 +101,7 @@ _Il ne vous reste plus qu'à utiliser vos virtuels._
 image::../images/virtuels.png[]
 
 ==== Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.
-Cela est possible. +
+Cela est possible et normal. +
 En effet, lors du démarrage, un démon essaye d'utiliser le port choisi a 2 reprises avec un délai d'attente d'environ 11s. +
 Si au bout de ces 2 tentatives le port n'est toujours pas disponible, alors il essaie d'en trouver un de libre automatiquement. +
 Et s'il en trouve un, il l'utilise et met à jour l'équipement idoine.
@@ -200,6 +205,12 @@ J'essaierai d'améliorer ce point-là mais sans garantie. Pour tests uniquements
 
 ===== Pins Sorties (output): 
 * *Uniquement sur Arduino / ESP / NodeMCU / Wemos :*
+** *Envoi valeur au servo par slider* - permet de commander un servo avec une valeur entre 0 et 180 par ex.
+** *Commande pour RGB LED Strip a base de WS2811* - Permet d'envoyer une valeur de couleur, ou de sélectionner parmi 17 effets.
+[IMPORTANT]
+Attention un effet est bloquant, il vaux mieux dédier un arduino/esp pour l'instant. +
+Limité à un ruban led (strip) par arduino/esp pour l'instant.
+
 ** *Envoi d'un message sur LCD16x2* - Permet d'envoyer un titre + message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C
 
 image::../images/lcd.png[]

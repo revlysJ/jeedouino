@@ -6,5 +6,7 @@
 	"author" : "Revlys",
 	"require" : "2",
 	"category" : "automation protocol",
-	"hasDependency" : true
+	"hasDependency" : true,
+	"changelog" : "https://revlysj.github.io/jeedouino/#language#/changelog",
+	"documentation" : "https://revlysj.github.io/jeedouino/#language#/index"
 }

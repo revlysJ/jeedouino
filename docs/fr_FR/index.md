@@ -1,6 +1,7 @@
 Description
 ===========
-- **Jeedouino v1.02**
+- **Jeedouino v1.02**  
+
    Ce plugin vous permet de contrôler de différentes manières les pins entrées/sorties des cartes suivantes :
 
    * Arduinos (différents modèles) branchés en USB sur *Raspberry PI*.
@@ -34,7 +35,7 @@ Installation et mise à jour du plugin
 
    Pour les Arduinos connectées en USB sur le R.PI, les cartes PiFace, et les GPIO du R.PI, il faudra aussi installer et activer le plugin sur les jeedom esclaves concernés uniquement.
 
-![image001](../../doc/images/configuration.png)
+![image001](../images/configuration.png)
 
 Mise à jour du plugin
 ---
@@ -55,7 +56,7 @@ Configuration du plugin
 
 Sur la page configuration du plugin
 
-![image101](../../doc/images/ConfOptions.png)
+![image101](../images/ConfOptions.png)
 
 Onglet : Options
 ---
@@ -79,45 +80,45 @@ Onglet : Options
 Onglet : Dépendances
 ---
 
-![image102](../../doc/images/configuration0.png)
+![image102](../images/configuration0.png)
 
 Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.
 
-* https://www.arduino.cc/en/Main/Software
+* <https://www.arduino.cc/en/Main/Software>
 
    > Pour les cartes ESP8266, NodeMCU, Wemos vous pouvez aussi utiliser l'IDE Arduino en y ajoutant le support ESP8266.
-   > http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html
+   > <http://esp8266.github.io/Arduino/versions/2.0.0-rc2/doc/installing.html>
 
 Pour les GPIO du R.PI, un bouton est disponible pour l'installation des dépendances.
 
-* http://sourceforge.net/p/raspberry-gpio-python/wiki/install/ 
+* <http://sourceforge.net/p/raspberry-gpio-python/wiki/install/>
 
 De même, un bouton est présent pour celles des cartes PiFace.
 
-* https://github.com/piface/pifacedigitalio
+* <https://github.com/piface/pifacedigitalio>
 
 * Il faudra aussi activer le module SPI.
 
-* http://piface.github.io/pifacecommon/installation.htmlenable-the-spi-module
-* http://www.piface.org.uk/guides/Install_PiFace_Software/Enabling_SPI/	
+* <http://piface.github.io/pifacecommon/installation.htmlenable-the-spi-module>
+* <http://www.piface.org.uk/guides/Install_PiFace_Software/Enabling_SPI/>
 
 > **[IMPORTANT]**
 >
 > Les paquets pifacecommon et pifacedigitalio pour la carte PiFace ne sont pas dispo sur le dépôt stretch.  
 > Il faut donc installer les packages via pip  
-> https://www.raspberrypi.org/forums/viewtopic.php?t194332  
+> <https://www.raspberrypi.org/forums/viewtopic.php?t194332>
 > il faut aussi modifier la vitesse du bus SPI dans spi.py  
-> https://www.raspberrypi.org/forums/viewtopic.php?t196248p1228166  
+> <https://www.raspberrypi.org/forums/viewtopic.php?t196248p1228166>
 > Merci à *@joopa* pour la résolution de ce problème.  
-> https://www.jeedom.com/forum/viewtopic.php?f133&t14056&p568991p565395  
+> <https://www.jeedom.com/forum/viewtopic.php?f133&t14056&p568991p565395>
 
 Idem, un bouton est présent pour celles des cartes AB Electronics UK IO Pi Plus.
 
-* https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi
+* <https://github.com/abelectronicsuk/ABElectronics_Python_Libraries/tree/master/IOPi>
 
 * Il faudra aussi activer le module I2C.
 
-* https://www.abelectronics.co.uk/kb/article/1/i2c--smbus-and-raspbian-wheezy	
+* <https://www.abelectronics.co.uk/kb/article/1/i2c--smbus-and-raspbian-wheezy>
 
 > **[IMPORTANT]**
 >
@@ -132,7 +133,7 @@ Onglet : Démons
 
 _Exemple de différents démons possibles:_
 
-![image103](../../doc/images/configuration1.png)
+![image103](../images/configuration1.png)
 
 Ici, dès que vous aurez créé des équipements nécéssitant l'utilisation de démons, apparaîtront ces derniers.
 
@@ -150,31 +151,31 @@ Ils seront affichés avec un raccourci direct vers l'équipement, leur Jeedom h�
 >
 >Une option permettant de vérifier, toutes les 5 minutes, le bon fonctionnement des démons et de les redémarrer le cas échéant est désormais disponible.
 
-![image104](../../doc/images/ConfDemons.png)
+![image104](../images/ConfDemons.png)
 
 Onglet : Sketchs pour vos équipements Arduino et ESP8266 (ex: NodeMCU / Wemos / Sonoff / Electrodragon)
 ---
 Les Arduinos et Esp8266 en réseau wifi n'ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
 Uniquement ceux des équipements créés.
 
-![image105](../../doc/images/configuration3.png)
+![image105](../images/configuration3.png)
 
 Onglet : Configuration Docker 
 ---
 Si votre Jeedom est sous Docker, il faut activer l'option, et renseigner l'IP de l'hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).
 
-![image106](../../doc/images/configuration4.png)
+![image106](../images/configuration4.png)
 
 Création des équipements
 ========================
 
 La configuration des équipements Jeedouino est accessible à partir du menu Plugins : 
 
-![image201](../../doc/images/menuplugin.png)
+![image201](../images/menuplugin.png)
 
 Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) : 
 
-![image202](../../doc/images/equipements.png)
+![image202](../images/equipements.png)
 
 > **[TIP]**
 >
@@ -182,7 +183,7 @@ Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équip
 
 Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez : 
 
-![image203](../../doc/images/equipements0.png)
+![image203](../images/equipements0.png)
 
 Vous retrouvez ici toute la configuration de votre équipement : 
 
@@ -195,11 +196,11 @@ En-dessous vous retrouvez le paramétrage de votre équipement :
 
 * **Modèle** : le Modèle de la carte que vous souhaitez controler,
 
-![image204](../../doc/images/modeles.png)
+![image204](../images/modeles.png)
 
 _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si vous avez un piRack par ex.)_
 
-![image205](../../doc/images/piface.png)
+![image205](../images/piface.png)
 * **Type de connection** : port de connection USB ou Réseau,
 * **Adresse IP et Port** : pour la connection à la carte via le réseau,
 
@@ -214,12 +215,12 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
    > _Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom._  
    > Vous pouvez aussi utiliser _local_ ou _localhost_ pour l'adresse IP du Jeedom principal (maître).
 
-![image206](../../doc/images/listeIP.png)
+![image206](../images/listeIP.png)
 * **Port USB** : Local ou déporté, pour la connection du Jeedom maître ou esclave à la carte via son port USB,
 * **Port local/Port déporté** : Port USB physique où est connectée la carte,
    > * Si vous débranchez/rebranchez la carte du port USB du RPI, il vous faudra redémarrer le démon correspondant.
 
-![image207](../../doc/images/listeUSB.png)
+![image207](../images/listeUSB.png)
 * **Port Démon** : pour la connection au démon via le réseau, l'IP du démon étant celle du Jeedom hôte.
 
    > **[WARNING]**
@@ -240,7 +241,7 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
    > 
    > _Le Sketch est par défaut prévu pour les shields avec chip W5100, mais il peut fonctionner aussi avec des ENC28J60. Dans ce cas, il faudra lire et appliquer la procédure présente en entête du sketch._
 
-![image208](../../doc/images/sketch.png)
+![image208](../images/sketch.png)
 
    > **[NOTE]**
    > 
@@ -252,7 +253,7 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
    >
    > Les _SSID_ et _mot de passe_ ne doivent pas contenir d'espaces !
 
-![image209](../../doc/images/ESP.png)
+![image209](../images/ESP.png)
 
 Configuration des pins
 ---
@@ -265,7 +266,7 @@ Configuration des pins
    * Entrées: Analogiques, Digitales, Compteur d'impulsions
    * Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..). 
 
-![image210](../../doc/images/jeedouino_screenshot4.png)
+![image210](../images/jeedouino_screenshot4.png)
 
    > **[IMPORTANT]**
    > 
@@ -283,7 +284,7 @@ Configuration des pins
 
 * **Modal Paramétrages / affectation des pins utilisateur**
 
-![image211](../../doc/images/UserPins.png)
+![image211](../images/UserPins.png)
 
 * Onglet **Pins / GPIO**
 
@@ -297,12 +298,12 @@ Configuration des pins
    * ALL_PULSE_LOW	Met toutes les pins output à LOW pendant le temps choisi
    * ALL_PULSE_HIGH	Met toutes les pins output à HIGH pendant le temps choisi
 
-![image212](../../doc/images/ALLpins.png)
+![image212](../images/ALLpins.png)
 
 Commandes
 ---
 
-![image213](../../doc/images/jeedouino_screenshot5.png)
+![image213](../images/jeedouino_screenshot5.png)
 * **Sauvegarde de l'équipement** :
    Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.
    Ainsi, la roue crantée tournante peut rester affichée un bon moment. Il ne faut donc pas s'en inquièter.
@@ -339,7 +340,7 @@ Ce sont ceux par défaut de Jeedom.
 
 Les widgets desktop ressemblent à cela :
 
-![image214](../../doc/images/desktop_widget.png)
+![image214](../images/desktop_widget.png)
 
 
 
@@ -352,7 +353,7 @@ Etat des démons du plugin
 Le plugin indique Ok si tous les démons et dépendances sont fonctionnels.  
 Il est possible d'ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.
 
-![image301](../../doc/images/sante1.png)
+![image301](../images/sante1.png)
 Il est possible de voir les états des équipements directement en cliquant sur l'icone à droite de Jeedouino. 
 
 Etats des équipements du plugin
@@ -361,7 +362,7 @@ Etats des équipements du plugin
 La liste donne tous les équipements avec leurs ID, IP, Ports, Modèles et dates de communication.  
 Il est possible de cliquer sur le nom de l'équipement pour aller sur sa page.
 
-![image302](../../doc/images/sante2.png)
+![image302](../images/sante2.png)
 
 Les dates de dernières communications sont colorisées:
 
@@ -379,28 +380,28 @@ FAQ
 Sketchs Personnels/Modifiables et Commandes Utilisateur
 ---
 
-- **Entêtes  des sketchs**
+- **Entêtes  des sketchs**  
    Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos.
    Il est donc possible de désactiver certaines de ces fonctionnalités afin d'alléger les sketchs si besoin.
    Vous trouverez en entête des sketchs cette possibilité : 
 
-   >**#define DEBUGtoSERIAL 0**	// 0, ou 1 pour debug dans la console serie
-   >**#define UseWatchdog 0**
-   >**#define UseDHT 1**
-   >**#define UseDS18x20 1**
-   >**#define UseTeleInfo 0**
-   >**#define UseLCD16x2 0**	// 0 # None (Aucun) / 1 # LCD Standard 6 pins / 2 # LCD via I2C
-   >**#define UseHCSR04 0**
-   >**#define UsePwm_input 0**	// Code obsolete (sera supprimé) 
-   >**#define UseBMP180 0**		// pour BMP085/180 Barometric Pressure & Temp Sensor
-   >**#define UseServo 0**
-   >**#define UseWS2811 0**		// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel
+   >**#define DEBUGtoSERIAL 0**	// 0, ou 1 pour debug dans la console serie  
+   >**#define UseWatchdog 0**  
+   >**#define UseDHT 1**  
+   >**#define UseDS18x20 1**  
+   >**#define UseTeleInfo 0**  
+   >**#define UseLCD16x2 0**	// 0 # None (Aucun) / 1 # LCD Standard 6 pins / 2 # LCD via I2C  
+   >**#define UseHCSR04 0**  
+   >**#define UsePwm_input 0**	// Code obsolete (sera supprimé)   
+   >**#define UseBMP180 0**		// pour BMP085/180 Barometric Pressure & Temp Sensor  
+   >**#define UseServo 0**  
+   >**#define UseWS2811 0**		// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel  
 
-   >**#define UserSketch 0**		// _Vous permet d'inclure du sketch perso_
-   >_Tags pour rechercher (CTRL F) l'emplacement pour votre code :_
-   >_UserVars_
-   >_UserSetup_
-   >_UserLoop_
+   >**#define UserSketch 0**		// _Vous permet d'inclure du sketch perso_  
+   >_Tags pour rechercher (CTRL F) l'emplacement pour votre code :_  
+   >_UserVars_  
+   >_UserSetup_  
+   >_UserLoop_  
 
    Pour les sketchs ESP, il est en outre possible de laisser le système récupérer une adresse IP libre (DHCP)
    ou de la forcer si besoin.
@@ -408,7 +409,7 @@ Sketchs Personnels/Modifiables et Commandes Utilisateur
    >
    >**#define NODHCP 0**					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
 
-- **Sketchs et pins Utilisateur**
+- **Sketchs et pins Utilisateur**  
 Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqué dedans avec des exemples.
    > **[NOTE]**
    >
@@ -425,31 +426,31 @@ Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqu
       * Sortie Numérique (Sous-type : curseur) 
       * Sortie Numérique (Sous-type : message)
  
-![image401](../../doc/images/UserPins.png)
+![image401](../images/UserPins.png)
 
 Generic Types & App mobile
 ---
-Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l'app mobile liée.
+Les generic types sont un ajout de Jeedom pour le fonctionnement du plugin mobile et de l'app mobile liée.  
 Pour plus d'informations les concernant, veuillez-vous reportez à leurs documentations respectives.
 
-Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée), lors de la mise à jour, le plugin essaiera de les récupérer.
-Vous pouvez aussi utiliser le mode auto, dans lequel le plugin essaiera de trouver le generic type le plus adapté.
+Si vous avez des équipements Jeedouino pour lesquels vous aviez déja configuré des generic types (en configuration avancée), lors de la mise à jour, le plugin essaiera de les récupérer.  
+Vous pouvez aussi utiliser le mode auto, dans lequel le plugin essaiera de trouver le generic type le plus adapté.  
 Sinon vous pouvez choisir le generic type dans le plugin, et lors de la création des commandes le plugin s'adaptera si possible.
 
 > **[TIP]**
 >
->Par exemple, si vous choisissez une pin en _Sortie mise à LOW (HIGH générée aussi)_ et le generic type _LIGHT ON_ , alors le plugin générera les commandes (et vice-versa):
->Sortie mise à LOW avec _LIGHT ON_
->Sortie mise à HIGH avec _LIGHT OFF_
->Etat de la sortie avec _LIGHT STATE_
+>Par exemple, si vous choisissez une pin en _Sortie mise à LOW (HIGH générée aussi)_ et le generic type _LIGHT ON_ , alors le plugin générera les commandes (et vice-versa):  
+>Sortie mise à LOW avec _LIGHT ON_  
+>Sortie mise à HIGH avec _LIGHT OFF_  
+>Etat de la sortie avec _LIGHT STATE_  
 
-![image402](../../doc/images/gt.png)
+![image402](../images/gt.png)
 
 > **[NOTE]**
 >
->Si sur **un même équipement** vous avez beaucoup de commandes ainsi que beaucoup de generic type différents ( par ex. LIGHT, ENERGY, FLAP, SIREN, etc..) il est possible que l'app mobile ne vous les affichent pas tous, ou génére une erreur.
->Cela évoluera certainement avec les futures versions de celle-ci.
->_L'utilisation de **Groupes Virtuels** pour scinder les équipements est alors conseillée._ 
+>Si sur **un même équipement** vous avez beaucoup de commandes ainsi que beaucoup de generic type différents ( par ex. LIGHT, ENERGY, FLAP, SIREN, etc..) il est possible que l'app mobile ne vous les affichent pas tous, ou génére une erreur.  
+>Cela évoluera certainement avec les futures versions de celle-ci.  
+>_L'utilisation de **Groupes Virtuels** pour scinder les équipements est alors conseillée._   
 
 Groupes Virtuels
 ---
@@ -457,35 +458,35 @@ Groupes Virtuels
 
 Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.
 
-![image403](../../doc/images/configuration5.png)
+![image403](../images/configuration5.png)
 
 Il faut ensuite créer les équipements virtuels dont vous aurez besoin (avec le plugin Virtuel bien-sûr).
 
 Par la suite, lors de la configuration des pins dans vos équipements Jeedouino, il suffira d'indiquer pour chaque pin dans quel Virtuel, elle doit  être dupliquée.
 
-![image404](../../doc/images/jeedouino_screenshot4.png)
+![image404](../images/jeedouino_screenshot4.png)
 
 > **[TIP]**
 >
->**Un exemple pour bien comprendre :**
->Mettons que vous avez dans votre jardin en deux endroits : 
->Un NoneMCU avec une carte 8 relais qui commande 4 electrovannes, 2 éclairages et une pompe de bassin.
->Un Raspberry avec une carte 4 relais qui commande 2 electrovannes, 1 éclairage.
+>**Un exemple pour bien comprendre :**  
+>Mettons que vous avez dans votre jardin en deux endroits :   
+>Un NoneMCU avec une carte 8 relais qui commande 4 electrovannes, 2 éclairages et une pompe de bassin.  
+>Un Raspberry avec une carte 4 relais qui commande 2 electrovannes, 1 éclairage.  
 >  
->_Vous avez donc 2 équipements séparés mais avec des fonctionalitées similaires que vous aimeriez regrouper par fonction._
->Les virtuels de Jeedom sont là pour ça, mais il vous faut copier les commandes _manuellement_.
+>_Vous avez donc 2 équipements séparés mais avec des fonctionalitées similaires que vous aimeriez regrouper par fonction._  
+>Les virtuels de Jeedom sont là pour ça, mais il vous faut copier les commandes _manuellement_.  
 >Les groupes virtuels de Jeedouino vous permettent de les sélectionner d'un clic, et de laisser faire le plugin automatiquement.
->Dans cet exemple vous n'avez qu'à créer les virtuels : _Arrosage, Eclairage, Bassin._
->Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtuel, et vous sauvez.
+>Dans cet exemple vous n'avez qu'à créer les virtuels : _Arrosage, Eclairage, Bassin._  
+>Puis pour chaque pin de chaque équipement Jeedouino vous affectez le bon virtuel, et vous sauvez.  
 >_Il ne vous reste plus qu'à utiliser vos virtuels._
 
-![image405](../../doc/images/virtuels.png)
+![image405](../images/virtuels.png)
 
 Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ont changés de port de connection tout seuls.
 ---
-Cela est possible et normal.
-En effet, lors du démarrage, un démon essaye d'utiliser le port choisi a 2 reprises avec un délai d'attente d'environ 11s.
-Si au bout de ces 2 tentatives le port n'est toujours pas disponible, alors il essaie d'en trouver un de libre automatiquement.
+Cela est possible et normal.  
+En effet, lors du démarrage, un démon essaye d'utiliser le port choisi a 2 reprises avec un délai d'attente d'environ 11s.  
+Si au bout de ces 2 tentatives le port n'est toujours pas disponible, alors il essaie d'en trouver un de libre automatiquement.  
 Et s'il en trouve un, il l'utilise et met à jour l'équipement idoine.
 
 Les équipements avec démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont pas directement fonctionnels après un reboot.
@@ -494,7 +495,7 @@ Voir ci-dessous.
 
 Les démons  ne démarrent pas aprés un reboot ?
 ---
-Les démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont relancés **qu'environ 4 minutes** après le lancement de Jeedom.
+Les démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont relancés **qu'environ 4 minutes** après le lancement de Jeedom.  
 Cela permet d'essayer d'assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc...). 
 > **[NOTE]**
 Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
@@ -502,31 +503,31 @@ Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après l
 > **[TIP]**
 Une option **AutoReStart** permettant le redémarrage automatique des démons est présente sur la page de configuration du plugin (onglet Démons).
 
-![image406](../../doc/images/configuration2.png)
+![image406](../images/configuration2.png)
 
 Le plugin est-il compatible Docker ?
 ---
 A la base, non à cause de la configuration spécifique du Jeedom sous docker.
 
-Cependant une option, dans la page de configuration du plugin a été ajoutée pour pallier à cela.
+Cependant une option, dans la page de configuration du plugin a été ajoutée pour pallier à cela.  
 Il faut l'activer, et renseigner l'IP de l'hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).
 
-![image407](../../doc/images/docker1.png)
-Dans la configuration réseau de Jeedom, il faut désactiver la gestion du réseau par Jeedom
+![image407](../images/docker1.png)
+Dans la configuration réseau de Jeedom, il faut désactiver la gestion du réseau par Jeedom  
 ( Normalement c'est déja la cas, si votre installation docker fonctionne correctement).
 
-![image408](../../doc/images/docker2.png)
+![image408](../images/docker2.png)
 
 Que signifient LOW ou HIGH ?
 ---
-* Pour faire simple Low = 0 = Gnd, c'est donc la mise à l'état bas de la pin.
+* Pour faire simple Low = 0 = Gnd, c'est donc la mise à l'état bas de la pin.  
 * Pour faire simple High = 1 = Vcc , c'est donc la mise à l'état haut de la pin.
 
 Que signifient Pull_Up ou Pull_Down ?
 ---
 * Pour faire simple Pull_Up signifie qu'il y a une résistance (interne de tirage) entre la pin concernée et le Vcc du Microcontrôleur.  
 Cela permet de maintenir la pin à l'etat haut (=High=1=Vcc) et d'éviter des tensions parasites.  
-_Ce mode est souvent disponible, dans le cas contraire, il vous suffit de mettre vous même une résistance dans votre montage._
+_Ce mode est souvent disponible, dans le cas contraire, il vous suffit de mettre vous même une résistance dans votre montage._  
 * Pour faire simple Pull_Down signifie qu'il y a une résistance (interne de tirage) entre la pin concernée et le Gnd du Microcontrôleur.  
 Cela permet de maintenir la pin à l'etat bas (=Low=0=Gnd) et d'éviter des tensions parasites.  
 _Ce mode n'est pas souvent disponible, et dans ce cas, il vous suffit de mettre vous même une résistance dans votre montage._
@@ -544,8 +545,8 @@ Quelle est la configuration (détaillée) des pins possible ?
 >**Rappel** : Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
 > Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 
-- **Pins Entrées (Input):**
-   + **Analogiques**
+- **Pins Entrées (Input):**  
+   + **Analogiques**  
    Permet de brancher un capteur analogique.
    Exemples:
       * Capteur de distance IR
@@ -554,7 +555,7 @@ Quelle est la configuration (détaillée) des pins possible ?
       * Capteur rotatif analogique
       * Etc..
 
-   + **Numériques**
+   + **Numériques**  
    Permet de brancher un capteur numérique (qui renvoie un binaire 0 / 1 i.e low / high).
 
       > **[NOTE]**
@@ -569,13 +570,13 @@ Quelle est la configuration (détaillée) des pins possible ?
       >Il est possible d'initialiser le compteur a une valeur donnée.
       >Le bouton Reset sert a l'envoyer à la carte.
 
-      ![image409](../../doc/images/compteur.png)
+      ![image409](../images/compteur.png)
 
       + **Entrée Numérique en PULL-UP** (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
       + **Entrée Numérique Variable (0-255 sur 10s)** (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)
       + **HC-SR04 Echo** En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.
 
-      ![image410](../../doc/images/hc_sr04.png)
+      ![image410](../images/hc_sr04.png)
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos :_**
       + **Sonde DHT11,21,22** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
@@ -596,51 +597,51 @@ Quelle est la configuration (détaillée) des pins possible ?
 
       > **[NOTE]**
 	  >
-      >Permet d'avoir une commande dont la valeur est le nombre d'appuis détectés successivement.
+      >Permet d'avoir une commande dont la valeur est le nombre d'appuis détectés successivement.  
       >Pour un appui long la valeur sera de 99.
 
       > **[IMPORTANT]**
       >
-      >*Sur piGpio, le fonctionnement multitâche du système ne permet pas une fiabilité à 100% de la détection des appuis.*
+      >*Sur piGpio, le fonctionnement multitâche du système ne permet pas une fiabilité à 100% de la détection des appuis.*  
       >J'essaierai d'améliorer ce point-là mais sans garantie. Pour tests uniquements.
 
-- **Pins Sorties (output):**
-   + **Génériques**
-      **_Uniquement sur Arduino / ESP826x:_**
-      + **Envoi valeur au servo par slider** - permet de commander un servo avec une valeur entre 0 et 180 par ex.
-      + **Commande pour RGB LED Strip a base de WS2811** - Permet d'envoyer une valeur de couleur, ou de sélectionner parmi 17 effets.
+- **Pins Sorties (output):**  
+   + **Génériques**  
+      **_Uniquement sur Arduino / ESP826x:_**  
+      + **Envoi valeur au servo par slider** - permet de commander un servo avec une valeur entre 0 et 180 par ex.  
+      + **Commande pour RGB LED Strip a base de WS2811** - Permet d'envoyer une valeur de couleur, ou de sélectionner parmi 17 effets.  
       > **[IMPORTANT]**
 	  >
-      >**Attention un effet est bloquant**, il vaux mieux dédier un arduino/esp pour l'instant.
+      >**Attention un effet est bloquant**, il vaux mieux dédier un arduino/esp pour l'instant.  
       >Limité à un ruban led (strip) par arduino/esp pour l'instant.
 
       + **Envoi d'un message sur LCD16x2** - Permet d'envoyer un titre message (16 caractères chaque) sur un écran LCD 16x2. Standard / I2C
 
-      ![image411](../../doc/images/lcd.png)
+      ![image411](../images/lcd.png)
 
-   + **Numériques**
+   + **Numériques**  
    Permet d'actionner un récepteur numérique ( relais, led, etc ... )
    
       + **Inverser la sortie (Switch)**.  Permet de mettre la sortie a LOW (=0) si elle est a HIGH (=1), et vice-versa. SANS connaître l'état précédent.
-         Pratique pour changer l'état d'une led (clignotement).
-         Actionner un relais comme un interrupteur (un coup, j'allume, un coup j'éteints.)
+         Pratique pour changer l'état d'une led (clignotement).  
+         Actionner un relais comme un interrupteur (un coup, j'allume, un coup j'éteints.)  
       + **Sortie mise à LOW (HIGH générée aussi)**.  Permet d'avoir 2 commandes pour mettre la sortie a LOW (=0) ou a HIGH (=1).
-         Pratique pour forcer l'état d'une sortie dans un scénario par ex.
-      + **Sortie mise à LOW/HIGH avec temporisation (minuterie)**.  Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.
+         Pratique pour forcer l'état d'une sortie dans un scénario par ex.  
+      + **Sortie mise à LOW/HIGH avec temporisation (minuterie)**.  Permet de mettre la sortie a LOW (=0) ou a HIGH (=1) pendant une durée limitée.  
 	  + **Sortie mise à LOW/HIGH avec temporisation (minuterie) avec slider**.  idem que précédent, avec tempo paramétrable, utile pour un scénario par ex.
       > **[NOTE]**
 	  >
       >Durée exprimée en dixième de secondes et 5 chiffres max. Soit de 0.1s a 9999.9s (env 166 minutes).  
       >*Une commande opposée (sans temporisation) est aussi créée afin de pouvoir stopper (plus tôt) la commande temporisée pré-citée (Stop Volets par ex.).*
 	  >  
-      >Pratique pour actionner une lumiere x minutes/secondes.
-      >Actionner un relais moins d'une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).
-      >Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).
-      >Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s). 
+      >Pratique pour actionner une lumiere x minutes/secondes.  
+      >Actionner un relais moins d'une seconde pour commander un contact sec / télérupteur (ex: 00007 pour 0,7s).  
+      >Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).  
+      >Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s).  
 
       + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
 
-   + **Numériques/pseudo-Analogiques**
+   + **Numériques/pseudo-Analogiques**  
       + **Sortie PWM**, Permet de régler l'intensité d'un ruban led compatible par ex.
 
 

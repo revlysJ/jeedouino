@@ -1,6 +1,3 @@
-Changelog
-=========
-
 Changelog Github : https://github.com/revlysJ/jeedouino/commits/master
 
 13/01/2018 v1.02

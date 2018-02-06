@@ -206,13 +206,13 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
 
    > **[WARNING]**
    > 
-   > Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé.
-   > _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._
+   > Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé.  
+   > _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._  
    > Le port doit aussi être différent de celui du Jeedom hôte.
 
    > **[TIP]**
    > 
-   > _Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom._  
+   > _Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom._   
    > Vous pouvez aussi utiliser _local_ ou _localhost_ pour l'adresse IP du Jeedom principal (maître).
 
 ![image206](../images/listeIP.png)
@@ -225,8 +225,8 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
 
    > **[WARNING]**
    > 
-   > Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé.
-   > _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._
+   > Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé.  
+   > _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._  
    > Le port doit aussi être différent de celui du Jeedom hôte.
 
 * **Sketch** : Dans le cas d'une carte Arduino ou ESP8266, le sketch pour celle-ci est proposé au téléchargement aprés une première sauvegarde de l'équipement.
@@ -234,7 +234,7 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
 
    > **[NOTE]**
    > 
-   > Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tenant compte de l'adresse IP choisie, du port choisi, et d'une adresse mac unique. 
+   > Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tenant compte de l'adresse IP choisie, du port choisi, et d'une adresse mac unique.   
    > _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._
 
    > **[TIP]**
@@ -246,7 +246,7 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
    > **[NOTE]**
    > 
    > Pour les modèles WiFi (ESP8266), il est spécifiquement généré, en tenant compte du port, du SSID, et du mot de passe wifi, l'adresse IP étant renvoyée par la carte.  
-   > _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._
+   > _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._  
    > _NB. Il faut tout de même renseigner l'adressse IP la premiére fois._
 
    > **[WARNING]**
@@ -260,7 +260,7 @@ Configuration des pins
 
 * **Modal Paramétrages / affectation des pins**
 
-   Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action). 
+   Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).   
    **_NB : Des compléments d'informations sont disponibles dans la FAQ._**
 
    * Entrées: Analogiques, Digitales, Compteur d'impulsions
@@ -270,7 +270,7 @@ Configuration des pins
 
    > **[IMPORTANT]**
    > 
-   > **_Les Pins seront configurables uniquement après une première sauvegarde de votre équipement._**
+   > **_Les Pins seront configurables uniquement après une première sauvegarde de votre équipement._**  
    > Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l'équipement générera toutes les commandes nécéssaires.
 
    > **[NOTE]**
@@ -304,8 +304,8 @@ Commandes
 ---
 
 ![image213](../images/jeedouino_screenshot5.png)
-* **Sauvegarde de l'équipement** :
-   Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.
+* **Sauvegarde de l'équipement** :  
+   Les commandes sont générées automatiquement, le démon est démarré si nécéssaire, la configuration des pins est envoyée à la carte ( Arduino, RPI, PiFace ) ainsi que quelques autres paramêtres.  
    Ainsi, la roue crantée tournante peut rester affichée un bon moment. Il ne faut donc pas s'en inquièter.
 
 * Les commandes sont créées automatiquement lors de la sauvegarde de l'équipement.

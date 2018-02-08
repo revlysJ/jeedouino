@@ -58,7 +58,7 @@ $cpl = jeedouino::GetJeedomComplement();
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Santé}}</center></span>
 			</div>
 			<div class="cursor eqLogicAction" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
-				<a target="_blank" style="text-decoration: none!important;" href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html">
+				<a target="_blank" style="text-decoration: none!important;" href="https://revlysj.github.io/jeedouino/fr_FR/">
 				<center>
 					<i class="fa fa-book" style="font-size : 7em;color:#00979C;"></i>
 				</center>
@@ -75,13 +75,13 @@ $cpl = jeedouino::GetJeedomComplement();
 			$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 			echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
 			echo "<center>";
-			if (file_exists(dirname(__FILE__) . '/../../doc/images/jeedouino_'.$ModeleArduino.'.png'))
+			if (file_exists(dirname(__FILE__) . '/../../docs/images/jeedouino_'.$ModeleArduino.'.png'))
 			{
-				echo '<img class="lazy" src="plugins/jeedouino/doc/images/jeedouino_'.$ModeleArduino.'.png" height="105" width="95" />';
+				echo '<img class="lazy" src="plugins/jeedouino/docs/images/jeedouino_'.$ModeleArduino.'.png" height="105" width="95" />';
 			}
 			else
 			{
-				echo '<img class="lazy" src="plugins/jeedouino/doc/images/jeedouino_icon.png" height="105" width="95" />';
+				echo '<img class="lazy" src="plugins/jeedouino/docs/images/jeedouino_icon.png" height="105" width="95" />';
 			}
 			echo "</center>";
 			echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
@@ -103,7 +103,7 @@ $cpl = jeedouino::GetJeedomComplement();
 			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fa fa-wrench"></i> </a>
 			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i> </a>
 			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i> </a>
-			<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
+			<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
 	      </div>
 
 		<ul class="nav nav-tabs" role="tablist">

@@ -1,5 +1,10 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+08/02/2018 v1.02
+---
+
+- Test nouvelle présentation de la doc (charte Jeedom).
+
 13/01/2018 v1.02
 ---
 

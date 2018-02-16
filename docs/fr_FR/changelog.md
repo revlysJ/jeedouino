@@ -1,5 +1,10 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+16/02/2018 v1.02
+---
+
+- Correction de l'envoi des pins utilisateur aux sketchs
+
 08/02/2018 v1.02
 ---
 

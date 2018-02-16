@@ -571,7 +571,8 @@ class jeedouino extends eqLogic {
 			$PinMode='';
  			foreach ($Arduino_pins as $pins_id => $pin_datas)
 			{
-				$myPin=config::byKey($arduino_id.'_'. $pins_id, 'jeedouino', 'not_used');
+				if ( $pins_id >= 500 ) continue;
+				$myPin = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
 				switch ($myPin)
 				{
 					// dispo : y

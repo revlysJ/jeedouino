@@ -648,6 +648,7 @@ Pins Sorties (output)
 
       + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
 
+
    + **Numériques/pseudo-Analogiques**  
       + **Sortie PWM**, Permet de régler l'intensité d'un ruban led compatible par ex.
 

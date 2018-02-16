@@ -27,8 +27,8 @@ Installation et mise à jour du plugin
 > Un reboot peut même être nécéssaire dans certains cas.  
 > Il suffit de suivre les logs des dépendances pour surveiller la progression.   
 
-- Installation du plugin
-
+Installation du plugin
+---
    Après téléchargement du plugin sur votre Jeedom maître, il vous faut activer celui-ci.
    Si vous souhaitez uniquement utiliser des cartes Arduino avec shield réseau, il n'y a rien de plus a faire.
    De même si vous n'avez qu'un Jeedom.
@@ -106,9 +106,9 @@ De même, un bouton est présent pour celles des cartes PiFace.
 >
 > Les paquets pifacecommon et pifacedigitalio pour la carte PiFace ne sont pas dispo sur le dépôt stretch.  
 > Il faut donc installer les packages via pip  
-> <https://www.raspberrypi.org/forums/viewtopic.php?t194332>
+> <https://www.raspberrypi.org/forums/viewtopic.php?t194332>  
 > il faut aussi modifier la vitesse du bus SPI dans spi.py  
-> <https://www.raspberrypi.org/forums/viewtopic.php?t196248p1228166>
+> <https://www.raspberrypi.org/forums/viewtopic.php?t196248p1228166>  
 > Merci à *@joopa* pour la résolution de ce problème.  
 > <https://www.jeedom.com/forum/viewtopic.php?f133&t14056&p568991p565395>
 
@@ -155,7 +155,7 @@ Ils seront affichés avec un raccourci direct vers l'équipement, leur Jeedom h�
 
 Onglet : Sketchs pour vos équipements Arduino et ESP8266 (ex: NodeMCU / Wemos / Sonoff / Electrodragon)
 ---
-Les Arduinos et Esp8266 en réseau wifi n'ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.
+Les Arduinos et Esp8266 en réseau wifi n'ayant pas besoin de démon, vous trouverez ici les sketchs pour ceux-ci.  
 Uniquement ceux des équipements créés.
 
 ![image105](../images/configuration3.png)
@@ -328,9 +328,9 @@ Il n'est pour l'instant pas prévu de pouvoir ajouter des commandes manuellement
 
 > **[TIP]**
 > 
-> Pour les commandes info de type 'compteur', elles sont remises a la valeur stockée dans l'équipement à chaque sauvegarde de celui-ci.
-> A l'inverse, après un reboot de l'arduino (par ex.), la derniére valeur est recupérée auprès du Jeedom maître.
-> Si une erreur de communication survient a ce moment la, le compteur sera réinitialisé à zéro. 
+> Pour les commandes info de type 'compteur', elles sont remises a la valeur stockée dans l'équipement à chaque sauvegarde de celui-ci.  
+> A l'inverse, après un reboot de l'arduino (par ex.), la derniére valeur est recupérée auprès du Jeedom maître.  
+> Si une erreur de communication survient a ce moment la, le compteur sera réinitialisé à zéro.   
 > Sur Arduino/ESP / NodeMCU / Wemos, il est possible de les ré-initialiser à une valeur spécifique, une option "reset" est présente sur la commande de l'équipement concerné.
 
 Widgets
@@ -354,6 +354,7 @@ Le plugin indique Ok si tous les démons et dépendances sont fonctionnels.
 Il est possible d'ouvrir la page de configuration du plugin directement en cliquant sur Jeedouino.
 
 ![image301](../images/sante1.png)
+
 Il est possible de voir les états des équipements directement en cliquant sur l'icone à droite de Jeedouino. 
 
 Etats des équipements du plugin
@@ -371,7 +372,6 @@ Les dates de dernières communications sont colorisées:
 * Rouges au-delà de 24h.
 
 > N.B. Un équipement grisé est un équipement désactivé.
-
 
 
 FAQ
@@ -454,7 +454,8 @@ Sinon vous pouvez choisir le generic type dans le plugin, et lors de la créatio
 
 Groupes Virtuels
 ---
-**Pré-requis : avoir le plugin Virtuel installé et activé.**
+
+> **Pré-requis : avoir le plugin Virtuel installé et activé.**
 
 Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.
 
@@ -495,13 +496,13 @@ Voir ci-dessous.
 
 Les démons  ne démarrent pas aprés un reboot ?
 ---
-Les démons ( piGPIO, piFace, piPlus/MCP23017, ArduinoUSB ) ne sont relancés **qu'environ 4 minutes** après le lancement de Jeedom.  
+Les démons ne sont relancés **qu'environ 4 minutes** après le lancement de Jeedom.  
 Cela permet d'essayer d'assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc...). 
-> **[NOTE]**
-Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
+> **[NOTE]**  
+> Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
 
-> **[TIP]**
-Une option **AutoReStart** permettant le redémarrage automatique des démons est présente sur la page de configuration du plugin (onglet Démons).
+> **[TIP]**  
+> Une option **AutoReStart** permettant le redémarrage automatique des démons est présente sur la page de configuration du plugin (onglet Démons).
 
 ![image406](../images/configuration2.png)
 
@@ -513,6 +514,7 @@ Cependant une option, dans la page de configuration du plugin a été ajoutée p
 Il faut l'activer, et renseigner l'IP de l'hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).
 
 ![image407](../images/docker1.png)
+
 Dans la configuration réseau de Jeedom, il faut désactiver la gestion du réseau par Jeedom  
 ( Normalement c'est déja la cas, si votre installation docker fonctionne correctement).
 
@@ -532,9 +534,12 @@ _Ce mode est souvent disponible, dans le cas contraire, il vous suffit de mettre
 Cela permet de maintenir la pin à l'etat bas (=Low=0=Gnd) et d'éviter des tensions parasites.  
 _Ce mode n'est pas souvent disponible, et dans ce cas, il vous suffit de mettre vous même une résistance dans votre montage._
 
-Quelle est la configuration (détaillée) des pins possible ?
+Configuration détaillée des pins
+================================
+
+Configuration des pins 
 ---
-* **Configuration des pins** : Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).
+Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).
 
 > **[IMPORTANT]**
 > 
@@ -542,10 +547,11 @@ Quelle est la configuration (détaillée) des pins possible ?
 
 > **[NOTE]**
 > 
->**Rappel** : Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
+>**Rappel** : Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.  
 > Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 
-- **Pins Entrées (Input):**  
+Pins Entrées (Input)
+---
    + **Analogiques**  
    Permet de brancher un capteur analogique.
    Exemples:
@@ -605,7 +611,8 @@ Quelle est la configuration (détaillée) des pins possible ?
       >*Sur piGpio, le fonctionnement multitâche du système ne permet pas une fiabilité à 100% de la détection des appuis.*  
       >J'essaierai d'améliorer ce point-là mais sans garantie. Pour tests uniquements.
 
-- **Pins Sorties (output):**  
+Pins Sorties (output)
+---
    + **Génériques**  
       **_Uniquement sur Arduino / ESP826x:_**  
       + **Envoi valeur au servo par slider** - permet de commander un servo avec une valeur entre 0 et 180 par ex.  
@@ -641,6 +648,7 @@ Quelle est la configuration (détaillée) des pins possible ?
 
       + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
 
+
    + **Numériques/pseudo-Analogiques**  
       + **Sortie PWM**, Permet de régler l'intensité d'un ruban led compatible par ex.
 
@@ -648,4 +656,4 @@ Quelle est la configuration (détaillée) des pins possible ?
 
 Changelog
 =========
-[Changelog](changelog.md)
+Lien vers le [Changelog](changelog.md)

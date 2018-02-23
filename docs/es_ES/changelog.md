@@ -1,9 +1,11 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
-16/02/2018 v1.02
+17/02/2018 v1.03
 ---
 
-- Correction de l'envoi des pins utilisateur aux sketchs
+- Mise à jour de la lib IOPi pour les cartes PiPlus/MCP23017 et du démon PiPlus.
+- Léger correctif des logs du plugin.
+- Correction de l'envoi des pins utilisateur aux sketchs.
 
 08/02/2018 v1.02
 ---

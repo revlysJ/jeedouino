@@ -1,5 +1,5 @@
 """
-JEEDOUINO IO Pi Plus DEMON v0.6 Dec2015-Novembre 2016
+JEEDOUINO IO Pi Plus DEMON v0.7 2015-2018
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -10,8 +10,9 @@ import threading
 import time
 import sys
 import httplib
-from ABE_helpers import ABEHelpers
-from ABE_IoPi import IoPi
+#from ABE_helpers import ABEHelpers
+#from ABE_IoPi import IoPi
+from IOPi import IOPi
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -19,7 +20,7 @@ port = 8000
 portusb = ''
 JeedomIP=''
 eqLogic=''
-boardId=0
+boardId=32
 JeedomPort=80
 JeedomCPL=''
 BootMode = 0
@@ -229,7 +230,7 @@ class myThread1 (threading.Thread):
 				if 'SetAllPulseLOW' in query:
 					RepStr = '&REP=SOK'
 					q = query.index("tempo")
-					for i in range(0,40):
+					for i in range(0,16):
 						j=i+1
 						if Status_pins[i]=='o' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
 							swtch[j]=0
@@ -241,7 +242,7 @@ class myThread1 (threading.Thread):
 				if 'SetAllPulseHIGH' in query:
 					RepStr = '&REP=SOK'
 					q = query.index("tempo")
-					for i in range(0,40):
+					for i in range(0,16):
 						j=i+1
 						if Status_pins[i]=='o' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
 							swtch[j]=1
@@ -335,7 +336,7 @@ class myThread2 (threading.Thread):
 
 			if SetAllSWITCH==1:
 				pinStr = '&REP=SOK'
-				for i in range(0,40):
+				for i in range(0,16):
 					j=i+1
 					if Status_pins[i]=='o' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
 						if swtch[j]==0:
@@ -405,9 +406,10 @@ if __name__ == "__main__":
 	sendCPT=0
 
 	# set up IOPi Plus
-	i2c_helper = ABEHelpers()
-	i2c_bus = i2c_helper.get_smbus()
-	bus = IoPi(i2c_bus, boardId)
+	#i2c_helper = ABEHelpers()
+	#i2c_bus = i2c_helper.get_smbus()
+	#bus = IoPi(i2c_bus, boardId)
+	bus = IOPi(boardId)
 
 	# Toutes les entrees en impulsion
 	# Init du Compteur  d'Impulsion

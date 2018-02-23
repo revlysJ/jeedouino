@@ -1,14 +1,14 @@
 Description
 ===========
-- **Jeedouino v1.02**  
+- **Jeedouino v1.03**  
 
    Ce plugin vous permet de contrôler de différentes manières les pins entrées/sorties des cartes suivantes :
 
    * Arduinos (différents modèles) branchés en USB sur *Raspberry PI*.
    * Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, W5500, ENC28J60) sur votre réseau.
-   * les ESP8266 (wifi) ex:
-     NodeMCU , Wemos, etc.
-     SONOFF 4CH & POW, ELECTRODRAGON 2CH.
+   * les ESP8266 (wifi) ex:  
+     NodeMCU , Wemos, etc.  
+     SONOFF 4CH & POW, ELECTRODRAGON 2CH.  
    * les GPIO du *Raspberry PI*.
    * les cartes PiFace sur *Raspberry PI*.
    * les cartes IO PiPlus et les MCP23017 sur *Raspberry PI*.
@@ -647,8 +647,8 @@ Pins Sorties (output)
       >Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s).  
 
       + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
-
-
+  
+  
    + **Numériques/pseudo-Analogiques**  
       + **Sortie PWM**, Permet de régler l'intensité d'un ruban led compatible par ex.
 

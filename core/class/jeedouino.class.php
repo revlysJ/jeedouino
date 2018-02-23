@@ -1145,7 +1145,7 @@ class jeedouino extends eqLogic {
 
 		$my_Board = eqLogic::byid($board_id);
 		$name = $my_Board->getName();
-		$IPBoard = $my_Board->getConfiguration('iparduino');
+		$IPBoard = trim($my_Board->getConfiguration('iparduino'));
 		$ipPort = $my_Board->getConfiguration('ipPort');
 		if ($DemonTypeF == 'USB' ) $ipPort = $my_Board->getConfiguration('PortDemon');
 
@@ -1156,19 +1156,32 @@ class jeedouino extends eqLogic {
 		$fp = false;
 		//jeedouino::log( 'debug', ' $IPBoard = ' . $IPBoard);
 		//jeedouino::log( 'debug', ' $_IpLocale = ' . config::byKey($board_id . '_IpLocale', 'jeedouino', 1));
-		
+		$IPJeedom = self::GetJeedomIP();
 		if (config::byKey($board_id . '_IpLocale', 'jeedouino', 1)) // Adresse IP locale pour le démon différente de celle de jeedom ?
-		{
-			$IPJeedom = self::GetJeedomIP();
+		{			
 			if ($IPJeedom != $IPBoard)
 			{
+				if ($IPBoard == '') $IPBoard = ' non definie ';
 				event::add('jeedom::alert', array(
 					'level' => 'danger',
 					'page' => 'jeedouino',
 					'message' => __('Attention l\'IP (' . $IPBoard . ') du démon local ' . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . ') et de Jeedom (' . $IPJeedom . ') diffèrent. Veuillez vérifier.' , __FILE__)
 					));
 				jeedouino::log('error', 'Attention l\'IP (' . $IPBoard . ') du démon local ' . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . ') et de Jeedom (' . $IPJeedom . ') diffèrent. Veuillez vérifier. ');
-				$IPBoard =  $IPJeedom;
+				$IPBoard = $IPJeedom;
+			}
+		}
+		else
+		{
+			if ($IPBoard == '')
+			{
+				event::add('jeedom::alert', array(
+					'level' => 'danger',
+					'page' => 'jeedouino',
+					'message' => __('Attention l\'IP du démon ' . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . ') n\'est pas définie. Veuillez vérifier.' , __FILE__)
+					));
+				jeedouino::log('error', 'Attention l\'IP du démon ' . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . ') n\'est pas définie. Veuillez vérifier. ');
+				$IPBoard = $IPJeedom;
 			}
 		}
 		$fp = @fsockopen($IPBoard, $ipPort, $errno, $errstr, 3);
@@ -1812,20 +1825,27 @@ class jeedouino extends eqLogic {
 
 		if ($this->getIsEnable() == 0)
 		{
-			list(, $board, $usb) = self::GetPinsByBoard($arduino_id);
-			switch ($board)
+			$IPBoard = trim($this->getConfiguration('iparduino'));
+			$AlreadyKilled = config::byKey($arduino_id . '_AlreadyKilled', 'jeedouino', false);
+			
+			if ($IPBoard != '' and filter_var( $IPBoard , FILTER_VALIDATE_IP) !== false and $AlreadyKilled == false)
 			{
-				case 'arduino':
-					if ($usb)
-					{
+				list(, $board, $usb) = self::GetPinsByBoard($arduino_id);
+				switch ($board)
+				{
+					case 'arduino':
+						if ($usb)
+						{
+							self::StopBoardDemon($arduino_id, 0, $board);
+						}
+						break;
+					case 'piface':
+					case 'piplus':
+					case 'gpio':
 						self::StopBoardDemon($arduino_id, 0, $board);
-					}
-					break;
-				case 'piface':
-				case 'piplus':
-				case 'gpio':
-					self::StopBoardDemon($arduino_id, 0, $board);
-					break;
+						break;
+				}
+				config::save($arduino_id . '_AlreadyKilled', true, 'jeedouino');
 			}
 			// Equipement désactivé, pas la peine de regénérer les commandes et d'envoyer la config des pins aux cartes/démons
 			jeedouino::log( 'debug','L\'équipement ID '.$this->getId().' est désactivé. Pas la peine de continuer.');

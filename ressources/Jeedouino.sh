@@ -41,20 +41,30 @@ echo "Installation dependance python-dev-openssl"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install build-essential python-dev python-openssl
 
-echo 60 > /tmp/dependances_jeedouino_en_cours
+echo 50 > /tmp/dependances_jeedouino_en_cours
 echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance git"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install git
 
-echo 70 > /tmp/dependances_jeedouino_en_cours
+echo 60 > /tmp/dependances_jeedouino_en_cours
 echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance Adafruit_Python_DHT"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 cd Adafruit_Python_DHT
+sudo python setup.py install
+cd ..
+
+echo 70 > /tmp/dependances_jeedouino_en_cours
+echo "-"
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "Installation dependance AB Electronics Python Libraries"
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+git clone https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
+cd ABElectronics_Python_Libraries
 sudo python setup.py install
 cd ..
 

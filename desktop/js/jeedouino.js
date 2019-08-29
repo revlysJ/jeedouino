@@ -160,6 +160,9 @@ $('.eqLogicAction[data-action=bt_healthSpecific]').on('click', function () {
   $('#md_modal').dialog({title: "{{Santé Jeedouino}}"});
   $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=health').dialog('open');
 });
+$('.eqLogicAction[data-action=bt_docSpecific]').on('click', function () {
+  window.open('https://revlysj.github.io/jeedouino/fr_FR/');
+});
 $('.bt_plugin_view_log').on('click',function(){
  if($('#md_modal').is(':visible')){
    $('#md_modal2').dialog({title: "{{Logs de Jeedouino}}"});

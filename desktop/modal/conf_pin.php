@@ -259,7 +259,7 @@ if (isset($_GET['id']))
 				if (method_exists('virtual', 'copyFromEqLogic'))
 				{
 					$Virtuels = '';
-					foreach (object::all() as $object)
+					foreach (jeeObject::all() as $object)
 					{
 						$options = '';
 						foreach (eqLogic::byType('virtual', true) as $eqLogic)

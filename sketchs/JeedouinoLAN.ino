@@ -242,7 +242,7 @@ void setup()
 		lcd.print(F("JEEDOUINO v097+"));
 	#endif
 	#if (UseLCD16x2 == 2)
-		lcd.init();
+		lcd.begin();
 		lcd.backlight();
 		lcd.home();
 		lcd.print(F("JEEDOUINO v097+"));
@@ -251,10 +251,10 @@ void setup()
 	#if (UseBMP180 == 1)
 		bmp.begin();
 	#endif
-	
+
 	#if (UseWS2811 == 1)
 		strip.begin();
-		strip.show(); 
+		strip.show();
 	#endif
 
 	#if (UserSketch == 1)
@@ -599,16 +599,16 @@ void loop()
 							Serial.print(F("\B: "));
 							Serial.println(b);
 						#endif
-						for(uint16_t z = 0; z < strip.numPixels(); z++) 
+						for(uint16_t z = 0; z < strip.numPixels(); z++)
 						{
 							strip.setPixelColor(z, r, b, g);
 						}
 						strip.show();
 					}
 				}
-				else client.print(F("NOK"));	// On reponds a JEEDOM 
+				else client.print(F("NOK"));	// On reponds a JEEDOM
 			}
-		#endif		
+		#endif
 		#if (UserSketch == 1)
 			else if (c[0]=='U' && c[n]=='R')	// UseR Action
 			{
@@ -856,6 +856,12 @@ void loop()
 
 		}
 	}
+
+	#if (UserSketch == 1)
+		UserLoop(); // Appel de votre loop() permanent
+		// if (NextRefresh<millis()) UserLoop(); // Appel de votre loop() toutes les 60s
+	#endif
+
 	if (NextRefresh<millis())
 	{
 		NextRefresh=millis()+60000;	// Refresh auto toutes les 60s
@@ -864,11 +870,6 @@ void loop()
 			jeedom += F("&ASK=1"); // Sinon on redemande
 		}
 	}
-
-	#if (UserSketch == 1)
-		UserLoop(); // Appel de votre loop() permanent
-		// if (NextRefresh<millis()) UserLoop(); // Appel de votre loop() toutes les 60s
-	#endif
 
 /* 	#if (UseLCD16x2 == 1 || UseLCD16x2 == 2)
 		lcd.setCursor(0,1);
@@ -1013,7 +1014,7 @@ void Set_OutputPin(int i)
 	switch (Status_pins[i])
 	{
 		#if (UseServo == 1)
-		case 'x': 
+		case 'x':
 			pinTempo = 100 * int(c[3]) + 10 * int(c[4]) + int(c[5]);
 			myServo[i].write(pinTempo);
 			delay(15);
@@ -1183,7 +1184,7 @@ void Load_EEPROM(int k)
 				break;
 			#endif
 			#if (UseServo == 1)
-			case 'x': 
+			case 'x':
 				myServo[i].attach(i);
 				break;
 			#endif
@@ -1486,7 +1487,7 @@ void startShow(int i) {
 						break;
 		case 14: theaterChase(strip.Color(0, 127, 127), 50); // Cyan
 						break;
-						
+
 		case 15: rainbow(20);
 						break;
 		case 16: rainbowCycle(20);

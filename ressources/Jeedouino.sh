@@ -83,7 +83,7 @@ echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Corrections droits"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-cd $(pwd)/../../plugins/jeedouino/ressources/
+cd /var/www/html/plugins/jeedouino/ressources/
 sudo chmod 755 DS18B20Scan
 cd
 

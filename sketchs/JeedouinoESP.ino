@@ -162,6 +162,7 @@ unsigned long TempoPinHIGH[NB_TOTALPIN ]; // pour tempo pins sorties HIGH
 unsigned long TempoPinLOW[NB_TOTALPIN ]; // pour tempo pins sorties LOW
 unsigned long pinTempo = 0;
 unsigned long NextRefresh = 0;
+unsigned long ConnectRefresh = millis() + 60000;
 unsigned long ProbeNextSend = millis();
 unsigned long timeout = 0;
 char myIpString[24];
@@ -245,16 +246,8 @@ void setup()
 		WiFi.config(IP_ARDUINO, GATEWAY, SUBNET);
 	#endif
 
-	WiFi.enableAP(0);
-	WiFi.begin(ssid, password);
+	WIFI_Connect();
 
-	while (WiFi.status() != WL_CONNECTED)
-	{
-		delay(500);
-		#if (DEBUGtoSERIAL == 1)
-			Serial.print(".");
-		#endif
-	}
 	server.begin();
 	Load_EEPROM(1);
 
@@ -285,7 +278,7 @@ void setup()
 		lcd.print(F("JEEDOUINO v097+"));
 	#endif
 	#if (UseLCD16x2 == 2)
-		lcd.init();
+		lcd.begin();
 		lcd.backlight();
 		lcd.home();
 		lcd.print(F("JEEDOUINO v097+"));
@@ -323,12 +316,12 @@ void setup()
 	#if (UseBMP180 == 1)
 		bmp.begin();
 	#endif
-	
+
 	#if (UseWS2811 == 1)
 		strip.begin();
-		strip.show(); 
+		strip.show();
 	#endif
-	
+
 	#if (UserSketch == 1)
 		UserSetup(); // Appel de votre setup()
 	#endif
@@ -345,6 +338,18 @@ void setup()
 
 void loop()
 {
+	// Verification de la connectivite WiFi
+	if (ConnectRefresh < millis())
+	{
+		ConnectRefresh = millis() + 60000; // test toutes les minutes env.
+		if (WiFi.status() != WL_CONNECTED)
+		{
+			#if (DEBUGtoSERIAL == 1)
+				Serial.println(F("\nConnection WiFi perdue. Essai de re-connection."));
+			#endif
+			WIFI_Connect();
+		}
+	}
 	// TRAITEMENT DES TEMPO SORTIES SI IL Y EN A
 	jeedom="";
 		for (int i = 2; i < NB_TOTALPIN; i++)
@@ -675,16 +680,16 @@ void loop()
 							Serial.print(F("\B: "));
 							Serial.println(b);
 						#endif
-						for(uint16_t z = 0; z < strip.numPixels(); z++) 
+						for(uint16_t z = 0; z < strip.numPixels(); z++)
 						{
 							strip.setPixelColor(z, r, b, g);
 						}
 						strip.show();
 					}
 				}
-				else client.print(F("NOK"));	// On reponds a JEEDOM 
+				else client.print(F("NOK"));	// On reponds a JEEDOM
 			}
-		#endif	
+		#endif
 		#if (UserSketch == 1)
 			else if (c[0]=='U' && c[n]=='R')	// User Action
 			{
@@ -1020,6 +1025,20 @@ void loop()
 #endif
 
 // FONCTIONS
+void WIFI_Connect()
+{
+	WiFi.disconnect();	// Not sure
+	WiFi.enableAP(0);
+	WiFi.begin(ssid, password);
+
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		delay(500);
+		#if (DEBUGtoSERIAL == 1)
+			Serial.print(".");
+		#endif
+	}
+}
 
 void SendToJeedom()
 {
@@ -1082,7 +1101,7 @@ void Set_OutputPin(int i)
 	switch (Status_pins[i])
 	{
 		#if (UseServo == 1)
-		case 'x': 
+		case 'x':
 			pinTempo = 100 * int(c[3]) + 10 * int(c[4]) + int(c[5]);
 			myServo[i].write(pinTempo);
 			delay(15);
@@ -1256,7 +1275,7 @@ void Load_EEPROM(int k)
 				break;
 		#endif
 			#if (UseServo == 1)
-			case 'x': 
+			case 'x':
 				myServo[i].attach(i);
 				break;
 			#endif
@@ -1571,7 +1590,7 @@ void startShow(int i) {
 						break;
 		case 14: theaterChase(strip.Color(0, 127, 127), 50); // Cyan
 						break;
-						
+
 		case 15: rainbow(20);
 						break;
 		case 16: rainbowCycle(20);

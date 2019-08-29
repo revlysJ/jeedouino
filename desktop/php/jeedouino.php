@@ -7,19 +7,56 @@ $eqLogics = eqLogic::byType('jeedouino');
 
 $cpl = jeedouino::GetJeedomComplement();
 //include_file('desktop', 'jeedouino', 'css', 'jeedouino');
+//
+$eqLogicsHTML = "";
+$eqLogicsCTRL = "";
+foreach ($eqLogics as $eqLogic)
+{
+    $ModeleArduino = $eqLogic->getConfiguration('arduino_board');
+    $icon = 'lan';
+    switch(substr($ModeleArduino, 0, 1))
+    {
+        case 'a':
+            if ($eqLogic->getConfiguration('datasource') == 'usbarduino') $icon = 'usb';
+            break;
+        case 'e':
+            $icon = 'wifi';
+    }
+    $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
+    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+    $HTML .= '<img style="cursor: pointer;all:initial!important;width:29px;height:29px;" src="plugins/jeedouino/icons/' . $icon . '.png" />';
+    $HTML .= "<center>";
+    if (file_exists(dirname(__FILE__) . '/../../icons/jeedouino_'.$ModeleArduino.'.png'))
+    {
+        $HTML .= '<img class="lazy" src="plugins/jeedouino/icons/jeedouino_'.$ModeleArduino.'.png" height="105" width="95" />';
+    }
+    else
+    {
+        $HTML .= '<img class="lazy" src="plugins/jeedouino/icons/jeedouino_icon.png" height="105" width="95" />';
+    }
+    $HTML .= "</center>";
+    $HTML .= '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+    $HTML .= '</div>';
+    if ($ModeleArduino == 'JeedouinoControl')
+    {
+        $eqLogicsCTRL .= $HTML;
+    }
+    else
+    {
+        $eqLogicsHTML .= $HTML;
+    }
+}
 ?>
 
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
-                <a class="btn btn-warning " style="width : 100%;margin-top : 5px;margin-bottom: 5px;" href="<?php echo $cpl; ?>/index.php?v=d&p=plugin&id=jeedouino">
-                    <i class="fa fa-cogs"></i> {{Config. du plugin}}
-                </a>
-                <a class="btn btn-warning bt_plugin_view_log " style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-slaveid="-1" data-log="jeedouino">
-                    <i class="fa fa-comment"></i> {{Logs du plugin}}
-                </a>
-                <a class="btn btn-default eqLogicAction" style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-action="add">
+                <a class="btn btn-warning eqLogicAction pull-left" data-action="gotoPluginConf" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-wrench"></i></a>
+                <a class="btn btn-info eqLogicAction pull-left bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i></a>
+                <a class="btn btn-info eqLogicAction pull-left" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i></a>
+                <a class="btn btn-success eqLogicAction pull-left" data-action="bt_docSpecific" title="{{Documentation du plugin}}"><i class="fa fa-book"></i></a>
+                <a class="btn btn-default eqLogicAction" style="margin-top : 5px;margin-bottom: 5px;" data-action="add">
                     <i class="fa fa-plus-circle"></i> {{Ajouter un jeedouino}} <!-- changer pour votre type d'équipement -->
                 </a>
                 <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
@@ -39,54 +76,39 @@ $cpl = jeedouino::GetJeedomComplement();
         <legend><i class="fa fa-cog"></i> {{Gestion}}</legend> <!-- changer pour votre type d'équipement -->
 
 		<div class="eqLogicThumbnailContainer">
-		   <div class="cursor eqLogicAction" data-action="add" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+		   <div class="cursor eqLogicAction" data-action="add" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
 			 <center>
 				<i class="fa fa-plus-circle" style="font-size : 7em;color:#00979C;"></i>
 			</center>
 			<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>Ajouter</center></span>
 			</div>
-			<div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+			<div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
 				<center>
 					<i class="fa fa-wrench" style="font-size : 7em;color:#00979C;"></i>
 				</center>
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Configuration}}</center></span>
 			</div>
-			<div class="cursor eqLogicAction" data-action="bt_healthSpecific" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+			<div class="cursor eqLogicAction" data-action="bt_healthSpecific" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
 				<center>
 					<i class="fa fa-medkit" style="font-size : 7em;color:#00979C;"></i>
 				</center>
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Santé}}</center></span>
 			</div>
-			<div class="cursor eqLogicAction" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
-				<a target="_blank" style="text-decoration: none!important;" href="https://revlysj.github.io/jeedouino/fr_FR/">
+			<div class="cursor eqLogicAction" data-action="bt_docSpecific" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
 				<center>
 					<i class="fa fa-book" style="font-size : 7em;color:#00979C;"></i>
 				</center>
 				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Documentation}}</center></span>
-				</a>
 			</div>
+            <?php
+                echo $eqLogicsCTRL;
+    		?>
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes équipements Jeedouino}}</legend>
+        <input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchEqlogic" />
 		<div class="eqLogicThumbnailContainer">
 		<?php
-		foreach ($eqLogics as $eqLogic)
-		{
-			$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
-			$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-			echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-			echo "<center>";
-			if (file_exists(dirname(__FILE__) . '/../../docs/images/jeedouino_'.$ModeleArduino.'.png'))
-			{
-				echo '<img class="lazy" src="plugins/jeedouino/docs/images/jeedouino_'.$ModeleArduino.'.png" height="105" width="95" />';
-			}
-			else
-			{
-				echo '<img class="lazy" src="plugins/jeedouino/docs/images/jeedouino_icon.png" height="105" width="95" />';
-			}
-			echo "</center>";
-			echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
-			echo '</div>';
-		}
+            echo $eqLogicsHTML;
 		?>
 		</div>
 	</div>
@@ -95,9 +117,9 @@ $cpl = jeedouino::GetJeedomComplement();
 		<div style="padding-bottom:40px;">
 			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fa fa-check-circle"></i> {{Sauver / Générer}}</a>
 			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fa fa-minus-circle"></i> </a>
-			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fa fa-files-o"></i> </a>
+			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fa fa-copy"></i> </a>
 			<!-- <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a> -->
-			<?php if (version_compare(jeedom::version(), '3.0.0', '>=')) echo '<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fa fa-object-group"></i> </a>'; ?>
+			<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fa fa-object-group"></i> </a>
 
 			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-cogs"></i> </a>
 			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fa fa-wrench"></i> </a>
@@ -135,7 +157,7 @@ $cpl = jeedouino::GetJeedomComplement();
                         <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
                             <option value="">{{Aucun}}</option>
                             <?php
-                            foreach (object::all() as $object) {
+                            foreach (jeeObject::all() as $object) {
                                 echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
                             }
                             ?>
@@ -271,24 +293,6 @@ $cpl = jeedouino::GetJeedomComplement();
                                 <option value="none">{{Aucun}}</option>
                                 <?php
                                 $plugin_jeedouino_deporte=false;
-								// sur Jeedom esclave
-								if (class_exists ('jeeNetwork', false))
-								{
-									foreach (jeeNetwork::byPlugin('jeedouino') as $jeeNetwork)
-									{
-										echo '<optgroup label="Jeedouino sur '.$jeeNetwork->getName().'">';
-										$plugin_jeedouino_deporte=true;
-										$UsbMap=$jeeNetwork->sendRawRequest('jeedom::getUsbMapping',array('gpio' => true));
-										if (is_array($UsbMap))
-										{
-											foreach ($UsbMap as $name => $value)
-											{
-												echo '<option value="' . $jeeNetwork->getId() . '_' . $name . '">' . $name . ' (' . $value . ')</option>';
-											}
-										}
-										echo '</optgroup>';
-									}
-								}
 
 								// Si JeedouinoExt activé
 								if (config::byKey('ActiveExt', 'jeedouino', false))
@@ -355,13 +359,6 @@ $cpl = jeedouino::GetJeedomComplement();
                             <datalist id="jeeReseau">
                 <?php
                     echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >Jeedom Master</option>';
-					if (class_exists ('jeeNetwork', false))
-					{
-						foreach (jeeNetwork::all() as $jeeNetwork)
-						{
-							echo '<option value="' . $jeeNetwork->getIp() . '">' . $jeeNetwork->getName() . '</option>';
-						}
-					}
 					// Sur JeedouinoExt (sans Jeedom)
 					$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
 					if ($ListExtIP != '')

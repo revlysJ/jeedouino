@@ -60,8 +60,7 @@ if (isset($_GET['BoardEQ']))
 			jeedouino::log( 'debug', $CALLBACK . 'vient d\'envoyer une trame téléinfo. J\'essaye de la transmette au plugin adapté.');
 			if (method_exists('teleinfo', 'createFromDef'))
 			{
-				$ApiKey = config::byKey('jeeNetwork::master::apikey');
-				if ($ApiKey == '') $ApiKey = config::byKey('api');
+				$ApiKey = config::byKey('api');
 				if ($ApiKey == '')  jeedouino::log( 'error', $CALLBACK . 'Impossible de trouver la clé API de votre Jeedom.');
 				else
 				{
@@ -103,7 +102,7 @@ if (isset($_GET['BoardEQ']))
 		// Informations fournies par les démons
 		if (isset($_GET['NODEP']))
 		{
-			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino); 
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			$message = __('Dépendances ' . ucfirst(strtolower($_GET['NODEP'])) . ' introuvables. Veuillez les reinstaller.' , __FILE__);
 			event::add('jeedom::error', array(
 				'level' => 'warning',
@@ -114,13 +113,13 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['PINGME']))
 		{
-			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino); 
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			jeedouino::log( 'debug', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');
 			$result = jeedouino::StatusBoardDemon($arduino_id, 0, $ModeleArduino);
 		}
 		if (isset($_GET['THREADSDEAD']))
 		{
-			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino); 
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			jeedouino::log( 'error', $CALLBACK . 'Les threads du démon sont hs. Tentative de redémarrage du démon en cours...');
 			jeedouino::ReStartBoardDemon($arduino_id, 0, $ModeleArduino);
 		}
@@ -181,7 +180,7 @@ if (isset($_GET['BoardEQ']))
 				{
 					config::save('SENDING_'.$arduino_id, 1, 'jeedouino');
 					jeedouino::log( 'debug', "Pause de 4s pour laisser l'arduino finir de communiquer avec le démon qui vient de demarrer");
-					sleep(4);					
+					sleep(4);
 					$message='S'.$message.'F';
 					jeedouino::log( 'debug','Envoi les valeurs des pins suite à la demande de la carte (Reboot?) '.$BOARDNAME.'- Message : '. $message);
 					$reponse=jeedouino::SendToBoard($arduino_id,$message);
@@ -253,10 +252,11 @@ if (isset($_GET['BoardEQ']))
 						}
 						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup')
 						{
-							$value=$cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
-							$RSTvalue=$cmd->getConfiguration('RSTvalue');
-							if ($recu<$RSTvalue) $recu=$RSTvalue;
-							//$cmd->setConfiguration('RSTvalue',$recu);
+							$value = $cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
+							$RSTvalue = $cmd->getConfiguration('RSTvalue');
+							if ($recu < $RSTvalue) $recu = $RSTvalue;
+							$cmd->setConfiguration('RSTvalue', $recu);
+							jeedouino::log('debug', $CALLBACK . 'RSTvalue Pin n° ' . $pins_id . ' = ' . $recu);
 						}
 						if ($MaJ)
 						{

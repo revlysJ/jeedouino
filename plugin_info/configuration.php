@@ -30,13 +30,10 @@ $port =  jeedouino::GetJeedomPort();
    <div class="form-group" >
         <label class="col-lg-5 control-label">{{Raccourcis}}</label>
         <div class="col-lg-5">
-<?php   if (jeedouino::Networkmode() == 'master')
-               {
-?>
+
             <a class="btn btn-warning " href="<?php echo $cpl; ?>/index.php?v=d&m=jeedouino&p=jeedouino">
                 <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/doc/images/jeedouino_icon.png"> {{Jeedouino Plugin}}
             </a>
-<?php   }     ?>
             <a class="btn btn-warning " href="<?php echo $cpl; ?>/index.php?v=d&p=log&logfile=jeedouino">
                 <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/doc/images/jeedouino_icon.png"> {{Jeedouino Logs}}
             </a>
@@ -47,19 +44,11 @@ $port =  jeedouino::GetJeedomPort();
 <ul class="nav nav-tabs" id="tab_jeedouino">
 	<li class="active"><a href="#tab_logs"><i class="fa fa-pencil-square-o"></i> {{Options}}</a></li>
 	<li><a href="#tab_dep"><i class="fa fa-certificate"></i> {{Dépendances}}</a></li>
-<?php
-    if (jeedouino::Networkmode() == 'master')
-	{
-	?>
 	<li><a href="#tab_demon"><i class="fa fa-university"></i> {{Démons}}</a></li>
 	<li><a href="#tab_sketch"><i class="fa fa-download"></i> {{Sketchs}}</a></li>
 	<li><a href="#tab_docker"><i class="fa fa-rss"></i> {{Conf. Docker}}</a></li>
 	<li><a href="#tab_JeedouinoExt"><i class="fa fa-code"></i> {{JeedouinoExt}}</a></li>
-
-<?php
-	}
-?>
-	</ul>
+</ul>
 <div class="tab-content">
 	 <div class="tab-pane active" id="tab_logs">
 	 <br/>
@@ -87,15 +76,7 @@ $port =  jeedouino::GetJeedomPort();
 						<input type="checkbox" class="configKey" data-l1key="ActiveUserCmd" name="ActiveUserCmd"/>
 					</div>
 				</div>
-				<!--
-				<div class="form-group" >
-					<label class="col-lg-7 control-label  text-warning">{{Maintenir les commandes en double lors d'un changement de fonction (Pour TESTS - NON recommandé).}}</label>
-					<div class="col-lg-3 ">
-						<input type="checkbox" class="configKey " data-l1key="MultipleCmd" name="MultipleCmd"/>
-					</div>
-				</div>
-				-->
-				<div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#configuration_logMessage"><i class="fa fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
+				<div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#logtab"><i class="fa fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
 			</fieldset>
 		</form>
 	</div>
@@ -201,14 +182,19 @@ $port =  jeedouino::GetJeedomPort();
 		</form>
 	</div>
 
-<?php
-	if (jeedouino::Networkmode() == 'master')
-	{
-	?>
 	 <div class="tab-pane" id="tab_demon">
         <br/>
         <div class="alert alert-primary"><i class="fa fa-university"></i> {{ Gestion des équipements avec Démons.}} </div>
-		<div class="alert alert-warning"><i class="fa fa-arrow-right"></i> {{ N.B. Suite a un reboot, les démons démarrent automatiquement >4 min après Jeedom. Cf doc.}} </div>
+		<div class="alert alert-warning"><i class="fa fa-arrow-right"></i> {{ N.B. Suite a un reboot, les démons démarrent automatiquement >4 min après Jeedom. Cf doc.}}
+            <div class="form-group">
+                <div class="col-lg-7">&nbsp;</div>
+                <label class="col-lg-3 control-label">{{Choisir un autre délai (min)}}</label>
+                <div class="col-lg-2">
+                    <input type="text" class="configKey form-control"  data-l1key="BootTime" placeholder="ex : 4 min"/>
+                </div>
+            </div>
+        </br>
+        </div>
 
 		<form class="form-horizontal">
 			<fieldset>
@@ -332,12 +318,10 @@ $port =  jeedouino::GetJeedomPort();
 				$board_ip=$eqLogic->getConfiguration('iparduino');
 				$jeedomMasterIP = jeedouino::GetJeedomIP();
 
-				if ($jeedomMasterIP==$board_ip) $localDemon=true;
-				else $localDemon=false;
+				if ($jeedomMasterIP == $board_ip) $localDemon = true;
+				else $localDemon = false;
 
-				list($SlaveNetworkID, $SlaveName) = jeedouino::GetSlaveNetworkID(0, $board_ip);
-
-				if (($a_usb) and (substr($ModeleArduino,0,1)=='a')) $StatusDemon = jeedouino::StatusBoardDemon($board_id, $SlaveNetworkID, $ModeleArduino);
+				if (($a_usb) and (substr($ModeleArduino, 0, 1) == 'a')) $StatusDemon = jeedouino::StatusBoardDemon($board_id, 0, $ModeleArduino);
 				config::save($board_id.'_StatusDemon', $StatusDemon, 'jeedouino');
 				config::save($board_id.'_HasDemon', 1, 'jeedouino');
 
@@ -348,7 +332,6 @@ $port =  jeedouino::GetJeedomPort();
 					<td>
 						<?php
 							if ($localDemon) echo '{{Jeedom maître}}';
-							elseif ($SlaveName!='') echo $SlaveName;
 							else
 							{
 								if ($board_ip!='')  echo '{{JeedouinoExt}}';
@@ -359,7 +342,6 @@ $port =  jeedouino::GetJeedomPort();
 					<td>
 						<?php
 							if ($localDemon) echo'{{Local}}';
-							elseif ($SlaveName!='') echo '{{Distant}}';
 							else
 							{
 								if ($board_ip!='') echo '{{ sur '.$board_ip.'}}';
@@ -384,19 +366,19 @@ $port =  jeedouino::GetJeedomPort();
 					</td>
 					<td>
 						<?php
-							if ($StatusDemon) echo '<a class="btn btn-success bt_restartDemon" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-play"></i></a>';
-							else echo '<a class="btn btn-success bt_StartDemon" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-play"></i></a>';
+							if ($StatusDemon) echo '<a class="btn btn-success bt_restartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-play"></i></a>';
+							else echo '<a class="btn btn-success bt_StartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-play"></i></a>';
 						?>
 					</td>
 					<td>
 						<?php
-							if ($StatusDemon) echo '<a class="btn btn-danger bt_stopDemon" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-stop"></i></a>';
+							if ($StatusDemon) echo '<a class="btn btn-danger bt_stopDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-stop"></i></a>';
 						?>
 					</td>
 					<td>
 						<?php
 							echo '<label class="checkbox-inline"><input type="checkbox" class="configKey " data-l1key="Auto_'. $board_id.'" /><i class="fa fa-refresh"></i> {{5min}}</label>';
-							//echo '<a class="btn btn-danger bt_changeAutoMode" data-mode="1" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-magic"></i> ON</a>';
+							//echo '<a class="btn btn-danger bt_changeAutoMode" data-mode="1" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-magic"></i> ON</a>';
 						?>
 					</td>
 					<td><?php echo $jsButton; ?></td>
@@ -599,9 +581,6 @@ $port =  jeedouino::GetJeedomPort();
 		</div>
 		<?php }  ?>
 	</div>
-	<?php
-	}
-?>
 
 </div>
 <br/><div class="nav-tabs"></div> <br/>

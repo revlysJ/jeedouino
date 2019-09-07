@@ -1,4 +1,19 @@
 <?php
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom and the jeedouino plugin are distributed in the hope that they will be useful
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
@@ -22,29 +37,21 @@ foreach ($eqLogics as $eqLogic)
         case 'e':
             $icon = 'wifi';
     }
+    $style = 'style="background-image: url(plugins/jeedouino/icons/' . $icon . '.png);background-repeat: no-repeat;"';
     $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-    $HTML .= '<img style="cursor: pointer;all:initial!important;width:29px;height:29px;" src="plugins/jeedouino/icons/' . $icon . '.png" />';
+    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" >';
     $HTML .= "<center>";
-    if (file_exists(dirname(__FILE__) . '/../../icons/jeedouino_'.$ModeleArduino.'.png'))
+    if (!file_exists(dirname(__FILE__) . '/../../icons/jeedouino_' . $ModeleArduino . '.png'))
     {
-        $HTML .= '<img class="lazy" src="plugins/jeedouino/icons/jeedouino_'.$ModeleArduino.'.png" height="105" width="95" />';
+        $ModeleArduino = 'icon';
+        $style = '';
     }
-    else
-    {
-        $HTML .= '<img class="lazy" src="plugins/jeedouino/icons/jeedouino_icon.png" height="105" width="95" />';
-    }
+    $HTML .= '<img src="plugins/jeedouino/icons/jeedouino_' . $ModeleArduino . '.png" ' . $style . '/>';
+
     $HTML .= "</center>";
-    $HTML .= '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+    $HTML .= '<span class="name" style="color:#00979C"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
     $HTML .= '</div>';
-    if ($ModeleArduino == 'JeedouinoControl')
-    {
-        $eqLogicsCTRL .= $HTML;
-    }
-    else
-    {
-        $eqLogicsHTML .= $HTML;
-    }
+    $eqLogicsHTML .= $HTML;
 }
 ?>
 
@@ -52,12 +59,11 @@ foreach ($eqLogics as $eqLogic)
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
-                <a class="btn btn-warning eqLogicAction pull-left" data-action="gotoPluginConf" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-wrench"></i></a>
-                <a class="btn btn-info eqLogicAction pull-left bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i></a>
-                <a class="btn btn-info eqLogicAction pull-left" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i></a>
-                <a class="btn btn-success eqLogicAction pull-left" data-action="bt_docSpecific" title="{{Documentation du plugin}}"><i class="fa fa-book"></i></a>
+                <a class="btn btn-warning eqLogicAction pull-left" data-action="gotoPluginConf" title="{{Configuration avancée de l'équipement}}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-info eqLogicAction pull-left bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fas fa-file"></i></a>
+                <a class="btn btn-info eqLogicAction pull-left" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fas fa-medkit"></i></a>
                 <a class="btn btn-default eqLogicAction" style="margin-top : 5px;margin-bottom: 5px;" data-action="add">
-                    <i class="fa fa-plus-circle"></i> {{Ajouter un jeedouino}} <!-- changer pour votre type d'équipement -->
+                    <i class="fas fa-plus-circle"></i> {{Ajouter un jeedouino}} <!-- changer pour votre type d'équipement -->
                 </a>
                 <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
                 <?php
@@ -73,38 +79,44 @@ foreach ($eqLogics as $eqLogic)
     </div>
 
     <div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
-        <legend><i class="fa fa-cog"></i> {{Gestion}}</legend> <!-- changer pour votre type d'équipement -->
+        <legend><i class="fas fa-cog"></i> {{Gestion}}</legend> <!-- changer pour votre type d'équipement -->
 
 		<div class="eqLogicThumbnailContainer">
-		   <div class="cursor eqLogicAction" data-action="add" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+		   <div class="cursor eqLogicAction" data-action="add" >
 			 <center>
-				<i class="fa fa-plus-circle" style="font-size : 7em;color:#00979C;"></i>
+				<i class="fas fa-plus-circle" style="font-size: 38px !important;color:#00979C;"></i>
 			</center>
-			<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>Ajouter</center></span>
+			<span style="color:#00979C"><center>Ajouter</center></span>
 			</div>
-			<div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+			<div class="cursor eqLogicAction" data-action="gotoPluginConf" >
 				<center>
-					<i class="fa fa-wrench" style="font-size : 7em;color:#00979C;"></i>
+					<i class="fas fa-wrench" style="font-size: 38px !important;color:#00979C;"></i>
 				</center>
-				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Configuration}}</center></span>
+				<span style="color:#00979C"><center>{{Configuration}}</center></span>
 			</div>
-			<div class="cursor eqLogicAction" data-action="bt_healthSpecific" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+			<div class="cursor eqLogicAction" data-action="bt_healthSpecific" >
 				<center>
-					<i class="fa fa-medkit" style="font-size : 7em;color:#00979C;"></i>
+					<i class="fas fa-medkit" style="font-size: 38px !important;color:#00979C;"></i>
 				</center>
-				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Santé}}</center></span>
+				<span style="color:#00979C"><center>{{Santé}}</center></span>
 			</div>
-			<div class="cursor eqLogicAction" data-action="bt_docSpecific" style="background-color : #ffffff; height : 105px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+			<div class="cursor eqLogicAction" data-action="bt_docSpecific" >
 				<center>
-					<i class="fa fa-book" style="font-size : 7em;color:#00979C;"></i>
+					<i class="fas fa-book" style="font-size: 38px !important;color:#00979C;"></i>
 				</center>
-				<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#00979C"><center>{{Documentation}}</center></span>
+				<span style="color:#00979C"><center>{{Documentation}}</center></span>
+			</div>
+            <div class="cursor eqLogicAction" data-action="bt_jeedouinoExt" >
+				<center>
+					<i class="fas fa-wrench" style="font-size: 38px !important;color:#00979C;"></i>
+				</center>
+				<span style="color:#00979C"><center>{{JeedouinoExt}}</center></span>
 			</div>
             <?php
                 echo $eqLogicsCTRL;
     		?>
 		</div>
-		<legend><i class="fa fa-table"></i> {{Mes équipements Jeedouino}}</legend>
+		<legend><i class="fas fa-table"></i> {{Mes équipements Jeedouino}}</legend>
         <input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchEqlogic" />
 		<div class="eqLogicThumbnailContainer">
 		<?php
@@ -115,29 +127,29 @@ foreach ($eqLogics as $eqLogic)
     <!-- Affichage de l'eqLogic sélectionné -->
     <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
 		<div style="padding-bottom:40px;">
-			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fa fa-check-circle"></i> {{Sauver / Générer}}</a>
-			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fa fa-minus-circle"></i> </a>
-			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fa fa-copy"></i> </a>
-			<!-- <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fa fa-share"></i> </a> -->
-			<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fa fa-object-group"></i> </a>
+			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fas fa-check-circle"></i> {{Sauver / Générer}}</a>
+			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fas fa-minus-circle"></i> </a>
+			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fas fa-copy"></i> </a>
+			<!-- <a class="btn btn-default pull-right" id="bt_exportEq" title="{{Exporter cet équipement}}}"><i class="fas fa-share"></i> </a> -->
+			<a class="btn btn-default pull-right" id="bt_graphEqLogic" title="{{Graphique de liens}}"><i class="fas fa-object-group"></i> </a>
 
-			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fa fa-cogs"></i> </a>
-			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fa fa-wrench"></i> </a>
-			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fa fa-medkit"></i> </a>
-			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fa fa-file"></i> </a>
-			<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
+			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fas fa-cogs"></i> </a>
+			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fas fa-wrench"></i> </a>
+			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fas fa-medkit"></i> </a>
+			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fas fa-file"></i> </a>
+			<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>
 	      </div>
 
-		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
-			<li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
-			<li role="presentation"><a href="#pinstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin"><i class="fa fa-wrench"></i> {{Pins / GPIO}}</a></li>
-			<li role="presentation" class="sketchstab"><a href="#sketchstab" aria-controls="profile" role="tab" data-toggle="tab"  ><i class="fa fa-code"></i> {{Sketchs}}</a></li>
+		<ul class="nav nav-tabs">
+			<li><a href="#" class="eqLogicAction" aria-controls="home" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
+			<li class="active"><a href="#eqlogictab" aria-controls="home" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{Equipement}}</a></li>
+			<li><a href="#commandtab" aria-controls="profile" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Commandes}}</a></li>
+			<li class="control"><a href="#pinstab" aria-controls="profile" data-toggle="tab"  id="bt_conf_Pin"><i class="fas fa-wrench"></i> {{Pins / GPIO}}</a></li>
+			<li class="sketchstab"><a href="#sketchstab" aria-controls="profile" data-toggle="tab"  ><i class="fas fa-code"></i> {{Sketchs}}</a></li>
 		</ul>
 
 		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-			<div role="tabpanel" class="tab-pane active" id="eqlogictab">
+			<div class="tab-pane active" id="eqlogictab">
 			<br>
 
         <form class="form-horizontal">
@@ -149,6 +161,7 @@ foreach ($eqLogics as $eqLogic)
                         <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
 						<input type="text" class="eqLogicAttr form-control" data-l1key="Original_ID" style="display : none;" />
                         <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement jeedouino}}"/>
+                        <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="LogicalId" style="display : none;"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -164,7 +177,7 @@ foreach ($eqLogics as $eqLogic)
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="control form-group">
                     <label class="col-sm-2 control-label">{{Catégorie}}</label>
                     <div class="col-sm-8">
                         <?php
@@ -179,7 +192,7 @@ foreach ($eqLogics as $eqLogic)
                 <div class="form-group">
 				  <label class="col-sm-3 control-label"></label>
 				  <div class="col-sm-9">
-					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activé?}}</label>
+					<label class="control checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activé?}}</label>
 					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible?}}</label>
 
 					<?php if (config::byKey('ActiveExt', 'jeedouino', false))
@@ -189,7 +202,7 @@ foreach ($eqLogics as $eqLogic)
 					<?php }  ?>
 					</div>
                 </div>
-                    <div class="form-group">
+                    <div class="control form-group">
                         <label class="col-sm-3 control-label">Modèle de la carte </label>
                         <div class="col-sm-3">
                             <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="arduino_board">
@@ -242,7 +255,7 @@ foreach ($eqLogics as $eqLogic)
 						</select>
 					</div>
 				</div>
-				 <div class="form-group">
+				 <div class="control form-group">
 					 <label class="col-sm-3 control-label">{{Type de connection de la carte}}</label>
 					 <div class="col-sm-3">
 						<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datasource">
@@ -358,7 +371,7 @@ foreach ($eqLogics as $eqLogic)
 							<input type="text" list="jeeReseau" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="iparduino" placeholder="ex : 192.168.0.55"/>
                             <datalist id="jeeReseau">
                 <?php
-                    echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >Jeedom Master</option>';
+                    echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >{{Ce Jeedom }}</option>';
 					// Sur JeedouinoExt (sans Jeedom)
 					$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
 					if ($ListExtIP != '')
@@ -400,11 +413,11 @@ foreach ($eqLogics as $eqLogic)
         </form>
 
 			</div>
-		<div role="tabpanel" class="tab-pane" id="commandtab">
+		<div class="tab-pane" id="commandtab">
 
         <legend>{{Commandes de la carte}}</legend>
 			<form class="form-horizontal">
-				<div class="form-group">
+				<div class="control form-group">
 				  <label class="col-sm-3 control-label"></label>
 				  <div class="col-sm-9">
 					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr configuration" data-l1key="configuration" data-l2key="AutoOrder" checked/> {{Ordonner automatiquement les commandes par numéro de pin.}}</label>
@@ -412,14 +425,14 @@ foreach ($eqLogics as $eqLogic)
 				</div>
 			</form>
 		<!--
-		<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i>{{ Ajouter une commande Jeedouino}}</a><br/><br/>
+		<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fas fa-plus-circle"></i>{{ Ajouter une commande Jeedouino}}</a><br/><br/>
 		 -->
 		 <!--
         <form class="form-horizontal">
             <fieldset>
                 <div class="form-actions">
-                    <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer l'équipement}}</a>
-                    <a class="btn btn-success eqLogicAction" data-action="save"><i class="fa fa-check-circle"></i> {{Sauver et/ou Générer les commandes}}</a>
+                    <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer l'équipement}}</a>
+                    <a class="btn btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauver et/ou Générer les commandes}}</a>
                 </div>
             </fieldset>
         </form>
@@ -437,7 +450,7 @@ foreach ($eqLogics as $eqLogic)
         </table>
 		</div>
 
-		<div role="tabpanel" class="tab-pane" id="pinstab">
+		<div class="tab-pane" id="pinstab">
 			<br><br><br>
 			<div class="form-group alert alert-warning">
 				<center><h4>
@@ -464,7 +477,7 @@ foreach ($eqLogics as $eqLogic)
 				<table class="table table-striped sketchstab">
 					<tr>
 						<td>Pins Utilisateur</td>
-						<td>{{Ajoute autant de pins utilisateur (que le nombre choisi) à la liste des pins configurables dans l'onglet <i class="fa fa-wrench"></i> Pins/GPIO.}}</td>
+						<td>{{Ajoute autant de pins utilisateur (que le nombre choisi) à la liste des pins configurables dans l'onglet <i class="fas fa-wrench"></i> Pins/GPIO.}}</td>
 					</tr>
 				</table>
 
@@ -502,7 +515,7 @@ foreach ($eqLogics as $eqLogic)
 			</table>
 		</div>
 
-			<div role="tabpanel" class="tab-pane" id="sketchstab">
+			<div class="tab-pane" id="sketchstab">
 			<br><br><br>
 					<?php
 					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
@@ -521,7 +534,7 @@ foreach ($eqLogics as $eqLogic)
 								echo '<div class="form-group sketchs sketchLAN'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-10">
-									<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Réseau) pour cet équipement.}}</a>
+									<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Réseau) pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 									<br>
 									<br><i>Note : Ce sketch est prévu pour les shields réseaux basés sur un chip W5100.</i>
@@ -534,7 +547,7 @@ foreach ($eqLogics as $eqLogic)
 								echo '<div class="form-group sketchs sketchUSB' . $board_id . ' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-10">
-									<a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Usb) pour cet équipement.}}</a>
+									<a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Usb) pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 									<br>
 								</div></div>';
@@ -557,7 +570,7 @@ foreach ($eqLogics as $eqLogic)
 								echo '<div class="form-group sketchs sketchESP'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-6">
-									<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'ESP8266 pour cet équipement.}}</a>
+									<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'ESP8266 pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 								</div></div>';
 							}
@@ -576,12 +589,12 @@ foreach ($eqLogics as $eqLogic)
 						echo '<br><br><div class="form-group sketchs sketchUSB " style="display : none;">
 						<label class="col-sm-2 control-label">{{ Sketch }}</label>
 						<div class="col-sm-6">
-							<a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
+							<a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
 						</div></div>';
 						echo '<br><br><div class="form-group sketchsLib " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Librairies pour vos Sketchs }}</label>
 								<div class="col-sm-6">
-									<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank" download><i class="fa fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
+									<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
 								</div></div>';
 					}
 

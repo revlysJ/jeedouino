@@ -7,7 +7,7 @@
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* Jeedom is distributed in the hope that it will be useful,
+* Jeedom and the jeedouino plugin are distributed in the hope that they will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
@@ -99,7 +99,7 @@ if (isset($_GET['id']))
 			<div class="form-group"  style="    ">
 				<label class="col-sm-4 control-label ">Paramétrage des pins de l'arduino/esp/rpi <?php echo $message_a; ?></label>
 				<div class="col-sm-8">
-					<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html#_sketchs_personnels_modifiables_et_commandes_utilisateur" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fa fa-book"></i> </a>
+					<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html#_sketchs_personnels_modifiables_et_commandes_utilisateur" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>
 					<a class="btn btn-success pull-right bt_savebackup_pins" id="bt_savebackup_pins1" title="Pensez à sauver l'équipement pour envoyer la config à la carte">* Sauvegarde</a>
 				</div>
 			</div>
@@ -108,15 +108,15 @@ if (isset($_GET['id']))
 				<?php if (substr($ModeleArduino,0,2)!='pi' or (substr($ModeleArduino,0,6)=='piGPIO') or ($ModeleArduino == 'piPlus'))
 				{
 				?>
-			<li role="presentation"><a href="#optionstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin"><i class="fa fa-wrench"></i> {{Options}}</a></li>
+			<li role="presentation"><a href="#optionstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin"><i class="fas fa-wrench"></i> {{Options}}</a></li>
 				<?php
 				}
 				?>
-			<li role="presentation" class="active"><a href="#boardpinstab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Pins Matérielles}}</a></li>
+			<li role="presentation" class="active"><a href="#boardpinstab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Pins Matérielles}}</a></li>
 				<?php if ($UserPinsStatus)
 				{
 				?>
-			<li role="presentation"><a href="#userpinstab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-code"></i> {{Pins Utilisateur}}</a></li>
+			<li role="presentation"><a href="#userpinstab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-code"></i> {{Pins Utilisateur}}</a></li>
 				<?php
 				}
 				?>
@@ -504,7 +504,7 @@ if (isset($_GET['id']))
 						$TmpPins .= '</optgroup>';
 					}
 					$TmpPins .= '</select>';
-					$TmpPins .= '<span class="HC_trigger hide"><i class="fa fa-arrow-right"></i> {{Pensez à selectionner la pin $TmpPins .=.}}</span>';
+					$TmpPins .= '<span class="HC_trigger hide"><i class="fas fa-arrow-right"></i> {{Pensez à selectionner la pin $TmpPins .=.}}</span>';
 					$TmpPins .= '</td>';
 
 					// Type Générique pour App Mobile

@@ -7,7 +7,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * Jeedom and the jeedouino plugin are distributed in the hope that they will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -51,7 +51,7 @@ if (isset($_GET['BoardEQ']))
 
 		list($Arduino_pins,$board,$usb) = jeedouino::GetPinsByBoard($arduino_id);
 
-		$BOARDNAME = strtoupper($eqLogic->getName()) . ' eqID ( '.$arduino_id.' ) ';
+		$BOARDNAME = 'Equipement ' . strtoupper($eqLogic->getName()) . ' (eqID: '.$arduino_id.') ';
 		$CALLBACK = 'CALLBACK - ' . $BOARDNAME . '- ';
 
 		// Cas de la téléinfo recue, on tente de l'envoyer au plugin teleinfo

@@ -7,7 +7,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * Jeedom and the jeedouino plugin are distributed in the hope that they will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -34,63 +34,124 @@ try {
         }
         ajax::success($return);
     }
-	// Actions pour la gestion du reset compteur
- 	if (init('action') == 'ResetCPT') 
+    /////
+    // Actions JeedouinoExt
+    //
+    // 		config::byKey('Auto_'. $board_id, 'jeedouino', 0)
+    //
+    if (init('action') == 'bt_AutoReStart')
+    {
+        $board_id = init('boardid');
+        if (config::byKey('Auto_' . $board_id, 'jeedouino', 1)) config::save('Auto_' . $board_id, 0, 'jeedouino');
+        else config::save('Auto_' . $board_id, 1, 'jeedouino');
+        ajax::success(['boardid'    => $board_id,
+				       'status'      => config::byKey('Auto_' . $board_id, 'jeedouino', 0)]);
+    }
+
+    if (init('action') == 'save_jeedouinoExt')
+    {
+		$JeedouinoExtSave = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+        $ip = trim($JeedouinoExtSave['IP']);
+        if ($ip == '')
+            throw new Exception(__('/!\ IP non renseignée. /!\ ', __FILE__) . $ip, 9999);
+        if (filter_var($ip, FILTER_VALIDATE_IP) === false)
+            throw new Exception(__('/!\ IP non valide. /!\ ', __FILE__) . $ip, 9999);
+//        $ListExtIP = config::byKey('ListExtIP', 'jeedouino', []);
+//        if (in_array($ip, $ListExtIP))
+//            throw new Exception(__('/!\ IP déja utilisée. /!\ ', __FILE__) . $ip, 9999);
+        $id = jeedouino::SaveIPJeedouinoExt($JeedouinoExtSave);
+		ajax::success(jeedom::toHumanReadable(jeedouino::GetJeedouinoExt($ip)));
+	}
+    if (init('action') == 'remove_jeedouinoExt')
+    {
+        $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
+        if (!jeedouino::RemoveJeedouinoExt($ip))
+        {
+			throw new Exception(__('JeedouinoExt inconnu : ' . $ip, __FILE__) . init('id'), 9999);
+		}
+		ajax::success();
+	}
+    if (init('action') == 'get_jeedouinoExt')
+    {
+        //if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . init('id'), 9999);
+        $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
+        $ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
+        if (!in_array($ip, $ListExtIP))
+        {
+			throw new Exception(__('JeedouinoExt inconnu : ' . $ip, __FILE__) . init('id'), 9999);
+		}
+		ajax::success(jeedom::toHumanReadable(jeedouino::GetJeedouinoExt($ip)));
+        //ajax::success(jeedouino::GetJeedouinoExt($ip));
+	}
+    if (init('action') == 'send_jeedouinoExt')
+    {
+        $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+        if (!jeedouino::SendJeedouinoExt($JeedouinoExtSend))
+        {
+            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JedouinoExt. ', __FILE__));
+        }
+		ajax::success();
+	}
+    //
+    ////
+
+    // Actions pour la gestion du reset compteur
+ 	if (init('action') == 'ResetCPT')
     {
         jeedouino::ResetCPT(init('boardid'),init('RSTvalue'),init('CMDid'));
 		ajax::success();
-	}   
-	
+	}
+
     // Actions pour la gestion des démons  / Jeedouino
- 	if (init('action') == 'StartBoardDemon') 
+ 	if (init('action') == 'StartBoardDemon')
     {
         jeedouino::StartBoardDemon(init('boardid'), init('id'), init('DemonType'));
 		ajax::success();
-	}   
-  	if (init('action') == 'ReStartBoardDemon') 
+	}
+  	if (init('action') == 'ReStartBoardDemon')
     {
         jeedouino::ReStartBoardDemon(init('boardid'), init('id'), init('DemonType'));
 		ajax::success();
-	}   
- 	if (init('action') == 'StopBoardDemon') 
+	}
+ 	if (init('action') == 'StopBoardDemon')
     {
         jeedouino::StopBoardDemon(init('boardid'), init('id'), init('DemonType'));
 		ajax::success();
-	} 
- 
+	}
+
     // Actions pour l'Installation des dépendances
-  	if (init('action') == 'installUpdate') 
+  	if (init('action') == 'installUpdate')
     {
         exec('sudo apt-get -y --yes --force-yes update >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	}  
-  	if (init('action') == 'installSerial') 
+	}
+  	if (init('action') == 'installSerial')
     {
         exec('sudo apt-get -y --yes --force-yes install python-serial >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	}    	
-  	if (init('action') == 'installGPIO') 
+	}
+  	if (init('action') == 'installGPIO')
     {
         exec('sudo pip install RPi.GPIO >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	}   
- 	if (init('action') == 'installPIFACE') 
+	}
+ 	if (init('action') == 'installPIFACE')
     {
         exec('sudo apt-get -y --yes --force-yes install python-pifacedigitalio >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		exec('sudo pip install pifacecommon >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		exec('sudo pip install pifacedigitalio >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	}      
- 	if (init('action') == 'installPiPlus') 
+	}
+ 	if (init('action') == 'installPiPlus')
     {
         exec('sudo apt-get -y --yes --force-yes install python-smbus >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	} 
- 	if (init('action') == 'installDS18B20') 
+	}
+ 	if (init('action') == 'installDS18B20')
     {
         exec('sudo chmod 755 ' . dirname(__FILE__) . '/../../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
-	}       	
+	}
     // action qui permet d'effectuer la sauvegarde des données en asynchrone
     if (init('action') == 'saveStack') {
         $params = init('params');

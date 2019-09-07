@@ -1,5 +1,5 @@
 """
-JEEDOUINO PIGPIO DEMON v0.6 Dec2015-Novembre 2016
+JEEDOUINO PIGPIO DEMON v0.7 Dec2015- 2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				https://piface.github.io/pifacedigitalio/example.html#interrupts
@@ -326,7 +326,7 @@ class myThread1 (threading.Thread):
 				GPIO.cleanup()
 			except:
 				pass
-			sys.exit
+			sys.exit()
 
 def SetPin(u,v,m):
 	global swtch
@@ -525,7 +525,7 @@ class myThread2 (threading.Thread):
 			GPIO.cleanup()
 		except:
 			pass
-		sys.exit
+		sys.exit()
 
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
@@ -692,4 +692,4 @@ if __name__ == "__main__":
 	except:
 		pass
 	s.close()
-	sys.exit
+	sys.exit()

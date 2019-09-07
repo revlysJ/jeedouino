@@ -1,5 +1,5 @@
 """
-JEEDOUINO PIFACE DEMON v0.6 Dec2015-Novembre 2016
+JEEDOUINO PIFACE DEMON v0.7 Dec2015 - 2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				https://piface.github.io/pifacedigitalio/example.html#interrupts
@@ -11,7 +11,13 @@ import threading
 import time
 import sys
 import httplib
-import pifacedigitalio
+
+try:
+	import pifacedigitalio
+	nodep = 0
+except:
+	nodep = 1
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -244,7 +250,7 @@ class myThread1 (threading.Thread):
 		s.close()
 		if exit==1:
 			#listener.deactivate()
-			sys.exit
+			sys.exit()
 
 def SetPin(u,v,m):
 	global swtch
@@ -354,7 +360,7 @@ class myThread2 (threading.Thread):
 			time.sleep(0.1)
 		s.close()
 		#listener.deactivate()
-		sys.exit
+		sys.exit()
 
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
@@ -391,6 +397,12 @@ if __name__ == "__main__":
 	NextRefresh=time.time()+40
 	sendCPT=0
 
+	if (nodep):
+		SimpleSend('&NODEP=pifacedigitalio')
+		log('Error' , 'Dependances pifacedigitalio introuvables. Veuillez les (re)installer.')
+		time.sleep(7)
+		sys.exit('Dependances pifacedigitalio introuvables.')
+	
 	# set up PiFace Digital
 	pifacedigital = pifacedigitalio.PiFaceDigital(int(boardId))
 	#listener = pifacedigitalio.InputEventListener(chip=pifacedigital)
@@ -496,4 +508,4 @@ if __name__ == "__main__":
 
 	s.close()
 	#listener.deactivate()
-	sys.exit
+	sys.exit()

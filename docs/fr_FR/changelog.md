@@ -1,5 +1,15 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+07/09/2019 v1.05
+---
+
+- Ajout de l'interface de gestion JeedouinoExt.
+- Amélioration de la page JeedouinoExt.
+- Ajout d'un équipement de controle des démons et ses commandes.
+- Amélioration de la page de configuration.
+- Corrections diverses.
+- Amélioration des libéllés des logs.
+
 28/08/2019 v1.04
 ---
 

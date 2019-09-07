@@ -1,5 +1,5 @@
 """
-JEEDOUINO ARDUINO USB DEMON v0.7 , Dec 2015 - Oct 2017
+JEEDOUINO ARDUINO USB DEMON v0.7 , Dec 2015 - 2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original :	https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -162,7 +162,7 @@ class myThread1 (threading.Thread):
 			time.sleep(0.1)
 		s.close()
 		if exit == 1:
-			sys.exit
+			sys.exit()
 
 
 class myThread2 (threading.Thread):
@@ -219,7 +219,7 @@ class myThread2 (threading.Thread):
 
 		USBArduino.close()
 		s.close()
-		sys.exit
+		sys.exit()
 
 def SimpleSend(rep):
 	global eqLogic, JeedomIP, JeedomPort, JeedomCPL
@@ -241,7 +241,7 @@ if __name__  ==  "__main__":
 	if len(sys.argv) > 6:
 		JeedomCPL = sys.argv[6]
 	if JeedomCPL == '.':
-			JeedomCPL = ''
+		JeedomCPL = ''
 	if len(sys.argv) > 5:
 		JeedomPort = int(sys.argv[5])
 	if len(sys.argv) > 4:
@@ -263,7 +263,7 @@ if __name__  ==  "__main__":
 		SimpleSend('&NODEP = SERIAL')
 		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller.')
 		time.sleep(7)
-		sys.exit
+		sys.exit('Dependances Serial introuvables')
 
 	# inits
 	exit = 0
@@ -323,4 +323,4 @@ if __name__  ==  "__main__":
 
 	USBArduino.close()
 	s.close()
-	sys.exit
+	sys.exit()

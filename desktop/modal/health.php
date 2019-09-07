@@ -6,7 +6,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * Jeedom and the jeedouino plugin are distributed in the hope that they will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -79,7 +79,7 @@ foreach ($eqLogics as $eqLogic)
 		if ($_path == '') $_path = '/';
 		$_port = trim(config::byKey('PORT-'.$ip, 'jeedouino', ''));
 		if ($_port == '') $_port = '80';
-		$ip = '<span class="label label-success" style="font-size : 1em; cursor : default;"><a href="http://' . $ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fa fa-home"></i> ' . $eqLogic->getConfiguration('iparduino') . '</a></span>';
+		$ip = '<span class="label label-success" style="font-size : 1em; cursor : default;"><a href="http://' . $ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fas fa-home"></i> ' . $eqLogic->getConfiguration('iparduino') . '</a></span>';
 	}
 	else
 	{

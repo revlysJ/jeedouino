@@ -1,18 +1,22 @@
 """
-JEEDOUINO IO Pi Plus DEMON v0.7 2015-2018
+JEEDOUINO IO Pi Plus DEMON v0.71 Dec2015-2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 				http://www.tutorialspoint.com/python/python_multithreading.htm
 """
 
-import socket			   # Import socket module
+import socket
 import threading
 import time
 import sys
 import httplib
-#from ABE_helpers import ABEHelpers
-#from ABE_IoPi import IoPi
-from IOPi import IOPi
+
+try:
+	from IOPi import IOPi
+	nodep = 0
+except:
+	nodep = 1
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -273,7 +277,7 @@ class myThread1 (threading.Thread):
 		s.close()
 		if exit==1:
 			#listener.deactivate()
-			sys.exit
+			sys.exit()
 
 def SetPin(u,v,m):
 	global swtch,bus
@@ -368,17 +372,17 @@ class myThread2 (threading.Thread):
 				SimpleSend(pinStr)
 			time.sleep(0.1)
 		s.close()
-		sys.exit
+		sys.exit()
 
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
 	if JeedomIP!='' and eqLogic!='':
 		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ="+str(eqLogic)+str(rep)
 		conn = httplib.HTTPConnection(JeedomIP,JeedomPort)
-		conn.request("GET", url )
+		conn.request("GET", url)
 		#resp = conn.getresponse()
 		conn.close()
-		log("GET", url )
+		log("GET", str(JeedomIP) + ':' + str(JeedomPort) + url )
 	else:
 		log ('Probleme',"JeedomIP et/ou eqLogic non fourni(s)")
 
@@ -409,7 +413,18 @@ if __name__ == "__main__":
 	#i2c_helper = ABEHelpers()
 	#i2c_bus = i2c_helper.get_smbus()
 	#bus = IoPi(i2c_bus, boardId)
-	bus = IOPi(boardId)
+	if (nodep):
+		SimpleSend('&NODEP=smbus')
+		log('Error' , 'Dependances SMBUS introuvables. Veuillez les (re)installer.')
+		time.sleep(7)
+		sys.exit('Dependances SMBUS introuvables.')
+	try:
+		bus = IOPi(boardId)
+	except:
+		SimpleSend('&NODEP=i2cBusNotOpen')
+		log('Error' , 'I2C introuvable. Veuillez l activer (sudo raspi-config).')
+		time.sleep(7)
+		sys.exit('i2c Bus Not Open ! try (sudo raspi-config)')
 
 	# Toutes les entrees en impulsion
 	# Init du Compteur  d'Impulsion
@@ -513,4 +528,4 @@ if __name__ == "__main__":
 
 	s.close()
 	#listener.deactivate()
-	sys.exit
+	sys.exit()

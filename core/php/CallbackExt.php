@@ -7,7 +7,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * Jeedom and the jeedouino plugin are distributed in the hope that they will be useful
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -24,18 +24,9 @@ if (isset($_GET['ip']))
 	$ip = $_GET['ip'];
 	if (filter_var($ip, FILTER_VALIDATE_IP) !== false)
 	{
-		jeedouino::log( 'debug','CALLBACK EXT - IP reçue de '.$ip);
-		// On a reçu une nouvelle ip ? Si oui on l'ajoute à la liste
-		$ListExtIP=config::byKey('ListExtIP', 'jeedouino', '');
-		if ($ListExtIP == '')
-		{
-			$ListExtIP = array($ip);
-		}
-		else
-		{
-			if (!in_array($ip, $ListExtIP))	$ListExtIP[]=$ip;
-		}
-		config::save('ListExtIP', $ListExtIP, 'jeedouino');
+		jeedouino::AddIPJeedouinoExt($ip);
+		$id = jeedouino::AddIDJeedouinoExt($ip);
+		jeedouino::log( 'debug','CALLBACK EXT - IP reçue de ' . $ip . ' , ID :' . $id);
 	}
 	else jeedouino::log( 'error','CALLBACK EXT - IP non valide reçue de '.$ip);
 

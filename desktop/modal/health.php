@@ -38,6 +38,7 @@ $eqLogics = jeedouino::byType('jeedouino');
 	 <?php
 foreach ($eqLogics as $eqLogic)
 {
+	if ($eqLogic->getLogicalId() == 'JeedouinoControl') continue;
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 	$board = strtolower($eqLogic->getConfiguration('arduino_board'));
 	$modele = $board;

@@ -182,7 +182,29 @@ $('.bt_plugin_view_log').on('click',function(){
  */
 /* global jeedom */
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-
+function printEqLogic(_data)
+{
+    var control = init(_data.logicalId);
+    if (control == 'JeedouinoControl')
+    {
+        $('.control').hide();
+        $('.config_pin').hide();
+        $('.datasource').hide();
+        $('.piFacePortID').hide();
+        $('.piPlusPortI2C').hide();
+        $('.sketchs').hide();
+        $('.sketchsLib').hide();
+        $('.sketchUSB').hide();
+        $('.esp8266').hide();
+        $('.sketchstab').hide();
+        $('.ActiveExt').hide();
+        $('.nav-tabs a:not(.eqLogicAction)').first().click();
+    }
+    else
+    {
+        $('.control').show();
+    }    
+}
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
 		var _cmd = {configuration: {}};

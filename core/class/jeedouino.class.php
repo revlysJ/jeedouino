@@ -284,44 +284,44 @@ class jeedouino extends eqLogic {
 				}
 			}
 		}
-		//if ($n == 0) jeedouino::log( 'debug','-=-= Aucun démon trouvé =-=-');
+		//if ($n == 0) jeedouino::log( 'debug',__('-=-= Aucun démon trouvé =-=-', __FILE__));
 		return $return;
 	}
 	public static function deamon_start($_debug = false)
 	{
 		$eqLogics = eqLogic::byType('jeedouino');
-		jeedouino::log( 'debug', '-=-= Suite demande Jeedom, démarrage global des démons =-=-');
+		jeedouino::log( 'debug', __('-=-= Suite demande Jeedom, démarrage global des démons =-=-', __FILE__));
 		foreach ($eqLogics as $eqLogic)
 		{
 			if ($eqLogic->getIsEnable() == 0) continue;
 			$board_id=$eqLogic->getId();
 			if (config::byKey($board_id . '_HasDemon', 'jeedouino', 0))
 			{
-				jeedouino::log( 'debug','-=-= '.$board_id.' =-=-');
+				jeedouino::log( 'debug',__('-=-= '.$board_id.' =-=-', __FILE__));
 				list(,$board,$usb) = self::GetPinsByBoard($board_id);
 				self::StartBoardDemon($board_id,0,$board);
 				sleep(2);
 			}
 
 		}
-		jeedouino::log( 'debug', '-=-= Fin du démarrage des démons =-=-');
+		jeedouino::log( 'debug', __('-=-= Fin du démarrage des démons =-=-', __FILE__));
 	}
 	public static function deamon_stop()
 	{
  		$eqLogics = eqLogic::byType('jeedouino');
-		jeedouino::log('debug', '-=-= Suite demande Jeedom, Arrêt global des démons =-=-');
+		jeedouino::log('debug', __('-=-= Suite demande Jeedom, Arrêt global des démons =-=-', __FILE__));
 		foreach ($eqLogics as $eqLogic)
 		{
 			$board_id = $eqLogic->getId();
 			if (config::byKey($board_id . '_HasDemon', 'jeedouino', 0))
 			{
-				jeedouino::log( 'debug','-=-= ' . $board_id . ' =-=-');
+				jeedouino::log( 'debug',__('-=-= ' . $board_id . ' =-=-', __FILE__));
 				list(, $board, $usb) = self::GetPinsByBoard($board_id);
 				self::StopBoardDemon($board_id, 0, $board);
 				sleep(2);
 			}
 		}
-		jeedouino::log( 'debug', '-=-= Fin de l\'arrêt des démons =-=-');
+		jeedouino::log( 'debug', __('-=-= Fin de l\'arrêt des démons =-=-', __FILE__));
 	}
 
 	public static function log($log1, $log2)
@@ -336,28 +336,30 @@ class jeedouino extends eqLogic {
 	public function StartAllDemons()
 	{
 		$EqLogics = eqLogic::byType('jeedouino');
-		jeedouino::log( 'debug','Suite reboot Jeedom, démarrage des démons, EqID :  '.json_encode($EqLogics));
+		jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage des démons, EqID :  ', __FILE__) . json_encode($EqLogics));
 		config::save('StartDemons', 1, 'jeedouino');
 		foreach ($EqLogics as $eqLogic)
 		{
+			if ($eqLogic->getLogicalId() == 'JeedouinoControl') continue;
 			$arduino_id = $eqLogic->getId();
 			if (!is_object($eqLogic))
 			{
-				jeedouino::log( 'error','L\'équipement ID ' . $arduino_id . ' n\'existe plus.');
+				jeedouino::log( 'debug', __('L\'équipement est n\'existe plus.', __FILE__) . ' (ID ' . $arduino_id . ') ');
 				continue;
 			}
 			if ($eqLogic->getIsEnable() == 0)
 			{
-				jeedouino::log( 'debug','L\'équipement ID ' . $arduino_id . ' est désactivé.');
+				jeedouino::log( 'debug', __('L\'équipement est désactivé.', __FILE__) . ' (ID ' . $arduino_id . ') ');
 				continue;
 			}
 			list(, $board, $usb) = jeedouino::GetPinsByBoard($arduino_id);
 			if (($board == 'arduino' and !$usb) or ($board == 'esp')) continue;
-			jeedouino::log( 'debug', '-=-= {{Démarrage de}} ' . $arduino_id . ' =-=-');
+
+			jeedouino::log( 'debug', '-=-= ' . __('Démarrage de ' , __FILE__) . $arduino_id . ' =-=-');
 			jeedouino::StartBoardDemon($arduino_id, 0, $board);
 			sleep(2);
 		}
-		jeedouino::log( 'debug', '-=-= {{Fin du démarrage des démons}} =-=-');
+		jeedouino::log( 'debug', '-=-= ' . __('Fin du démarrage des démons', __FILE__) . ' =-=-');
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 
@@ -1986,13 +1988,13 @@ class jeedouino extends eqLogic {
 			// pas d'id original, donc surement creation d'un nouvel equipement
 			$this->setConfiguration('Original_ID' , $arduino_id);
 			$this->save(true);
-			jeedouino::log( 'debug','Pas de ID original, donc surement création d un nouvel équipement.');
+			jeedouino::log( 'debug', __('Pas de ID original, donc surement création d\'un nouvel équipement.', __FILE__));
 		}
 		elseif ($Original_ID != $arduino_id)
 		{
 			jeedouino::log( 'debug',' arduino_id = ' . $arduino_id);
 			jeedouino::log( 'debug',' Original_ID = ' . $Original_ID);
-			jeedouino::log( 'debug','ID original différent de celui de l\'ID courant, donc résultat d\'une duplication.');
+			jeedouino::log( 'debug', __('ID original différent de celui de l\'ID courant, donc résultat d\'une duplication.', __FILE__));
 			$this->setConfiguration('Original_ID' , $arduino_id);
 			$this->save(true);
 			// id original different de celui de l'id courant, donc resultat d'une duplication.
@@ -2194,10 +2196,14 @@ class jeedouino extends eqLogic {
 			//
 
 			// changement de modèle de carte
-			if (config::byKey($arduino_id.'-ForceSuppr', 'jeedouino', '0'))
+			if (config::byKey($arduino_id . '-ForceSuppr', 'jeedouino', '0'))
 			{
-				jeedouino::log( 'debug','EqID '.$arduino_id.' Effacement de toutes les commandes suite au changement de modèle de la carte.');
-				foreach ($this->getCmd() as $cmd)
+				jeedouino::log( 'debug','EqID ' . $arduino_id . __(' Effacement de toutes les commandes suite au changement de modèle de la carte.', __FILE__));
+
+				$cmds = $this->getCmd();
+				if (is_object($cmds)) $cmds = [$cmds]; // 1 seule commande ???
+
+				foreach ($cmds as $cmd)
 				{
 					// nettoyage des pins paramêtrées
 					$pins_id=$cmd->getConfiguration('pins_id');
@@ -2208,10 +2214,10 @@ class jeedouino extends eqLogic {
 					// Netttoyage des virtuels
 					if (config::byKey('ActiveVirtual', 'jeedouino', false)) jeedouino::DelCmdOfVirtual($cmd, $cmd->getLogicalId());
 					// nettoyage des commandes afférentes
-					jeedouino::log( 'debug','Suppression de : '. json_encode($cmd->getLogicalId()));
+					jeedouino::log( 'debug', __('Suppression de : ', __FILE__) . json_encode($cmd->getLogicalId()));
 					$cmd->remove();
 				}
-				config::save($arduino_id.'-ForceSuppr', '0', 'jeedouino');	// pas forcément utile
+				config::save($arduino_id . '-ForceSuppr', '0', 'jeedouino');
 			}
 
 			$DHTxx = 0;			// Pour génération sketch
@@ -2712,7 +2718,7 @@ class jeedouino extends eqLogic {
 			}
 
 			$modif_cmd = false; //  // ne renvoi pas la config a la carte
-			jeedouino::log( 'debug','EqID '.$arduino_id.' Effacement des commandes obsolètes.');
+			jeedouino::log( 'debug', 'EqID ' . $arduino_id . __(' Effacement des commandes obsolètes.', __FILE__));
 			foreach ($this->getCmd() as $cmd)
 			{
 				$Lid = $cmd->getLogicalId();
@@ -2722,25 +2728,17 @@ class jeedouino extends eqLogic {
 					{
 						$cmd->setLogicalId($old_list[$Lid]);
 						$cmd->save();
-						jeedouino::log( 'debug','Màj du LogicalId de : '.$Lid.' vers '.$old_list[$Lid]);
+						jeedouino::log( 'debug', __('Màj du LogicalId de : ', __FILE__) . $Lid . ' vers ' . $old_list[$Lid]);
 					}
 					else
 					{
 						if (config::byKey('ActiveVirtual', 'jeedouino', false)) jeedouino::DelCmdOfVirtual($cmd, $Lid);
-						jeedouino::log( 'debug','Suppression de : '. json_encode($cmd->getLogicalId()));
+						jeedouino::log( 'debug', __('Suppression de : ', __FILE__) . json_encode($cmd->getLogicalId()));
 						$cmd->remove();
 						$modif_cmd = true; // Renvoi la config a la carte
 					}
 				}
 			}
-/* 			jeedouino::log( 'debug','Debut - Liste des commandes');
-			foreach ($this->getCmd() as $cmd)
-			{
-				jeedouino::log( 'debug','== EqID '.$arduino_id.' $cmd->getLogicalId() = '.$cmd->getLogicalId());
-				jeedouino::log( 'debug','== EqID '.$arduino_id.' $cmd->getName() = '.$cmd->getName());
-				//jeedouino::log( 'debug','== EqID '.$arduino_id.' $cmd->exportApi() = '.json_encode($cmd->exportApi()));
-			}
-			jeedouino::log( 'debug','Fin - Liste des commandes');   */
 
 			jeedouino::log( 'debug','EqID '.$arduino_id.' Création des nouvelles commandes, MàJ des autres..');
 
@@ -2754,9 +2752,6 @@ class jeedouino extends eqLogic {
 				}
 				else
 				{
-					//jeedouino::log( 'debug','EqID '.$arduino_id.' else $create_cmd=true. - '.$key.' => '.json_encode($cmd_info));
-					//jeedouino::log( 'debug','EqID '.$arduino_id.' $cmd_list($key) : '.$key.' => $cmd->getName() : '.$cmd->getName().' ( '.$cmd->getLogicalId().' ) ');
-
 					// on verifie au cas ou le mode d'une pin a changé
 					if ($cmd_info['modePIN'] == 'trigger') $modif_cmd = true; // envoi nécéssaire.
 
@@ -2992,7 +2987,7 @@ class jeedouino extends eqLogic {
 	{
 		if ($this->getLogicalId() == 'JeedouinoControl') return;
 		jeedouino::log( 'debug','Debut de postAjax()');
-		
+
 		if ($this->getConfiguration('AutoOrder') == '1')
 		{
 			foreach ($this->getCmd() as $cmd)
@@ -3490,7 +3485,7 @@ class jeedouino extends eqLogic {
 				if (file_exists($SketchFileName))
 				{
 					unlink($SketchFileName);
-					jeedouino::log( 'debug', 'Le Sketch ESP / NodeMCU / Wemos pour l\'équipement eqID : ' . $arduino_id . '  est supprimé ! - ' . $SketchFileName);
+					jeedouino::log( 'debug', __('Le Sketch ESP / NodeMCU / Wemos est supprimé !', __FILE__) . ' eqID : ' . $arduino_id . ' - ' . $SketchFileName);
 				}
 				break;
 			case 'piface':
@@ -3501,14 +3496,22 @@ class jeedouino extends eqLogic {
 				break;
 		}
 		// On efface les commandes dans les virtuels
-		foreach ($this->getCmd() as $cmd)  jeedouino::DelCmdOfVirtual($cmd, $cmd->getLogicalId());
+		$cmds = $this->getCmd();
+		if (is_array($cmds))
+		{
+			if ($cmds != []) foreach ($cmds as $cmd)  jeedouino::DelCmdOfVirtual($cmd, $cmd->getLogicalId());
+		}
+		elseif (is_object($cmds)) jeedouino::DelCmdOfVirtual($cmds, $cmds->getLogicalId());
 
 		// On efface les variables dans la table config (pins et autres)
-		foreach ($Arduino_pins as $pins_id => $pin_datas)
+		if (is_array($Arduino_pins))
 		{
-			config::remove($arduino_id . '_' . $pins_id, 'jeedouino');
-			config::remove('GT_' . $arduino_id . '_' . $pins_id, 'jeedouino');
-			config::remove('GV_' . $arduino_id . '_' . $pins_id, 'jeedouino');
+			foreach ($Arduino_pins as $pins_id => $pin_datas)
+			{
+				config::remove($arduino_id . '_' . $pins_id, 'jeedouino');
+				config::remove('GT_' . $arduino_id . '_' . $pins_id, 'jeedouino');
+				config::remove('GV_' . $arduino_id . '_' . $pins_id, 'jeedouino');
+			}
 		}
 		config::remove($arduino_id . '_choix_boot', 'jeedouino');
 		config::remove($arduino_id . '_DHTxx', 'jeedouino');
@@ -3528,7 +3531,6 @@ class jeedouino extends eqLogic {
 		config::remove($arduino_id . '_BMP180', 'jeedouino');
 		config::remove($arduino_id . '_SERVO', 'jeedouino');
 		config::remove($arduino_id . '_WS2811', 'jeedouino');
-
 		config::remove('REP_' . $arduino_id, 'jeedouino');
 
 		config::remove($arduino_id . 'remove', 'jeedouino');

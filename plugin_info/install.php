@@ -26,6 +26,8 @@ function jeedouino_update()
 {
     // update JeedouinoExt
     $ListExtIP = jeedouino::CleanIPJeedouinoExt();
+    $IPsToNames = [];
+    foreach ($eqLogics as $eqLogic) $IPsToNames[trim($eqLogic->getConfiguration('iparduino'))] = $eqLogic->getName();
     foreach ($ListExtIP as $ip)
     {
         $id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
@@ -33,7 +35,8 @@ function jeedouino_update()
 		if ($id == '' and $JExtname == '')
         {
             $id = jeedouino::AddIDJeedouinoExt($ip);
-            config::save('JExtname-' . $ip, 'JeedouinoExt', 'jeedouino');
+            if (isset($IPsToNames[$ip])) config::save('JExtname-' . $ip, $IPsToNames[$ip], 'jeedouino');
+            else config::save('JExtname-' . $ip, 'JeedouinoExt', 'jeedouino');
         }
     }
     //

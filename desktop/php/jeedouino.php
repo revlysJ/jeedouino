@@ -106,15 +106,20 @@ foreach ($eqLogics as $eqLogic)
 				</center>
 				<span style="color:#00979C"><center>{{Documentation}}</center></span>
 			</div>
+<?php
+    if (config::byKey('ActiveExt', 'jeedouino', false))
+    {
+?>
             <div class="cursor eqLogicAction" data-action="bt_jeedouinoExt" >
 				<center>
 					<i class="fas fa-wrench" style="font-size: 38px !important;color:#00979C;"></i>
 				</center>
 				<span style="color:#00979C"><center>{{JeedouinoExt}}</center></span>
 			</div>
-            <?php
-                echo $eqLogicsCTRL;
-    		?>
+<?php
+    }
+    echo $eqLogicsCTRL;
+?>
 		</div>
 		<legend><i class="fas fa-table"></i> {{Mes équipements Jeedouino}}</legend>
         <input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchEqlogic" />

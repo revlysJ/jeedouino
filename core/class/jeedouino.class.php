@@ -336,7 +336,7 @@ class jeedouino extends eqLogic {
 	public function StartAllDemons()
 	{
 		$EqLogics = eqLogic::byType('jeedouino');
-		jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage des démons, EqID :  ', __FILE__) . json_encode($EqLogics));
+		jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage des démons, EqID :  ', __FILE__));
 		config::save('StartDemons', 1, 'jeedouino');
 		foreach ($EqLogics as $eqLogic)
 		{
@@ -355,7 +355,7 @@ class jeedouino extends eqLogic {
 			list(, $board, $usb) = jeedouino::GetPinsByBoard($arduino_id);
 			if (($board == 'arduino' and !$usb) or ($board == 'esp')) continue;
 
-			jeedouino::log( 'debug', '-=-= ' . __('Démarrage de ' , __FILE__) . $arduino_id . ' =-=-');
+			jeedouino::log( 'debug', '-=-= ' . __('Démarrage de ' , __FILE__) . $eqLogic->getName() . ' ID ' . $arduino_id . ' =-=-');
 			jeedouino::StartBoardDemon($arduino_id, 0, $board);
 			sleep(2);
 		}

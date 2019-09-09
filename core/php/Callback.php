@@ -115,7 +115,7 @@ if (isset($_GET['BoardEQ']))
 		{
 			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			jeedouino::log( 'debug', $CALLBACK . 'Le 1er thread du démon demande un test PING ...');
-			$result = jeedouino::StatusBoardDemon($arduino_id, 0, $ModeleArduino);
+			$result = jeedouino::StatusBoardDemon($arduino_id, 1, $ModeleArduino); // Force le cache
 		}
 		if (isset($_GET['THREADSDEAD']))
 		{

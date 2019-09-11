@@ -416,14 +416,12 @@ if __name__ == "__main__":
 	if (nodep):
 		SimpleSend('&NODEP=smbus')
 		log('Error' , 'Dependances SMBUS introuvables. Veuillez les (re)installer.')
-		time.sleep(7)
 		sys.exit('Dependances SMBUS introuvables.')
 	try:
 		bus = IOPi(boardId)
 	except:
 		SimpleSend('&NODEP=i2cBusNotOpen')
 		log('Error' , 'I2C introuvable. Veuillez l activer (sudo raspi-config).')
-		time.sleep(7)
 		sys.exit('i2c Bus Not Open ! try (sudo raspi-config)')
 
 	# Toutes les entrees en impulsion

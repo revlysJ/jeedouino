@@ -99,7 +99,7 @@ if (isset($_GET['id']))
 			<div class="form-group"  style="    ">
 				<label class="col-sm-4 control-label ">Paramétrage des pins de l'arduino/esp/rpi <?php echo $message_a; ?></label>
 				<div class="col-sm-8">
-					<a href="https://jeedom.github.io/documentation/third_plugin/jeedouino/fr_FR/index.html#_sketchs_personnels_modifiables_et_commandes_utilisateur" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>
+					<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>
 					<a class="btn btn-success pull-right bt_savebackup_pins" id="bt_savebackup_pins1" title="Pensez à sauver l'équipement pour envoyer la config à la carte">* Sauvegarde</a>
 				</div>
 			</div>

@@ -7,10 +7,13 @@ Original :	https://github.com/piface/pifacedigitalio/blob/master/examples/simple
 
 import socket			   # Import socket module
 import threading
-import time
+import os, time
 import sys
 import serial
 import httplib
+os.environ['TZ'] = 'Europe/Paris'
+time.tzset()
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 

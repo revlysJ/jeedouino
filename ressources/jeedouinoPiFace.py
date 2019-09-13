@@ -8,9 +8,11 @@ Original : https://github.com/piface/pifacedigitalio/blob/master/examples/simple
 
 import socket			   # Import socket module
 import threading
-import time
+import os, time
 import sys
 import httplib
+os.environ['TZ'] = 'Europe/Paris'
+time.tzset()
 
 try:
 	import pifacedigitalio
@@ -35,9 +37,9 @@ thread_2 = 0
 
 def log(level,message):
 	try:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
+		print('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
 	except:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		print('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 
 def SimpleParse(m):
 	m=m.replace('/', '')

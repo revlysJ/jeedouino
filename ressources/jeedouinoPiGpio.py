@@ -15,14 +15,16 @@ et de
 
 import socket
 import threading
-import time
+import os, time
 import sys
 import httplib
 import RPi.GPIO as GPIO
 import Adafruit_DHT
 import Adafruit_BMP.BMP085 as BMP085
 from subprocess import Popen, PIPE
-import os
+os.environ['TZ'] = 'Europe/Paris'
+time.tzset()
+
 try:
 	DSpath = os.path.dirname(os.path.realpath(__file__))
 except:
@@ -48,9 +50,9 @@ thread_2 = 0
 
 def log(level,message):
 	try:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
+		print('[%s][Demon PIGPIO] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
 	except:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		print('[%s][Demon PIGPIO] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 
 def SimpleParse(m):
 	m=m.replace('/', '')

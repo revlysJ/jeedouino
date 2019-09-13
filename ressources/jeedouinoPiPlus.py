@@ -1,5 +1,5 @@
 """
-JEEDOUINO IO Pi Plus DEMON v0.71 Dec2015-2019
+JEEDOUINO IO PiPlus DEMON v0.71 Dec2015-2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -7,9 +7,11 @@ Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 
 import socket
 import threading
-import time
+import os, time
 import sys
 import httplib
+os.environ['TZ'] = 'Europe/Paris'
+time.tzset()
 
 try:
 	from IOPi import IOPi
@@ -35,9 +37,9 @@ thread_2 = 0
 
 def log(level,message):
 	try:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
+		print('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
 	except:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		print('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 
 def SimpleParse(m):
 	m=m.replace('/', '')

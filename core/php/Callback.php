@@ -142,6 +142,7 @@ if (isset($_GET['BoardEQ']))
 			$eqLogic->setConfiguration('ipPort', $_GET['PORTFOUND']);
 			$eqLogic->setConfiguration('PortDemon', $_GET['PORTFOUND']);
 			$eqLogic->save(true);
+			if ($this->getConfiguration('alone') == '1') jeedouino::SendPRM($eqLogic); // on renvoie la config
 		}
 		// Informations fournies par les Arduinos/Esp
 		if (isset($_GET['ASK']))
@@ -195,6 +196,24 @@ if (isset($_GET['BoardEQ']))
 			$eqLogic->setConfiguration('iparduino',$_GET['ipwifi']);  // On sauve L'IP fournie par l'ESP
 			$eqLogic->save(true);
 			jeedouino::log( 'debug', $BOARDNAME . __(' vient d\'envoyer son adresse IP : ', __FILE__) . $_GET['ipwifi']);
+		}
+		if (isset($_GET['PINMODE']))
+		{
+			$PinMode = config::byKey($arduino_id . '_PinMode', 'jeedouino', 'none');
+			if ($PinMode != 'none')
+			{
+				jeedouino::log( 'debug', $CALLBACK . __('Le démon réclame l\'envoi du mode des pins.', __FILE__));
+				$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
+				if ($DemonTypeF == 'USB' ) $PinMode = 'USB=' . $PinMode;
+				$reponse = jeedouino::SendToBoardDemon($arduino_id, $PinMode, $DemonTypeF);
+				if ($reponse != 'COK') jeedouino::log( 'debug', __('Erreur d\'envoi de la configuration des pins sur l\'équipement ', __FILE__) . $arduino_id.' ( ' . $eqLogic->getName() . ' ) - Réponse :' . $reponse);
+				else
+				{
+					config::save('NODEP_' . $arduino_id, '', 'jeedouino');
+					config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+				}
+				jeedouino::log( 'debug', __('Envoi de ', __FILE__) . $PinMode . __(' - Réponse : ', __FILE__) . $reponse);
+			}
 		}
 		else // Informations fournies par tous
 		{

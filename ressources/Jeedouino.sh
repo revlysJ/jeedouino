@@ -25,7 +25,7 @@ echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance  python-pip"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo apt-get -y install python-pip
+sudo apt-get -y install python{,3}-pip
 
 echo 30 > /tmp/dependances_jeedouino_en_cours
 echo "-"

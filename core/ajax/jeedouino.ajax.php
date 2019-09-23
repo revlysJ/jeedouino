@@ -73,7 +73,7 @@ try {
 	}
     if (init('action') == 'get_jeedouinoExt')
     {
-        //if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . init('id'), 9999);
+        if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . init('id'), 9999);
         $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
         $ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
         if (!in_array($ip, $ListExtIP))
@@ -122,30 +122,40 @@ try {
     // Actions pour l'Installation des dépendances
   	if (init('action') == 'installUpdate')
     {
-        exec('sudo apt-get -y --yes --force-yes update >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo apt-get -y update >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo apt-get -y upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo apt-get -y dist-upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
 	}
   	if (init('action') == 'installSerial')
     {
-        exec('sudo apt-get -y --yes --force-yes install python-serial >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo apt-get -y install python-serial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
 		ajax::success();
 	}
   	if (init('action') == 'installGPIO')
     {
-        exec('sudo pip install RPi.GPIO >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo pip install RPi.GPIO >> '.log::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
 		ajax::success();
 	}
  	if (init('action') == 'installPIFACE')
     {
-        exec('sudo apt-get -y --yes --force-yes install python-pifacedigitalio >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		exec('sudo pip install pifacecommon >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		exec('sudo pip install pifacedigitalio >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('sudo apt-get -y install python-pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+		exec('sudo pip install pifacecommon >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+		exec('sudo pip install pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+        // enable spi
+        exec('sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt');
 		ajax::success();
 	}
  	if (init('action') == 'installPiPlus')
     {
-        exec('sudo apt-get -y --yes --force-yes install python-smbus >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		ajax::success();
+        exec('sudo apt-get -y install i2c-tools libi2c-dev >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+        exec('sudo apt-get -y install python-smbus >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+        // enable i2c
+        exec('sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt');
+        exec('sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt');
+        exec('sudo echo i2c-dev | sudo tee -a /etc/modules');
+        exec('sudo echo i2c-bcm2708 | sudo tee -a /etc/modules');
+        ajax::success();
 	}
  	if (init('action') == 'installDS18B20')
     {

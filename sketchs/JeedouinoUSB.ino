@@ -327,14 +327,72 @@ void loop()
 			{
 				for (int i = 1; i < n; i++)
 				{
-					if (isDigit(c[i])) c[i]=c[i]-'0';
+					if (isDigit(c[i])) c[i] = c[i] - '0';
 				}
 
-				pin_id=10*int(c[1])+int(c[2]);					// recuperation du numero de la pin
+				pin_id = 10 * int(c[1]) + int(c[2]);					// recuperation du numero de la pin
+				if (Status_pins[pin_id] != 'y')
+				{
+					Set_OutputPin(pin_id);
+				}
+				else	// double pulse
+				{
+					if (n == 10)		// Petite securite
+					{
+						unsigned long clickTemp = 100 * int(c[4]) + 10 * int(c[5]) + int(c[6]); // milli-secondes
+						unsigned long pauseTemp = 100 * int(c[7]) + 10 * int(c[8]) + int(c[9]); // milli-secondes
 
-				Set_OutputPin(pin_id);
+						clickTemp = 100 * clickTemp;
+						pauseTemp = 100 * pauseTemp;
+						if (c[3] == 0)
+						{
+							digitalWrite(pin_id, LOW);	// first click
+							delay(clickTemp);			// duree du click
+
+							digitalWrite(pin_id, HIGH);	// pause
+							delay(pauseTemp);			// duree de la pause
+
+							digitalWrite(pin_id, LOW);	// second click
+							delay(clickTemp);			// duree du click
+
+							digitalWrite(pin_id, HIGH);	// retour
+							swtch[pin_id] = 1;
+							jeedom += '&';
+							jeedom += pin_id;
+							jeedom += F("=1");
+						}
+						else
+						{
+							digitalWrite(pin_id, HIGH);
+							delay(clickTemp);
+
+							digitalWrite(pin_id, LOW);
+							delay(pauseTemp);
+
+							digitalWrite(pin_id, HIGH);
+							delay(clickTemp);
+
+							digitalWrite(pin_id, LOW);
+							swtch[pin_id] = 0;
+							jeedom += '&';
+							jeedom += pin_id;
+							jeedom += F("=0");
+						}
+					}
+					else if (n == 4)
+					{
+						if (c[3] == 0)
+						{
+							PinWriteLOW(pin_id);
+						}
+						else
+						{
+							PinWriteHIGH(pin_id);
+						}
+					}
+				}
 				Serial.println(F("SOK"));								// On reponds a JEEDOM
-				ProbeNextSend=millis()+10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
+				ProbeNextSend = millis() + 10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
 			}
 			else if ((c[0]=='S' || c[0]=='R') && c[n]=='C')       	// Reçoie la valeur SAUVEE d'une pin compteur (suite reboot)
 			{                                       										// ou RESET suite sauvegarde equipement.
@@ -377,6 +435,7 @@ void loop()
 							case 'u':		//	output_pulse
 							case 'v':		//	low_pulse
 							case 'w':		 //	high_pulse
+							case 'y':		 //	double_pulse
 								if (c[i+1]=='0')
 								{
 									PinWriteLOW(i);
@@ -416,6 +475,7 @@ void loop()
 							case 'u': // output_pulse
 							case 'v': // low_pulse
 							case 'w': // high_pulse
+							case 'y': // double_pulse
 								if (c[n]=='L')
 								{
 									if (c[1] == 'P') TempoPinHIGH[i] = pinTempo;
@@ -1091,6 +1151,7 @@ void Load_EEPROM(int k)
 			case 'u':		//	output_pulse
 			case 'v':		//	low_pulse
 			case 'w':		//	high_pulse
+			case 'y':		 //	double_pulse
 				pinMode(i, OUTPUT);
 				// restauration de l'etat des pins DIGITAL OUT au demarrage
 				 if (k)

@@ -15,10 +15,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Fonction pour l'ajout de commande, appellé automatiquement par plugin.jeedouino
-
 $('#bt_graphEqLogic').off('click').on('click', function () {
-    $('#md_modal').dialog({title: "{{Graphique de lien}}"});
+    $('#md_modal').dialog({title: "{{Graphique des relations de vos équipements}}"});
     $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=eqLogic&filter_id='+$('.eqLogicAttr[data-l1key=id]').value()).dialog('open');
 });
 $('#bt_exportEq').on('click', function() {
@@ -148,39 +146,34 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 		$('.ActiveExt').hide();
 	}
 });
- $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduinoport]').on('change',function(){
+$('.eqLogicAttr[data-l1key=configuration][data-l2key=arduinoport]').on('change',function(){
 	$('.arduinoport').hide();
 	$('.arduinoport.'+$(this).value()).show();
 });
-
-$('#bt_conf_Pin').on('click', function() {
+$('#bt_conf_Pin').off('click').on('click', function() {
 	$('#md_modal').dialog({title: "{{Paramétrages / affectation des pins}}"});
 	$('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=conf_pin&id=' + $('.eqLogicAttr[data-l1key=id]').value() + '&board=' + $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value()).dialog('open');
 });
 $('.eqLogicAction[data-action=bt_healthSpecific]').on('click', function () {
-  $('#md_modal').dialog({title: "{{Santé Jeedouino}}"});
-  $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=health').dialog('open');
+    $('#md_modal').dialog({title: "{{Santé de vos équipements Jeedouino}}"});
+    $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=health').dialog('open');
 });
 $('.eqLogicAction[data-action=bt_jeedouinoExt]').on('click', function () {
-  $('#md_modal').dialog({title: "{{Gestion JeedouinoExt}}"});
-  $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=jeedouinoExt').dialog('open');
+    $('#md_modal').dialog({title: "{{Gestion de vos équipements JeedouinoExt}}"});
+    $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=jeedouinoExt').dialog('open');
 });
 $('.eqLogicAction[data-action=bt_docSpecific]').on('click', function () {
-  window.open('https://revlysj.github.io/jeedouino/fr_FR/');
+    window.open('https://revlysj.github.io/jeedouino/fr_FR/');
 });
 $('.bt_plugin_view_log').on('click',function(){
- if($('#md_modal').is(':visible')){
-   $('#md_modal2').dialog({title: "{{Logs de Jeedouino}}"});
-   $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')+'&slaveId='+$(this).attr('data-slaveId')).dialog('open');
- }else{
-   $('#md_modal').dialog({title: "{{Logs de Jeedouino}}"});
-   $("#md_modal").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')+'&slaveId='+$(this).attr('data-slaveId')).dialog('open');
- }
+    if($('#md_modal').is(':visible')){
+        $('#md_modal2').dialog({title: "{{Logs de Jeedouino}}"});
+        $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')+'&slaveId='+$(this).attr('data-slaveId')).dialog('open');
+    }else{
+       $('#md_modal').dialog({title: "{{Logs de Jeedouino}}"});
+       $("#md_modal").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')+'&slaveId='+$(this).attr('data-slaveId')).dialog('open');
+   }
 });
-/* Fonction appelé pour mettre l'affichage du tableau des commandes de votre eqLogic
- * _cmd: les détails de votre commande
- */
-/* global jeedom */
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 function printEqLogic(_data)
 {
@@ -203,7 +196,7 @@ function printEqLogic(_data)
     else
     {
         $('.control').show();
-    }    
+    }
 }
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
@@ -238,8 +231,6 @@ function addCmdToTable(_cmd) {
 	var gtype = init(_cmd.display.generic_type);
 	var pins_id = init(_cmd.configuration.pins_id);
 	if (pins_id>999) pins_id -= 1000;
-/* 	if (pins_id & 1) var tr = '<tr class="cmd table-info" data-cmd_id="' + init(_cmd.id) + '">';
-	else */
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 
 	tr += '<td>';
@@ -256,8 +247,6 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 
 	tr += '<td>';
-	//tr += jeedom.cmd.availableType();
-	//tr += '<span class="type" type="' + ctype + '">' + ctype+ '</span>';
 	tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="' + ctype + '" disabled style="display : none;" />';
 	tr += '<input class="cmdAttr form-control  input-sm" data-l1key="subType" value="' + stype + '" disabled style="display : none;" />';
 	if ( ctype == 'action') {
@@ -321,9 +310,12 @@ function addCmdToTable(_cmd) {
     			case 'servo':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" >';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
-    			//	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="Min" title="Min"   style="display : none;">';
-    			//	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="Max" title="Max"   style="display : none;">';
-
+    				break;
+    			case 'double_pulse_low':
+    			case 'double_pulse_high':
+    				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
+    				tr += '<span class="label label-warning">Durées clic + pause en dixième de s. 3 + 3 Chiffres.</span>';
+    				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" >';
     				break;
     			default:
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" >';
@@ -367,20 +359,6 @@ function addCmdToTable(_cmd) {
 
 	tr += '</tr>';
 	$('#table_cmd tbody').append(tr);
- /*    var tr = $('#table_cmd tbody tr:last');
-    jeedom.eqLogic.builSelectCmd({
-        id: $(".li_eqLogic.active").attr('data-eqLogic_id'),
-        filter: {type: 'info'},
-        error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
-        success: function (result) {
-            tr.find('.cmdAttr[data-l1key=value]').append(result);
-            tr.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdId]').append(result);
-            tr.setValues(_cmd, '.cmdAttr');
-            jeedom.cmd.changeType(tr, init(_cmd.subType));
-        }
-    });	 */
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	if (isset(_cmd.type)) {
 		$('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));

@@ -17,7 +17,7 @@ time.tzset()
 try:
 	import pifacedigitalio
 	nodep = 0
-except:
+except Exception as errdep:
 	nodep = 1
 
 reload(sys)
@@ -35,11 +35,16 @@ JeedomCPL=''
 thread_1 = 0
 thread_2 = 0
 
+logFile = "JeedouinoPiFace.log"
+
 def log(level,message):
+	fifi=open(logFile, "a+")
 	try:
-		print('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
+		fifi.write('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
 	except:
-		print('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		fifi.write('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+	fifi.write("\r\n")
+	fifi.close()
 
 def SimpleParse(m):
 	m=m.replace('/', '')
@@ -72,7 +77,7 @@ class myThread1 (threading.Thread):
 		self.name = name
 
 	def run(self):
-		print("Starting " + self.name)
+		log('info', "Starting " + self.name)
 		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,thread_1,thread_tries
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -230,6 +235,38 @@ class myThread1 (threading.Thread):
 						RepStr += '&' + str(i) + '=1'
 					reponse='SOK'
 
+				if 'SetLOWdoublepulse' in query:
+					q = query.index("SetLOWdoublepulse")
+					u = int(query[q+1]) - 8
+					q = query.index("tempclick")
+					v = float(query[q+1]) / 10
+					q = query.index("temppause")
+					w = float(query[q+1]) / 10
+					pifacedigital.output_pins[u].value = 0
+					time.sleep(v)
+					pifacedigital.output_pins[u].value = 1
+					time.sleep(w)
+					pifacedigital.output_pins[u].value = 0
+					time.sleep(v)
+					reponse='SOK'
+					SetPin(u, 1, reponse)
+
+				if 'SetHIGHdoublepulse' in query:
+					q = query.index("SetHIGHdoublepulse")
+					u = int(query[q+1]) - 8
+					q = query.index("tempclick")
+					v = float(query[q+1]) / 10
+					q = query.index("temppause")
+					w = float(query[q+1]) / 10
+					pifacedigital.output_pins[u].value = 1
+					time.sleep(v)
+					pifacedigital.output_pins[u].value = 0
+					time.sleep(w)
+					pifacedigital.output_pins[u].value = 1
+					time.sleep(v)
+					reponse='SOK'
+					SetPin(u, 0, reponse)
+
 				if 'PING' in query:
 					reponse='PINGOK'
 					SimpleSend('&REP=' + str(reponse))
@@ -254,12 +291,12 @@ class myThread1 (threading.Thread):
 			#listener.deactivate()
 			sys.exit()
 
-def SetPin(u,v,m):
+def SetPin(u, v, m):
 	global swtch
-	swtch[u]=v
-	pifacedigital.output_pins[u].value	= v
+	swtch[u] = v
+	pifacedigital.output_pins[u].value = v
 	pinStr = '&' + str(u+8) + '=' + str(v)
-	if m!='':
+	if m != '':
 		pinStr += '&REP=' + str(m)
 	SimpleSend(pinStr)
 
@@ -291,7 +328,7 @@ class myThread2 (threading.Thread):
 		self.name = name
 
 	def run(self):
-		print("Starting " + self.name)
+		log('info', "Starting " + self.name)
 		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_2
 
 		while exit==0:
@@ -367,18 +404,21 @@ class myThread2 (threading.Thread):
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
 	if JeedomIP!='' and eqLogic!='':
-		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ="+str(eqLogic)+str(rep)
+		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
 		conn = httplib.HTTPConnection(JeedomIP,JeedomPort)
 		conn.request("GET", url )
 		#resp = conn.getresponse()
 		conn.close()
 		log("GET", url )
 	else:
-		log ('Probleme',"JeedomIP et/ou eqLogic non fourni(s)")
+		log('Error', "JeedomIP et/ou eqLogic non fourni(s)")
 
 # Debut
 if __name__ == "__main__":
 	# get the arguments
+	if len(sys.argv) > 7:
+		if sys.argv[7] != '':
+			logFile = sys.argv[7]
 	if len(sys.argv) > 6:
 		JeedomCPL = sys.argv[6]
 		if JeedomCPL == '.':
@@ -401,10 +441,9 @@ if __name__ == "__main__":
 
 	if (nodep):
 		SimpleSend('&NODEP=pifacedigitalio')
-		log('Error' , 'Dependances pifacedigitalio introuvables. Veuillez les (re)installer.')
-		time.sleep(7)
-		sys.exit('Dependances pifacedigitalio introuvables.')
-	
+		log('Error' , 'Dependances pifacedigitalio introuvables. Veuillez les (re)installer. - ' + str(errdep))
+		sys.exit('Dependances pifacedigitalio introuvables. - ' + str(errdep))
+
 	# set up PiFace Digital
 	pifacedigital = pifacedigitalio.PiFaceDigital(int(boardId))
 	#listener = pifacedigitalio.InputEventListener(chip=pifacedigital)
@@ -446,8 +485,8 @@ if __name__ == "__main__":
 	threads = []
 
 	# Create new threads
-	thread1 = myThread1(1, "Net")
-	thread2 = myThread2(2, "Tmp")
+	thread1 = myThread1(1, "First Network thread")
+	thread2 = myThread2(2, "Second Network thread")
 
 	# Start new Threads
 	thread1.start()
@@ -461,7 +500,7 @@ if __name__ == "__main__":
 	thread_refresh = time.time() + thread_delay
 	thread_tries = 0
 
-	print("Jeedouino PiFace daemon waiting for inputs...")
+	log('info', "Jeedouino PiFace daemon running...")
 	try:
 		while exit==0:
 			if thread_refresh<time.time():
@@ -505,7 +544,7 @@ if __name__ == "__main__":
 				SimpleSend(pinStr + '&Main=1')
 			time.sleep(0.2)
 	except KeyboardInterrupt:
-		print('^C received, shutting down server')
+		log('debug' , '^C received, shutting down daemon server')
 		exit=1  # permet de sortir du thread aussi
 
 	s.close()

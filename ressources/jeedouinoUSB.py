@@ -29,11 +29,16 @@ JeedomCPL = ''
 thread_1 = 0
 thread_2 = 0
 
-def log(level, message):
+logFile = "JeedouinoUSB.log"
+
+def log(level,message):
+	fifi=open(logFile, "a+")
 	try:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
+		fifi.write('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
 	except:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		fifi.write('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+	fifi.write("\r\n")
+	fifi.close()
 
 def SimpleParse(m):
 	m = m.replace('/', '')
@@ -67,7 +72,7 @@ class myThread1 (threading.Thread):
 		self.name = name
 
 	def run(self):
-		print("Starting " + self.name)
+		log('info', "Starting " + self.name)
 		global exit, Arduino_reponse, USBArduino, port, s, thread_1, thread_tries
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -175,7 +180,7 @@ class myThread2 (threading.Thread):
 		self.name = name
 
 	def run(self):
-		print("Starting " + self.name)
+		log('info', "Starting " + self.name)
 		global exit, Arduino_reponse, USBArduino, cmd_list, s, thread_2
 		rep = ''
 		while exit == 0:
@@ -201,7 +206,7 @@ class myThread2 (threading.Thread):
 				for i in cmd_list:
 					if rep.find(i) > -1:
 						Arduino_reponse = i
-						rep = rep.replace(i, '&REP = '+str(i))
+						rep = rep.replace(i, '&REP='+str(i))
 						break
 
 			rep = rep.replace('\n', '')
@@ -227,18 +232,25 @@ class myThread2 (threading.Thread):
 def SimpleSend(rep):
 	global eqLogic, JeedomIP, JeedomPort, JeedomCPL
 	if JeedomIP != '' and eqLogic != '':
-		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ = "+str(eqLogic)+str(rep)
+		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
 		conn = httplib.HTTPConnection(JeedomIP, JeedomPort)
 		conn.request("GET", url )
 		#resp = conn.getresponse()
 		conn.close()
 		log("GET", url )
 	else:
-		log ('Probleme', "JeedomIP et/ou eqLogic non fourni(s)")
+		log('Error', "JeedomIP et/ou eqLogic non fourni(s)")
 
 # Debut
 if __name__  ==  "__main__":
 	# get the arguments
+	if len(sys.argv) > 9:
+		if sys.argv[9] != '':
+			logFile = sys.argv[9]
+	if len(sys.argv) > 8:
+		ProbeDelay = int(sys.argv[8])
+		if ProbeDelay<1 or ProbeDelay>1000:
+			ProbeDelay = 5
 	if len(sys.argv) > 7:
 		baudrate = sys.argv[7]
 	if len(sys.argv) > 6:
@@ -261,12 +273,11 @@ if __name__  ==  "__main__":
 		USBArduino = serial.Serial(portusb, baudrate, timeout = 1, rtscts = 1)
 		time.sleep(0.5)
 		USBArduino.flush()
-	except:
+	except Exception as e:
 		USBArduino = ''
 		SimpleSend('&NODEP = SERIAL')
-		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller.')
-		time.sleep(7)
-		sys.exit('Dependances Serial introuvables')
+		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller. - ' + str(e))
+		sys.exit('Dependances Serial introuvables. - ' + str(e))
 
 	# inits
 	exit = 0
@@ -278,8 +289,8 @@ if __name__  ==  "__main__":
 	threads = []
 
 	# Create new threads
-	thread1 = myThread1(1, "Net")
-	thread2 = myThread2(2, "Usb")
+	thread1 = myThread1(1, "Network thread")
+	thread2 = myThread2(2, "Usb thread")
 
 	# Start new Threads
 	thread1.start()
@@ -293,7 +304,7 @@ if __name__  ==  "__main__":
 	thread_refresh = time.time() + thread_delay
 	thread_tries = 0
 
-	print("Jeedouino daemon waiting...")
+	log('info', "Jeedouino USB daemon running...")
 	try:
 		while exit == 0:
 			if thread_refresh < time.time():
@@ -320,7 +331,7 @@ if __name__  ==  "__main__":
 				thread_2 = 0
 			time.sleep(2)
 	except KeyboardInterrupt:
-		print('^C received, shutting down daemon server')
+		log('debug' , '^C received, shutting down daemon server')
 		exit = 1  # permet de sortir du thread aussi
 		time.sleep(2)
 

@@ -149,11 +149,11 @@ foreach ($eqLogics as $eqLogic)
 			<li><a href="#" class="eqLogicAction" aria-controls="home" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
 			<li class="active"><a href="#eqlogictab" aria-controls="home" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{Equipement}}</a></li>
 			<li><a href="#commandtab" aria-controls="profile" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Commandes}}</a></li>
-			<li class="control"><a href="#pinstab" aria-controls="profile" data-toggle="tab"  id="bt_conf_Pin"><i class="fas fa-wrench"></i> {{Pins / GPIO}}</a></li>
+			<li class="control"><a href="#pinstab" aria-controls="profile" data-toggle="tab"><i class="fas fa-wrench"></i> {{Pins / GPIO}}</a></li>
 			<li class="sketchstab"><a href="#sketchstab" aria-controls="profile" data-toggle="tab"  ><i class="fas fa-code"></i> {{Sketchs}}</a></li>
 		</ul>
 
-		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+		<div class="tab-content" style="height:calc(100% - 80px);overflow:auto;overflow-x: hidden;">
 			<div class="tab-pane active" id="eqlogictab">
 			<br>
 
@@ -183,8 +183,8 @@ foreach ($eqLogics as $eqLogic)
                     </div>
                 </div>
                 <div class="control form-group">
-                    <label class="col-sm-2 control-label">{{Catégorie}}</label>
-                    <div class="col-sm-8">
+                    <label class="col-sm-1 control-label">{{Catégorie}}</label>
+                    <div class="col-sm-10">
                         <?php
                         foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                             echo '<label class="checkbox-inline ">';
@@ -193,6 +193,7 @@ foreach ($eqLogics as $eqLogic)
                         }
                         ?>
                     </div>
+                    <br><br>
                 </div>
                 <div class="form-group">
 				  <label class="col-sm-3 control-label"></label>
@@ -429,19 +430,6 @@ foreach ($eqLogics as $eqLogic)
 				  </div>
 				</div>
 			</form>
-		<!--
-		<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fas fa-plus-circle"></i>{{ Ajouter une commande Jeedouino}}</a><br/><br/>
-		 -->
-		 <!--
-        <form class="form-horizontal">
-            <fieldset>
-                <div class="form-actions">
-                    <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer l'équipement}}</a>
-                    <a class="btn btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauver et/ou Générer les commandes}}</a>
-                </div>
-            </fieldset>
-        </form>
-		-->
 		<br>
         <table id="table_cmd" class="table table-bordered table-condensed">
             <thead>
@@ -456,18 +444,16 @@ foreach ($eqLogics as $eqLogic)
 		</div>
 
 		<div class="tab-pane" id="pinstab">
-			<br><br><br>
+			<br><br>
 			<div class="form-group alert alert-warning">
-				<center><h4>
-						{{Note : Il est nécéssaire de configurer l'équipement et de le sauvegarder avant de pouvoir configurer les pins de celui-ci}}
-				</h4></center>
-				<!--
-				<label class="col-sm-3 control-label">{{Configuration des pins de la carte}}</label>
-				 <div class="col-sm-6">
-					<a class="btn btn-warning btn-sm " id="bt_conf_Pin" >{{Ouvrir le paramétrage}}</a>
-				</div>
-				-->
+				<center>
+                    <h4>
+                        {{Note : Il est nécéssaire de configurer l'équipement et de le sauvegarder avant de pouvoir configurer les pins de celui-ci}}
+                    </h4>
+                    <a class="btn btn-info" href="#pinstab" aria-controls="profile" data-toggle="tab"  id="bt_conf_Pin"><i class="fas fa-wrench"></i> {{Pins / GPIO}}</a>
+                </center>
 			</div>
+            <br><br>
 
 				<?php	if (config::byKey('ActiveUserCmd', 'jeedouino', false))
 				{ ?>
@@ -485,7 +471,7 @@ foreach ($eqLogics as $eqLogic)
 						<td>{{Ajoute autant de pins utilisateur (que le nombre choisi) à la liste des pins configurables dans l'onglet <i class="fas fa-wrench"></i> Pins/GPIO.}}</td>
 					</tr>
 				</table>
-
+                <br><br>
 		<?php
 				} ?>
 			<form class="form-horizontal">

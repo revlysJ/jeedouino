@@ -1,6 +1,15 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
-07/09/2019 v1.05
+23/09/2019 v1.05b
+---
+
+- Amélioration de la page JeedouinoExt.
+- Améliorations des démons et des logs.
+- Corrections diverses.
+- Ajout de la fonction double_pulse (pour simuler un double-clic par ex).
+- Amélioration de la compatibilité Buster et Jeedom v4.
+
+07/09/2019 v1.05a
 ---
 
 - Ajout de l'interface de gestion JeedouinoExt.

@@ -59,6 +59,7 @@ $port =  jeedouino::GetJeedomPort();
 							<input type="checkbox" class="configKey " data-l1key="ActiveLog" />
 						</div>
 				</div>
+                <div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#logtab"><i class="fas fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
 				<?php if (method_exists('virtual', 'copyFromEqLogic'))
 						{
 				?>
@@ -83,7 +84,6 @@ $port =  jeedouino::GetJeedomPort();
 						</div>
     				</div>
                 </div>
-				<div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#logtab"><i class="fas fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
 			</fieldset>
 		</form>
 	</div>
@@ -209,7 +209,7 @@ $port =  jeedouino::GetJeedomPort();
 			<fieldset>
 			<div class="form-group" >
 
-		<table class="table table-bordered">
+		<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
 				<th>{{Jeedom}}</th>
@@ -364,19 +364,19 @@ $port =  jeedouino::GetJeedomPort();
 				$html .= '<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank"><i class="fas fa-sitemap"></i> '.$name.'</a></div>';
 				$html .= '</td><td class="deamonState">';
 
-				if ($StatusDemon) $html .= '<span class="label label-success" style="font-size : 1em;" >OK</span>';
+				if ($StatusDemon) $html .= '<span class="btn btn-success" >OK</span>';
 				else
 				{
-					if (($CronStepArr!='') and (in_array($board_id,$CronStepArr))) $html .= '<span class="label label-warning " style="font-size : 1em;" ><i class="fas fa-play"></i> 4min</span>';
-					else $html .= '<span class="label label-danger " style="font-size : 1em;" >NOK</span>';
+					if (($CronStepArr!='') and (in_array($board_id,$CronStepArr))) $html .= '<span class="btn btn-warning " ><i class="fas fa-play"></i> 4min</span>';
+					else $html .= '<span class="btn btn-danger " >NOK</span>';
 				}
 				$html .= '</td><td>';
-				if ($StatusDemon) $html .= '<a class="btn btn-success bt_restartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-play"></i></a>';
+				if ($StatusDemon) $html .= '<a class="btn btn-success bt_restartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-sync"></i></a>';
 				else $html .= '<a class="btn btn-success bt_StartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-play"></i></a>';
 				$html .= '</td><td>';
 				if ($StatusDemon) $html .= '<a class="btn btn-danger bt_stopDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-stop"></i></a>';
 				$html .= '</td><td>';
-				$html .= '<label class="checkbox-inline"><input type="checkbox" class="configKey " data-l1key="Auto_'. $board_id.'" /><i class="fas fa-refresh"></i> {{5min}}</label>';
+				$html .= '<label class="checkbox-inline"><input type="checkbox" class="configKey " data-l1key="Auto_'. $board_id.'" /><i class="fas fa-redo"></i> {{5min}}</label>';
 				$html .= '</td><td>';
                 $html .= $jsButton;
                 $html .= '</td><td>';

@@ -1,5 +1,22 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+07/09/2019 v1.05
+---
+
+- Ajout de l'interface de gestion JeedouinoExt.
+- Amélioration de la page JeedouinoExt.
+- Ajout d'un équipement de controle des démons et ses commandes.
+- Amélioration de la page de configuration.
+- Corrections diverses.
+- Amélioration des libéllés des logs.
+
+28/08/2019 v1.04
+---
+
+- Compatibilité PHP 7.3 (Buster).
+- Nettoyage et Correction de quelques bugs.
+- compteur_pullup : la valeur de Reset est màj régulièrement.
+
 17/02/2018 v1.03
 ---
 
@@ -19,7 +36,7 @@ Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 - Ajout des commandes pour cartes arduino et esp826x:  
    * Envoi valeur au servo par slider, permet de commander un servo avec une valeur entre 0 et 180 par ex.
    * Commande pour RGB LED Strip a base de WS2811 (1 strip max par carte).
-       Permet d'envoyer une valeur de couleur, ou de selectionner parmi 17 effets. 
+       Permet d'envoyer une valeur de couleur, ou de selectionner parmi 17 effets.
        Attention un effet est bloquant, il vaux mieux dédier un arduino/esp.
 - Ajout génération Sketch USB.
 - Amélioration du démarrage du démon usb.

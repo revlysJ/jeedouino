@@ -1,6 +1,6 @@
 Description
 ===========
-- **Jeedouino v1.03**  
+- **Jeedouino v1.05**  
 
    Ce plugin vous permet de contrôler de différentes manières les pins entrées/sorties des cartes suivantes :
 
@@ -39,7 +39,7 @@ Installation du plugin
 
 Mise à jour du plugin
 ---
-Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier. 
+Si vous avez plusieurs Jeedom, il est conseillé de faire la mise à jour sur les Jeedom esclaves en premier.
 Ensuite vous pouvez faire celle du Jeedom maître.
 
 > **[IMPORTANT]**
@@ -160,7 +160,7 @@ Uniquement ceux des équipements créés.
 
 ![image105](../images/configuration3.png)
 
-Onglet : Configuration Docker 
+Onglet : Configuration Docker
 ---
 Si votre Jeedom est sous Docker, il faut activer l'option, et renseigner l'IP de l'hôte (Celle du NAS le plus souvent) et le port mappé (souvent 9080).
 
@@ -169,11 +169,11 @@ Si votre Jeedom est sous Docker, il faut activer l'option, et renseigner l'IP de
 Création des équipements
 ========================
 
-La configuration des équipements Jeedouino est accessible à partir du menu Plugins : 
+La configuration des équipements Jeedouino est accessible à partir du menu Plugins :
 
 ![image201](../images/menuplugin.png)
 
-Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) : 
+Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équipements) :
 
 ![image202](../images/equipements.png)
 
@@ -181,18 +181,18 @@ Voilà à quoi ressemble la page du plugin Jeedouino (ici avec déjà des équip
 >
 > Comme à beaucoup d'endroits sur Jeedom, placer la souris tout à gauche permet de faire apparaître un menu d'accès rapide (vous pouvez, à partir de votre profil, le laisser toujours visible).
 
-Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez : 
+Une fois que vous cliquez sur le bouton + (Ajouter un nouvel équipement), et après avoir donné un nom à votre équipement, vous obtenez :
 
 ![image203](../images/equipements0.png)
 
-Vous retrouvez ici toute la configuration de votre équipement : 
+Vous retrouvez ici toute la configuration de votre équipement :
 
 * **Nom de l'équipement** : nom de votre équipement Jeedouino,
 * **Objet parent** : indique l'objet parent auquel appartient l'équipement,
 * **Activer** : permet de rendre votre équipement actif,
 * **Visible** : rend votre équipement visible sur le dashboard.
 
-En-dessous vous retrouvez le paramétrage de votre équipement : 
+En-dessous vous retrouvez le paramétrage de votre équipement :
 
 * **Modèle** : le Modèle de la carte que vous souhaitez controler,
 
@@ -205,13 +205,13 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
 * **Adresse IP et Port** : pour la connection à la carte via le réseau,
 
    > **[WARNING]**
-   > 
+   >
    > Les démons (GPIO et Piface par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé.  
    > _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._  
    > Le port doit aussi être différent de celui du Jeedom hôte.
 
    > **[TIP]**
-   > 
+   >
    > _Suivant, les navigateurs, une flèche apparaît permettant de choisir directement une IP parmis vos Jeedom._   
    > Vous pouvez aussi utiliser _local_ ou _localhost_ pour l'adresse IP du Jeedom principal (maître).
 
@@ -224,7 +224,7 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
 * **Port Démon** : pour la connection au démon via le réseau, l'IP du démon étant celle du Jeedom hôte.
 
    > **[WARNING]**
-   > 
+   >
    > Les démons ( Arduino USB par ex.) pouvant êtres sur le même Jeedom, il faut veiller à utiliser des ports différents pour chacun. Normalement, à la création d'un équipement, un port de libre vous est proposé.  
    > _Si nécéssaire, le démon choisira un autre port en lieu et place de celui indiqué s'il s'avère impossible de l'utiliser._  
    > Le port doit aussi être différent de celui du Jeedom hôte.
@@ -233,18 +233,18 @@ _Pour la carte PiFace, un numéro (de 0 à 3) est demandé pour l'identifier (Si
 (NB. Rafraîchissement de la page, il peut être nécéssaire de faire un F5 pour voir apparaître le lien )
 
    > **[NOTE]**
-   > 
+   >
    > Pour les modèles Ethernet (Arduinos), il est spécifiquement généré, en tenant compte de l'adresse IP choisie, du port choisi, et d'une adresse mac unique.   
    > _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._
 
    > **[TIP]**
-   > 
+   >
    > _Le Sketch est par défaut prévu pour les shields avec chip W5100, mais il peut fonctionner aussi avec des ENC28J60. Dans ce cas, il faudra lire et appliquer la procédure présente en entête du sketch._
 
 ![image208](../images/sketch.png)
 
    > **[NOTE]**
-   > 
+   >
    > Pour les modèles WiFi (ESP8266), il est spécifiquement généré, en tenant compte du port, du SSID, et du mot de passe wifi, l'adresse IP étant renvoyée par la carte.  
    > _Ainsi que de l'IP, du complément '/jeedom' (ou non) et du port du Jeedom maître ( d'après votre configuration réseau dans Jeedom)._  
    > _NB. Il faut tout de même renseigner l'adressse IP la premiére fois._
@@ -264,22 +264,22 @@ Configuration des pins
    **_NB : Des compléments d'informations sont disponibles dans la FAQ._**
 
    * Entrées: Analogiques, Digitales, Compteur d'impulsions
-   * Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..). 
+   * Sorties: Low (=0=Gnd), High (=1=Vcc), Switch (inverse la sortie), Pulse (mettre la sortie à low ou high pendant une durée limitée - ex.:actionner momentanément, via un relais, un télérupteur, une électrovanne, un volet, un contact sec, etc..).
 
 ![image210](../images/jeedouino_screenshot4.png)
 
    > **[IMPORTANT]**
-   > 
+   >
    > **_Les Pins seront configurables uniquement après une première sauvegarde de votre équipement._**  
    > Une fois celles-ci configurées et sauvées (dans la fenêtre de modale), une sauvegarde de l'équipement générera toutes les commandes nécéssaires.
 
    > **[NOTE]**
-   > 
+   >
    > Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.
    > Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 
    > **[TIP]**
-   > 
+   >
    > Il est désormais possible de configurer les generic type directement, et d'affecter les pins à des groupes (équipements) virtuels, voir la FAQ.
 
 * **Modal Paramétrages / affectation des pins utilisateur**
@@ -313,7 +313,7 @@ Commandes
 * Il est bien sûr possible de renommer les commandes.
 
    > **[NOTE]**
-   > 
+   >
    > Pour chaque commande de type 'action', une commande de type 'info' de retour d'état est aussi créée _(si utile)_.
 
 * Les boutons _Afficher_ et _Historiser_ sont les boutons habituels d'affichage (ou non) de la commande sur le widget et de son historisation (ou non).
@@ -327,7 +327,7 @@ Commandes
 Il n'est pour l'instant pas prévu de pouvoir ajouter des commandes manuellement.
 
 > **[TIP]**
-> 
+>
 > Pour les commandes info de type 'compteur', elles sont remises a la valeur stockée dans l'équipement à chaque sauvegarde de celui-ci.  
 > A l'inverse, après un reboot de l'arduino (par ex.), la derniére valeur est recupérée auprès du Jeedom maître.  
 > Si une erreur de communication survient a ce moment la, le compteur sera réinitialisé à zéro.   
@@ -355,7 +355,7 @@ Il est possible d'ouvrir la page de configuration du plugin directement en cliqu
 
 ![image301](../images/sante1.png)
 
-Il est possible de voir les états des équipements directement en cliquant sur l'icone à droite de Jeedouino. 
+Il est possible de voir les états des équipements directement en cliquant sur l'icone à droite de Jeedouino.
 
 Etats des équipements du plugin
 ---
@@ -383,7 +383,7 @@ Sketchs Personnels/Modifiables et Commandes Utilisateur
 - **Entêtes  des sketchs**  
    Avec les nouvelles fonctionnalités, les sketchs peuvent devenir trop lourd pour les "petits" Arduinos.
    Il est donc possible de désactiver certaines de ces fonctionnalités afin d'alléger les sketchs si besoin.
-   Vous trouverez en entête des sketchs cette possibilité : 
+   Vous trouverez en entête des sketchs cette possibilité :
 
    >**#define DEBUGtoSERIAL 0** // 0, ou 1 pour debug dans la console serie  
    >**#define UseWatchdog 0**  
@@ -423,7 +423,7 @@ Pour vos Sketchs perso, il suffit d'aller voir dans les sketchs, tout est indiqu
       * Entrée Numérique (Sous-type : numérique)
       * Entrée Numérique (Sous-type : autre)
       * Sortie Numérique (Sous-type : défaut)
-      * Sortie Numérique (Sous-type : curseur) 
+      * Sortie Numérique (Sous-type : curseur)
       * Sortie Numérique (Sous-type : message)
 
 ![image401](../images/UserPins.png)
@@ -497,7 +497,7 @@ Voir ci-dessous.
 Les démons  ne démarrent pas aprés un reboot ?
 ---
 Les démons ne sont relancés **qu'environ 4 minutes** après le lancement de Jeedom.  
-Cela permet d'essayer d'assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc...). 
+Cela permet d'essayer d'assurer une compatibilité avec les systèmes un peu plus lents (Ex: RPI 1, Systèmes chargés, etc...).
 > **[NOTE]**  
 > Si des Jeedom esclaves démarrent aussi, le délai de 4 minutes débute après le dernier Jeedom démarré.
 
@@ -537,16 +537,16 @@ _Ce mode n'est pas souvent disponible, et dans ce cas, il vous suffit de mettre 
 Configuration détaillée des pins
 ================================
 
-Configuration des pins 
+Configuration des pins
 ---
 Permet de sélectionner les pins voulues et de leur affecter une fonction de type entrée (info) ou sortie (action).
 
 > **[IMPORTANT]**
-> 
+>
 >**Toutes les fonctions des pins ne sont pas forcément disponibles sur toutes les cartes / microcontrôleurs, chacun ayant ses propres caractéristiques.**
 
 > **[NOTE]**
-> 
+>
 >**Rappel** : Il n'est pas utile de donner une fonction à chaque pin, mais uniquement à celles dont vous avez besoin.  
 > Cela évitera la génération de commandes inutiles et de trop charger Jeedom.
 

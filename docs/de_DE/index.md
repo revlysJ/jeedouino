@@ -133,7 +133,7 @@ Onglet : Démons
 
 _Exemple de différents démons possibles:_
 
-![image103](../images/configuration1.png)
+![image103](../images/ConfDemons.png)
 
 Ici, dès que vous aurez créé des équipements nécéssitant l'utilisation de démons, apparaîtront ces derniers.
 
@@ -459,7 +459,7 @@ Groupes Virtuels
 
 Pour activer les groupes virtuels, une option est présente sur la page de configuration du plugin.
 
-![image403](../images/configuration5.png)
+![image403](../images/configuration.png)
 
 Il faut ensuite créer les équipements virtuels dont vous aurez besoin (avec le plugin Virtuel bien-sûr).
 

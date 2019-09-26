@@ -2,7 +2,7 @@ Description
 ===========
 - **Jeedouino v1.05**  
 
-   Ce plugin vous permet de contrôler de différentes manières les pins entrées/sorties des cartes suivantes :
+   This plugin enable you to control in many ways the input/output of the following boards :
 
    * Arduinos (différents modèles) branchés en USB sur *Raspberry PI*.
    * Arduinos (différents modèles) branchés avec un shield Ethernet (W5100, W5500, ENC28J60) sur votre réseau.

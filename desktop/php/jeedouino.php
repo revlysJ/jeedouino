@@ -24,7 +24,7 @@ $cpl = jeedouino::GetJeedomComplement();
 //include_file('desktop', 'jeedouino', 'css', 'jeedouino');
 //
 $eqLogicsHTML = "";
-$eqLogicsCTRL = "";
+$eqLogicsEXT = "";
 foreach ($eqLogics as $eqLogic)
 {
     $ModeleArduino = $eqLogic->getConfiguration('arduino_board');
@@ -49,9 +49,10 @@ foreach ($eqLogics as $eqLogic)
     $HTML .= '<img src="plugins/jeedouino/icons/jeedouino_' . $ModeleArduino . '.png" ' . $style . '/>';
 
     $HTML .= "</center>";
-    $HTML .= '<span class="name" style="color:#00979C"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+    $HTML .= '<span class="name" style="color:#00979C"><br><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
     $HTML .= '</div>';
-    $eqLogicsHTML .= $HTML;
+    if ($eqLogic->getConfiguration('alone') == '1') $eqLogicsEXT .= $HTML;
+    else $eqLogicsHTML .= $HTML;
 }
 ?>
 
@@ -118,16 +119,23 @@ foreach ($eqLogics as $eqLogic)
 			</div>
 <?php
     }
-    echo $eqLogicsCTRL;
 ?>
 		</div>
-		<legend><i class="fas fa-table"></i> {{Mes équipements Jeedouino}}</legend>
         <input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchEqlogic" />
+		<legend><i class="fas fa-table"></i> {{Mes équipements Jeedouino}}</legend>
 		<div class="eqLogicThumbnailContainer">
 		<?php
             echo $eqLogicsHTML;
-		?>
-		</div>
+            echo '</div>';
+
+            if ($eqLogicsEXT != '')
+            {
+                echo '<legend><i class="fas fa-table"></i> {{Mes équipements sur JeedouinoEXT}}</legend>';
+                echo '<div class="eqLogicThumbnailContainer">';
+                echo $eqLogicsEXT;
+                echo '</div>';
+            }
+        ?>
 	</div>
     <!-- Affichage de l'eqLogic sélectionné -->
     <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
@@ -183,13 +191,20 @@ foreach ($eqLogics as $eqLogic)
                     </div>
                 </div>
                 <div class="control form-group">
-                    <label class="col-sm-1 control-label">{{Catégorie}}</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label">{{Catégorie}}</label>
+                    <div class="col-sm-9">
                         <?php
+                        $n = 0;
                         foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                             echo '<label class="checkbox-inline ">';
                             echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
                             echo '</label>';
+                            $n++;
+                            if ($n >= 4)
+                            {
+                                $n = 0;
+                                echo '</div></div><div class="control form-group"><label class="col-sm-3 control-label">"</label><div class="col-sm-9">';
+                            }
                         }
                         ?>
                     </div>
@@ -207,6 +222,7 @@ foreach ($eqLogics as $eqLogic)
 					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
 					<?php }  ?>
 					</div>
+                    <br><br>
                 </div>
                     <div class="control form-group">
                         <label class="col-sm-3 control-label">Modèle de la carte </label>
@@ -384,7 +400,8 @@ foreach ($eqLogics as $eqLogic)
 					{
 						foreach ($ListExtIP as $ip)
 						{
-							echo '<option value="' . $ip . '">JeedouinoExt</option>';
+                            $JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', 'JeedouinoExt'));
+							echo '<option value="' . $ip . '">' . $JExtname . '</option>';
 						}
 					}
                 ?>

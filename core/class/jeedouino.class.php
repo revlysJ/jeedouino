@@ -1291,12 +1291,13 @@ class jeedouino extends eqLogic {
 		return false;
 	}
 
-	public function SendJeedouinoExt($jeedouino_ext)
+	public function SendJeedouinoExt($jeedouino_ext, $Noinstall = false)
 	{
-		jeedouino::log( 'info', 'Envoi des fichiers JeedouinoExt sur ' . $jeedouino_ext['IP']);
+		jeedouino::log( 'info', __('Envoi des fichiers JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
 		$file_path = dirname(__FILE__) . '/../../ressources/JeedouinoExt.zip';
 		$to_path = '/tmp/JeedouinoExt.zip';
 		$sh_path = '/tmp/JeedouinoExt/JeedouinoExt.sh';
+		if ($Noinstall) $sh_path = '/tmp/JeedouinoExt/JeedouinoExt2.sh';
 
 		// test
 		$jeedouinocfg = '{"IP":"' . jeedouino::GetJeedomIP(). '","Port":"' . jeedouino::GetJeedomPort(). '","Cpl":"' . jeedouino::GetJeedomComplement(). '"}';
@@ -1305,21 +1306,21 @@ class jeedouino extends eqLogic {
 		//
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
 		{
-			jeedouino::log( 'error', 'Connection SSH impossible sur ' . $jeedouino_ext['IP']);
+			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
 			return false;
 		}
 		else
 		{
 			if (!ssh2_auth_password($connection, $jeedouino_ext['sshID'], $jeedouino_ext['sshPW']))
 			{
-				jeedouino::log( 'error', 'Authentification SSH impossible sur ' . $jeedouino_ext['IP']);
+				jeedouino::log( 'error', __('Authentification SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
 				return false;
 			}
 			else
 			{
 				if (!$result = ssh2_scp_send($connection, $file_path, $to_path, 0777))
 				{
-					jeedouino::log( 'error', 'Envoi du fichier ' . $file_path. ' impossible sur ' . $jeedouino_ext['IP']);
+					jeedouino::log( 'error', __('Envoi du fichier ', __FILE__) . $file_path. __(' impossible sur ', __FILE__) . $jeedouino_ext['IP']);
 					return false;
 				}
 				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
@@ -1327,6 +1328,17 @@ class jeedouino extends eqLogic {
 				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd . '/bin/bash ' . $sh_path);
 				$result = jeedouino::SshCmdJeedouinoExt($connection, $test);
 				$result = jeedouino::SshCmdJeedouinoExt($connection, 'exit');
+			}
+		}
+		if ($Noinstall)
+		{
+			foreach (eqLogic::byType('jeedouino') as $eqLogic)
+			{
+				if ($eqLogic->getConfiguration('iparduino') == $jeedouino_ext['IP'])
+				{
+					jeedouino::SendPRM($eqLogic); // on renvoie la config
+					jeedouino::ReStartBoardDemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
+				}
 			}
 		}
 		return true;

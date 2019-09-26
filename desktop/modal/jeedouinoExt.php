@@ -74,7 +74,7 @@ $ip = jeedouino::GetJeedomIP();
 		<ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="#" class="jeedouinoExtAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
 			<li role="presentation" class="active"><a href="#jeedouinoExtConfigtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cogs"></i> {{Paramètres}}</a></li>
-			<li role="presentation"><a href="#jeedouinoExtEq" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Equipements et Démons}}</a></li>
+			<li role="presentation"><a href="#jeedouinoExtEq" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Equipement(s) et Démon(s)}}</a></li>
 		</ul>
 
 		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -128,7 +128,16 @@ $ip = jeedouino::GetJeedomIP();
                                 <a class="btn btn-success" target="_blank" download href="/../../plugins/jeedouino/ressources/JeedouinoExt.zip"><i class="fas fa-download"></i> {{Zip}}</a>
                             </div>
                         </div>
-                        <div class="alert alert-info JeedouinoExtNew">{{La durée d'installation peut être trés (trés) longue selon les systèmes.}}</div>
+						<div class="form-group JeedouinoExtNew">
+                            <label class="col-sm-3 control-label">{{Ou}}</label>
+                            <div class="col-sm-3">
+                                <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles2"><i class="fas fa-spinner"></i> {{Envoi et redémarrage du/des démon(s)}}</a>
+                            </div>
+                        </div>
+                        <div class="alert alert-info JeedouinoExtNew">
+							{{La durée d'installation peut être trés (trés) longue selon les systèmes.}}<br>
+							{{Il faudra re-sauver le(s) équipement(s) après un envoi sur une installation existante si le redémarrage du/des démon(s) échoue.}}<br>
+						</div>
 
 					</fieldset>
                     <fieldset class="JeedouinoExtNew">
@@ -156,6 +165,9 @@ $ip = jeedouino::GetJeedomIP();
 			</div>
 			<div role="tabpanel" class="tab-pane" id="jeedouinoExtEq">
                 <br>
+				<div class="alert alert-info JeedouinoExtNew">
+					{{Si un équipement est NOK ici mais OK sur la page JeedouinoExt, patientez 3min (màj du cache) et ré-actualisez (F5) ici.}}<br>
+				</div>
 				<form class="form-horizontal">
 					<fieldset>
                         <div class="form-group" >
@@ -378,6 +390,28 @@ $ip = jeedouino::GetJeedomIP();
 		});
 	});
 
+	$('.jeedouinoExtAction[data-action=sendFiles2]').on('click',function(){
+        var jeedouino_ext = $('.jeedouinoExt').getValues('.jeedouinoExtAttr')[0];
+		$.ajax({
+			type: "POST",
+			url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php",
+			data: {
+				action: "send_jeedouinoExt2",
+				jeedouino_ext: json_encode(jeedouino_ext),
+			},
+			dataType: 'json',
+			error: function (request, status, error) {
+				handleAjaxError(request, status, error,$('#div_jeedouinoExtAlert'));
+			},
+			success: function (data) {
+				if (data.state != 'ok') {
+					$('#div_jeedouinoExtAlert').showAlert({message: data.result, level: 'danger'});
+					return;
+				}
+				$('#div_jeedouinoExtAlert').showAlert({message: '{{Envois réussis}}', level: 'success'});
+			}
+		});
+	});
 
    $('.bt_StartDemon').on('click', function () {
        var jextid = $(this).attr('data-jextid');

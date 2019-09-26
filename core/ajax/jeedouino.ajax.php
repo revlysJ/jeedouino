@@ -92,6 +92,15 @@ try {
         }
 		ajax::success();
 	}
+    if (init('action') == 'send_jeedouinoExt2')
+    {
+        $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+        if (!jeedouino::SendJeedouinoExt($JeedouinoExtSend, true))
+        {
+            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JedouinoExt. ', __FILE__));
+        }
+		ajax::success();
+	}
     //
     ////
 

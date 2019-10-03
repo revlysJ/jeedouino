@@ -1,4 +1,4 @@
-# Jeedouino v1.05
+# Jeedouino v1.06
 Plugin pour Jeedom  
 
 Description  
@@ -13,6 +13,8 @@ Description
    * les GPIO du *Raspberry PI*.
    * les cartes PiFace v1 (et piRack) sur *Raspberry PI*.
    * les cartes IO PiPlus et les MCP23017 sur *Raspberry PI*.
+
+   Avec le support de différents composants tels que  DHT11/22, DS18B20, WS2811, BMP085/180, BME/P280, BME680, etc...
 
 Il fonctionne en local ou en déporté (jeedouinoExt) sur votre réseau.  
 

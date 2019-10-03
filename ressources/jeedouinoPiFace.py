@@ -10,7 +10,10 @@ import socket			   # Import socket module
 import threading
 import os, time
 import sys
-import httplib
+try:
+	import http.client as httplib
+except:
+	import httplib
 os.environ['TZ'] = 'Europe/Paris'
 time.tzset()
 
@@ -20,8 +23,8 @@ try:
 except Exception as errdep:
 	nodep = 1
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 port = 8000
 portusb = ''
@@ -40,13 +43,14 @@ logFile = "JeedouinoPiFace.log"
 def log(level,message):
 	fifi=open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
-	except:
 		fifi.write('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+	except:
+		print('[%s][Demon PIFACE] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
 def SimpleParse(m):
+	m=m.decode('ascii')
 	m=m.replace('/', '')
 	u = m.find('?')
 	if u>-1:
@@ -106,7 +110,7 @@ class myThread1 (threading.Thread):
 					addr, portnew = s.getsockname()
 					log('debug','Un port libre est disponible : ' + str(portnew))
 					SimpleSend('&PORTFOUND=' + str(portnew))
-				except Exception, e:
+				except:
 					log('erreur','Impossible de trouver un port automatiquement. Veuillez en choisir un autre')
 					SimpleSend('&NOPORTFOUND=' + str(port))
 					s.close()
@@ -276,7 +280,7 @@ class myThread1 (threading.Thread):
 					reponse='EXITOK'
 
 				if reponse!='':
-					c.send(reponse)
+					c.send(reponse.encode('ascii'))
 					log ('>>Reponse a la requete :',str(reponse))
 					if RepStr!='':
 						SimpleSend(RepStr)

@@ -1,5 +1,5 @@
 """
-JEEDOUINO ARDUINO USB DEMON v0.7 , Dec 2015 - 2019
+JEEDOUINO ARDUINO USB DEMON v0.8 , Dec 2015 - 2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original :	https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -10,12 +10,15 @@ import threading
 import os, time
 import sys
 import serial
-import httplib
+try:
+	import http.client as httplib
+except:
+	import httplib
 os.environ['TZ'] = 'Europe/Paris'
 time.tzset()
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 port = 8080
 baudrate = 115200
@@ -34,13 +37,14 @@ logFile = "JeedouinoUSB.log"
 def log(level,message):
 	fifi=open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
-	except:
 		fifi.write('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+	except:
+		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
 def SimpleParse(m):
+	m=m.decode('ascii')
 	m = m.replace('/', '')
 	u = m.find('?')
 	if u > -1:
@@ -101,7 +105,7 @@ class myThread1 (threading.Thread):
 					addr, portnew = s.getsockname()
 					log('debug', 'Un port libre est disponible : ' + str(portnew))
 					SimpleSend('&PORTFOUND = ' + str(portnew))
-				except Exception, e:
+				except:
 					log('erreur', 'Impossible de trouver un port automatiquement. Veuillez en choisir un autre')
 					SimpleSend('&NOPORTFOUND = ' + str(port))
 					s.close()
@@ -146,7 +150,7 @@ class myThread1 (threading.Thread):
 						reponse = ''
 						Arduino_reponse = ''
 						Arduino_message +=  '\n'
-						USBArduino.write(Arduino_message)	   # fin du message a l'arduino
+						USBArduino.write(Arduino_message.encode('ascii'))	   # fin du message a l'arduino
 						log ('Arduino_message', Arduino_message)
 						timeout = time.time()*10+35
 						while Arduino_reponse == '':
@@ -160,7 +164,7 @@ class myThread1 (threading.Thread):
 						reponse = Arduino_reponse		 # Important !
 
 				if reponse != '':
-					c.send(reponse)
+					c.send(reponse.encode('ascii'))
 					log (' >  > Reponse a la requete', str(reponse))
 
 				if exit == 1:
@@ -189,7 +193,7 @@ class myThread2 (threading.Thread):
 				if exit == 1:
 					break
 				try:
-					rep = USBArduino.readline()
+					rep = USBArduino.readline().decode('ascii')
 				except serial.SerialException as e:
 					rep = ''
 					exit = 1

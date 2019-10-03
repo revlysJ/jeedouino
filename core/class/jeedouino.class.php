@@ -208,22 +208,22 @@ class jeedouino extends eqLogic {
 		$return['log'] = 'jeedouino_update';
 		$return['last_launch'] = '';
 		$return['progress_file'] = '/tmp/dependances_jeedouino_en_cours';
-		if (@shell_exec('ls /usr/lib/python2.*/dist-packages/serial/serialposix.py | wc -l') == 0)
+		if (@shell_exec('ls /usr/lib/python3*/dist-packages/serial/serialposix.py | wc -l') == 0)
 		{
 			$return['state'] = 'nok';
 		}
 		else
 		{
 			$return['state'] = 'ok';
-			if (@shell_exec('ls /usr/local/lib/python2.*/dist-packages/Adafruit_DHT*.egg | wc -l') == 0) $return['state'] = 'nok';
+			if (@shell_exec('ls /usr/local/lib/python3*/dist-packages/Adafruit_DHT*.egg | wc -l') == 0) $return['state'] = 'nok';
 		}
-		if ($return['state'] == 'nok') $return['advice'] = 'Normal si ce n\'est pas sur un Raspberry PI.';
+		if ($return['state'] == 'nok') $return['advice'] = __('Normal si ce n\'est pas sur un Raspberry PI.', __FILE__);
 
 		// Cas du maitre qui n'est pas un RPI
-		if (strpos(strtolower(config::byKey('hardware_name')),'rpi') === false)
+		if (strpos(strtolower(config::byKey('hardware_name')), 'rpi') === false)
 		{
 			$return['state'] = 'ok';
-			log::add('jeedouino_update','info','ATTENTION ! Ce n\'est pas un Raspberry PI, les dépendances afférentes ne s(er)ont pas installées.');
+			log::add('jeedouino_update','info', __('ATTENTION ! Ce n\'est pas un Raspberry PI, les dépendances afférentes ne s(er)ont pas installées.', __FILE__));
 		}
 		return $return;
 	}
@@ -231,16 +231,16 @@ class jeedouino extends eqLogic {
 	{
 		if (file_exists('/tmp/dependances_jeedouino_en_cours')) return;	// Install déja en cours
 
-		log::remove('jeedouino_update');
+		//log::remove('jeedouino_update');
 		//exec('sudo apt-get install python-serial >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		exec('sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/Jeedouino.sh >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 
-		log::add('jeedouino_update','info','Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci');
+		log::add('jeedouino_update','info', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
 	}
 	public static function health()
 	{
 		$return = array();
-		$return['test'] = 'Etat(s) démon(s)';
+		$return['test'] = __('Etat(s) démon(s)', __FILE__);
 		$return['result'] ='OK';
 		$return['advice'] = '';
 		$return['state'] = true;
@@ -258,7 +258,7 @@ class jeedouino extends eqLogic {
 				{
 					$return['state'] = false;
 					$return['result'] = 'NOK';
-					$return['advice'] = 'Au moins un démon ne tourne pas. Voir la page de configuration du plugin.';
+					$return['advice'] = __('Au moins un démon ne tourne pas. Voir la page de configuration du plugin.', __FILE__);
 					break;
 				}
 			}
@@ -515,92 +515,101 @@ class jeedouino extends eqLogic {
 				$myPin = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
 				switch ($myPin)
 				{
-					// dispo : 0-9
+					// dispo : 0-9 D-Z
 					case 'double_pulse_low':
 					case 'double_pulse_high':
 					case 'double_pulse':
 						$PinMode .= 'y';
-					break;
+						break;
 					case 'servo':
 						$PinMode .= 'x';
-					break;
+						break;
 					case 'bmp180':
 						$PinMode .= 'r';
-					break;
+						break;
+					case 'bmp280':
+						$PinMode .= 'C';
+						break;
+					case 'bme280':
+						$PinMode .= 'A';
+						break;
+					case 'bme680':
+						$PinMode .= 'B';
+						break;
 					case 'bp_input':
 						$PinMode .= 'n';
-					break;
+						break;
 					case 'bp_input_pullup':
 						$PinMode .= 'q';
-					break;
+						break;
 					case 'teleinfoRX':
 						$PinMode .= 'j';
-					break;
+						break;
 					case 'teleinfoTX':
 						$PinMode .= 'k';
-					break;
+						break;
 					case 'trigger':
 						$PinMode .= 't';
-					break;
+						break;
 					case 'echo':
 						$PinMode .= 'z';
-					break;
+						break;
 					case 'input':
 						$PinMode .= 'i';
-					break;
+						break;
 					case 'input_pullup':
 						$PinMode .= 'p';
-					break;
+						break;
 					case 'dht11':
 						$PinMode .= 'd';
-					break;
+						break;
 					case 'dht21':
 						$PinMode .= 'e';
-					break;
+						break;
 					case 'dht22':
 						$PinMode .= 'f';
-					break;
+						break;
 					case 'ds18b20':
 						$PinMode .= 'b';
-					break;
+						break;
 					case 'pwm_input':
 						$PinMode .= 'g';
-					break;
+						break;
 					case 'analog_input':
 						$PinMode .= 'a';
-					break;
+						break;
 					case 'output':
 						$PinMode .= 'o';
-					break;
+						break;
 					case 'switch':
 						$PinMode .= 's';
-					break;
+						break;
 					case 'compteur_pullup':
 						$PinMode .= 'c';
-					break;
+						break;
 					case 'low_relais':
 						$PinMode .= 'l';
-					break;
+						break;
 					case 'high_relais':
 						$PinMode .= 'h';
-					break;
+						break;
 					case 'output_pulse':
 						$PinMode .= 'u';
-					break;
+						break;
 					case 'low_pulse':
 					case 'low_pulse_slide':
 						$PinMode .= 'v';
-					break;
+						break;
 					case 'high_pulse':
 					case 'high_pulse_slide':
 						$PinMode .= 'w';
-					break;
+						break;
 					case 'pwm_output':
 						$PinMode .= 'm';
-					break;
+						break;
 					default:		// case 'not_used':
 						$PinMode .= '.';
-					break;
+						break;
 				}
 			}
 			if ($PinMode != '')
@@ -1297,13 +1306,12 @@ class jeedouino extends eqLogic {
 		$file_path = dirname(__FILE__) . '/../../ressources/JeedouinoExt.zip';
 		$to_path = '/tmp/JeedouinoExt.zip';
 		$sh_path = '/tmp/JeedouinoExt/JeedouinoExt.sh';
-		if ($Noinstall) $sh_path = '/tmp/JeedouinoExt/JeedouinoExt2.sh';
+		if ($Noinstall) $sh_path = '/tmp/JeedouinoExt/JeedouinoExt2.sh >> /var/www/html/JeedouinoExt/JeedouinoExt.log 2>&1 &';
 
 		// test
 		$jeedouinocfg = '{"IP":"' . jeedouino::GetJeedomIP(). '","Port":"' . jeedouino::GetJeedomPort(). '","Cpl":"' . jeedouino::GetJeedomComplement(). '"}';
 		$test = "echo '" . $jeedouinocfg . "' | sudo tee /var/www/html/JeedouinoExt/jeedouino.cfg";
 
-		//
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
 		{
 			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
@@ -1324,10 +1332,10 @@ class jeedouino extends eqLogic {
 					return false;
 				}
 				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
-				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd . 'unzip ' . $to_path . ' -d /tmp');
-				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd . '/bin/bash ' . $sh_path);
-				$result = jeedouino::SshCmdJeedouinoExt($connection, $test);
-				$result = jeedouino::SshCmdJeedouinoExt($connection, 'exit');
+				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'unzip ' . $to_path . ' -d /tmp');
+				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, '/bin/bash ' . $sh_path);
+				$result = jeedouino::SshCmdJeedouinoExt($connection, '', $test);
+				$result = jeedouino::SshCmdJeedouinoExt($connection, '', 'exit');
 			}
 		}
 		if ($Noinstall)
@@ -1344,16 +1352,15 @@ class jeedouino extends eqLogic {
 		return true;
 	}
 
-	public function SshCmdJeedouinoExt($connection, $cmd)
+	public function SshCmdJeedouinoExt($connection, $preCmd, $cmd)
 	{
-		$stream = ssh2_exec($connection, $cmd);
+		$stream = ssh2_exec($connection, $preCmd . $cmd);
 		$error = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
 		stream_set_blocking($error, true);
 		stream_set_blocking($stream, true);
 		$output = trim(stream_get_contents($stream) . ' ' . stream_get_contents($error));
 		fclose($error);
 		fclose($stream);
-
 		if (($output === false))
 		{
 			jeedouino::log( 'error', 'Envoi via SSH de la commande : ' . $cmd . ' impossible. ');
@@ -1386,9 +1393,9 @@ class jeedouino extends eqLogic {
 				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
 				foreach ($cmds as $cmd)
 				{
-					if (!$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd . $cmd)) return false;
+					if (!$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, $cmd)) return false;
 				}
-				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd . 'exit');
+				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'exit');
 			}
 		}
 		return true;
@@ -1696,7 +1703,7 @@ class jeedouino extends eqLogic {
 				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$PiPlusBoardID.' '.$JeedomPort.' '.$JeedomCPL;
 				break;
 		}
-		$cmd = "sudo nice -n 19 /usr/bin/python " . $filename . ' ' . $cmd;
+		$cmd = "sudo nice -n 19 /usr/bin/python3 " . $filename . ' ' . $cmd;
 		$_log = log::getPathToLog('jeedouino_' . strtolower($DemonTypeF));
 		$cmd .= ' ' . $_log;
 		jeedouino::log( 'debug', __('Cmd Appel démon : ', __FILE__) . $cmd);
@@ -2373,6 +2380,9 @@ class jeedouino extends eqLogic {
 			$UserSketch = 0;	// Pour génération sketch
 			$SomfyRTS = 0;		// Pour génération sketch
 			$bmp180 = 0;		// Pour génération sketch
+			$bmp280 = 0;		// Pour génération sketch
+			$bme280 = 0;		// Pour génération sketch
+			$bme680 = 0;		// Pour génération sketch
 			$servo = 0;			// Pour génération sketch
 			$WS2811 = false;	// Pour génération sketch (a cause de la pin 0 sur esp...)
 
@@ -2384,6 +2394,8 @@ class jeedouino extends eqLogic {
 			foreach ($Arduino_pins as $pins_id => $pin_datas)
 			{
 				$double_cmd = '';
+				$triple_cmd = '';
+				$quadruple_cmd = '';
 				if (($PortArduino == 'rj45arduino') and ($pin_datas['ethernet'] == '1'))
 				{
 					config::save($arduino_id . '_' . $pins_id, 'not_used', 'jeedouino');
@@ -2516,13 +2528,49 @@ class jeedouino extends eqLogic {
 							$value2 = '0';
 							$bmp180 = 1;			// Pour génération sketch
 						break;
+						case 'bmp280':
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$double_cmd = $myPin . '_p';
+							$value2 = '0';
+							$bmp280 = 1;			// Pour génération sketch
+						break;
+						case 'bme280':
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$double_cmd = $myPin . '_p';
+							$value2 = '0';
+							$triple_cmd = $myPin . '_h';
+							$value3 = '0';
+							$bme280 = 1;			// Pour génération sketch
+						break;
+						case 'bme680':
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$double_cmd = $myPin . '_p';
+							$value2 = '0';
+							$triple_cmd = $myPin . '_h';
+							$value3 = '0';
+							$quadruple_cmd = $myPin . '_g';
+							$value4 = '0';
+							$bme680 = 1;			// Pour génération sketch
+						break;
 						case 'ds18b20':
-							$myType='info';
-							$mySubType='numeric';
-							$myinvertBinary='0';
-							$tempo='0';
-							$value='0';
-							$DS18x20=1;	// Pour génération sketch
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$DS18x20 = 1;	// Pour génération sketch
 						break;
 						case 'pwm_input':
 							$myType='info';
@@ -2687,9 +2735,6 @@ class jeedouino extends eqLogic {
 					//Correctif noms des pins HLW8012 pour SONOFF POW
 					if ($ModeleArduino == 'espsonoffpow' and $pins_id > 0 and $pins_id < 6) $myPinN = $pin_datas['Nom_pin'];
 
-					//$double_tmp = '';
-					//if ($double_cmd != '') $double_tmp=$double_cmd;
-
 					$cmd_list[$LogicalId . 'a'] = array('name' 			=> $ID_pins . '_' . $myPinN ,
 														'type' 			=> $myType,
 														'subtype' 		=> $mySubType,
@@ -2738,6 +2783,44 @@ class jeedouino extends eqLogic {
 						$old_list[$pin_datas['Nom_pin'].'2'] = $LogicalId.'b';
 						$double_cmd='';
 					}
+					if ($triple_cmd != '')
+					{
+						$list_order_nb++;
+						$cmd_list[$LogicalId . 'c'] = array('name' 			=> $ID_pins . '_' . $triple_cmd,
+															'type' 			=> $myType,
+															'subtype' 		=> $mySubType,
+															'tempo' 		=> $tempo,
+															'value' 		=> $value3,
+															'modePIN' 		=> $triple_cmd,
+															'double_cmd'	=> $quadruple_cmd,
+															'double_key' 	=> $LogicalId . 'd',
+															'pins_id' 		=> $pins_id + 2000,
+															'invertBinary'	=> $myinvertBinary,
+															'generic_type'	=> $generic_type,
+															'virtual'		=> $virtual,
+															'order'			=> $list_order_nb
+															);
+						$triple_cmd = '';
+					}
+					if ($quadruple_cmd != '')
+					{
+						$list_order_nb++;
+						$cmd_list[$LogicalId . 'd'] = array('name' 			=> $ID_pins . '_' . $quadruple_cmd,
+															'type' 			=> $myType,
+															'subtype' 		=> $mySubType,
+															'tempo' 		=> $tempo,
+															'value' 		=> $value4,
+															'modePIN' 		=> $quadruple_cmd,
+															'double_cmd'	=> $triple_cmd,
+															'double_key' 	=> $LogicalId . 'c',
+															'pins_id' 		=> $pins_id + 3000,
+															'invertBinary'	=> $myinvertBinary,
+															'generic_type'	=> $generic_type,
+															'virtual'		=> $virtual,
+															'order'			=> $list_order_nb
+															);
+						$quadruple_cmd = '';
+					}
 					if (($myType == 'action') and ($mySubType == 'other' or $mySubType == 'slider') and ($myPin != 'trigger') and ($myPin != 'servo') and ($myPin != 'WS2811'))
 					{
 						// Tentative d'adapter le generic_type pour le retour d'etat
@@ -2775,9 +2858,7 @@ class jeedouino extends eqLogic {
 																'order'			=> $list_order_nb
 															);
 						$old_list[$pin_datas['Nom_pin'] . 'i'] = $LogicalId . 'i';
-
 					}
-
 				}
 				else
 				{
@@ -2794,6 +2875,9 @@ class jeedouino extends eqLogic {
 			config::save($arduino_id.'_UserSketch', $UserSketch, 'jeedouino');
 			config::save($arduino_id.'_SomfyRTS', $SomfyRTS, 'jeedouino');
 			config::save($arduino_id.'_BMP180', $bmp180, 'jeedouino');
+			config::save($arduino_id.'_BMP280', $bmp280, 'jeedouino');
+			config::save($arduino_id.'_BME280', $bme280, 'jeedouino');
+			config::save($arduino_id.'_BME680', $bme680, 'jeedouino');
 			config::save($arduino_id.'_SERVO', $servo, 'jeedouino');
 			config::save($arduino_id.'_WS2811', $WS2811, 'jeedouino');
 
@@ -3012,6 +3096,9 @@ class jeedouino extends eqLogic {
 					case 'dht22':
 					case 'ds18b20':
 					case 'bmp180':
+					case 'bmp280':
+					case 'bme280':
+					case 'bme680':
 						$cmd->setTemplate('dashboard', 'thermometre');
 						$cmd->setTemplate('mobile', 'default');
 						$cmd->setUnite('°C');
@@ -3020,13 +3107,23 @@ class jeedouino extends eqLogic {
 					case 'dht11_h':
 					case 'dht21_h':
 					case 'dht22_h':
+					case 'bme280_h':
+					case 'bme680_h':
 						$cmd->setTemplate('dashboard', 'humidite');
 						$cmd->setTemplate('mobile', 'default');
 						$cmd->setUnite('%');
 						$generic_type = 'HUMIDITY';
 						break;
 					case 'bmp180_p':
+					case 'bmp280_p':
+					case 'bme280_p':
+					case 'bme680_p':
 						$generic_type = 'PRESSURE';
+						$cmd->setUnite('Pa');
+						break;
+					case 'bme680_g': // gas cov
+						$generic_type = 'AIR_QUALITY';
+						$cmd->setUnite('Ohms');
 						break;
 					case 'output_other':
 					case 'output_slider':
@@ -3156,6 +3253,7 @@ class jeedouino extends eqLogic {
 			foreach ($this->getCmd() as $cmd)
 			{
 				$order = $cmd->getConfiguration('pins_id');
+				if ($order > 999) $order -= 1000;
 				if ($order > 999) $order -= 1000;
 				$cmd->setOrder($order);
 				$cmd->save();
@@ -3378,7 +3476,6 @@ class jeedouino extends eqLogic {
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
 				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
-				$bmp180 = config::byKey($board_id.'_BMP180', 'jeedouino', 0);
 				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 				$WS2811 = config::byKey($board_id.'_WS2811', 'jeedouino', 0);
 
@@ -3391,10 +3488,23 @@ class jeedouino extends eqLogic {
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
 				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
-				if ($bmp180)
+				if (config::byKey($board_id.'_BMP180', 'jeedouino', 0))
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
 				}
+				if (config::byKey($board_id.'_BMP280', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BME280', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BME680', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 1' , $MasterFile);
+				}
+
 				if ($servo)
 				{
 				 	$MasterFile = str_replace('#define UseServo 0' , '#define UseServo 1' , $MasterFile);
@@ -3477,7 +3587,6 @@ class jeedouino extends eqLogic {
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
 				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
-				$bmp180 = config::byKey($board_id.'_BMP180', 'jeedouino', 0);
 				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 				$WS2811 = config::byKey($board_id.'_WS2811', 'jeedouino', false);
 
@@ -3501,9 +3610,21 @@ class jeedouino extends eqLogic {
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
 				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
-				if ($bmp180)
+				if (config::byKey($board_id.'_BMP180', 'jeedouino', 0))
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BMP280', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BME280', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BME680', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 1' , $MasterFile);
 				}
 				if ($servo)
 				{
@@ -3578,7 +3699,6 @@ class jeedouino extends eqLogic {
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
 				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
-				$bmp180 = config::byKey($board_id.'_BMP180', 'jeedouino', 0);
 				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 				$WS2811 = config::byKey($board_id.'_WS2811', 'jeedouino', 0);
 
@@ -3592,7 +3712,22 @@ class jeedouino extends eqLogic {
 
 				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
 
-				if ($bmp180) $MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
+				if (config::byKey($board_id.'_BMP180', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BMP280', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BME280', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 1' , $MasterFile);
+				}
+				if (config::byKey($board_id.'_BME680', 'jeedouino', 0))
+				{
+				 	$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 1' , $MasterFile);
+				}
 				if ($servo) $MasterFile = str_replace('#define UseServo 0' , '#define UseServo 1' , $MasterFile);
 
 				if ($WS2811)
@@ -3693,6 +3828,9 @@ class jeedouino extends eqLogic {
 		config::remove($arduino_id . '_EqCfgSaveStep', 'jeedouino');
 		config::remove($arduino_id . '_ProbeDelay', 'jeedouino');
 		config::remove($arduino_id . '_BMP180', 'jeedouino');
+		config::remove($arduino_id . '_BMP280', 'jeedouino');
+		config::remove($arduino_id . '_BME280', 'jeedouino');
+		config::remove($arduino_id . '_BME680', 'jeedouino');
 		config::remove($arduino_id . '_SERVO', 'jeedouino');
 		config::remove($arduino_id . '_WS2811', 'jeedouino');
 		config::remove('REP_' . $arduino_id, 'jeedouino');

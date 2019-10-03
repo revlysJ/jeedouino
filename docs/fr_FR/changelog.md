@@ -1,5 +1,14 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+03/10/2019 v1.06
+---
+
+- Il est désormais possible d'avoir plusieurs sondes DS18B20 sur une même pin.
+- Ajout du support du capteur de température / pression BMP280.
+- Ajout du support du capteur de température / pression / humidité BME280.
+- Ajout du support du capteur de température / pression / humidité / gas COV BME680.
+- Passage des démons en python3.
+
 23/09/2019 v1.05b
 ---
 

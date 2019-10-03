@@ -451,7 +451,7 @@ foreach ($eqLogics as $eqLogic)
         <table id="table_cmd" class="table table-bordered table-condensed">
             <thead>
                 <tr>
-                    <th>{{Nom}}</th><th>{{Type (Sous-Type)}}</th><th>{{Type Générique}}</th><th>{{Valeur}}</th><th>{{Affichage}}</th><th>{{Valeur}}</th><th>{{Plus}}</th>
+                    <th>{{Nom}}</th><th>{{Type (Sous-Type)}}</th><th>{{Type Générique}}</th><th>{{Paramètres}}</th><th>{{Affichage}}</th><th>{{Valeur}}</th><th>{{Plus}}</th>
                 </tr>
             </thead>
             <tbody>

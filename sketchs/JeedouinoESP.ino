@@ -16,6 +16,9 @@
 #define UsePwm_input 0 	// Code obsolete (sera supprimé) - Entrée Numérique Variable (0-255 sur 10s) en PULL-UP
 #define UseHLW8012 0	// pour SONOFF POW
 #define UseBMP180 0		// pour BMP085/180 Barometric Pressure & Temp Sensor
+#define UseBMP280 0		// pour BMP280 temperature, barometric pressure
+#define UseBME280 0		// pour BME280 temperature, barometric pressure and humidity
+#define UseBME680 0		// pour BME680 temperature, humidity, barometric pressure and VOC gas
 #define UseServo 0
 #define UseWS2811 0	// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel
 
@@ -217,6 +220,30 @@ char myIpString[24];
 	#include <Adafruit_BMP085.h>
 	Adafruit_BMP085 bmp;
 #endif
+#if (UseBME280 == 1)
+	//  BMP280 BME280-barometric-pressure-temperature-sensor [humidity]
+	//  https://github.com/farmerkeith/BMP280-library
+	// compatible GY-BM E/p 280 chinese stuff
+	#include <Wire.h>
+	#include <farmerkeith_BMP280.h>
+	bme280 bme280;
+#endif
+#if (UseBMP280 == 1)
+	//  BMP280 BME280-barometric-pressure-temperature-sensor [humidity]
+	//  https://github.com/farmerkeith/BMP280-library
+	// compatible GY-BM E/p 280 chinese stuff
+	#include <Wire.h>
+	#include <farmerkeith_BMP280.h>
+	bme280 bmp280;
+#endif
+#if (UseBME680 == 1)
+	//  bme680-humidity-temperature-barometic-pressure-voc-gas
+	//  https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/overview
+	#include <Wire.h>
+	#include <Adafruit_Sensor.h>
+	#include "Adafruit_BME680.h"
+	Adafruit_BME680 bme680; // I2C
+#endif
 #if (UserSketch == 1)
 	// UserVars
 	// Vos declarations de variables / includes etc....
@@ -315,6 +342,21 @@ void setup()
 
 	#if (UseBMP180 == 1)
 		bmp.begin();
+	#endif
+	#if (UseBME280 == 1)
+		bme280.begin();
+	#endif
+	#if (UseBMP280 == 1)
+		bmp280.begin();
+	#endif
+	#if (UseBME680 == 1)
+		bme680.begin();
+		// Set up oversampling and filter initialization
+		bme680.setTemperatureOversampling(BME680_OS_8X);
+		bme680.setHumidityOversampling(BME680_OS_2X);
+		bme680.setPressureOversampling(BME680_OS_4X);
+		bme680.setIIRFilterSize(BME680_FILTER_SIZE_3);
+		bme680.setGasHeater(320, 150); // 320*C for 150 ms
 	#endif
 
 	#if (UseWS2811 == 1)
@@ -912,14 +954,15 @@ void loop()
 			#endif
 			#if (UseDS18x20 == 1)
 			case 'b': // DS18x20
-				if (PinNextSend[i]<millis() and ProbeNextSend<millis())
+				if (PinNextSend[i] < millis() and ProbeNextSend < millis())
 				{
+					float reponse = read_DSx(i); // DS18x20
 					jeedom += '&';
 					jeedom += i;
 					jeedom += '=';
-					jeedom += read_DSx(i); // DS18x20
-					PinNextSend[i]=millis()+60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-					ProbeNextSend=millis()+10000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
+					jeedom += reponse;
+					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 10000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
 				}
 				break;
 			#endif
@@ -979,7 +1022,7 @@ void loop()
 			#endif
 			#if (UseBMP180 == 1)
 			case 'r': // BMP085/180
-				if (PinNextSend[i]<millis())
+				if (PinNextSend[i] < millis())
 				{
 					jeedom += '&';
 					jeedom += i;
@@ -989,6 +1032,66 @@ void loop()
 					jeedom += i + 1000;
 					jeedom += '=';
 					jeedom += bmp.readPressure();
+					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+				}
+				break;
+			#endif
+			#if (UseBME280 == 1)
+			case 'A': // BME280
+				if (PinNextSend[i] < millis())
+				{
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += bme280.readTemperature();
+					jeedom += '&';
+					jeedom += i + 1000;
+					jeedom += '=';
+					jeedom += bme280.readPressure();
+					jeedom += '&';
+					jeedom += i + 2000;
+					jeedom += '=';
+					jeedom += bme280.readHumidity();
+					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+				}
+				break;
+			#endif
+			#if (UseBME680 == 1)
+			case 'B': // BME680
+				if (PinNextSend[i] < millis() and bme680.performReading())
+				{
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += bme680.temperature;
+					jeedom += '&';
+					jeedom += i + 1000;
+					jeedom += '=';
+					jeedom += bme680.pressure;
+					jeedom += '&';
+					jeedom += i + 2000;
+					jeedom += '=';
+					jeedom += bme680.humidity;
+					jeedom += '&';
+					jeedom += i + 3000;
+					jeedom += '=';
+					jeedom += bme680.gas_resistance;
+					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+				}
+				break;
+			#endif
+			#if (UseBMP280 == 1)
+			case 'C': // BMP280
+				if (PinNextSend[i] < millis())
+				{
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += bmp280.readTemperature();
+					jeedom += '&';
+					jeedom += i + 1000;
+					jeedom += '=';
+					jeedom += bmp280.readPressure();
 					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 				}
 				break;
@@ -1499,119 +1602,99 @@ void Init_EEPROM()
 	{
 		EEPROM.write(i, 1);	// Valeur des pins OUT au 1er demarrage ( mes relais sont actis a 0, donc je met 1 pour eviter de les actionner au 1er boot)
 	}
-	EEPROM.write(26, IP_JEEDOM[0]);						// Sauvegarde de l' IP
+	EEPROM.write(26, IP_JEEDOM[0]);				// Sauvegarde de l' IP
 	EEPROM.write(27, IP_JEEDOM[1]);
 	EEPROM.write(28, IP_JEEDOM[2]);
 	EEPROM.write(29, IP_JEEDOM[3]);
 
-	eqLogic = F("IDeqLogic");										// Sauvegarde de eqLogic pour 1er boot apres 1er flashage
-	EEPROM.write(15, eqLogicLength);						// Sauvegarde de la longueur du eqLogic
+	eqLogic = F("IDeqLogic");					// Sauvegarde de eqLogic pour 1er boot apres 1er flashage
+	EEPROM.write(15, eqLogicLength);			// Sauvegarde de la longueur du eqLogic
 	for (int i = 1; i < eqLogicLength; i++)
 	{
-		EEPROM.write(15+i, eqLogic[i-1]-'0'); 					// Sauvegarde de l' eqLogic
+		EEPROM.write(15+i, eqLogic[i-1]-'0'); 	// Sauvegarde de l' eqLogic
 	}
 
 	EEPROM.commit();
 	// fin initialisation
 }
-//int freeRam ()
-//{
-//	extern int __heap_start, *__brkval;
-//	int v;
-//	return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
-//}
+
 #if (UseDS18x20 == 1)
 int read_DSx(int pinD)
 {
-	byte present = 0;
-	byte type_s;
 	byte data[12];
 	byte addr[8];
+	long first, temp;
+	char buffer[3];
 	OneWire ds(pinD);
+	byte nb_ds18 = 0;
 
-	if ( !ds.search(addr))
+	ds.reset_search();
+	while (ds.search(addr))
+	{
+		if (OneWire::crc8(addr, 7) != addr[7]) //Check if there is no errors on transmission
+		{
+			#if (DEBUGtoSERIAL == 1)
+				Serial.println(F("CRC invalide..."));
+			#endif
+			return 99999;
+		}
+		if (addr[0] != 0x28)
+		{
+			#if (DEBUGtoSERIAL == 1)
+				Serial.println(F("Device is not a DS18B20."));
+			#endif
+			return 99999;
+		}
+		ds.reset();
+		ds.select(addr);
+		ds.write(0x44, 1);
+		nb_ds18++;
+	}
+	if (nb_ds18 == 0)
 	{
 		ds.reset_search();
-	#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("ds not found..."));
-	#endif
-		delay(250);
-		return 0;
-	}
-
-	if (OneWire::crc8(addr, 7) != addr[7]) //Check if there is no errors on transmission
-	{
 		#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("CRC invalide..."));
+			Serial.println(F("ds not found..."));
 		#endif
-		return 0;
+		delay(250);
+		return 99999;
 	}
-
-	// the first ROM byte indicates which chip
-	switch (addr[0])
-	{
-		case 0x10:
-	#if (DEBUGtoSERIAL == 1)
-		 Serial.println(F(" Chip = DS18S20")); // or old DS1820
-	#endif
-		 type_s = 1;
-		 break;
-		case 0x28:
-	#if (DEBUGtoSERIAL == 1)
-		 Serial.println(F(" Chip = DS18B20"));
-	#endif
-		 type_s = 0;
-		 break;
-		case 0x22:
-	#if (DEBUGtoSERIAL == 1)
-		 Serial.println(F(" Chip = DS1822"));
-	#endif
-		 type_s = 0;
-		 break;
-		default:
-	#if (DEBUGtoSERIAL == 1)
-		 Serial.println(F("Device is not a DS18x20 family device."));
-	#endif
-		 return 0;
-	}
-
-	ds.reset();
-	ds.select(addr);
-	ds.write(0x44,1);			 // start conversion, with parasite power on at the end
+	nb_ds18 = 0;
 	delay(800);
-	present = ds.reset();
-	ds.select(addr);
-	ds.write(0xBE);			 // Read Scratchpad
-	byte ii;
-	for ( ii = 0; ii < 9; ii++)
-	{				 // we need 9 bytes
-		data[ii] = ds.read();
-	}
-
-	// convert the data to actual temperature
-
-	unsigned int raw = (data[1] << 8) | data[0];
-	if (type_s)
+	jeedom = F("&DS18list={");
+	ds.reset_search();
+	while (ds.search(addr))
 	{
-		raw = raw << 3; // 9 bit resolution default
-		if (data[7] == 0x10)
+		jeedom += '"';
+		jeedom += F("28-");
+		for (int ii = 6; ii > 0; ii--)
 		{
-			// count remain gives full 12 bit resolution
-			raw = (raw & 0xFFF0) + 12 - data[6];
+			if (addr[ii] < 16) jeedom += '0';
+			itoa (addr[ii], buffer, 16);
+			jeedom += buffer;
 		}
+		jeedom += '"';
+		jeedom += ':';
+		jeedom += '"';
+		ds.reset();
+		ds.select(addr);
+		ds.write(0xBE);
+		for (int ii = 0; ii < 9; ii++)
+		{
+			data[ii] = ds.read();
+		}
+		temp = (int16_t) ((data[1] << 8) | data[0]) * 6.25;
+		if (nb_ds18 == 0) first = temp;
+		nb_ds18++;
+		#if (DEBUGtoSERIAL == 1)
+			Serial.println(temp / 100);
+		#endif
+		jeedom += temp;
+		jeedom += '"';
+		jeedom += ',';
 	}
-	else
-	{
-		byte cfg = (data[4] & 0x60);
-		if (cfg == 0x00) raw = raw << 3;	// 9 bit resolution, 93.75 ms
-		else if (cfg == 0x20) raw = raw << 2; // 10 bit res, 187.5 ms
-		else if (cfg == 0x40) raw = raw << 1; // 11 bit res, 375 ms
-
-	}
-	#if (DEBUGtoSERIAL == 1)
-	Serial.println(raw/16);
-	#endif
-	return raw;
+	jeedom += '}';
+	return first;
 }
 #endif
 

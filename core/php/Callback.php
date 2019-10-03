@@ -142,7 +142,7 @@ if (isset($_GET['BoardEQ']))
 			$eqLogic->setConfiguration('ipPort', $_GET['PORTFOUND']);
 			$eqLogic->setConfiguration('PortDemon', $_GET['PORTFOUND']);
 			$eqLogic->save(true);
-			if ($this->getConfiguration('alone') == '1') jeedouino::SendPRM($eqLogic); // on renvoie la config
+			if ($eqLogic->getConfiguration('alone') == '1') jeedouino::SendPRM($eqLogic); // on renvoie la config
 		}
 		// Informations fournies par les Arduinos/Esp
 		if (isset($_GET['ASK']))
@@ -239,38 +239,90 @@ if (isset($_GET['BoardEQ']))
 						$_board = strtoupper($board);
 						$recu = trim($_GET[$pins_id]);
 						$MaJ = true;
-						$MaJLog = $CALLBACK . '** NoOp **-  ' . $BOARDNAME . '- Pin n° ' . $pins_id . ' = ' . $recu;
-						if ($recu=='')
+						$MaJErr = true;
+						$MaJLog = $CALLBACK . '** NoOp ** - ' . $BOARDNAME . ' - Pin n° ' . $pins_id . ' = ' . $recu;
+						if ($recu == '')
 						{
 							$MaJ = false;
 							$MaJLog = $CALLBACK . __(' a envoyé une valeur vide de la Pin n° ', __FILE__) . $pins_id;
 						}
-
-						if (substr($cmd->getConfiguration('modePIN'), 0, 3) == 'dht')
+						elseif (substr($cmd->getConfiguration('modePIN'), 0, 3) == 'dht')
 						{
-							$recu = round($recu/100,1);	// 1 chiffre apres la virgule.
-							if ($recu>255)	// valeur arbitraire
+							$recu = round($recu / 100, 1);	// 1 chiffre apres la virgule.
+							if ($recu > 255)	// valeur arbitraire
 							{
 								$MaJLog = $CALLBACK . __('La sonde DHT de la Pin n° ', __FILE__) . ($pins_id>=1000?($pins_id-1000).' (Humidité)':$pins_id.' (Température)').__(' a envoyée une valeur erronée : ', __FILE__).$recu . __('. Veuillez vérifier votre sonde et/ou son alimentation. ', __FILE__);
 								$MaJ = false;
 							}
 						}
-						if (substr($cmd->getConfiguration('modePIN'), 0, 4) == 'ds18')
+						elseif (substr($cmd->getConfiguration('modePIN'), 0, 4) == 'ds18')
 						{
-							if ($recu>32767)
+							if (isset($_GET['DS18list']))
 							{
-								//jeedouino::log( 'debug',$CALLBACK . 'Pin n° '.$pins_id.' = '.decbin($recu));
-								$recu = -(($recu ^ 0xFFFF)+1);
-								//jeedouino::log( 'debug',$CALLBACK . 'Pin n° '.$pins_id.' = '.decbin($recu));
-							}
-							$recu = round($recu/16,1);
-							if (($recu<-55) || ($recu>125))
-							{
-								$MaJLog = $CALLBACK . __('La sonde DS18x20 de la Pin n° ', __FILE__) . $pins_id . __(' a envoyée une valeur erronée : ', __FILE__) . $recu . __('. Veuillez vérifier votre sonde et/ou son alimentation. ', __FILE__);
 								$MaJ = false;
+								$MaJErr = false;
+								$_GET['DS18list'] = strtoupper(str_replace(',}', '}', $_GET['DS18list'])); // filtre pour arduino
+								$DS18list = json_decode($_GET['DS18list'], true);
+								list($firstID) = array_keys($DS18list);
+								if ($cmd->getConfiguration('ds18id', '') == '' or $cmd->getConfiguration($firstID, '') == '')
+								{
+									$cmd->setConfiguration('ds18id', $firstID);
+									$cmd->setConfiguration($firstID, 'set');
+									$cmd->save();
+								}
+								//unset($DS18list[$firstID]);
+								$pins_start_id = $pins_id + 2000;
+								foreach($DS18list as $id => $temp)
+								{
+									//$pins_start_id++;
+									$temp = round($temp / 100, 2);
+									$_cmd = $eqLogic->searchCmdByConfiguration($id);
+									if (is_array($_cmd) and !empty($_cmd)) $_cmd = $_cmd[0];
+									if (!is_object($_cmd))
+									{
+										$_cmd = new jeedouinoCmd();
+										$_cmd->setName($pins_id . '_' . 'ds18b20_' . substr($id, -7));
+										$_cmd->setLogicalId('ID' . $pins_id . 'a');
+										$_cmd->setConfiguration('modePIN', 'ds18b20');
+										$_cmd->setConfiguration('pins_id', $pins_start_id);
+										$_cmd->setConfiguration($id, 'set');
+										$_cmd->setConfiguration('ds18id', $id);
+										$_cmd->setUnite('°C');
+										$_cmd->setOrder($pins_id);
+										$_cmd->setSubType('numeric');
+										$_cmd->setType('info');
+										$_cmd->setEqLogic_id($eqLogic->getId());
+										$_cmd->setGeneric_type('TEMPERATURE');
+										$_cmd->save();
+										$_cmd->setValue($_cmd->getId());
+									}
+									if (($temp < -55) || ($temp > 125))
+									{
+										jeedouino::log( 'error', $CALLBACK . __('La sonde DS18x20 (', __FILE__) . $id . __(') de la Pin n° ', __FILE__) . $pins_id . __(' a envoyée une valeur erronée : ', __FILE__) . $temp . __(' . Veuillez vérifier votre sonde et/ou son alimentation. ', __FILE__));
+									}
+									else
+									{
+										$_cmd->setCollectDate(date('Y-m-d H:i:s'));
+										$_cmd->event($temp);
+										$_cmd->setConfiguration('value', $temp);
+										$_cmd->save();
+										jeedouino::log('debug', $CALLBACK . __('Lecture Sonde DS18x20 (', __FILE__) . $id . ') Pin n° ' . $pins_id . ' = ' . $temp);
+									}
+								}
+								$eqLogic->refreshWidget();
+							}
+							else
+							{
+								if ($recu > 32767) $recu = -(($recu ^ 0xFFFF) + 1);
+								$recu = round($recu / 100, 2);
+								if (($recu < -55) || ($recu > 125))
+								{
+									$MaJLog = $CALLBACK . __('La sonde DS18x20 de la Pin n° ', __FILE__) . $pins_id . __(' a envoyée une valeur erronée : ', __FILE__) . $recu . __(' . Veuillez vérifier votre sonde et/ou son alimentation. ', __FILE__);
+									$MaJ = false;
+								}
 							}
 						}
-						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup')
+						elseif ($cmd->getConfiguration('modePIN') == 'compteur_pullup')
 						{
 							$value = $cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
@@ -294,14 +346,14 @@ if (isset($_GET['BoardEQ']))
 						}
 						else
 						{
-							jeedouino::log( 'error',$MaJLog);
+							if ($MaJErr) jeedouino::log( 'error', $MaJLog);
 						}
 
 					}
-					elseif (array_key_exists('IN_'.$pins_id, $_GET))
+					elseif (array_key_exists('IN_' . $pins_id, $_GET))
 					{
-						$recu=$_GET['IN_'.$pins_id];
-						if (substr($cmd->getConfiguration('modePIN'),0,5)=='input')
+						$recu = $_GET['IN_' . $pins_id];
+						if (substr($cmd->getConfiguration('modePIN'), 0, 5) == 'input')
 						{
 							$cmd->setCollectDate(date('Y-m-d H:i:s'));
 							$cmd->event($recu);
@@ -311,9 +363,9 @@ if (isset($_GET['BoardEQ']))
 							jeedouino::log( 'debug',$CALLBACK . 'Pin n° '.$pins_id.' = '.$recu);
 						}
 					}
-					elseif (array_key_exists('CPT_'.$pins_id, $_GET))
+					elseif (array_key_exists('CPT_' . $pins_id, $_GET))
 					{
-						if ($cmd->getConfiguration('modePIN')=='compteur_pullup') // uniquement les valeurs de compteur
+						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup') // uniquement les valeurs de compteur
 						{
 							$value=$cmd->getConfiguration('value');
 							list(,$board) = jeedouino::GetPinsByBoard($arduino_id);
@@ -347,7 +399,7 @@ if (isset($_GET['BoardEQ']))
 		}
 
 	}
-	else jeedouino::log( 'error', __('CALLBACK - L\'équipement ID ' . $arduino_id . ' est introuvable.', __FILE__));
+	else jeedouino::log( 'error', __('CALLBACK - L\'équipement ID ', __FILE__) . $arduino_id . __(' est introuvable.', __FILE__));
 }
 else jeedouino::log( 'error', __('CALLBACK - ID de l\'équipement non défini.', __FILE__));
 ?>

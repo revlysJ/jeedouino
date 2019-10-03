@@ -1,5 +1,5 @@
 """
-JEEDOUINO IO PiPlus DEMON v0.71 Dec2015-2019
+JEEDOUINO IO PiPlus DEMON v0.8 Dec2015-2019
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -9,7 +9,10 @@ import socket
 import threading
 import os, time
 import sys
-import httplib
+try:
+	import http.client as httplib
+except:
+	import httplib
 os.environ['TZ'] = 'Europe/Paris'
 time.tzset()
 
@@ -19,8 +22,8 @@ try:
 except Exception as errdep:
 	nodep = 1
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 sendPINMODE = 0
 port = 8000
@@ -41,13 +44,14 @@ logFile = "JeedouinoPiPlus.log"
 def log(level,message):
 	fifi=open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), message.encode('utf8')))
-	except:
 		fifi.write('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+	except:
+		print('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
 def SimpleParse(m):
+	m=m.decode('ascii')
 	m=m.replace('/', '')
 	u = m.find('?')
 	if u>-1:
@@ -107,7 +111,7 @@ class myThread1 (threading.Thread):
 					addr, portnew = s.getsockname()
 					log('debug','Un port libre est disponible : ' + str(portnew))
 					SimpleSend('&PORTFOUND=' + str(portnew))
-				except Exception, e:
+				except:
 					log('erreur','Impossible de trouver un port automatiquement. Veuillez en choisir un autre')
 					SimpleSend('&NOPORTFOUND=' + str(port))
 					s.close()
@@ -301,7 +305,7 @@ class myThread1 (threading.Thread):
 					reponse = 'EXITOK'
 
 				if reponse != '':
-					c.send(reponse)
+					c.send(reponse.encode('ascii'))
 					log ('>>Reponse a la requete :', str(reponse))
 					if RepStr != '':
 						SimpleSend(RepStr)
@@ -453,10 +457,6 @@ if __name__ == "__main__":
 	NextRefresh=time.time() + 40
 	sendCPT=0
 
-	# set up IOPi Plus
-	#i2c_helper = ABEHelpers()
-	#i2c_bus = i2c_helper.get_smbus()
-	#bus = IoPi(i2c_bus, boardId)
 	if (nodep):
 		SimpleSend('&NODEP=smbus')
 		log('Error' , 'Dependances SMBUS introuvables. Veuillez les (re)installer. - ' + str(errdep))

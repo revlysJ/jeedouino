@@ -162,9 +162,9 @@ $port =  jeedouino::GetJeedomPort();
 						<tr>
 							<td>
 								<div class="form-group" >
-										<label class="col-lg-5 control-label">{{Correction droits DS18B20}}</label>
+										<label class="col-lg-5 control-label">{{BitBangingDS18B20 Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo chmod 755 DS18B20Scan}}</a>
+												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo python setup.py install}}</a>
 										</div>
 								</div>
 							</td>
@@ -585,7 +585,7 @@ $port =  jeedouino::GetJeedomPort();
                 return;
             }
             $('#ul_plugin .li_plugin[data-plugin_id=jeedouino]').click();   // recharge la page config du plugin
-            $('#div_alert').showAlert({message: '{{Les corrections de droits de DS18B20Scan sont en cours.}}', level: 'success'});
+            $('#div_alert').showAlert({message: '{{L\'installation de la dépendance danjperron/BitBangingDS18B20 est en cours.}}', level: 'success'});
         }
     });
     });

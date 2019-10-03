@@ -324,7 +324,10 @@ if (isset($_GET['id']))
                             $TmpPins .= '<td>';
                             $TmpPins .= '<select class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_' . $pins_id . '">';
                             $TmpPins .= '<option value="not_used">{{Non utilisée}}</option>';
-                            $TmpPins .= '<option value="bmp180">{{Capteur Pression BMP085/180}}</option>';
+                            $TmpPins .= '<option value="bmp180">{{Capteur Température/Pression BMP085/180}}</option>';
+                            $TmpPins .= '<option value="bmp280">{{Capteur Température/Pression GY-BMP280}}</option>';
+                            $TmpPins .= '<option value="bme280">{{Capteur Température/Humidité/Pression BME280}}</option>';
+                            $TmpPins .= '<option value="bme680">{{Capteur Température/Humidité/Pression/Gas COV BME680}}</option>';
                             $TmpPins .= '</select>';
                             $TmpPins .= '</td>';
                         }
@@ -406,7 +409,13 @@ if (isset($_GET['id']))
 									elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 									else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
 								}
-                                if (substr($pin_datas['option'], 0, 3) == 'SDA') $InfoPins[] = '<option value="bmp180">{{Capteur Pression BMP085/180}}</option>';
+                                if (substr($pin_datas['option'], 0, 3) == 'SDA')
+                                {
+                                    $InfoPins[] = '<option value="bmp180">{{Capteur Température/Pression BMP085/180}}</option>';
+                                    $InfoPins[] = '<option value="bmp280">{{Capteur Température/Pression GY-BMP280}}</option>';
+                                    $InfoPins[] = '<option value="bme280">{{Capteur Température/Humidité/Pression BME280}}</option>';
+                                    $InfoPins[] = '<option value="bme680">{{Capteur Température/Humidité/Pression/Gas COV BME680}}</option>';
+                                }
 							}
 							else
 							{
@@ -473,7 +482,13 @@ if (isset($_GET['id']))
 						}
 						else
 						{
-                            if (strpos($pin_datas['option'], 'SDA') !== false ) $InfoPins[] = '<option value="bmp180">{{Capteur Pression BMP085/180}}</option>';
+                            if (strpos($pin_datas['option'], 'SDA') !== false )
+                            {
+                                $InfoPins[] = '<option value="bmp180">{{Capteur Température/Pression BMP085/180}}</option>';
+                                $InfoPins[] = '<option value="bmp280">{{Capteur Température/Pression GY-BMP280}}</option>';
+                                $InfoPins[] = '<option value="bme280">{{Capteur Température/Humidité/Pression BME280}}</option>';
+                                $InfoPins[] = '<option value="bme680">{{Capteur Température/Humidité/Pression/Gas COV BME680}}</option>';
+                            }
                             if (strpos($pin_datas['option'], 'ANA') === false )
 							{
 								foreach ($ArduinoMODEpins as $mode_value => $mode_name)

@@ -228,9 +228,10 @@ function addCmdToTable(_cmd) {
 	var ctype = init(_cmd.type);
 	var stype = init(_cmd.subType);
 	var mtype = init(_cmd.configuration.modePIN);
-	var gtype = init(_cmd.display.generic_type);
+	var gtype = init(_cmd.generic_type);
 	var pins_id = init(_cmd.configuration.pins_id);
 	if (pins_id>999) pins_id -= 1000;
+    if (pins_id>999) pins_id -= 1000;
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 
 	tr += '<td>';
@@ -329,8 +330,13 @@ function addCmdToTable(_cmd) {
     		{
     			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
     			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="RSTvalue" >';
-    			tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{Reset}}</a>';
+    			tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{Reset compteur}}</a>';
     		}
+            else if ( mtype == 'ds18b20')
+            {
+                var ds18b20 = init(_cmd.configuration.ds18id);
+                if ( ds18b20 != '') tr += '<div class="label label-info" ><i class="fas fa-fingerprint"></i> ID: ' + ds18b20 + '</div>';
+            }
     	}
     }
 	tr += '</td>';

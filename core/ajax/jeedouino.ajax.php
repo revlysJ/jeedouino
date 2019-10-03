@@ -138,7 +138,7 @@ try {
 	}
   	if (init('action') == 'installSerial')
     {
-        exec('sudo apt-get -y install python-serial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo apt-get -y install python{,3}-pip python{,3}-serial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
 		ajax::success();
 	}
   	if (init('action') == 'installGPIO')
@@ -148,17 +148,17 @@ try {
 	}
  	if (init('action') == 'installPIFACE')
     {
-        exec('sudo apt-get -y install python-pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip install pifacecommon >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip install pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+        exec('sudo apt-get -y install python{,3}-pip python{,3}-setuptools >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+		exec('sudo pip3 install pifacecommon pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+		exec('sudo pip install pifacecommon pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
         // enable spi
         exec('sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt');
 		ajax::success();
 	}
  	if (init('action') == 'installPiPlus')
     {
-        exec('sudo apt-get -y install i2c-tools libi2c-dev >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
-        exec('sudo apt-get -y install python-smbus >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+        exec('sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+        //exec('sudo apt-get -y install python{,3}-smbus >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
         // enable i2c
         exec('sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt');
         exec('sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt');
@@ -168,7 +168,10 @@ try {
 	}
  	if (init('action') == 'installDS18B20')
     {
-        exec('sudo chmod 755 ' . dirname(__FILE__) . '/../../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('cd ; git clone https://github.com/danjperron/BitBangingDS18B20.git >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        sleep(3);
+        exec('cd BitBangingDS18B20/python; sudo python setup.py install >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+        exec('cd BitBangingDS18B20/python; sudo python3 setup.py install >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 		ajax::success();
 	}
     // action qui permet d'effectuer la sauvegarde des données en asynchrone

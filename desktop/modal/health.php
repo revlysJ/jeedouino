@@ -24,7 +24,7 @@ $eqLogics = jeedouino::byType('jeedouino');
 <table class="table table-condensed tablesorter" id="table_healthjeedouino">
 	<thead>
 		<tr>
-			<th>{{Equipement}}</th>
+			<th>{{Equipement(s)}}</th>
 			<th>{{ID}}</th>
 			<th>{{Actif}}</th>
 			<th>{{IP}}</th>

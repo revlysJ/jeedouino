@@ -3063,6 +3063,8 @@ class jeedouino extends eqLogic {
 				}
 				$order = $cmd_info['order'];
 				if ($order > 999) $order -= 1000;
+				if ($order > 999) $order -= 1000;
+				if ($order > 999) $order -= 1000;
 				$cmd->setOrder($order);
 
 				$generic_type = $cmd_info['generic_type'];
@@ -3253,6 +3255,7 @@ class jeedouino extends eqLogic {
 			foreach ($this->getCmd() as $cmd)
 			{
 				$order = $cmd->getConfiguration('pins_id');
+				if ($order > 999) $order -= 1000;
 				if ($order > 999) $order -= 1000;
 				if ($order > 999) $order -= 1000;
 				$cmd->setOrder($order);

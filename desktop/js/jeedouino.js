@@ -232,6 +232,7 @@ function addCmdToTable(_cmd) {
 	var pins_id = init(_cmd.configuration.pins_id);
 	if (pins_id>999) pins_id -= 1000;
     if (pins_id>999) pins_id -= 1000;
+    if (pins_id>999) pins_id -= 1000;
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 
 	tr += '<td>';

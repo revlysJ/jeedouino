@@ -1305,7 +1305,7 @@ class jeedouino extends eqLogic {
 		jeedouino::log( 'info', __('Envoi des fichiers JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
 		$file_path = dirname(__FILE__) . '/../../ressources/JeedouinoExt.zip';
 		$to_path = '/tmp/JeedouinoExt.zip';
-		$sh_path = '/tmp/JeedouinoExt/JeedouinoExt.sh';
+		$sh_path = '/tmp/JeedouinoExt/JeedouinoExt.sh >> /tmp/InstallJeedouinoExt.log 2>&1 &';
 		if ($Noinstall) $sh_path = '/tmp/JeedouinoExt/JeedouinoExt2.sh >> /var/www/html/JeedouinoExt/JeedouinoExt.log 2>&1 &';
 
 		// test
@@ -1358,34 +1358,61 @@ class jeedouino extends eqLogic {
 		$error = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
 		stream_set_blocking($error, true);
 		stream_set_blocking($stream, true);
-		$output = trim(stream_get_contents($stream) . ' ' . stream_get_contents($error));
+		$output = trim(stream_get_contents($stream));
 		fclose($error);
 		fclose($stream);
-		if (($output === false))
+		if ($output != '')
 		{
-			jeedouino::log( 'error', 'Envoi via SSH de la commande : ' . $cmd . ' impossible. ');
+			jeedouino::log( 'error', __('Envoi via SSH de la commande : ', __FILE__) . $cmd . __(' impossible. ', __FILE__));
 			return false;
 		}
-		jeedouino::log( 'debug', 'Réponse via SSH de la commande : ' . $cmd . ' : ' . $output);
+		jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);
 		return true;
 	}
-
-	public function SendSSHCmdsJeedouinoExt($jeedouino_ext, $cmds)
+	public function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)
 	{
-		jeedouino::log( 'info', 'Envoi de commande SSH pour JeedouinoExt sur ' . $jeedouino_ext['IP']);
-		$file_path = dirname(__FILE__) . '/../../ressources/JeedouinoExt.zip';
-		$to_path = '/var/www/html/JeedouinoExt.zip';
-
+		jeedouino::log( 'info', __('Téléchargement via SSH d\'un fichier de JeedouinoExt depuis l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
 		{
-			jeedouino::log( 'error', 'Connection SSH impossible sur ' . $jeedouino_ext['IP']);
+			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
 			return false;
 		}
 		else
 		{
 			if (!ssh2_auth_password($connection, $jeedouino_ext['sshID'], $jeedouino_ext['sshPW']))
 			{
-				jeedouino::log( 'error', 'Authentification SSH impossible sur ' . $jeedouino_ext['IP']);
+				jeedouino::log( 'error', __('Authentification SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
+				return false;
+			}
+			else
+			{
+				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
+				$result = ssh2_scp_recv($connection, $distant, $local);
+				$res= jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'exit');
+				return $result;
+			}
+		}
+		return true;
+	}
+	public function getExtLog($_log)
+	{
+		$log = file($_log);
+		if ($log !== false) return $log;
+		else return [];
+	}
+	public function SendSSHCmdsJeedouinoExt($jeedouino_ext, $cmds)
+	{
+		jeedouino::log( 'info', __('Envoi de commandes SSH pour JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
+		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
+		{
+			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
+			return false;
+		}
+		else
+		{
+			if (!ssh2_auth_password($connection, $jeedouino_ext['sshID'], $jeedouino_ext['sshPW']))
+			{
+				jeedouino::log( 'error', __('Authentification SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
 				return false;
 			}
 			else

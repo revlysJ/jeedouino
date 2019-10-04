@@ -24,6 +24,7 @@ if (!isConnect('admin'))
 $JeedouinoExts = jeedouino::allJeedouinoExt();
 $eqLogics = eqLogic::byType('jeedouino');
 $ip = jeedouino::GetJeedomIP();
+$_log = log::getPathToLog('jeedouino_ext');
 
 ?>
 <div id='div_jeedouinoExtAlert' style="display: none;"></div>
@@ -57,7 +58,7 @@ $ip = jeedouino::GetJeedomIP();
     foreach ($JeedouinoExts as $JeedouinoExt)
     {
         echo '<div class="eqLogicDisplayCard cursor col-lg-2" data-jeedouinoExt_id="' . $JeedouinoExt['id'] . '" style="width:10px">';
-        echo '<img class="lazy" src="plugins/jeedouino/icons/jeedouino_icon.png"/>';
+        echo '<img class="lazy" src="plugins/jeedouino/icons/jeedouino_piGPIO40.png"/>';
         echo '<br>';
         echo '<span class="name">' . $JeedouinoExt['name'] . '</span>';
         echo '</div>';
@@ -72,9 +73,10 @@ $ip = jeedouino::GetJeedomIP();
 		<a class="btn btn-danger jeedouinoExtAction pull-right" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
 
 		<ul class="nav nav-tabs" role="tablist">
-            <li role="presentation"><a href="#" class="jeedouinoExtAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
-			<li role="presentation" class="active"><a href="#jeedouinoExtConfigtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cogs"></i> {{Paramètres}}</a></li>
-			<li role="presentation"><a href="#jeedouinoExtEq" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Equipement(s) et Démon(s)}}</a></li>
+            <li role="presentation"><a href="" class="jeedouinoExtAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
+			<li role="presentation" class="ExtHideLog active"><a href="#jeedouinoExtConfigtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cogs"></i> {{Paramètres}}</a></li>
+			<li role="presentation" class="ExtHideLog"><a href="#jeedouinoExtEq" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Equipement(s) et Démon(s)}}</a></li>
+			<li role="presentation" class="ExtShowLog" style="display:none;"><a href="#jeedouinoExtLogs" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Logs distants}}</a></li>
 		</ul>
 
 		<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -121,24 +123,23 @@ $ip = jeedouino::GetJeedomIP();
 						</div>
                         <div class="form-group JeedouinoExtNew">
                             <label class="col-sm-3 control-label">{{Fichiers JeedouinoExt}}</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-9">
                                 <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles"><i class="fas fa-spinner"></i> {{Envoi et Installation}}</a>
-                            </div>
-							<div class="col-sm-2">
-                                <a class="btn btn-success" target="_blank" download href="/../../plugins/jeedouino/ressources/JeedouinoExt.zip"><i class="fas fa-download"></i> {{Zip}}</a>
+								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/tmp/InstallJeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs d'install}}</a>
+                                <a class="btn btn-info" target="_blank" download href="/../../plugins/jeedouino/ressources/JeedouinoExt.zip"><i class="fas fa-download"></i> {{Zip}}</a>
                             </div>
                         </div>
 						<div class="form-group JeedouinoExtNew">
                             <label class="col-sm-3 control-label">{{Ou}}</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-9">
                                 <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles2"><i class="fas fa-spinner"></i> {{Envoi et redémarrage du/des démon(s)}}</a>
+								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/JeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs JeedouinoExt}}</a>
                             </div>
                         </div>
                         <div class="alert alert-info JeedouinoExtNew">
 							{{La durée d'installation peut être trés (trés) longue selon les systèmes.}}<br>
 							{{Il faudra re-sauver le(s) équipement(s) après un envoi sur une installation existante si le redémarrage du/des démon(s) échoue.}}<br>
 						</div>
-
 					</fieldset>
                     <fieldset class="JeedouinoExtNew">
                         <legend>{{Paramètres reçus}}</legend>
@@ -180,6 +181,7 @@ $ip = jeedouino::GetJeedomIP();
                         				<th>{{Arrêter}}</th>
                         				<th>{{AutoReStart}}</th>
                         				<th>{{Type}}</th>
+										<th>{{Logs}}</th>
                         			</tr>
                         		</thead>
                                 <tbody>
@@ -217,7 +219,7 @@ $ip = jeedouino::GetJeedomIP();
                 $jsButton = 'PiPlus';
                 break;
             default:
-                $jsButton = 'ArduinoUsb';
+                $jsButton = 'USB';
         }
         if ($StatusDemon) echo '<td><a class="btn btn-success bt_restartDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-sync"></i></a></td>';
         else echo '<td><a class="btn btn-success bt_StartDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-play"></i></a></td>';
@@ -228,6 +230,7 @@ $ip = jeedouino::GetJeedomIP();
         else echo '<td><a class="btn btn-danger bt_AutoReStart" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-times"></i>  {{5min}}</a></td>';
 
         echo '<td>' . $jsButton . '</td>';
+		echo '<td><a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/Jeedouino' . $jsButton . '.log"><i class="fas fa-file-alt"></i> </a></td>';
         echo '</tr>';
     }
 ?>
@@ -237,12 +240,121 @@ $ip = jeedouino::GetJeedomIP();
 					</fieldset>
 				</form>
 			</div>
+			<div role="tabpanel" class="tab-pane" id="jeedouinoExtLogs">
+				<br>
+				<div class="alert alert-info">
+					{{Suivi distant via ssh des logs de JeedouinoExt - RefreshAuto 5s}}
+					<a class="btn btn-warning pull-right" id="bt_pause" logfile=""><i class="fas fa-pause"></i> {{Pause}}</a>
+					<a class="btn btn-success pull-right" target="_blank" download href="/../../plugins/jeedouino/ressources/jeedouino_ext.logg"><i class="fas fa-download"></i> {{Télécharger}}</a>
+					<br><br>
+				</div>
+				<pre id="modal_log" style='overflow: auto; height: 80%; width:100%;'></pre>
+			</div>
 		</div>
 	</div>
 </div>
-
-
 <script>
+	timeout = null;
+	pause = 1;
+	voirlogs = 0;
+	$('.jeedouinoExtAction[data-action=getExtLog]').off('click').on('click', function ()
+	{
+		if (voirlogs == 0)
+		{
+			voirlogs = 1;
+			pause = 0;
+			$('#modal_log').empty();
+			$('.nav-tabs a[href="#jeedouinoExtLogs"]').tab('show');
+			$('#bt_pause').attr('logfile', $(this).attr('log'));
+			autoupdate({
+				logfile : $(this).attr('log'),
+				display : $('#modal_log'),
+				});
+			$('.ExtShowLog').show();
+			$('.jeedouinoExtAction[data-action=remove]').hide();
+			$('.jeedouinoExtAction[data-action=save]').hide();
+		}
+		else
+		{
+			hideLog();
+		}
+	});
+	$('.ExtHideLog').off('click').on('click', function ()
+	{
+		hideLog();
+	});
+	hideLog = function ()
+	{
+		voirlogs = 0;
+		pause = 1;
+		$('.ExtShowLog').hide();
+		$('.jeedouinoExtAction[data-action=remove]').show();
+		$('.jeedouinoExtAction[data-action=save]').show();
+		$('#modal_log').empty();
+		$('#bt_pause').removeClass('btn-success').addClass('btn-warning');
+		$('#bt_pause').html('<i class="fas fa-pause"></i> {{Pause}}');
+		if (timeout !== null) { clearTimeout( timeout ); }
+	}
+	$('#bt_pause').off('click').on('click', function ()
+	{
+		if (pause == 0)
+		{
+			pause = 1;
+			$(this).removeClass('btn-warning').addClass('btn-success');
+			$(this).html('<i class="fas fa-play"></i> {{Reprendre}}');
+		}
+		else
+		{
+			pause = 0;
+			$(this).removeClass('btn-success').addClass('btn-warning');
+			$(this).html('<i class="fas fa-pause"></i> {{Pause}}');
+			autoupdate({
+				logfile : $(this).attr('logfile'),
+				display : $('#modal_log'),
+				});
+		}
+	});
+	autoupdate = function (prm)
+	{
+		if (pause == 1) return;
+		var jeedouino_ext = $('.jeedouinoExt').getValues('.jeedouinoExtAttr')[0];
+		if (jeedouino_ext == null || jeedouino_ext == '')
+		{
+			if (timeout !== null) { clearTimeout( timeout ); }
+			$('.ExtShowLog').hide();
+			pause = 1;
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php",
+			data: {
+				action: 'getExtLog',
+				logfile : prm.logfile,
+				jeedouino_ext: json_encode(jeedouino_ext)
+			},
+			dataType: 'json',
+			success : function(data){
+				var log = '';
+				if ($.isArray(data.result))
+				{
+					for (var i in data.result) { log += $.trim(data.result[i]) + "\n"; }
+				}
+				prm.display.text(log);
+				prm.display.scrollTop(prm.display.height() + 50000);
+				if (timeout !== null) { clearTimeout( timeout ); }
+				timeout = setTimeout( function() { autoupdate(prm) }, 5000 );
+			},
+			error : function(){
+				$('#modal_log').empty();
+				$('#modal_log').text(__('Erreur de Lecture du fichier distant !', __FILE__));
+				if (timeout !== null) { clearTimeout( timeout ); }
+				timeout = setTimeout( function() { autoupdate(prm) }, 5000 );
+			},
+		});
+	}
+
+	///
 	$('.jeedouinoExtAction[data-action=add]').on('click',function(){
 		$('.jeedouinoExt').show();
         $('.jeedouinoExtThumbnailDisplay').hide();
@@ -252,21 +364,31 @@ $ip = jeedouino::GetJeedomIP();
         $('.JeedouinoExtNew').hide();
         $('.jeedouinoExtEqTR').hide();
         $('.jeedouinoExtAction[data-action=refresh]').attr('data-refresh-id', '');
+		hideLog();
+		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').tab('show');
+		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').addClass('active');
 	});
 
     $('.jeedouinoExtAction[data-action=returnToThumbnailDisplay]').on('click',function(){
 		$('.jeedouinoExt').hide();
 		$('.li_jeedouinoExt').removeClass('active');
         $('.jeedouinoExtThumbnailDisplay').show();
+		hideLog();
 	});
 
     $('.eqLogicDisplayCard').on('click',function(){
 		displayjeedouinoExt($(this).attr('data-jeedouinoExt_id'));
         $('.jeedouinoExtAction[data-action=refresh]').attr('data-refresh-id', $(this).attr('data-jeedouinoExt_id'));
+		hideLog();
+		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').tab('show');
+		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').addClass('active');
 	});
     $('.li_jeedouinoExt').on('click',function(){
 		displayjeedouinoExt($(this).attr('data-jeedouinoExt_id'));
         $('.jeedouinoExtAction[data-action=refresh]').attr('data-refresh-id', $(this).attr('data-jeedouinoExt_id'));
+		hideLog();
+		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').tab('show');
+		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').addClass('active');
 	});
 
 	function displayjeedouinoExt(_id){

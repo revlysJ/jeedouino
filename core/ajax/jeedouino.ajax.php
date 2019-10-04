@@ -101,7 +101,17 @@ try {
         }
 		ajax::success();
 	}
-    //
+    if (init('action') == 'getExtLog')
+    {
+        $JeedouinoExtGet = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+        if ($JeedouinoExtGet == '') ajax::error('DarkMatterIsUndetectable...');
+        $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg'; //log::getPathToLog('jeedouino_ext');
+        if (!jeedouino::SshGetJeedouinoExt($JeedouinoExtGet, $_log, init('logfile')))
+        {
+            ajax::error(__('Erreur, Impossible de récupérer le fichier de log de JedouinoExt. ', __FILE__));
+        }
+		ajax::success(jeedouino::getExtLog($_log));
+    }
     ////
 
     // Actions pour la gestion du reset compteur

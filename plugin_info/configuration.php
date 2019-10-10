@@ -117,7 +117,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Install Python-Serial}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installSerial" ><i class="fas fa-play"></i> {{sudo apt-get install python-serial}}</a>
+												<a class="btn btn-info bt_installSerial" ><i class="fas fa-play"></i> {{sudo pip3 install pyserial}}</a>
 										</div>
 								</div>
 							</td>

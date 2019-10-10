@@ -35,7 +35,9 @@ echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance  python-serial"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo apt-get -y install python{,3}-serial
+sudo apt-get -y install python-serial
+sudo pip3 uninstall serial
+sudo pip3 install pyserial
 
 echo 40 > /tmp/dependances_jeedouino_en_cours
 echo "-"

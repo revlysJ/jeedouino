@@ -83,18 +83,18 @@ foreach ($eqLogics as $eqLogic)
         <legend><i class="fas fa-cog"></i> {{Gestion}}</legend> <!-- changer pour votre type d'équipement -->
 
 		<div class="eqLogicThumbnailContainer">
-		   <div class="cursor eqLogicAction" data-action="add" >
-			 <center>
-				<i class="fas fa-plus-circle" style="font-size: 38px !important;color:#00979C;"></i>
-			</center>
-			<span style="color:#00979C"><center>Ajouter</center></span>
+            <div class="cursor eqLogicAction" data-action="add" >
+    			<center>
+    				<i class="fas fa-plus-circle" style="font-size: 38px !important;color:#00979C;"></i>
+    			</center>
+    			<span style="color:#00979C"><center>{{Ajouter}}</center></span>
 			</div>
 			<div class="cursor eqLogicAction" data-action="gotoPluginConf" >
 				<center>
 					<i class="fas fa-wrench" style="font-size: 38px !important;color:#00979C;"></i>
 				</center>
 				<span style="color:#00979C"><center>{{Configuration}}</center></span>
-			</div>
+    		</div>
 			<div class="cursor eqLogicAction" data-action="bt_healthSpecific" >
 				<center>
 					<i class="fas fa-medkit" style="font-size: 38px !important;color:#00979C;"></i>

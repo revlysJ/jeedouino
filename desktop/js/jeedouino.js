@@ -159,7 +159,7 @@ $('.eqLogicAction[data-action=bt_healthSpecific]').on('click', function () {
     $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=health').dialog('open');
 });
 $('.eqLogicAction[data-action=bt_jeedouinoExt]').on('click', function () {
-    $('#md_modal').dialog({title: "{{Gestion de vos équipements JeedouinoExt}}"});
+    $('#md_modal').dialog({title: "{{Gestion de vos équipements distants JeedouinoExt}}"});
     $('#md_modal').load('index.php?v=d&plugin=jeedouino&modal=jeedouinoExt').dialog('open');
 });
 $('.eqLogicAction[data-action=bt_docSpecific]').on('click', function () {

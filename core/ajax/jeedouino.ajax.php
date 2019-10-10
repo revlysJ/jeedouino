@@ -148,7 +148,9 @@ try {
 	}
   	if (init('action') == 'installSerial')
     {
-        exec('sudo apt-get -y install python{,3}-pip python{,3}-serial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo apt-get -y install python{,3}-pip python-serial>> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo pip3 uninstall serial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo pip3 install pyserial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
 		ajax::success();
 	}
   	if (init('action') == 'installGPIO')

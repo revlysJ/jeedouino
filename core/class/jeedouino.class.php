@@ -1975,6 +1975,14 @@ class jeedouino extends eqLogic {
 			}
 			return;
 		}
+		// Correction IP choisie par Input ou Select
+		$ip = strtolower(trim($this->getConfiguration('iparduino')));
+		if ($ip == '' or $this->getConfiguration('alone') == '1')
+		{
+			$ip = strtolower(trim($this->getConfiguration('iparduino2')));
+			if ($ip != '' and filter_var($ip , FILTER_VALIDATE_IP)) $this->setConfiguration('iparduino', $ip);
+		}
+
 		// On va essayer de détecter un changement dans les paramêtres de la carte (réseau/port/etc)
 		$arduino_id=$this->getId();
 		$BoardEQ = eqLogic::byid($arduino_id);

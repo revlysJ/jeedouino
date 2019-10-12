@@ -113,7 +113,7 @@ foreach ($eqLogics as $eqLogic)
 ?>
             <div class="cursor eqLogicAction" data-action="bt_jeedouinoExt" >
 				<center>
-					<i class="fas fa-wrench" style="font-size: 38px !important;color:#00979C;"></i>
+					<i class="fas fa-screwdriver" style="font-size: 38px !important;color:#00979C;"></i>
 				</center>
 				<span style="color:#00979C"><center>{{JeedouinoExt}}</center></span>
 			</div>
@@ -157,7 +157,7 @@ foreach ($eqLogics as $eqLogic)
 			<li><a href="#" class="eqLogicAction" aria-controls="home" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
 			<li class="active"><a href="#eqlogictab" aria-controls="home" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{Equipement}}</a></li>
 			<li><a href="#commandtab" aria-controls="profile" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Commandes}}</a></li>
-			<li class="control"><a href="#pinstab" aria-controls="profile" data-toggle="tab"><i class="fas fa-wrench"></i> {{Pins / GPIO}}</a></li>
+			<li class="control pintab"><a href="#pinstab" aria-controls="profile" data-toggle="tab"><i class="fas fa-wrench"></i> {{Pins / GPIO}}</a></li>
 			<li class="sketchstab"><a href="#sketchstab" aria-controls="profile" data-toggle="tab"  ><i class="fas fa-code"></i> {{Sketchs}}</a></li>
 		</ul>
 
@@ -167,7 +167,7 @@ foreach ($eqLogics as $eqLogic)
 
         <form class="form-horizontal">
             <fieldset>
-
+<legend><i class="fas fa-user-cog"></i> {{Paramètres Jeedom}}</legend>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">{{Nom de l'équipement jeedouino}}</label>
                     <div class="col-sm-3">
@@ -203,7 +203,7 @@ foreach ($eqLogics as $eqLogic)
                             if ($n >= 4)
                             {
                                 $n = 0;
-                                echo '</div></div><div class="control form-group"><label class="col-sm-3 control-label">"</label><div class="col-sm-9">';
+                                echo '</div></div><div class="control form-group"><label class="col-sm-3 control-label"> </label><div class="col-sm-9">';
                             }
                         }
                         ?>
@@ -211,7 +211,7 @@ foreach ($eqLogics as $eqLogic)
                     <br><br>
                 </div>
                 <div class="form-group">
-				  <label class="col-sm-3 control-label"></label>
+				  <label class="col-sm-3 control-label"> </label>
 				  <div class="col-sm-9">
 					<label class="control checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activé?}}</label>
 					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible?}}</label>
@@ -222,62 +222,39 @@ foreach ($eqLogics as $eqLogic)
 					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
 					<?php }  ?>
 					</div>
-                    <br><br>
                 </div>
-                    <div class="control form-group">
-                        <label class="col-sm-3 control-label">Modèle de la carte </label>
-                        <div class="col-sm-3">
-                            <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="arduino_board">
-                                <option value="" id="select_arduino_board">Aucune</option>
-								<optgroup label="Pour Arduino">
-                                <option value="auno" id="select_arduino_board">Arduino UNO 328</option>
-								<option value="a2009" id="select_arduino_board">Arduino DUEMILLANOVE 328</option>
-                                <option value="anano" id="select_arduino_board">Arduino NANO 328</option>
-                                <option value="a1280" id="select_arduino_board">Arduino MEGA 1280</option>
-                                <option value="a2560" id="select_arduino_board">Arduino MEGA 2560</option>
-								</optgroup>
-								<optgroup label="Pour Raspberry PI">
-                                <option value="piface" id="select_arduino_board">PiFace Digital</option>
-                                <option value="piGPIO26" id="select_arduino_board">Raspberry PI A/B GPIO</option>
-                                <option value="piGPIO40" id="select_arduino_board">Raspberry PI2/3 A+/B+ GPIO</option>
-								<option value="piPlus" id="select_arduino_board" >AB-Elec. IO Pi plus / MCP23017</option>
-								</optgroup>
-								<optgroup label="Pour ESP826x">
-                                <option value="esp01" id="select_arduino_board" >ESP8266-01</option>
-								<option value="esp07" id="select_arduino_board" >ESP8266-All I/O (Pour tests)</option>
-								<option value="espMCU01" id="select_arduino_board" >NodeMCU / Wemos</option>
-                                <option value="espsonoffpow" id="select_arduino_board">SONOFF POW (Pour tests)</option>
-                                <option value="espsonoff4ch" id="select_arduino_board">SONOFF 4CH (Pour tests)</option>
-                                <option value="esp32dev" id="select_arduino_board">ESP32 Dev (Pour tests)</option>
-								<option value="espElectroDragonSPDT" id="select_arduino_board">ElectroDragon 2CH (Pour tests)</option>
-								</optgroup>
-
-                            </select>
-                        </div>
-                    </div>
-				<div class="piFacePortID form-group">
-					 <label class="col-sm-3 control-label" >{{Numéro de la carte piFace}}</label>
-						<div class="col-sm-1">
-							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortID" placeholder="ex : 0"  title="{{ 0 par défaut, 0 à 3 si PiRack }}"/>
-						</div>
-				</div>
-				<div class="piPlusPortI2C form-group">
-					<label class="col-sm-3 control-label" >{{Adresse I2C du MCP23017}}</label>
-					<div class="col-sm-2">
-					   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="PortI2C">
-							<option value="32" id="select_i2c_board">0x20 (32) </option>
-							<option value="33" id="select_i2c_board">0x21 (33) </option>
-							<option value="34" id="select_i2c_board">0x22 (34) </option>
-							<option value="35" id="select_i2c_board">0x23 (35) </option>
-							<option value="36" id="select_i2c_board">0x24 (36) </option>
-							<option value="37" id="select_i2c_board">0x25 (37) </option>
-							<option value="38" id="select_i2c_board">0x26 (38) </option>
-							<option value="39" id="select_i2c_board">0x27 (39) </option>
+<legend class="control"><i class="fas fa-cogs"></i> {{Paramètres Matériel}}</legend>
+                <div class="control form-group">
+                    <label class="col-sm-3 control-label">Modèle de la carte </label>
+                    <div class="col-sm-3">
+                        <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="arduino_board">
+                            <option value="">Aucune</option>
+							<optgroup label="Pour Arduino">
+                            <option value="auno">Arduino UNO 328</option>
+							<option value="a2009">Arduino DUEMILLANOVE 328</option>
+                            <option value="anano">Arduino NANO 328</option>
+                            <option value="a1280">Arduino MEGA 1280</option>
+                            <option value="a2560">Arduino MEGA 2560</option>
 							</optgroup>
-						</select>
-					</div>
-				</div>
-				 <div class="control form-group">
+							<optgroup label="Pour Raspberry PI">
+                            <option value="piface">PiFace Digital</option>
+                            <option value="piGPIO26">Raspberry PI A/B GPIO</option>
+                            <option value="piGPIO40">Raspberry PI2/3 A+/B+ GPIO</option>
+							<option value="piPlus" >AB-Elec. IO Pi plus / MCP23017</option>
+							</optgroup>
+							<optgroup label="Pour ESP826x">
+                            <option value="esp01" >ESP8266-01</option>
+							<option value="esp07" >ESP8266-All I/O (Pour tests)</option>
+							<option value="espMCU01" >NodeMCU / Wemos</option>
+                            <option value="espsonoffpow">SONOFF POW (Pour tests)</option>
+                            <option value="espsonoff4ch">SONOFF 4CH (Pour tests)</option>
+                            <option value="esp32dev">ESP32 Dev (Pour tests)</option>
+							<option value="espElectroDragonSPDT">ElectroDragon 2CH (Pour tests)</option>
+							</optgroup>
+                        </select>
+                    </div>
+                </div>
+				 <div class="control UsbLan form-group">
 					 <label class="col-sm-3 control-label">{{Type de connection de la carte}}</label>
 					 <div class="col-sm-3">
 						<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datasource">
@@ -288,17 +265,17 @@ foreach ($eqLogics as $eqLogic)
 				</div>
 				<div class="datasource usbarduino">
 					<div class="form-group">
-						<label class="col-sm-3 control-label">{{Port USB}}</label>
+						<label class="col-sm-3 control-label">{{Localisation de la carte}}</label>
 						<div class="col-sm-3">
 							<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="arduinoport">
-								<option value="usblocal">{{Local}}</option>
-								<option value="usbdeporte">{{Déporté}}</option>
+								<option value="usblocal">{{Local (sur ce Jeedom)}}</option>
+								<option value="usbdeporte">{{Déporté (sur un JeedouinoExt)}}</option>
 							</select>
 						</div>
 					</div>
 
 					<div class="form-group arduinoport usblocal">
-						<label class="col-sm-3 control-label">{{Port local USB carte }}</label>
+						<label class="col-sm-3 control-label">{{Port USB de connection locale}}</label>
 						<div class="col-sm-3">
 							<select class="eqLogicAttr form-control"  data-l1key="configuration" data-l2key="portusblocal">
 								<option value="none">{{Aucun}}</option>
@@ -322,7 +299,7 @@ foreach ($eqLogics as $eqLogic)
 						</div>
 					</div>
 					<div class="form-group arduinoport usbdeporte">
-                        <label class="col-lg-3 control-label">{{Carte sur port USB déporté }}</label>
+                        <label class="col-lg-3 control-label">{{Port USB de connection déportée}}</label>
                         <div class="col-lg-3">
                             <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portusbdeporte">
                                 <option value="none">{{Aucun}}</option>
@@ -379,37 +356,40 @@ foreach ($eqLogics as $eqLogic)
 	//	}
 		?>
 					</div>
-                    <div class="form-group arduinoport usblocal usbdeporte">
-						<label class="col-lg-3 control-label">{{Port réseau du démon}}</label>
-						<div class="col-lg-3">
-							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortDemon" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('PortDemon'); ?>"/>
-						</div>
-                    </div>
 				</div>
 				<div class="datasource rj45arduino">
 				   <div class="form-group">
 						<label class="col-sm-3 control-label">{{Adresse IP de la carte }}</label>
 						<div class="col-sm-3">
-							<input type="text" list="jeeReseau" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="iparduino" placeholder="ex : 192.168.0.55"/>
+							<input type="text" list="jeeReseau" class="NotAlone eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="iparduino" placeholder="ex : 192.168.0.55"/>
                             <datalist id="jeeReseau">
-                <?php
-                    echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >{{Ce Jeedom }}</option>';
-					// Sur JeedouinoExt (sans Jeedom)
-					$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
-					if ($ListExtIP != '')
-					{
-						foreach ($ListExtIP as $ip)
-						{
-                            $JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', 'JeedouinoExt'));
-							echo '<option value="' . $ip . '">' . $JExtname . '</option>';
-						}
-					}
-                ?>
+<?php
+    echo '<option value="' .$_SERVER["SERVER_ADDR"]. '" >{{Ce Jeedom }}</option>';
+?>
                             </datalist>
-						</div>
-						<label class="col-sm-1 control-label">{{Port}}</label>
-						<div class="col-sm-2">
-							<input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
+
+                            <select class="Alone eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="iparduino2">
+<?php
+	// Sur JeedouinoExt (sans Jeedom)
+	// iparduino2 mis dans iparduino dans la class method presave()
+	$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
+	if ($ListExtIP != '')
+	{
+        echo '<option value="" >' . __('Veuillez choisir un JeedouinoExt', __FILE__) . '</option>';
+		foreach ($ListExtIP as $ip)
+		{
+            echo '<optgroup label="JeedouinoExt sur ' . $ip . '">';
+            $JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', 'JeedouinoExt'));
+			echo '<option value="' . $ip . '">' . $JExtname . '</option>';
+            echo '</optgroup>';
+		}
+	}
+    else
+    {
+        echo '<option value="" >' . __('Veuillez créer un JeedouinoExt avant', __FILE__) . '</option>';
+    }
+?>
+                            </select>
 						</div>
 					</div>
 				</div>
@@ -425,6 +405,45 @@ foreach ($eqLogics as $eqLogic)
 						</div>
 					</div>
 				</div>
+                <div class="piFacePortID form-group">
+					 <label class="col-sm-3 control-label" >{{Numéro de la carte piFace}}</label>
+						<div class="col-sm-3">
+							<input type="number" min="0" max="3" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortID" placeholder="{{ 0 par défaut, 0 à 3 si PiRack }}"  title="{{ 0 par défaut, 0 à 3 si PiRack }}"/>
+						</div>
+				</div>
+				<div class="piPlusPortI2C form-group">
+					<label class="col-sm-3 control-label" >{{Adresse I2C du MCP23017}}</label>
+					<div class="col-sm-3">
+					   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="PortI2C">
+							<option value="32" id="select_i2c_board">0x20 (32) </option>
+							<option value="33" id="select_i2c_board">0x21 (33) </option>
+							<option value="34" id="select_i2c_board">0x22 (34) </option>
+							<option value="35" id="select_i2c_board">0x23 (35) </option>
+							<option value="36" id="select_i2c_board">0x24 (36) </option>
+							<option value="37" id="select_i2c_board">0x25 (37) </option>
+							<option value="38" id="select_i2c_board">0x26 (38) </option>
+							<option value="39" id="select_i2c_board">0x27 (39) </option>
+							</optgroup>
+						</select>
+					</div>
+				</div>
+<legend><i class="fas fa-cog"></i> {{Paramètres facultatifs}}</legend>
+            <div class="datasource rj45arduino">
+               <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Port réseau}}</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
+                    </div>
+                </div>
+            </div>
+            <div class="datasource usbarduino">
+                <div class="form-group arduinoport usblocal usbdeporte">
+                    <label class="col-sm-3 control-label">{{Port réseau du démon}}</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortDemon" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('PortDemon'); ?>"/>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Memento}}</label>
               <div class="col-sm-3">
@@ -438,7 +457,7 @@ foreach ($eqLogics as $eqLogic)
 			</div>
 		<div class="tab-pane" id="commandtab">
 
-        <legend>{{Commandes de la carte}}</legend>
+        <legend><i class="fas fa-list-alt"></i> {{Commandes générées}}</legend>
 			<form class="form-horizontal">
 				<div class="control form-group">
 				  <label class="col-sm-3 control-label"></label>

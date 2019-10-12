@@ -48,7 +48,12 @@ if (isset($_GET['id']))
 	$PortArduino = $my_arduino->getConfiguration('datasource');
 	$LocalArduino = $my_arduino->getConfiguration('arduinoport');
 	$IPArduino = trim($my_arduino->getConfiguration('iparduino'));
-    if ($IPArduino == '') $IPArduino = __(' NON DEFINIE ! ', __FILE__);
+    if ($IPArduino == '')
+    {
+        // si équipement désactivé, iparduino pas mis à jour par iparduino2 dans presave()
+        $IPArduino = strtolower(trim($my_arduino->getConfiguration('iparduino2')));
+        if ($IPArduino == '') $IPArduino = __(' NON DEFINIE ! ', __FILE__);
+    }
 
 	// On verifie que l'utilisateur n'a pas changé de modèle de carte après la 1ère sauvegarde sans resauver derrière.
 	if ($arduino_board != '')
@@ -105,7 +110,7 @@ if (isset($_GET['id']))
 
 <div class="tab-content" id="backup_pins" >
 			<div id='div_alertpins' style="display: none;"></div>
-			<div class="form-group"  style="    ">
+			<div class="form-group" >
 				<label class="col-sm-6 control-label ">{{Paramétrage des pins de l'arduino/esp/rpi}} <?php echo $message_a; ?></label>
 				<div class="col-sm-6">
 					<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-info eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>
@@ -113,7 +118,7 @@ if (isset($_GET['id']))
 				</div>
 			</div>
 
-		<ul class="nav nav-tabs" role="tablist">
+		<ul class="nav nav-tabs" role="tablist" >
 				<?php if (substr($ModeleArduino,0,2) != 'pi' or (substr($ModeleArduino,0,6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
 				{
 				?>

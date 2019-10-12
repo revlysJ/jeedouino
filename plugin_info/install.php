@@ -27,7 +27,19 @@ function jeedouino_update()
     // update JeedouinoExt
     $ListExtIP = jeedouino::CleanIPJeedouinoExt();
     $IPsToNames = [];
-    foreach ($eqLogics as $eqLogic) $IPsToNames[trim($eqLogic->getConfiguration('iparduino'))] = $eqLogic->getName();
+    foreach ($eqLogics as $eqLogic)
+    {
+        $ip = trim($eqLogic->getConfiguration('iparduino'));
+        $IPsToNames[$ip] = $eqLogic->getName();
+        if ($eqLogic->getConfiguration('alone') == '1')
+        {
+            if ($ip != '' and filter_var($ip , FILTER_VALIDATE_IP))
+            {
+                $eqLogic->setConfiguration('iparduino2', $ip);
+    			$eqLogic->save(true);
+            }
+        }
+    }
     foreach ($ListExtIP as $ip)
     {
         $id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
@@ -41,7 +53,7 @@ function jeedouino_update()
     }
     //
 	// correction droits fichier DS18B20Scan
-	exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+	//exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 	//
 	$eqLogics = eqLogic::byType('jeedouino');
 	$IPJeedom = jeedouino::GetJeedomIP();

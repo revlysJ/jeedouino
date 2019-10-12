@@ -102,7 +102,7 @@ $_log = log::getPathToLog('jeedouino_ext');
 						</div>
                     </fieldset>
                     <fieldset>
-                        <legend>{{Accès SSH}}</legend>
+                        <legend><i class="fas fa-cogs"></i> {{Accès SSH}}</legend>
                         <div class="form-group">
 							<label class="col-sm-3 control-label">{{Login SSH}}</label>
 							<div class="col-sm-3">
@@ -142,7 +142,7 @@ $_log = log::getPathToLog('jeedouino_ext');
 						</div>
 					</fieldset>
                     <fieldset class="JeedouinoExtNew">
-                        <legend>{{Paramètres reçus}}</legend>
+                        <legend><i class="fas fa-cog"></i> {{Paramètres reçus}}</legend>
                         <div class="form-group">
 							<label class="col-sm-3 control-label">{{Chemin URL}}</label>
 							<div class="col-sm-3">

@@ -38,6 +38,8 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 		}
 		else
 		{
+            $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+            RPIlocal();
 			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value().substr(0, 1)=='e')
 			{
 				$('.ActiveExt').hide();
@@ -50,6 +52,32 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 			}
 		}
 	 }
+});
+RPIlocal = function()
+{
+    $('.Alone').hide();
+    $('.NotAlone').show();
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduinoport] option[value="usblocal"]').prop('selected', true);
+    $('.arduinoport').hide();
+    $('.arduinoport.usblocal').show();
+}
+RPIalone = function()
+{
+    $('.NotAlone').hide();
+    $('.Alone').show();
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduinoport] option[value="usbdeporte"]').prop('selected', true);
+    $('.arduinoport').hide();
+    $('.arduinoport.usbdeporte').show();
+}
+$('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').on('change',function(){
+	if ($(this).value() == 0)
+	{
+        RPIlocal();
+    }
+    else
+    {
+        RPIalone();
+    }
 });
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change',function(){
 	if ($(this).value()=='')
@@ -65,10 +93,22 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 		$('.esp8266').hide();
 		$('.sketchstab').hide();
 		$('.ActiveExt').hide();
+        $('.Alone').hide();
+        $('.NotAlone').hide();
+        $('.UsbLan').hide();
 	}
-	else if ($(this).value()=='piface' || $(this).value()=='piGPIO26' || $(this).value()=='piGPIO40' || $(this).value()=='piPlus' )
+	else if ($(this).value().substr(0, 1)=='p')
 	{
+        if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
+        {
+            RPIlocal();
+        }
+        else
+        {
+            RPIalone();
+        }
         $('.control').show();
+        $('.UsbLan').show();
 		$('.config_pin').show();
 		if ($(this).value()=='piface') $('.piFacePortID').show();
 		else $('.piFacePortID').hide();
@@ -85,7 +125,10 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	}
 	else if ($(this).value().substr(0, 1)=='e')
 	{
+        RPIlocal();
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
         $('.control').show();
+        $('.UsbLan').show();
 		$('.config_pin').show();
 		$('.piFacePortID').hide();
 		$('.piPlusPortI2C').hide();
@@ -102,7 +145,25 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	}
 	else if ($(this).value().substr(0, 1)=='a')
 	{
+        if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value() == 'usbarduino')
+        {
+            if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
+            {
+                RPIlocal();
+            }
+            else
+            {
+                RPIalone();
+            }
+        }
+        else
+        {
+            $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+            RPIlocal();
+        }
+
         $('.control').show();
+        $('.UsbLan').show();
 		$('.sketchs').hide();
 		$('.sketchUSB').hide();
 		if ($('.li_eqLogic.active').attr('data-eqLogic_id') != undefined)
@@ -133,6 +194,7 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	else
 	{
         $('.control').show();
+        $('.UsbLan').show();
 		$('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').removeAttr('disabled');
 		$('.config_pin').show();
 		$('.piFacePortID').hide();
@@ -147,8 +209,18 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	}
 });
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduinoport]').on('change',function(){
-	$('.arduinoport').hide();
-	$('.arduinoport.'+$(this).value()).show();
+	//$('.arduinoport').hide();
+	//$('.arduinoport.'+$(this).value()).show();
+    if ($(this).value() == 'usblocal')
+    {
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+        RPIlocal();
+    }
+    else
+    {
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", true );
+        RPIalone();
+    }
 });
 $('#bt_conf_Pin').off('click').on('click', function() {
 	$('#md_modal').dialog({title: "{{Paramétrages / affectation des pins}}"});

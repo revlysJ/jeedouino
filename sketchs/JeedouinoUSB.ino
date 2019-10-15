@@ -150,24 +150,22 @@ unsigned long timeout = 0;
 	Adafruit_BMP085 bmp;
 #endif
 #if (UseBME280 == 1)
-	//  BMP280 BME280-barometric-pressure-temperature-sensor [humidity]
-	//  https://github.com/farmerkeith/BMP280-library
-	// compatible GY-BM E/p 280 chinese stuff
+	// BME280-barometric-pressure-temperature-humidity-sensor
+	// https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/arduino-test
 	#include <Wire.h>
-	#include <farmerkeith_BMP280.h>
-	bme280 bme280;
+	#include <Adafruit_BME280.h>
+	Adafruit_BME280 bme280;
 #endif
 #if (UseBMP280 == 1)
-	//  BMP280 BME280-barometric-pressure-temperature-sensor [humidity]
-	//  https://github.com/farmerkeith/BMP280-library
-	// compatible GY-BM E/p 280 chinese stuff
+	// BMP280 barometric-pressure-temperature-sensor
+	// https://learn.adafruit.com/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout/arduino-test
 	#include <Wire.h>
-	#include <farmerkeith_BMP280.h>
-	bme280 bmp280;
+	#include <Adafruit_BMP280.h>
+	Adafruit_BMP280 bmp280;
 #endif
 #if (UseBME680 == 1)
 	//  bme680-humidity-temperature-barometic-pressure-voc-gas
-	//  https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/overview
+	//  https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/arduino-wiring-test
 	#include <Wire.h>
 	#include <Adafruit_Sensor.h>
 	#include "Adafruit_BME680.h"
@@ -220,13 +218,13 @@ void setup()
 		bmp.begin();
 	#endif
 	#if (UseBME280 == 1)
-		bme280.begin();
+		if (!bme280.begin(0x77)) bme280.begin(0x76);
 	#endif
 	#if (UseBMP280 == 1)
-		bmp280.begin();
+		if (!bmp280.begin(0x77)) bmp280.begin(0x76);
 	#endif
 	#if (UseBME680 == 1)
-		bme680.begin();
+		if (!bme680.begin(0x77)) bme680.begin(0x76);
 		// Set up oversampling and filter initialization
 		bme680.setTemperatureOversampling(BME680_OS_8X);
 		bme680.setHumidityOversampling(BME680_OS_2X);

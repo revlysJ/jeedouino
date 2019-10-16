@@ -229,6 +229,8 @@ if (isset($_GET['BoardEQ']))
 					{
 						if ($pins_id<100 and $pins_id>53) $pins_id -= 40;
 						elseif ($pins_id<1100 and $pins_id>1053) $pins_id -= 40;
+						elseif ($pins_id<2100 and $pins_id>2053) $pins_id -= 40;
+						elseif ($pins_id<3100 and $pins_id>3053) $pins_id -= 40;
 					}
 
 					// Specifique ESPxx entree analogique

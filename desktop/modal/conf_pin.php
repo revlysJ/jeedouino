@@ -323,16 +323,28 @@ if (isset($_GET['id']))
 					// pins non disponibles
 					if ($pin_datas['disable'] == '1')
 					{
-                        // cas particulier GPIO RPI disabled sur SDA (i2c)
-                        if (substr($pin_datas['option'], 0, 3) == 'SDA')
+                        // cas particulier GPIO RPI disabled sur SDA et SCL (i2c)
+                        $sda = substr($pin_datas['option'], 0, 3);
+                        if ($sda == 'SDA')
                         {
                             $TmpPins .= '<td>';
                             $TmpPins .= '<select class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_' . $pins_id . '">';
                             $TmpPins .= '<option value="not_used">{{Non utilisée}}</option>';
-                            $TmpPins .= '<option value="bmp180">{{Capteur Température/Pression BMP085/180}}</option>';
-                            $TmpPins .= '<option value="bmp280">{{Capteur Température/Pression GY-BMP280}}</option>';
-                            $TmpPins .= '<option value="bme280">{{Capteur Température/Humidité/Pression BME280}}</option>';
-                            $TmpPins .= '<option value="bme680">{{Capteur Température/Humidité/Pression/Gas COV BME680}}</option>';
+                            $TmpPins .= '<option value="bmp180">{{Capteur BMP085/180 Température/Pression}}</option>';
+                            $TmpPins .= '<option value="bmp280">{{Capteur BMP280 (i2c x76) Température/Pression}}</option>';
+                            $TmpPins .= '<option value="bme280">{{Capteur BME280 (i2c x76) Température/Humidité/Pression}}</option>';
+                            $TmpPins .= '<option value="bme680">{{Capteur BME680 (i2c x76) Température/Humidité/Pression/Gas COV}}</option>';
+                            $TmpPins .= '</select>';
+                            $TmpPins .= '</td>';
+                        }
+                        elseif ($sda == 'SCL')
+                        {
+                            $TmpPins .= '<td>';
+                            $TmpPins .= '<select class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_' . $pins_id . '">';
+                            $TmpPins .= '<option value="not_used">{{Non utilisée}}</option>';
+                            $TmpPins .= '<option value="bmp280b">{{Capteur BMP280 (i2c x77) Température/Pression}}</option>';
+                            $TmpPins .= '<option value="bme280b">{{Capteur BME280 (i2c x77) Température/Humidité/Pression}}</option>';
+                            $TmpPins .= '<option value="bme680b">{{Capteur BME680 (i2c x77) Température/Humidité/Pression/Gas COV}}</option>';
                             $TmpPins .= '</select>';
                             $TmpPins .= '</td>';
                         }
@@ -416,10 +428,16 @@ if (isset($_GET['id']))
 								}
                                 if (substr($pin_datas['option'], 0, 3) == 'SDA')
                                 {
-                                    $InfoPins[] = '<option value="bmp180">{{Capteur Température/Pression BMP085/180}}</option>';
-                                    $InfoPins[] = '<option value="bmp280">{{Capteur Température/Pression GY-BMP280}}</option>';
-                                    $InfoPins[] = '<option value="bme280">{{Capteur Température/Humidité/Pression BME280}}</option>';
-                                    $InfoPins[] = '<option value="bme680">{{Capteur Température/Humidité/Pression/Gas COV BME680}}</option>';
+                                    $InfoPins[] = '<option value="bmp180">{{Capteur BMP085/180 Température/Pression}}</option>';
+                                    $InfoPins[] = '<option value="bmp280">{{Capteur BMP280 (i2c x76) Température/Pression}}</option>';
+                                    $InfoPins[] = '<option value="bme280">{{Capteur BME280 (i2c x76) Température/Humidité/Pression}}</option>';
+                                    $InfoPins[] = '<option value="bme680">{{Capteur BME680 (i2c x76) Température/Humidité/Pression/Gas COV}}</option>';
+                                }
+                                if (substr($pin_datas['option'], 0, 3) == 'SCL')
+                                {
+                                    $InfoPins[] = '<option value="bmp280b">{{Capteur BMP280 (i2c x77) Température/Pression}}</option>';
+                                    $InfoPins[] = '<option value="bme280b">{{Capteur BME280 (i2c x77) Température/Humidité/Pression}}</option>';
+                                    $InfoPins[] = '<option value="bme680b">{{Capteur BME680 (i2c x77) Température/Humidité/Pression/Gas COV}}</option>';
                                 }
 							}
 							else
@@ -489,10 +507,16 @@ if (isset($_GET['id']))
 						{
                             if (strpos($pin_datas['option'], 'SDA') !== false )
                             {
-                                $InfoPins[] = '<option value="bmp180">{{Capteur Température/Pression BMP085/180}}</option>';
-                                $InfoPins[] = '<option value="bmp280">{{Capteur Température/Pression GY-BMP280}}</option>';
-                                $InfoPins[] = '<option value="bme280">{{Capteur Température/Humidité/Pression BME280}}</option>';
-                                $InfoPins[] = '<option value="bme680">{{Capteur Température/Humidité/Pression/Gas COV BME680}}</option>';
+                                $InfoPins[] = '<option value="bmp180">{{Capteur BMP085/180 Température/Pression}}</option>';
+                                $InfoPins[] = '<option value="bmp280">{{Capteur BMP280 (i2c x76) Température/Pression}}</option>';
+                                $InfoPins[] = '<option value="bme280">{{Capteur BME280 (i2c x76) Température/Humidité/Pression}}</option>';
+                                $InfoPins[] = '<option value="bme680">{{Capteur BME680 (i2c x76) Température/Humidité/Pression/Gas COV}}</option>';
+                            }
+                            if (strpos($pin_datas['option'], 'SCL') !== false )
+                            {
+                                $InfoPins[] = '<option value="bmp280b">{{Capteur BMP280 (i2c x77) Température/Pression}}</option>';
+                                $InfoPins[] = '<option value="bme280b">{{Capteur BME280 (i2c x77) Température/Humidité/Pression}}</option>';
+                                $InfoPins[] = '<option value="bme680b">{{Capteur BME680 (i2c x77) Température/Humidité/Pression/Gas COV}}</option>';
                             }
                             if (strpos($pin_datas['option'], 'ANA') === false )
 							{

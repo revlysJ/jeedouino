@@ -20,6 +20,11 @@
 #define UseServo 0
 #define UseWS2811 0	// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel
 
+// Concernant UseBMP280, UseBME280 et UseBME680
+// =1 capteur(x1) sur i2c addr 0x76 (au choix)
+// =2 capteur(x1) sur i2c addr 0x77 (au choix)
+// =3 capteurs(x2) sur i2c addr 0x76 & 0x77 (identiques)
+
 // Vous permet d'inclure du sketch perso - voir Doc / FAQ.
 // Il faut activer l'option dans la configuration du plugin.
 // Puis choisir le nombre de variables utilisateur sous l'onglet Pins/GPIO de votre équipement.
@@ -149,27 +154,38 @@ unsigned long timeout = 0;
 	#include <Adafruit_BMP085.h>
 	Adafruit_BMP085 bmp;
 #endif
-#if (UseBME280 == 1)
+#if (UseBME280 >= 1)
 	// BME280-barometric-pressure-temperature-humidity-sensor
 	// https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/arduino-test
-	#include <Wire.h>
 	#include <Adafruit_BME280.h>
-	Adafruit_BME280 bme280;
+	#if (UseBME280 != 2)
+		Adafruit_BME280 bme280; // I2C x76
+	#endif
+	#if (UseBME280 >= 2)
+		Adafruit_BME280 bme280b; // I2C x77
+	#endif
 #endif
-#if (UseBMP280 == 1)
+#if (UseBMP280 >= 1)
 	// BMP280 barometric-pressure-temperature-sensor
 	// https://learn.adafruit.com/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout/arduino-test
-	#include <Wire.h>
 	#include <Adafruit_BMP280.h>
-	Adafruit_BMP280 bmp280;
+	#if (UseBMP280 != 2)
+		Adafruit_BMP280 bmp280; // I2C x76
+	#endif
+	#if (UseBMP280 >= 2)
+		Adafruit_BMP280 bmp280b; // I2C x77
+	#endif
 #endif
-#if (UseBME680 == 1)
+#if (UseBME680 >= 1)
 	//  bme680-humidity-temperature-barometic-pressure-voc-gas
 	//  https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/arduino-wiring-test
-	#include <Wire.h>
-	#include <Adafruit_Sensor.h>
 	#include "Adafruit_BME680.h"
-	Adafruit_BME680 bme680; // I2C
+	#if (UseBME680 != 2)
+		Adafruit_BME680 bme680; // I2C x76
+	#endif
+	#if (UseBME680 >= 2)
+		Adafruit_BME680 bme680b; // I2C x77
+	#endif
 #endif
 #if (UserSketch == 1)
 	// UserVars
@@ -217,20 +233,29 @@ void setup()
 	#if (UseBMP180 == 1)
 		bmp.begin();
 	#endif
-	#if (UseBME280 == 1)
-		if (!bme280.begin(0x77)) bme280.begin(0x76);
+	#if (UseBME280 >= 1)
+		#if (UseBME280 != 2)
+			bme280.begin(0x76);
+		#endif
+		#if (UseBME280 >= 2)
+			bme280b.begin(0x77);
+		#endif
 	#endif
-	#if (UseBMP280 == 1)
-		if (!bmp280.begin(0x77)) bmp280.begin(0x76);
+	#if (UseBMP280 >= 1)
+		#if (UseBMP280 != 2)
+			bmp280.begin(0x76);
+		#endif
+		#if (UseBMP280 >= 2)
+			bmp280b.begin(0x77);
+		#endif
 	#endif
-	#if (UseBME680 == 1)
-		if (!bme680.begin(0x77)) bme680.begin(0x76);
-		// Set up oversampling and filter initialization
-		bme680.setTemperatureOversampling(BME680_OS_8X);
-		bme680.setHumidityOversampling(BME680_OS_2X);
-		bme680.setPressureOversampling(BME680_OS_4X);
-		bme680.setIIRFilterSize(BME680_FILTER_SIZE_3);
-		bme680.setGasHeater(320, 150); // 320*C for 150 ms
+	#if (UseBME680 >= 1)
+		#if (UseBME680 != 2)
+			bme680.begin(0x76);
+		#endif
+		#if (UseBME680 >= 2)
+			bme680b.begin(0x77);
+		#endif
 	#endif
 
 	#if (UseWS2811 == 1)
@@ -886,65 +911,131 @@ void loop()
 				}
 				break;
 			#endif
-			#if (UseBME280 == 1)
-			case 'A': // BME280
-				if (PinNextSend[i] < millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bme280.readTemperature();
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bme280.readPressure();
-					jeedom += '&';
-					jeedom += i + 2000;
-					jeedom += '=';
-					jeedom += bme280.readHumidity();
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
+			#if (UseBME280 >= 1)
+				#if (UseBME280 != 2)
+				case 'A': // BME280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme280.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme280.readPressure();
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme280.readHumidity();
+						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
+				#if (UseBME280 >= 2)
+				case 'D': // BME280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme280b.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme280b.readPressure();
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme280b.readHumidity();
+						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
 			#endif
-			#if (UseBME680 == 1)
-			case 'B': // BME680
-				if (PinNextSend[i] < millis() and bme680.performReading())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bme680.temperature;
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bme680.pressure;
-					jeedom += '&';
-					jeedom += i + 2000;
-					jeedom += '=';
-					jeedom += bme680.humidity;
-					jeedom += '&';
-					jeedom += i + 3000;
-					jeedom += '=';
-					jeedom += bme680.gas_resistance;
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
+			#if (UseBME680 >= 1)
+				#if (UseBME680 != 2)
+				case 'B': // BME680
+					if (PinNextSend[i] < millis() and bme680.performReading())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme680.temperature;
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme680.pressure;
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme680.humidity;
+						jeedom += '&';
+						jeedom += i + 3000;
+						jeedom += '=';
+						jeedom += bme680.gas_resistance;
+						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
+				#if (UseBME680 >= 2)
+				case 'E': // BME680
+					if (PinNextSend[i] < millis() and bme680b.performReading())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme680b.temperature;
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme680b.pressure;
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme680b.humidity;
+						jeedom += '&';
+						jeedom += i + 3000;
+						jeedom += '=';
+						jeedom += bme680b.gas_resistance;
+						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
 			#endif
-			#if (UseBMP280 == 1)
-			case 'C': // BMP280
-				if (PinNextSend[i] < millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bmp280.readTemperature();
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bmp280.readPressure();
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
+			#if (UseBMP280 >= 1)
+				#if (UseBMP280 != 2)
+				case 'C': // BMP280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bmp280.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bmp280.readPressure();
+						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
+				#if (UseBMP280 >= 2)
+				case 'F': // BMP280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bmp280b.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bmp280b.readPressure();
+						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
 			#endif
 		}
 	}

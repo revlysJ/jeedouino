@@ -97,7 +97,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,gpioSET,sendPINMODE,busio
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -212,6 +212,13 @@ class myThread1 (threading.Thread):
 							except:
 								bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c) #hex77 default
 							bme280.sea_level_pressure = 1013.25
+						elif Status_pins[i]=='D':
+							i2c = busio.I2C(board.SCL, board.SDA)
+							try:
+								bme280b = adafruit_bme280.Adafruit_BME280_I2C(i2c) #hex77 default
+							except:
+								bme280b = adafruit_bme280.Adafruit_BME280_I2C(i2c, 118) # hex76 = 118
+							bme280b.sea_level_pressure = 1013.25
 						elif Status_pins[i]=='B':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -219,6 +226,13 @@ class myThread1 (threading.Thread):
 							except:
 								bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
 							bme680.sea_level_pressure = 1013.25
+						elif Status_pins[i]=='E':
+							i2c = busio.I2C(board.SCL, board.SDA)
+							try:
+								bme680b = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
+							except:
+								bme680b = adafruit_bme680.Adafruit_BME680_I2C(i2c, 118, debug=False)
+							bme680b.sea_level_pressure = 1013.25
 						elif Status_pins[i]=='C':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -226,6 +240,13 @@ class myThread1 (threading.Thread):
 							except:
 								bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
 							bmp280.sea_level_pressure = 1013.25
+						elif Status_pins[i]=='F':
+							i2c = busio.I2C(board.SCL, board.SDA)
+							try:
+								bmp280b = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
+							except:
+								bmp280b = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, 118)
+							bmp280b.sea_level_pressure = 1013.25
 					reponse = 'COK'
 					RepStr = '&REP=' + str(reponse) + GPIOStr
 					gpioSET = True
@@ -476,7 +497,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,sendPINMODE
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE
 
 		while exit==0:
 			thread_2 = 1
@@ -595,6 +616,13 @@ class myThread2 (threading.Thread):
 						pinStr += '&' + str(1000 + j) + '=' + str(bme280.pressure)
 						pinStr += '&' + str(2000 + j) + '=' + str(bme280.humidity)
 						pinDHT = 1
+					elif Status_pins[i]=='D': # BME280
+						if pinDHT:
+							time.sleep(2)
+						pinStr += '&' + str(j) + '=' + str(bme280b.temperature)
+						pinStr += '&' + str(1000 + j) + '=' + str(bme280b.pressure)
+						pinStr += '&' + str(2000 + j) + '=' + str(bme280b.humidity)
+						pinDHT = 1
 					elif Status_pins[i]=='B': # BME680
 						if pinDHT:
 							time.sleep(2)
@@ -603,11 +631,25 @@ class myThread2 (threading.Thread):
 						pinStr += '&' + str(2000 + j) + '=' + str(bme680.humidity)
 						pinStr += '&' + str(3000 + j) + '=' + str(bme680.gas)
 						pinDHT = 1
+					elif Status_pins[i]=='E': # BME680
+						if pinDHT:
+							time.sleep(2)
+						pinStr += '&' + str(j) + '=' + str(bme680b.temperature)
+						pinStr += '&' + str(1000 + j) + '=' + str(bme680b.pressure)
+						pinStr += '&' + str(2000 + j) + '=' + str(bme680b.humidity)
+						pinStr += '&' + str(3000 + j) + '=' + str(bme680b.gas)
+						pinDHT = 1
 					elif Status_pins[i]=='C': # BMP280
 						if pinDHT:
 							time.sleep(2)
 						pinStr += '&' + str(j) + '=' + str(bmp280.temperature)
 						pinStr += '&' + str(1000 + j) + '=' + str(bmp280.pressure * 100)
+						pinDHT = 1
+					elif Status_pins[i]=='F': # BMP280
+						if pinDHT:
+							time.sleep(2)
+						pinStr += '&' + str(j) + '=' + str(bmp280b.temperature)
+						pinStr += '&' + str(1000 + j) + '=' + str(bmp280b.pressure * 100)
 						pinDHT = 1
 				pinDHT = 0
 				if pinStr != '':

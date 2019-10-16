@@ -530,11 +530,20 @@ class jeedouino extends eqLogic {
 					case 'bmp280':
 						$PinMode .= 'C';
 						break;
+					case 'bmp280b':
+						$PinMode .= 'F';
+						break;
 					case 'bme280':
 						$PinMode .= 'A';
 						break;
+					case 'bme280b':
+						$PinMode .= 'D';
+						break;
 					case 'bme680':
 						$PinMode .= 'B';
+						break;
+					case 'bme680b':
+						$PinMode .= 'E';
 						break;
 					case 'bp_input':
 						$PinMode .= 'n';
@@ -2564,6 +2573,7 @@ class jeedouino extends eqLogic {
 							$bmp180 = 1;			// Pour génération sketch
 						break;
 						case 'bmp280':
+							$bmp280 |= 1;			// i2c x76
 							$myType = 'info';
 							$mySubType = 'numeric';
 							$myinvertBinary = '0';
@@ -2571,9 +2581,19 @@ class jeedouino extends eqLogic {
 							$value = '0';
 							$double_cmd = $myPin . '_p';
 							$value2 = '0';
-							$bmp280 = 1;			// Pour génération sketch
+						break;
+						case 'bmp280b':
+							$bmp280 |= 2;			// i2c x77
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$double_cmd = $myPin . '_p';
+							$value2 = '0';
 						break;
 						case 'bme280':
+							$bme280 |= 1;			// i2c x76
 							$myType = 'info';
 							$mySubType = 'numeric';
 							$myinvertBinary = '0';
@@ -2583,9 +2603,21 @@ class jeedouino extends eqLogic {
 							$value2 = '0';
 							$triple_cmd = $myPin . '_h';
 							$value3 = '0';
-							$bme280 = 1;			// Pour génération sketch
+						break;
+						case 'bme280b':
+							$bme280 |= 2;			// i2c x77
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$double_cmd = $myPin . '_p';
+							$value2 = '0';
+							$triple_cmd = $myPin . '_h';
+							$value3 = '0';
 						break;
 						case 'bme680':
+							$bme680 |= 1;			// i2c x76
 							$myType = 'info';
 							$mySubType = 'numeric';
 							$myinvertBinary = '0';
@@ -2597,7 +2629,21 @@ class jeedouino extends eqLogic {
 							$value3 = '0';
 							$quadruple_cmd = $myPin . '_g';
 							$value4 = '0';
-							$bme680 = 1;			// Pour génération sketch
+
+						break;
+						case 'bme680b':
+							$bme680 |= 2;			// i2c x77
+							$myType = 'info';
+							$mySubType = 'numeric';
+							$myinvertBinary = '0';
+							$tempo = '0';
+							$value = '0';
+							$double_cmd = $myPin . '_p';
+							$value2 = '0';
+							$triple_cmd = $myPin . '_h';
+							$value3 = '0';
+							$quadruple_cmd = $myPin . '_g';
+							$value4 = '0';
 						break;
 						case 'ds18b20':
 							$myType = 'info';
@@ -3136,6 +3182,9 @@ class jeedouino extends eqLogic {
 					case 'bmp280':
 					case 'bme280':
 					case 'bme680':
+					case 'bmp280b':
+					case 'bme280b':
+					case 'bme680b':
 						$cmd->setTemplate('dashboard', 'thermometre');
 						$cmd->setTemplate('mobile', 'default');
 						$cmd->setUnite('°C');
@@ -3146,6 +3195,8 @@ class jeedouino extends eqLogic {
 					case 'dht22_h':
 					case 'bme280_h':
 					case 'bme680_h':
+					case 'bme280b_h':
+					case 'bme680b_h':
 						$cmd->setTemplate('dashboard', 'humidite');
 						$cmd->setTemplate('mobile', 'default');
 						$cmd->setUnite('%');
@@ -3155,10 +3206,14 @@ class jeedouino extends eqLogic {
 					case 'bmp280_p':
 					case 'bme280_p':
 					case 'bme680_p':
+					case 'bmp280b_p':
+					case 'bme280b_p':
+					case 'bme680b_p':
 						$generic_type = 'PRESSURE';
 						$cmd->setUnite('Pa');
 						break;
 					case 'bme680_g': // gas cov
+					case 'bme680b_g': // gas cov
 						$generic_type = 'AIR_QUALITY';
 						$cmd->setUnite('Ohms');
 						break;
@@ -3530,18 +3585,10 @@ class jeedouino extends eqLogic {
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
 				}
-				if (config::byKey($board_id.'_BMP280', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 1' , $MasterFile);
-				}
-				if (config::byKey($board_id.'_BME280', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 1' , $MasterFile);
-				}
-				if (config::byKey($board_id.'_BME680', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 1' , $MasterFile);
-				}
+
+				$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 ' . config::byKey($board_id.'_BMP280', 'jeedouino', 0) , $MasterFile);
+				$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 ' . config::byKey($board_id.'_BME280', 'jeedouino', 0) , $MasterFile);
+				$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 ' . config::byKey($board_id.'_BME680', 'jeedouino', 0) , $MasterFile);
 
 				if ($servo)
 				{
@@ -3652,18 +3699,10 @@ class jeedouino extends eqLogic {
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
 				}
-				if (config::byKey($board_id.'_BMP280', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 1' , $MasterFile);
-				}
-				if (config::byKey($board_id.'_BME280', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 1' , $MasterFile);
-				}
-				if (config::byKey($board_id.'_BME680', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 1' , $MasterFile);
-				}
+				$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 ' . config::byKey($board_id.'_BMP280', 'jeedouino', 0) , $MasterFile);
+				$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 ' . config::byKey($board_id.'_BME280', 'jeedouino', 0) , $MasterFile);
+				$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 ' . config::byKey($board_id.'_BME680', 'jeedouino', 0) , $MasterFile);
+
 				if ($servo)
 				{
 				 	$MasterFile = str_replace('#define UseServo 0' , '#define UseServo 1' , $MasterFile);
@@ -3754,18 +3793,10 @@ class jeedouino extends eqLogic {
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
 				}
-				if (config::byKey($board_id.'_BMP280', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 1' , $MasterFile);
-				}
-				if (config::byKey($board_id.'_BME280', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 1' , $MasterFile);
-				}
-				if (config::byKey($board_id.'_BME680', 'jeedouino', 0))
-				{
-				 	$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 1' , $MasterFile);
-				}
+				$MasterFile = str_replace('#define UseBMP280 0' , '#define UseBMP280 ' . config::byKey($board_id.'_BMP280', 'jeedouino', 0) , $MasterFile);
+				$MasterFile = str_replace('#define UseBME280 0' , '#define UseBME280 ' . config::byKey($board_id.'_BME280', 'jeedouino', 0) , $MasterFile);
+				$MasterFile = str_replace('#define UseBME680 0' , '#define UseBME680 ' . config::byKey($board_id.'_BME680', 'jeedouino', 0) , $MasterFile);
+
 				if ($servo) $MasterFile = str_replace('#define UseServo 0' , '#define UseServo 1' , $MasterFile);
 
 				if ($WS2811)

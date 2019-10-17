@@ -59,6 +59,12 @@ $port =  jeedouino::GetJeedomPort();
 							<input type="checkbox" class="configKey " data-l1key="ActiveLog" />
 						</div>
 				</div>
+                <div class="form-group" >
+						<label class="col-lg-7 control-label">{{Activer les logs séparés des démons}} <i class="fas fa-question-circle tooltips" title="{{Nécéssite un redémarrage des démons}}"></i></label>
+						<div class="col-lg-3">
+							<input type="checkbox" class="configKey " data-l1key="ActiveDemonLog" />
+						</div>
+				</div>
                 <div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#logtab"><i class="fas fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
 				<?php if (method_exists('virtual', 'copyFromEqLogic'))
 						{

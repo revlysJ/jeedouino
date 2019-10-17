@@ -24,7 +24,6 @@ if (!isConnect('admin'))
 $JeedouinoExts = jeedouino::allJeedouinoExt();
 $eqLogics = eqLogic::byType('jeedouino');
 $ip = jeedouino::GetJeedomIP();
-$_log = log::getPathToLog('jeedouino_ext');
 
 ?>
 <div id='div_jeedouinoExtAlert' style="display: none;"></div>

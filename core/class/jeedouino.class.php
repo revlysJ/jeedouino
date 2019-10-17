@@ -230,10 +230,7 @@ class jeedouino extends eqLogic {
 	public static function dependancy_install()
 	{
 		if (file_exists('/tmp/dependances_jeedouino_en_cours')) return;	// Install déja en cours
-
-		//log::remove('jeedouino_update');
-		//exec('sudo apt-get install python-serial >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		exec('sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/Jeedouino.sh >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+		exec('sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/Jeedouino.sh >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 
 		log::add('jeedouino_update','info', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
 	}
@@ -336,6 +333,11 @@ class jeedouino extends eqLogic {
 		// On nettoie le log de ses caracteres speciaux car il font planter l'affichage des logs dans jeedom
 		//$log2 = filter_var($log2, FILTER_SANITIZE_STRING);
 		if (config::byKey('ActiveLog', 'jeedouino', false)) log::add('jeedouino', $log1, $log2);
+	}
+	public static function getPathToLog($log)
+	{
+		if (config::byKey('ActiveDemonLog', 'jeedouino', false)) return log::getPathToLog($log);
+		return '/dev/null';
 	}
 
 	/*************************** Méthodes d'instance **************************/
@@ -630,7 +632,7 @@ class jeedouino extends eqLogic {
 					case 'piface':
 					case 'piplus':
 					case 'gpio':
-						if ($ForceStart)
+						if ($ForceStart or $ForceStart == '1')
 						{
 							self::StartBoardDemon($arduino_id, 0, $ModeleArduino);   // on démarre le démon si nécéssaire.
 							sleep(2);
@@ -1740,7 +1742,7 @@ class jeedouino extends eqLogic {
 				break;
 		}
 		$cmd = "sudo nice -n 19 /usr/bin/python3 " . $filename . ' ' . $cmd;
-		$_log = log::getPathToLog('jeedouino_' . strtolower($DemonTypeF));
+		$_log = jeedouino::getPathToLog('jeedouino_' . strtolower($DemonTypeF));
 		$cmd .= ' ' . $_log;
 		jeedouino::log( 'debug', __('Cmd Appel démon : ', __FILE__) . $cmd);
 		$reponse = exec($cmd . ' >> ' . $_log . ' 2>&1 &');
@@ -1801,7 +1803,7 @@ class jeedouino extends eqLogic {
 		foreach ($processus as $process)
 		{
 			jeedouino::log( 'debug','KILL process '.$process);
-			exec('sudo kill -9 ' . $process . ' >> ' . log::getPathToLog('jeedouino') . ' 2>&1 &');
+			exec('sudo kill -9 ' . $process . ' >> ' . jeedouino::getPathToLog('jeedouino_' . strtolower($DemonTypeF)) . ' 2>&1 &');
 			$done = true;
 			usleep(500000); // 0.5 secondes
 		}
@@ -3323,13 +3325,13 @@ class jeedouino extends eqLogic {
 			if (($board == 'arduino') and (!$usb)) $_ForceStart = true;
 			if (($board == 'esp') and (!$usb)) $_ForceStart = true;
 
-			if ($modif_cmd or $_ForceStart) self::ConfigurePinMode($_ForceStart);
+			if ($modif_cmd or $_ForceStart == '1') self::ConfigurePinMode($_ForceStart);
 			// On génère les sketchs
 			if (($board == 'arduino') and (!$usb)) self::GenerateLanArduinoSketchFile($arduino_id);
 			if (($board == 'arduino') and ($usb)) self::GenerateUSBArduinoSketchFile($arduino_id);
 			if (($board == 'esp') and (!$usb)) self::GenerateESP8266SketchFile($arduino_id);
 			jeedouino::CreateJeedouinoControl();
-
+			config::save($arduino_id . '-ForceStart', '0', 'jeedouino');
 		}
 		else throw new Exception(__('Vous n\'avez pas défini la connection de la carte (Réseau / Usb: Local/Déporté)) !.', __FILE__));
 

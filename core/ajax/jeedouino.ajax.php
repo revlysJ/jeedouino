@@ -105,7 +105,7 @@ try {
     {
         $JeedouinoExtGet = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
         if ($JeedouinoExtGet == '') ajax::error('DarkMatterIsUndetectable...');
-        $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg'; //log::getPathToLog('jeedouino_ext');
+        $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg'; //jeedouino::getPathToLog('jeedouino_ext');
         if (!jeedouino::SshGetJeedouinoExt($JeedouinoExtGet, $_log, init('logfile')))
         {
             ajax::error(__('Erreur, Impossible de récupérer le fichier de log de JedouinoExt. ', __FILE__));
@@ -148,29 +148,29 @@ try {
 	}
   	if (init('action') == 'installSerial')
     {
-        exec('sudo apt-get -y install python{,3}-pip python-serial>> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-        exec('sudo pip3 uninstall serial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-        exec('sudo pip3 install pyserial >> '.log::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo apt-get -y install python{,3}-pip python-serial>> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo pip3 uninstall serial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+        exec('sudo pip3 install pyserial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
 		ajax::success();
 	}
   	if (init('action') == 'installGPIO')
     {
-        exec('sudo pip install RPi.GPIO >> '.log::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
+        exec('sudo pip install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
 		ajax::success();
 	}
  	if (init('action') == 'installPIFACE')
     {
-        exec('sudo apt-get -y install python{,3}-pip python{,3}-setuptools >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip3 install pifacecommon pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip install pifacecommon pifacedigitalio >> ' . log::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+        exec('sudo apt-get -y install python{,3}-pip python{,3}-setuptools >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+		exec('sudo pip3 install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+		exec('sudo pip install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
         // enable spi
         exec('sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt');
 		ajax::success();
 	}
  	if (init('action') == 'installPiPlus')
     {
-        exec('sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
-        //exec('sudo apt-get -y install python{,3}-smbus >> '.log::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+        exec('sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+        //exec('sudo apt-get -y install python{,3}-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
         // enable i2c
         exec('sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt');
         exec('sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt');

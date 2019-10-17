@@ -643,13 +643,13 @@ class myThread2 (threading.Thread):
 						if pinDHT:
 							time.sleep(2)
 						pinStr += '&' + str(j) + '=' + str(bmp280.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bmp280.pressure * 100)
+						pinStr += '&' + str(1000 + j) + '=' + str(bmp280.pressure)
 						pinDHT = 1
 					elif Status_pins[i]=='F': # BMP280
 						if pinDHT:
 							time.sleep(2)
 						pinStr += '&' + str(j) + '=' + str(bmp280b.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bmp280b.pressure * 100)
+						pinStr += '&' + str(1000 + j) + '=' + str(bmp280b.pressure)
 						pinDHT = 1
 				pinDHT = 0
 				if pinStr != '':

@@ -200,7 +200,7 @@ if (isset($_GET['BoardEQ']))
 		if (isset($_GET['PINMODE']))
 		{
 			$PinMode = config::byKey($arduino_id . '_PinMode', 'jeedouino', 'none');
-			if ($PinMode != 'none')
+			if ($PinMode != 'none' and config::byKey($arduino_id . '-ForceStart', 'jeedouino', '0') == '0')
 			{
 				jeedouino::log( 'debug', $CALLBACK . __('Le démon réclame l\'envoi du mode des pins.', __FILE__));
 				$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);

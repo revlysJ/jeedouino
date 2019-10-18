@@ -6,7 +6,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * Jeedom and the jeedouino plugin are distributed in the hope that they will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -30,79 +30,74 @@ $port =  jeedouino::GetJeedomPort();
    <div class="form-group" >
         <label class="col-lg-5 control-label">{{Raccourcis}}</label>
         <div class="col-lg-5">
-<?php   if (jeedouino::Networkmode() == 'master')
-               {
-?>
+
             <a class="btn btn-warning " href="<?php echo $cpl; ?>/index.php?v=d&m=jeedouino&p=jeedouino">
-                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/doc/images/jeedouino_icon.png"> {{Jeedouino Plugin}}
+                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/icons/jeedouino_icon.png"> {{Jeedouino Plugin}}
             </a>
-<?php   }     ?>
             <a class="btn btn-warning " href="<?php echo $cpl; ?>/index.php?v=d&p=log&logfile=jeedouino">
-                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/doc/images/jeedouino_icon.png"> {{Jeedouino Logs}}
+                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/icons/jeedouino_icon.png"> {{Jeedouino Logs}}
             </a>
         </div>
 
             <br><br>
     </div>
 <ul class="nav nav-tabs" id="tab_jeedouino">
-	<li class="active"><a href="#tab_logs"><i class="fa fa-pencil-square-o"></i> {{Options}}</a></li>
-	<li><a href="#tab_dep"><i class="fa fa-certificate"></i> {{Dépendances}}</a></li>
-<?php
-    if (jeedouino::Networkmode() == 'master')
-	{
-	?>
-	<li><a href="#tab_demon"><i class="fa fa-university"></i> {{Démons}}</a></li>
-	<li><a href="#tab_sketch"><i class="fa fa-download"></i> {{Sketchs}}</a></li>
-	<li><a href="#tab_docker"><i class="fa fa-rss"></i> {{Conf. Docker}}</a></li>
-	<li><a href="#tab_JeedouinoExt"><i class="fa fa-code"></i> {{JeedouinoExt}}</a></li>
-
-<?php
-	}
-?>
-	</ul>
+	<li class="active"><a href="#tab_logs"><i class="fas fa-pencil-square-o"></i> {{Options}}</a></li>
+	<li><a href="#tab_dep"><i class="fas fa-certificate"></i> {{Dépendances}}</a></li>
+	<li><a href="#tab_demon"><i class="fas fa-university"></i> {{Démons}}</a></li>
+	<li><a href="#tab_sketch"><i class="fas fa-download"></i> {{Sketchs}}</a></li>
+	<li><a href="#tab_docker"><i class="fas fa-rss"></i> {{Conf. Docker}}</a></li>
+</ul>
 <div class="tab-content">
 	 <div class="tab-pane active" id="tab_logs">
 	 <br/>
 		<form class="form-horizontal">
 			<fieldset>
 				<div class="form-group" >
-						<label class="col-lg-7 control-label">{{Activer les logs}}</label>
+						<label class="col-lg-7 control-label">{{Activer les logs}} <i class="fas fa-question-circle tooltips" title="{{Permet de surveiller le fonctionnement du plugin}}"></i></label>
 						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveLog" />
 						</div>
 				</div>
+                <div class="form-group" >
+						<label class="col-lg-7 control-label">{{Activer les logs séparés des démons locaux}} <i class="fas fa-question-circle tooltips" title="{{Nécéssite un redémarrage des démons}}"></i></label>
+						<div class="col-lg-3">
+							<input type="checkbox" class="configKey " data-l1key="ActiveDemonLog" />
+						</div>
+				</div>
+                <div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#logtab"><i class="fas fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
 				<?php if (method_exists('virtual', 'copyFromEqLogic'))
 						{
 				?>
 				<div class="form-group" >
-						<label class="col-lg-7 control-label">{{Activer les groupes virtuels}}</label>
+						<label class="col-lg-7 control-label">{{Activer les groupes virtuels}} <i class="fas fa-question-circle tooltips" title="{{Permet de séparer les commandes d'un même équipement dans plusieurs virtuels}}"></i></label>
 						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveVirtual" />
 						</div>
 				</div>
 				<?php } ?>
 				<div class="form-group" >
-					<label class="col-lg-7 control-label">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}}</label>
+					<label class="col-lg-7 control-label">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}} <i class="fas fa-question-circle tooltips" title="{{Permet d'ajouter du code/commandes dans le(s) sketch(s) }}"></i></label>
 					<div class="col-lg-3">
 						<input type="checkbox" class="configKey" data-l1key="ActiveUserCmd" name="ActiveUserCmd"/>
 					</div>
+                    </br></br>
 				</div>
-				<!--
-				<div class="form-group" >
-					<label class="col-lg-7 control-label  text-warning">{{Maintenir les commandes en double lors d'un changement de fonction (Pour TESTS - NON recommandé).}}</label>
-					<div class="col-lg-3 ">
-						<input type="checkbox" class="configKey " data-l1key="MultipleCmd" name="MultipleCmd"/>
-					</div>
-				</div>
-				-->
-				<div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#configuration_logMessage"><i class="fa fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
+                <div class="alert alert-warning"><i class="fas fa-code"></i>{{ Uniquement pour utilisateurs avancés. /!\ Option en version BETA pour TESTS seulement. /!\}}
+                    <div class="form-group" >
+						<label class="col-lg-7 control-label">{{Activer l'option JeedouinoExt}} <i class="fas fa-question-circle tooltips" title="{{Permet d'utiliser les fonctions du plugin sur un RaspberryPi n'ayant pas Jeedom }}"></i></label>
+						<div class="col-lg-3">
+							<input type="checkbox" class="configKey " data-l1key="ActiveExt" />
+						</div>
+    				</div>
+                </div>
 			</fieldset>
 		</form>
 	</div>
 
 	<div class="tab-pane" id="tab_dep">
 	<br/>
-		<div class="alert alert-warning"><i class="fa fa-arrow-right"></i> {{ A n'installer que si nécéssaire.}} </div>
+		<div class="alert alert-warning"><i class="fas fa-arrow-right"></i> {{ A n'installer que si nécéssaire.}} </div>
 		<form class="form-horizontal">
 			<fieldset>
 				<table class="table table-bordered table-striped">
@@ -118,7 +113,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Télécharger l'Arduino IDE}}</label>
 										<div class="col-lg-5">
-											<a href="https://www.arduino.cc/en/Main/Software" target="_blank" class="btn btn-success" ><i class='fa fa-floppy-o'></i>{{ Aller sur le site }}</a>
+											<a href="https://www.arduino.cc/en/Main/Software" target="_blank" class="btn btn-success" ><i class='fas fa-floppy-o'></i>{{ Aller sur le site }}</a>
 										</div>
 								</div>
 							</td>
@@ -129,7 +124,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Install Python-Serial}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installSerial" ><i class="fa fa-play"></i> {{sudo apt-get install python-serial}}</a>
+												<a class="btn btn-info bt_installSerial" ><i class="fas fa-play"></i> {{sudo pip3 install pyserial}}</a>
 										</div>
 								</div>
 							</td>
@@ -143,7 +138,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{RPi.GPIO Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installGPIO" ><i class="fa fa-play"></i> {{sudo pip install RPi.GPIO}}</a>
+												<a class="btn btn-info bt_installGPIO" ><i class="fas fa-play"></i> {{sudo pip install RPi.GPIO}}</a>
 										</div>
 								</div>
 							</td>
@@ -154,7 +149,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Pifacedigitalio Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPIFACE" ><i class="fa fa-play"></i> {{sudo apt-get/pip install python-pifacedigitalio}}</a>
+												<a class="btn btn-info bt_installPIFACE" ><i class="fas fa-play"></i> {{sudo apt-get/pip install python-pifacedigitalio}}</a>
 										</div>
 								</div>
 							</td>
@@ -165,7 +160,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{IO.PiPlus smbus Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPiPlus" ><i class="fa fa-play"></i> {{sudo install python-smbus}}</a>
+												<a class="btn btn-info bt_installPiPlus" ><i class="fas fa-play"></i> {{sudo install python-smbus}}</a>
 										</div>
 								</div>
 							</td>
@@ -174,9 +169,9 @@ $port =  jeedouino::GetJeedomPort();
 						<tr>
 							<td>
 								<div class="form-group" >
-										<label class="col-lg-5 control-label">{{Correction droits DS18B20}}</label>
+										<label class="col-lg-5 control-label">{{BitBangingDS18B20 Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installDS18B20" ><i class="fa fa-play"></i> {{sudo chmod 755 DS18B20Scan}}</a>
+												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo python setup.py install}}</a>
 										</div>
 								</div>
 							</td>
@@ -190,7 +185,7 @@ $port =  jeedouino::GetJeedomPort();
 				<div class="form-group" >
 						<label class="col-lg-5 control-label">{{Dépendance : MàJ Système}}</label>
 						<div class="col-lg-5">
-								<a class="btn btn-info bt_installUpdate" ><i class="fa fa-play"></i> {{sudo apt-get update}}</a>
+								<a class="btn btn-info bt_installUpdate" ><i class="fas fa-play"></i> {{sudo apt-get update}}</a>
 						</div>
 				</div>
 			*/
@@ -201,20 +196,26 @@ $port =  jeedouino::GetJeedomPort();
 		</form>
 	</div>
 
-<?php
-	if (jeedouino::Networkmode() == 'master')
-	{
-	?>
-	 <div class="tab-pane" id="tab_demon">
+	<div class="tab-pane" id="tab_demon">
         <br/>
-        <div class="alert alert-primary"><i class="fa fa-university"></i> {{ Gestion des équipements avec Démons.}} </div>
-		<div class="alert alert-warning"><i class="fa fa-arrow-right"></i> {{ N.B. Suite a un reboot, les démons démarrent automatiquement >4 min après Jeedom. Cf doc.}} </div>
+        <?php $html = '
+        <div class="alert alert-primary"><i class="fas fa-university"></i> {{ Gestion des équipements avec Démons.}} </div>
+		<div class="alert alert-warning"><i class="fas fa-arrow-right"></i> {{ N.B. Suite a un reboot, les démons démarrent automatiquement >4 min après Jeedom. Cf doc.}}
+            </br></br>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">{{Choisir un autre délai (min)}}</label>
+                <div class="col-lg-2">
+                    <input type="text" class="configKey form-control"  data-l1key="BootTime" placeholder="ex : 4 min"/>
+                </div>
+            </div>
+            </br></br>
+        </div>
 
 		<form class="form-horizontal">
 			<fieldset>
 			<div class="form-group" >
 
-		<table class="table table-bordered">
+		<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
 				<th>{{Jeedom}}</th>
@@ -228,13 +229,14 @@ $port =  jeedouino::GetJeedomPort();
 				<th>{{Sketchs}}</th>
 			</tr>
 		</thead>
-		<tbody>
-		<?php
+		<tbody>';
+		$hasDemons = false;
 		$Arduino_reseaux = '';
 		$CronStepArr=config::byKey('CronStepArr', 'jeedouino', '');
 		foreach ($eqLogics as $eqLogic)
 		{
 			if ($eqLogic->getIsEnable() == 0) continue;
+            if ($eqLogic->getLogicalId() == 'JeedouinoControl') continue;
 			$name=$eqLogic->getName(true);
 			$board_id=$eqLogic->getId();
 			$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
@@ -329,160 +331,145 @@ $port =  jeedouino::GetJeedomPort();
 			}
 			if (!$a_lan)
 			{
+                $hasDemons = true;
 				$board_ip=$eqLogic->getConfiguration('iparduino');
 				$jeedomMasterIP = jeedouino::GetJeedomIP();
 
-				if ($jeedomMasterIP==$board_ip) $localDemon=true;
-				else $localDemon=false;
+				if ($jeedomMasterIP == $board_ip or $board_ip == '127.0.0.1') $localDemon = true;
+				else $localDemon = false;
 
-				list($SlaveNetworkID, $SlaveName) = jeedouino::GetSlaveNetworkID(0, $board_ip);
-
-				if (($a_usb) and (substr($ModeleArduino,0,1)=='a')) $StatusDemon = jeedouino::StatusBoardDemon($board_id, $SlaveNetworkID, $ModeleArduino);
+				if (($a_usb) and (substr($ModeleArduino, 0, 1) == 'a')) $StatusDemon = jeedouino::StatusBoardDemon($board_id, 0, $ModeleArduino);
 				config::save($board_id.'_StatusDemon', $StatusDemon, 'jeedouino');
 				config::save($board_id.'_HasDemon', 1, 'jeedouino');
 
 				if (config::byKey('Auto_'. $board_id, 'jeedouino', 'none') == 'none') config::save('Auto_'. $board_id, 0, 'jeedouino');
 
-				?>
-				<tr>
-					<td>
-						<?php
-							if ($localDemon) echo '{{Jeedom maître}}';
-							elseif ($SlaveName!='') echo $SlaveName;
-							else
-							{
-								if ($board_ip!='')  echo '{{JeedouinoExt}}';
-								else echo '{{Equipement mal configuré}}';
-							}
-						?>
-					</td>
-					<td>
-						<?php
-							if ($localDemon) echo'{{Local}}';
-							elseif ($SlaveName!='') echo '{{Distant}}';
-							else
-							{
-								if ($board_ip!='') echo '{{ sur '.$board_ip.'}}';
-								else echo '{{EqID'.$board_id.'}}';
-							}
-						?>
-					</td>
-					<td>
-						<?php
-							echo '<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank"><i class="fa fa-sitemap"></i> '.$name.'</a></div>';
-						?>
-					</td>
-					<td class="deamonState">
-						<?php
-							if ($StatusDemon) echo '<span class="label label-success" style="font-size : 1em;" >OK</span>';
-							else
-							{
-								if (($CronStepArr!='') and (in_array($board_id,$CronStepArr)))echo '<span class="label label-warning " style="font-size : 1em;" ><i class="fa fa-play"></i> 4min</span>';
-								else echo '<span class="label label-danger " style="font-size : 1em;" >NOK</span>';
-							}
-						?>
-					</td>
-					<td>
-						<?php
-							if ($StatusDemon) echo '<a class="btn btn-success bt_restartDemon" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-play"></i></a>';
-							else echo '<a class="btn btn-success bt_StartDemon" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-play"></i></a>';
-						?>
-					</td>
-					<td>
-						<?php
-							if ($StatusDemon) echo '<a class="btn btn-danger bt_stopDemon" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-stop"></i></a>';
-						?>
-					</td>
-					<td>
-						<?php
-							echo '<label class="checkbox-inline"><input type="checkbox" class="configKey " data-l1key="Auto_'. $board_id.'" /><i class="fa fa-refresh"></i> {{5min}}</label>';
-							//echo '<a class="btn btn-danger bt_changeAutoMode" data-mode="1" slaveID="'.$SlaveNetworkID.'" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fa fa-magic"></i> ON</a>';
-						?>
-					</td>
-					<td><?php echo $jsButton; ?></td>
-					<td>
-						<?php
-							if ($Sketch != '')
-							{
-								$jeedouinoPATH = realpath(dirname(__FILE__) . '/../sketchs/');
-								$SketchFileName = $jeedouinoPATH.'/JeedouinoUSB_'.$board_id.'.ino';
-								if (file_exists($SketchFileName))
-								{
-									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
-									$Arduino_reseaux .= '<div class="form-group">
-									<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( USB )' . '}}</label>
-									<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fa fa-usb"></i> '.$name.'</a></div>
-									<div class="col-lg-5">
-										<a href="plugins/jeedouino/sketchs/JeedouinoUSB_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
-									</div></div>';
-								}
-								else
-								{
-									echo '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}" download target="_blank"><i class="fa fa-download"></i> SketchUSB</a></div>';
-								}
-							}
-						?>
-					</td>
-				</tr>
-			<?php
+				$html .= '<tr><td>';
+
+				if ($localDemon) $html .= '{{Jeedom maître}}';
+				else
+				{
+					if ($board_ip!='')  $html .=  '{{JeedouinoExt}}';
+					else $html .=  '{{Equipement mal configuré}}';
+				}
+				$html .= '</td><td>';
+				if ($localDemon) $html .= '{{Local}}';
+				else
+				{
+					if ($board_ip!='')
+                    {
+                        $_path = trim(config::byKey('path-'.$board_ip, 'jeedouino', ''));
+    					if ($_path == '') $_path = '/';
+    					$_port = trim(config::byKey('PORT-'.$board_ip, 'jeedouino', ''));
+    					if ($_port == '') $_port = '80';
+                        $html .= '<a href="http://' . $board_ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fas fa-home"></i> {{ sur ' . $board_ip . '}}</a>';
+                    }
+					else $html .=  '{{EqID'.$board_id.'}}';
+				}
+				$html .= '</td><td>';
+				$html .= '<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank"><i class="fas fa-sitemap"></i> '.$name.'</a></div>';
+				$html .= '</td><td class="deamonState">';
+
+				if ($StatusDemon) $html .= '<span class="btn btn-success" >OK</span>';
+				else
+				{
+					if (($CronStepArr!='') and (in_array($board_id,$CronStepArr))) $html .= '<span class="btn btn-warning " ><i class="fas fa-play"></i> 4min</span>';
+					else $html .= '<span class="btn btn-danger " >NOK</span>';
+				}
+				$html .= '</td><td>';
+				if ($StatusDemon) $html .= '<a class="btn btn-success bt_restartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-sync"></i></a>';
+				else $html .= '<a class="btn btn-success bt_StartDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-play"></i></a>';
+				$html .= '</td><td>';
+				if ($StatusDemon) $html .= '<a class="btn btn-danger bt_stopDemon" slaveID="0" boardID="'. $board_id.'" DemonType="'.$jsButton.'"><i class="fas fa-stop"></i></a>';
+				$html .= '</td><td>';
+				$html .= '<label class="checkbox-inline"><input type="checkbox" class="configKey " data-l1key="Auto_'. $board_id.'" /><i class="fas fa-redo"></i> {{5min}}</label>';
+				$html .= '</td><td>';
+                $html .= $jsButton;
+                $html .= '</td><td>';
+				if ($Sketch != '')
+				{
+					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../sketchs/');
+					$SketchFileName = $jeedouinoPATH . '/JeedouinoUSB_' . $board_id . '.ino';
+					if (file_exists($SketchFileName))
+					{
+						$html .= '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
+						$Arduino_reseaux .= '<div class="form-group">
+						<label class="col-lg-4 control-label">{{ ' . $Sketch . ' ( USB )' . '}}</label>
+						<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fab fa-usb"></i> '.$name.'</a></div>
+						<div class="col-lg-5">
+							<a href="plugins/jeedouino/sketchs/JeedouinoUSB_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+						</div></div>';
+					}
+					else
+					{
+						$html .= '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}" download target="_blank"><i class="fas fa-download"></i> SketchUSB</a></div>';
+					}
+				}
+				$html .= '</td></tr>';
 			}
 			else
 			{
 				config::save($board_id.'_HasDemon', 0, 'jeedouino');
 				//jeedouino::log( 'debug',$board_id.'_HasDemon ==  '.config::byKey($board_id.'_HasDemon', 'jeedouino', 3));
 				//jeedouino::log( 'debug',$board_id.'_StatusDemon ==  '.config::byKey($board_id.'_StatusDemon', 'jeedouino', 3));
-				//<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fa fa-sitemap"></i> '.$name.'</a></div>
+				//<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'"><i class="fas fa-sitemap"></i> '.$name.'</a></div>
 				if ($esp)
 				{
 					$Arduino_reseaux .= '<div class="form-group">
 					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( WIFI )' . '}}</label>
-					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fa fa-wifi"></i> '.$name.'</a></div>
+					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fas fa-wifi"></i> '.$name.'</a></div>
 					<div class="col-lg-5">
-						<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
+						<a href="plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
 				}
 				else
 				{
 					$Arduino_reseaux .= '<div class="form-group">
 					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( LAN )' . '}}</label>
-					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fa fa-sitemap"></i> '.$name.'</a></div>
+					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fas fa-sitemap"></i> '.$name.'</a></div>
 					<div class="col-lg-5">
-						<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fa fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+						<a href="plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
 				}
 			}
 
 		}
-		echo '</tbody></table>';
+		$html .= '</tbody></table>';
 		if ($Arduino_reseaux!='')
 		{
 			$Arduino_reseaux .= '<div class="form-group">
 							<label class="col-lg-5 control-label">{{ Librairies pour vos Sketchs }}</label>
 							<div class="col-lg-5">
-								<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank"  download><i class="fa fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
+								<a href="plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank"  download><i class="fas fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
 							</div></div>';
 
 		}
-		?>
+		$html .= '
 			</div>
 			</fieldset>
-		</form>
+		</form>';
+
+        if ($hasDemons) echo $html;
+        else echo '<div class="alert alert-info"><i class="fas fa-times"></i> {{ Vous n\'avez aucun équipement nécéssitant un démon.}} </div>';
+
+        ?>
 	</div>
 
 	 <div class="tab-pane" id="tab_sketch">
         <br/>
-        <div class="alert alert-primary"><i class="fa fa-download"></i> {{ Sketchs pour vos équipements Arduino / ESP8266 / NodeMCU / Wemos.}} </div>
-
 		<form class="form-horizontal">
 			<fieldset>
-				<?php echo  $Arduino_reseaux; ?>
+				<?php
+                if ($Arduino_reseaux != '') echo  '<div class="alert alert-primary"><i class="fas fa-download"></i> {{ Sketchs pour vos équipements Arduino / ESP8266 / NodeMCU / Wemos.}} </div>' . $Arduino_reseaux;
+                else echo '<div class="alert alert-info"><i class="fas fa-times"></i> {{ Vous n\'avez aucun équipement nécéssitant un Sketch.}} </div>';
+                ?>
 			</fieldset>
 		</form>
 	</div>
 
 	 <div class="tab-pane" id="tab_docker">
         <br/>
-        <div class="alert alert-warning"><i class="fa fa-rss"></i>{{ Uniquement pour utilisateurs avertis.}} </div>
+        <div class="alert alert-warning"><i class="fas fa-rss"></i>{{ Uniquement pour utilisateurs avertis.}} </div>
 
 		<form class="form-horizontal">
 			<fieldset>
@@ -512,103 +499,10 @@ $port =  jeedouino::GetJeedomPort();
 		</form>
 	</div>
 
-	 <div class="tab-pane" id="tab_JeedouinoExt">
-        <br/>
-        <div class="alert alert-warning"><i class="fa fa-code"></i>{{ Uniquement pour utilisateurs avancés. /!\ Option en version BETA pour TESTS seulement. /!\}} </div>
-		<form class="form-horizontal">
-			<fieldset>
-				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Activer JeedouinoExt}}</label>
-						<div class="col-lg-5">
-							<input type="checkbox" class="configKey " data-l1key="ActiveExt" />
-						</div>
-				</div>
-			</fieldset>
-		</form>
-		<?php if (config::byKey('ActiveExt', 'jeedouino', false))
-		{
-
-			// Sur JeedouinoExt (sans Jeedom)
-			$ListExtIP=config::byKey('ListExtIP', 'jeedouino', '');
-			if ($ListExtIP != '')
-			{
-				// un petit nettoyage
-				$ListExtIPCleaned = array();
-				foreach ($ListExtIP as $_ip)
-				{
-					if (filter_var($_ip, FILTER_VALIDATE_IP) === false) continue;
-					$ListExtIPCleaned[]=$_ip;
-				}
-				$ListExtIP = $ListExtIPCleaned;
-				config::save('ListExtIP', $ListExtIP, 'jeedouino');
-			}
-			if ($ListExtIP != '')
-			{
-				echo '<form class="form-horizontal">
-							<fieldset> ';
-				foreach ($ListExtIP as $_ip)
-				{
-					$_path = trim(config::byKey('path-'.$_ip, 'jeedouino', ''));
-					if ($_path == '') $_path = '/';
-					$_port = trim(config::byKey('PORT-'.$_ip, 'jeedouino', ''));
-					if ($_port == '') $_port = '80';
-					echo '
-					<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Configuration de JeedouinoExt sur }}</label>
-						<div class="col-lg-5">
-							<span class="label label-success" style="font-size : 1em; cursor : default;"><a href="http://' . $_ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fa fa-home"></i> ' . $_ip . '</a></span>
-						</div>
-					</div>'	;
-				}
-				echo '</fieldset>
-					</form>';
-			}
-		?>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{ Extension spécifique pour Raspberry déportés sans Jeedom.}}</h3>
-			</div>
-			<div class="panel-body">
-				<span  class="pull-right">Testé uniquement sur <a class="btn btn-danger btn-xs" href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank"> 2016-03-18-raspbian-jessie-lite.zip</a></span>
-				<p><br/><br/>1 - Se connecter au Shell via SSH du RPI déporté.</p>
-				<p>2 - Faire un <kbd>sudo su</kbd></p>
-				<p>3.1 - Se mettre dans le dossier racine du serveur web si présent:<br/>
-					- Nginx ex: <kbd>cd /usr/share/nginx/www</kbd> ou <kbd>cd /var/www/html</kbd><br/>
-					- Apache ex: <kbd>cd /var/www/html</kbd><br/>
-					A adapter à votre cas.<br/>
-					Puis <kbd>cd JeedouinoExt</kbd><br/>
-					<kbd>sudo chmod -R 775 $(pwd)</kbd><br/>
-					<kbd>sudo chown www-data:www-data $(pwd)</kbd><br/>
-					<br/>
-					3.2 - Si pas de serveur web de présent, faire les points 4, 5 et 6 dans le dossier courant, puis<br/>
-					<kbd>cd JeedouinoExt</kbd><br/>
-					<kbd>/bin/bash  JeedouinoExt.sh</kbd><br/>
-					Ensuite passer à l'étape 7.
-				</p>
-				<p>4 - Supprimer le zip JeedouinoExt si déja présent<br/>
-					<kbd>rm JeedouinoExt.zip* </kbd></p>
-				<p>5 - Récupérer le zip JeedouinoExt<br/>
-					<kbd>wget <?php echo $ip.':'.$port.$cpl; ?>/plugins/jeedouino/ressources/JeedouinoExt.zip</kbd></p>
-				<p>6 - Le dézipper en créant le dossier JeedouinoExt.<br/>
-					<kbd>unzip JeedouinoExt.zip</kbd></p>
-				<p>7 - Normalement la page de configuration JeedouinoExt devrait être accessible sur <br/>
-					<kbd>IP_du_RPI/JeedouinoExt/JeedouinoExt.php</kbd></p>
-				<p>8 - Une fois sur la page de configuration JeedouinoExt, il faut configurer en premier l'IP du Jeedom maître, le port ( et le complément si utile ) puis <span class="btn btn-success btn-xs">valider</span>.<br/>
-					Cela permettra à la page JeedouinoExt et au Jeedom maître de communiquer.</p>
-			</div>
-		</div>
-		<?php }  ?>
-	</div>
-	<?php
-	}
-?>
-
 </div>
-<br/><div class="nav-tabs"></div> <br/>
-
-	<div class=" alert alert-success">
-	<span><i class="fa fa-arrow-right"></i> {{Veillez à réactualiser cette page (F5) après l'avoir sauvegardée.}}</span>
-	</div>
+<div class=" alert alert-success">
+	<span><i class="fas fa-arrow-right"></i> {{Veillez à réactualiser cette page (F5) après l'avoir sauvegardée.}}</span>
+</div>
 <script>
  $('#tab_jeedouino a').click(function (e) {
     e.preventDefault()
@@ -697,7 +591,7 @@ $port =  jeedouino::GetJeedomPort();
                 return;
             }
             $('#ul_plugin .li_plugin[data-plugin_id=jeedouino]').click();   // recharge la page config du plugin
-            $('#div_alert').showAlert({message: '{{Les corrections de droits de DS18B20Scan sont en cours.}}', level: 'success'});
+            $('#div_alert').showAlert({message: '{{L\'installation de la dépendance danjperron/BitBangingDS18B20 est en cours.}}', level: 'success'});
         }
     });
     });

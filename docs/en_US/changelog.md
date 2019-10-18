@@ -1,5 +1,41 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+04/10/2019 v1.06
+---
+
+- Il est désormais possible d'avoir plusieurs sondes DS18B20 sur une même pin.
+- Ajout du support du capteur de température / pression BMP280.
+- Ajout du support du capteur de température / pression / humidité BME280.
+- Ajout du support du capteur de température / pression / humidité / gas COV BME680.
+- Passage des démons en python3.
+- Ajout du suivi des logs distants JeedouinoExt depuis l'interface de gestion de ces équipements.
+
+23/09/2019 v1.05b
+---
+
+- Amélioration de la page JeedouinoExt.
+- Améliorations des démons et des logs.
+- Corrections diverses.
+- Ajout de la fonction double_pulse (pour simuler un double-clic par ex).
+- Amélioration de la compatibilité Buster et Jeedom v4.
+
+07/09/2019 v1.05a
+---
+
+- Ajout de l'interface de gestion JeedouinoExt.
+- Amélioration de la page JeedouinoExt.
+- Ajout d'un équipement de controle des démons et ses commandes.
+- Amélioration de la page de configuration.
+- Corrections diverses.
+- Amélioration des libéllés des logs.
+
+28/08/2019 v1.04
+---
+
+- Compatibilité PHP 7.3 (Buster).
+- Nettoyage et Correction de quelques bugs.
+- compteur_pullup : la valeur de Reset est màj régulièrement.
+
 17/02/2018 v1.03
 ---
 
@@ -19,7 +55,7 @@ Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 - Ajout des commandes pour cartes arduino et esp826x:  
    * Envoi valeur au servo par slider, permet de commander un servo avec une valeur entre 0 et 180 par ex.
    * Commande pour RGB LED Strip a base de WS2811 (1 strip max par carte).
-       Permet d'envoyer une valeur de couleur, ou de selectionner parmi 17 effets. 
+       Permet d'envoyer une valeur de couleur, ou de selectionner parmi 17 effets.
        Attention un effet est bloquant, il vaux mieux dédier un arduino/esp.
 - Ajout génération Sketch USB.
 - Amélioration du démarrage du démon usb.

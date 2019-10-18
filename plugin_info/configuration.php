@@ -32,10 +32,10 @@ $port =  jeedouino::GetJeedomPort();
         <div class="col-lg-5">
 
             <a class="btn btn-warning " href="<?php echo $cpl; ?>/index.php?v=d&m=jeedouino&p=jeedouino">
-                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/docs/images/jeedouino_icon.png"> {{Jeedouino Plugin}}
+                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/icons/jeedouino_icon.png"> {{Jeedouino Plugin}}
             </a>
             <a class="btn btn-warning " href="<?php echo $cpl; ?>/index.php?v=d&p=log&logfile=jeedouino">
-                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/docs/images/jeedouino_icon.png"> {{Jeedouino Logs}}
+                <img class="img-responsive" style="width : 20px;display:inline-block;" src="plugins/jeedouino/icons/jeedouino_icon.png"> {{Jeedouino Logs}}
             </a>
         </div>
 
@@ -54,13 +54,13 @@ $port =  jeedouino::GetJeedomPort();
 		<form class="form-horizontal">
 			<fieldset>
 				<div class="form-group" >
-						<label class="col-lg-7 control-label">{{Activer les logs}}</label>
+						<label class="col-lg-7 control-label">{{Activer les logs}} <i class="fas fa-question-circle tooltips" title="{{Permet de surveiller le fonctionnement du plugin}}"></i></label>
 						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveLog" />
 						</div>
 				</div>
                 <div class="form-group" >
-						<label class="col-lg-7 control-label">{{Activer les logs séparés des démons}} <i class="fas fa-question-circle tooltips" title="{{Nécéssite un redémarrage des démons}}"></i></label>
+						<label class="col-lg-7 control-label">{{Activer les logs séparés des démons locaux}} <i class="fas fa-question-circle tooltips" title="{{Nécéssite un redémarrage des démons}}"></i></label>
 						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveDemonLog" />
 						</div>
@@ -70,21 +70,22 @@ $port =  jeedouino::GetJeedomPort();
 						{
 				?>
 				<div class="form-group" >
-						<label class="col-lg-7 control-label">{{Activer les groupes virtuels}}</label>
+						<label class="col-lg-7 control-label">{{Activer les groupes virtuels}} <i class="fas fa-question-circle tooltips" title="{{Permet de séparer les commandes d'un même équipement dans plusieurs virtuels}}"></i></label>
 						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveVirtual" />
 						</div>
 				</div>
 				<?php } ?>
 				<div class="form-group" >
-					<label class="col-lg-7 control-label">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}}</label>
+					<label class="col-lg-7 control-label">{{Activer les commandes utilisateur (Sketchs persos - Arduinos/Esp8266/NodeMcu/Wemos...)}} <i class="fas fa-question-circle tooltips" title="{{Permet d'ajouter du code/commandes dans le(s) sketch(s) }}"></i></label>
 					<div class="col-lg-3">
 						<input type="checkbox" class="configKey" data-l1key="ActiveUserCmd" name="ActiveUserCmd"/>
 					</div>
+                    </br></br>
 				</div>
                 <div class="alert alert-warning"><i class="fas fa-code"></i>{{ Uniquement pour utilisateurs avancés. /!\ Option en version BETA pour TESTS seulement. /!\}}
                     <div class="form-group" >
-						<label class="col-lg-7 control-label">{{Activer l'option JeedouinoExt}}</label>
+						<label class="col-lg-7 control-label">{{Activer l'option JeedouinoExt}} <i class="fas fa-question-circle tooltips" title="{{Permet d'utiliser les fonctions du plugin sur un RaspberryPi n'ayant pas Jeedom }}"></i></label>
 						<div class="col-lg-3">
 							<input type="checkbox" class="configKey " data-l1key="ActiveExt" />
 						</div>
@@ -200,15 +201,14 @@ $port =  jeedouino::GetJeedomPort();
         <?php $html = '
         <div class="alert alert-primary"><i class="fas fa-university"></i> {{ Gestion des équipements avec Démons.}} </div>
 		<div class="alert alert-warning"><i class="fas fa-arrow-right"></i> {{ N.B. Suite a un reboot, les démons démarrent automatiquement >4 min après Jeedom. Cf doc.}}
-            <br/>
+            </br></br>
             <div class="form-group">
-                <div class="col-lg-7">&nbsp;</div>
                 <label class="col-lg-3 control-label">{{Choisir un autre délai (min)}}</label>
                 <div class="col-lg-2">
                     <input type="text" class="configKey form-control"  data-l1key="BootTime" placeholder="ex : 4 min"/>
                 </div>
             </div>
-            </br>
+            </br></br>
         </div>
 
 		<form class="form-horizontal">

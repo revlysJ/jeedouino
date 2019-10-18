@@ -168,7 +168,7 @@ class jeedouino extends eqLogic {
 		$BootTime = config::byKey('BootTime', 'jeedouino', 4);
 		$CronStep = config::byKey('CronStep', 'jeedouino', 0);
 		//jeedouino::log( 'debug', '$CronStep = ' . $CronStep);
-		if ($CronStep > $BootTime) return;
+		if ($CronStep > $BootTime + 42) return;
 		if ($CronStep == $BootTime) jeedouino::StartAllDemons();
 		$CronStep++;
 		config::save('CronStep', $CronStep, 'jeedouino');
@@ -176,7 +176,7 @@ class jeedouino extends eqLogic {
 	// Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
 	public static function cron5()
 	{
-		$BootTime = config::byKey('BootTime', 'jeedouino', 4);
+		$BootTime = config::byKey('BootTime', 'jeedouino', 4) + 5;
 		$CronStep = config::byKey('CronStep', 'jeedouino', 0);
 		if ($CronStep <= $BootTime) return;
 
@@ -193,13 +193,23 @@ class jeedouino extends eqLogic {
 			}
 		}
 	}
-	public static function cron10()
+	public static function cron30()
 	{
-		$BootTime = config::byKey('BootTime', 'jeedouino', 4);
+		$BootTime = config::byKey('BootTime', 'jeedouino', 4) + 30;
 		$CronStep = config::byKey('CronStep', 'jeedouino', 0);
 		if ($CronStep <= $BootTime) return;
-		jeedouino::log( 'debug', __('JeedouinoControl : Vérification automatique des démons toutes les 10 minutes', __FILE__));
-		jeedouino::updateDemons();
+		$eqLogics = eqLogic::byType('jeedouino');
+		$hasDemons = false;
+		foreach ($eqLogics as $eqLogic)
+		{
+			if ($eqLogic->getIsEnable() == 0) continue;
+			if (config::byKey($eqLogic->getId() . '_HasDemon', 'jeedouino', 0)) $hasDemons = true;
+		}
+		if ($hasDemons)
+		{
+			jeedouino::log( 'debug', __('JeedouinoControl : Vérification automatique des démons toutes les 30 minutes', __FILE__));
+			jeedouino::updateDemons();
+		}
 	}
 
 	public static function dependancy_info()

@@ -218,14 +218,17 @@ class jeedouino extends eqLogic {
 		$return['log'] = 'jeedouino_update';
 		$return['last_launch'] = '';
 		$return['progress_file'] = '/tmp/dependances_jeedouino_en_cours';
-		if (@shell_exec('ls /usr/lib/python3*/dist-packages/serial/serialposix.py | wc -l') == 0)
+		if (@shell_exec('ls /usr/local/lib/python3*/dist-packages/serial/serialposix.py | wc -l') == 0)
 		{
 			$return['state'] = 'nok';
 		}
 		else
 		{
 			$return['state'] = 'ok';
-			if (@shell_exec('ls /usr/local/lib/python3*/dist-packages/Adafruit_DHT*.egg | wc -l') == 0) $return['state'] = 'nok';
+			if (strpos(strtolower(config::byKey('hardware_name')), 'rpi') == true)
+			{
+				if (@shell_exec('ls /usr/local/lib/python3*/dist-packages/Adafruit_DHT*.egg | wc -l') == 0) $return['state'] = 'nok';
+			}
 		}
 		if ($return['state'] == 'nok') $return['advice'] = __('Normal si ce n\'est pas sur un Raspberry PI.', __FILE__);
 
@@ -233,7 +236,7 @@ class jeedouino extends eqLogic {
 		if (strpos(strtolower(config::byKey('hardware_name')), 'rpi') === false)
 		{
 			$return['state'] = 'ok';
-			log::add('jeedouino_update','info', __('ATTENTION ! Ce n\'est pas un Raspberry PI, les dépendances afférentes ne s(er)ont pas installées.', __FILE__));
+			log::add('jeedouino_update', 'debug', __('ATTENTION ! Ce n\'est pas un Raspberry PI, les dépendances afférentes ne s(er)ont pas installées.', __FILE__));
 		}
 		return $return;
 	}
@@ -242,7 +245,7 @@ class jeedouino extends eqLogic {
 		if (file_exists('/tmp/dependances_jeedouino_en_cours')) return;	// Install déja en cours
 		exec('sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/Jeedouino.sh >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 
-		log::add('jeedouino_update','info', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
+		log::add('jeedouino_update', 'debug', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
 	}
 	public static function health()
 	{
@@ -488,6 +491,125 @@ class jeedouino extends eqLogic {
 		return array($Arduino_pins, $board, $usb);
 	}
 
+	public function GetPinMode($arduino_id)
+	{
+		list($Arduino_pins, $board, $usb) = self::GetPinsByBoard($arduino_id);
+		$PinMode = '';
+		foreach ($Arduino_pins as $pins_id => $pin_datas)
+		{
+			if ( $pins_id >= 500 ) continue;
+			$myPin = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
+			switch ($myPin)
+			{
+				// dispo : 0-9 G-Z
+				case 'double_pulse_low':
+				case 'double_pulse_high':
+				case 'double_pulse':
+					$PinMode .= 'y';
+					break;
+				case 'servo':
+					$PinMode .= 'x';
+					break;
+				case 'bmp180':
+					$PinMode .= 'r';
+					break;
+				case 'bmp280':
+					$PinMode .= 'C';
+					break;
+				case 'bmp280b':
+					$PinMode .= 'F';
+					break;
+				case 'bme280':
+					$PinMode .= 'A';
+					break;
+				case 'bme280b':
+					$PinMode .= 'D';
+					break;
+				case 'bme680':
+					$PinMode .= 'B';
+					break;
+				case 'bme680b':
+					$PinMode .= 'E';
+					break;
+				case 'bp_input':
+					$PinMode .= 'n';
+					break;
+				case 'bp_input_pullup':
+					$PinMode .= 'q';
+					break;
+				case 'teleinfoRX':
+					$PinMode .= 'j';
+					break;
+				case 'teleinfoTX':
+					$PinMode .= 'k';
+					break;
+				case 'trigger':
+					$PinMode .= 't';
+					break;
+				case 'echo':
+					$PinMode .= 'z';
+					break;
+				case 'input':
+					$PinMode .= 'i';
+					break;
+				case 'input_pullup':
+					$PinMode .= 'p';
+					break;
+				case 'dht11':
+					$PinMode .= 'd';
+					break;
+				case 'dht21':
+					$PinMode .= 'e';
+					break;
+				case 'dht22':
+					$PinMode .= 'f';
+					break;
+				case 'ds18b20':
+					$PinMode .= 'b';
+					break;
+				case 'pwm_input':
+					$PinMode .= 'g';
+					break;
+				case 'analog_input':
+					$PinMode .= 'a';
+					break;
+				case 'output':
+					$PinMode .= 'o';
+					break;
+				case 'switch':
+					$PinMode .= 's';
+					break;
+				case 'compteur_pullup':
+					$PinMode .= 'c';
+					break;
+				case 'low_relais':
+					$PinMode .= 'l';
+					break;
+				case 'high_relais':
+					$PinMode .= 'h';
+					break;
+				case 'output_pulse':
+					$PinMode .= 'u';
+					break;
+				case 'low_pulse':
+				case 'low_pulse_slide':
+					$PinMode .= 'v';
+					break;
+				case 'high_pulse':
+				case 'high_pulse_slide':
+					$PinMode .= 'w';
+					break;
+				case 'pwm_output':
+					$PinMode .= 'm';
+					break;
+				default:		// case 'not_used':
+					$PinMode .= '.';
+					break;
+			}
+		}
+		return $PinMode;
+	}
+
 	public function ConfigurePinMode($ForceStart = true) 	// Paramétrage du mode des pins)
 	{
 	 	//$arduino_id = $this->getEqLogic_id();	// si appel depuis CMD
@@ -520,119 +642,8 @@ class jeedouino extends eqLogic {
 
 			list($Arduino_pins, $board, $usb) = self::GetPinsByBoard($arduino_id);
 
-			$PinMode = '';
- 			foreach ($Arduino_pins as $pins_id => $pin_datas)
-			{
-				if ( $pins_id >= 500 ) continue;
-				$myPin = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
-				switch ($myPin)
-				{
-					// dispo : 0-9 D-Z
-					case 'double_pulse_low':
-					case 'double_pulse_high':
-					case 'double_pulse':
-						$PinMode .= 'y';
-						break;
-					case 'servo':
-						$PinMode .= 'x';
-						break;
-					case 'bmp180':
-						$PinMode .= 'r';
-						break;
-					case 'bmp280':
-						$PinMode .= 'C';
-						break;
-					case 'bmp280b':
-						$PinMode .= 'F';
-						break;
-					case 'bme280':
-						$PinMode .= 'A';
-						break;
-					case 'bme280b':
-						$PinMode .= 'D';
-						break;
-					case 'bme680':
-						$PinMode .= 'B';
-						break;
-					case 'bme680b':
-						$PinMode .= 'E';
-						break;
-					case 'bp_input':
-						$PinMode .= 'n';
-						break;
-					case 'bp_input_pullup':
-						$PinMode .= 'q';
-						break;
-					case 'teleinfoRX':
-						$PinMode .= 'j';
-						break;
-					case 'teleinfoTX':
-						$PinMode .= 'k';
-						break;
-					case 'trigger':
-						$PinMode .= 't';
-						break;
-					case 'echo':
-						$PinMode .= 'z';
-						break;
-					case 'input':
-						$PinMode .= 'i';
-						break;
-					case 'input_pullup':
-						$PinMode .= 'p';
-						break;
-					case 'dht11':
-						$PinMode .= 'd';
-						break;
-					case 'dht21':
-						$PinMode .= 'e';
-						break;
-					case 'dht22':
-						$PinMode .= 'f';
-						break;
-					case 'ds18b20':
-						$PinMode .= 'b';
-						break;
-					case 'pwm_input':
-						$PinMode .= 'g';
-						break;
-					case 'analog_input':
-						$PinMode .= 'a';
-						break;
-					case 'output':
-						$PinMode .= 'o';
-						break;
-					case 'switch':
-						$PinMode .= 's';
-						break;
-					case 'compteur_pullup':
-						$PinMode .= 'c';
-						break;
-					case 'low_relais':
-						$PinMode .= 'l';
-						break;
-					case 'high_relais':
-						$PinMode .= 'h';
-						break;
-					case 'output_pulse':
-						$PinMode .= 'u';
-						break;
-					case 'low_pulse':
-					case 'low_pulse_slide':
-						$PinMode .= 'v';
-						break;
-					case 'high_pulse':
-					case 'high_pulse_slide':
-						$PinMode .= 'w';
-						break;
-					case 'pwm_output':
-						$PinMode .= 'm';
-						break;
-					default:		// case 'not_used':
-						$PinMode .= '.';
-						break;
-				}
-			}
+			$PinMode = self::GetPinMode($arduino_id);
+
 			if ($PinMode != '')
 			{
 				switch ($board)
@@ -925,7 +936,7 @@ class jeedouino extends eqLogic {
 					'page' => 'jeedouino',
 					'message' => $tell
 					));
-				jeedouino::log('info', $tell);
+				jeedouino::log('debug', $tell);
 			}
 
 			stream_set_timeout($fp, 9);
@@ -1323,7 +1334,7 @@ class jeedouino extends eqLogic {
 
 	public function SendJeedouinoExt($jeedouino_ext, $Noinstall = false)
 	{
-		jeedouino::log( 'info', __('Envoi des fichiers JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
+		jeedouino::log( 'debug', __('Envoi des fichiers JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
 		$file_path = dirname(__FILE__) . '/../../ressources/JeedouinoExt.zip';
 		$to_path = '/tmp/JeedouinoExt.zip';
 		$sh_path = '/tmp/JeedouinoExt/JeedouinoExt.sh >> /tmp/InstallJeedouinoExt.log 2>&1 &';
@@ -1392,7 +1403,7 @@ class jeedouino extends eqLogic {
 	}
 	public function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)
 	{
-		jeedouino::log( 'info', __('Téléchargement via SSH d\'un fichier de JeedouinoExt depuis l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
+		jeedouino::log( 'debug', __('Téléchargement via SSH d\'un fichier de JeedouinoExt depuis l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
 		{
 			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
@@ -1423,7 +1434,7 @@ class jeedouino extends eqLogic {
 	}
 	public function SendSSHCmdsJeedouinoExt($jeedouino_ext, $cmds)
 	{
-		jeedouino::log( 'info', __('Envoi de commandes SSH pour JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
+		jeedouino::log( 'debug', __('Envoi de commandes SSH pour JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
 		{
 			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
@@ -1714,11 +1725,29 @@ class jeedouino extends eqLogic {
 		$filename = $jeedouinoPATH . $jeedouinoFile . '_' . $board_id . '.py';
 		if (file_exists($filename)) unlink($filename);
 
+		// Generation du fichier du demon + fallback
 		$DemonFileName = $jeedouinoPATH . $jeedouinoFile . '.py';
-		if (!copy($DemonFileName, $filename))
+
+		$MasterFile = file_get_contents($DemonFileName);
+		if ($MasterFile)
 		{
-			jeedouino::log( 'error', __(' Impossible de créer le fichier pour le démon ', __FILE__) . $filename . '.');
-			$filename = $DemonFileName;
+			if (($DemonTypeF == 'PiGpio') or ($DemonTypeF == 'PiPlus'))
+			{
+				// boot mode
+				$BootMode = 'BootMode = ' . config::byKey($board_id . '_' . $DemonTypeF . '_boot', 'jeedouino', '0');
+				$MasterFile = str_replace('BootMode = False' , $BootMode , $MasterFile);
+
+				$PinMode = jeedouino::GetPinMode($board_id);
+				if ($DemonTypeF == 'PiGpio' and strlen($PinMode) < 39) $PinMode .= '..............';
+				$MasterFile = str_replace('Status_pins = {}' , "Status_pins = '" . $PinMode . "'", $MasterFile);
+			}
+			// save
+			$result = file_put_contents($filename, $MasterFile);
+			if ($result === false)
+			{
+				jeedouino::log( 'error', __(' Impossible de créer le fichier pour le démon : ', __FILE__) . $filename);
+				$filename = $DemonFileName;
+			}
 		}
 
 		self::StopBoardDemonCMD($board_id, $DemonType); // Stoppe le(s) processus du Démon local
@@ -1828,7 +1857,8 @@ class jeedouino extends eqLogic {
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return false;
 		if ($_board_id == 0) $_board_id = $this->getEqLogic_id();
-		$id_type = '( EqID: ' . $_board_id . ' ) Démon ' . $DemonTypeF;
+		$my_Board = eqLogic::byid($_board_id);
+		$id_type = '( ' . $my_Board->getName() . ' - EqID: ' . $_board_id . ' ) Démon ' . $DemonTypeF;
 
 		$Time = time() + 180; // duree du cache 3 min
 		$LastPING = config::byKey($_board_id . '_' . $DemonTypeF . 'LastPING', 'jeedouino', 0);
@@ -2322,7 +2352,12 @@ class jeedouino extends eqLogic {
 		}
 		if ($ToSend)
 		{
-			$prm = json_encode(array('board_id' => $arduino_id, 'DemonName' => $DemonName, 'prm' => $setprm));
+			$Fallback = [];
+			$Fallback['BootMode'] = config::byKey($arduino_id . '_' . $DemonName . '_boot', 'jeedouino', '0');
+			$PinMode = jeedouino::GetPinMode($arduino_id);
+			if ($DemonName == 'PiGpio' and strlen($PinMode) < 39) $PinMode .= '..............';
+			if ($PinMode != 'none') $Fallback['PinMode'] = $PinMode;
+			$prm = json_encode(array('board_id' => $arduino_id, 'DemonName' => $DemonName, 'prm' => $setprm, 'Fallback' => $Fallback));
 			$reponse = jeedouino::CallJeedouinoExt($arduino_id, 'SetPRM', $prm, $wwwPort ); // EqLogic, Cmd, Array Params, default port www
 			if ($reponse != 'OK') jeedouino::log( 'error', __('Problème d\'envoi de SetPRM sur JeedouinoExt, démon : ', __FILE__) . ' Jeedouino' . $DemonName . '.py ( eqID ' . $arduino_id . ' ) - Réponse :' . $reponse);
 		}
@@ -4037,7 +4072,7 @@ class jeedouinoCmd extends cmd {
 				elseif ($this->getSubType() == 'message')
 				{
 					if ($_options === null) return false;
-					//jeedouino::log( 'info','_ - $_options = '. json_encode($_options));
+					//jeedouino::log( 'debug','_ - $_options = '. json_encode($_options));
 					if (!isset($_options['title'])) $_options['title'] = '';
 					if (!isset($_options['message'])) $_options['message'] = '';
 					if ($_options['title'] == '') $_options['title'] = 'Jeedouino says:';

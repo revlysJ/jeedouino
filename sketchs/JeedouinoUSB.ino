@@ -1506,7 +1506,9 @@ int read_DSx(int pinD)
 	}
 	nb_ds18 = 0;
 	delay(800);
-	jeedom = F("&DS18list={");
+	jeedom = F("&DS18list_");
+	jeedom += pinD;
+	jeedom += F("={");
 	ds.reset_search();
 	while (ds.search(addr))
 	{

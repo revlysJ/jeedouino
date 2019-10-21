@@ -3,6 +3,7 @@
 # v0.3 alpha
 ##
 
+sudo chmod -R 777 /tmp
 touch /tmp/dependances_jeedouino_en_cours
 cd /tmp
 echo 0 > /tmp/dependances_jeedouino_en_cours
@@ -128,4 +129,5 @@ echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Fin de l'installation des dependances ..."
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+sudo chmod -R 777 /tmp/dependances_jeedouino_en_cours
 rm /tmp/dependances_jeedouino_en_cours

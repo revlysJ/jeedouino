@@ -36,9 +36,16 @@ Installation du plugin
 
 Mise à jour du plugin et des sketchs
 ---
-La mise à jour du plugin Jeedouino se fait via Jeedom.
-La mise à jour de l'option JeedouinoExt se fait via le plugin Jeedouino.
-Dans le cas de démons, il seront redémarrés automatiquement.
+- Les dépendances doivent être mises à jour pour l'utilisation des démons.
+- Pour l’installation des dépendances, il faut que le système soit à jour, sinon elles ne peuvent pas s'installer correctement / complètement.
+- Des dépendances ok sur des systèmes autre que RaspberryPI (ex: VM, PC, NUC, Freebox Delta) ne préjugent pas de leur bonne installation.
+
+>
+> De façon générale, il est préférable de relancer l'installation des dépendances - quelles soient ok ou non - lors de la mise à jour d'un plugin.
+
+- La mise à jour du plugin Jeedouino se fait via Jeedom.
+- La mise à jour de l'option JeedouinoExt se fait via le plugin Jeedouino.
+- Dans le cas de démons, il seront redémarrés automatiquement.
 
 > **[IMPORTANT]**
 >

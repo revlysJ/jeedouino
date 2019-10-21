@@ -417,7 +417,7 @@ function addCmdToTable(_cmd) {
 	tr += '<td>';
 	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isVisible" data-size="mini" checked />{{Afficher}}</label></span> ';
 	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary" data-size="mini" />{{Inverser}}</label></span> ';
-	if ( ctype == 'info' && control != 'JeedouinoControl') {
+	if ( ctype == 'info') {
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isHistorized" data-size="mini" />{{Historiser}}</label></span> ';
 	}
 	tr += '</td>';

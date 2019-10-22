@@ -20,6 +20,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function jeedouino_install() {
     message::add('jeedouino', __('Suite à l\'installation de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
+    message::add('jeedouino', __('Pensez à installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
 }
 
 function jeedouino_update()
@@ -102,6 +103,7 @@ function jeedouino_update()
 	}
 	jeedouino::log( 'debug','-=-= Fin du démarrage des démons et de la re-génération des sketchs =-=-');
     message::add('jeedouino', __('Suite mise à jour de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
+    message::add('jeedouino', __('Pensez à ré-installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
 }
 
 

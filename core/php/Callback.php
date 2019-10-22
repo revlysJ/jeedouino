@@ -259,12 +259,14 @@ if (isset($_GET['BoardEQ']))
 						}
 						elseif (substr($cmd->getConfiguration('modePIN'), 0, 4) == 'ds18')
 						{
-							if (isset($_GET['DS18list']))
+							$DSkey = 'DS18list_' . $pins_id;
+							if (isset($_GET['DS18list'])) $DSkey = 'DS18list'; // palliatif temporaire
+							if (isset($_GET[$DSkey]))
 							{
 								$MaJ = false;
 								$MaJErr = false;
-								$_GET['DS18list'] = strtoupper(str_replace(',}', '}', $_GET['DS18list'])); // filtre pour arduino
-								$DS18list = json_decode($_GET['DS18list'], true);
+								$_GET[$DSkey] = strtoupper(str_replace(',}', '}', $_GET[$DSkey])); // filtre pour arduino
+								$DS18list = json_decode($_GET[$DSkey], true);
 								list($firstID) = array_keys($DS18list);
 								if ($cmd->getConfiguration('ds18id', '') == '' or $cmd->getConfiguration($firstID, '') == '')
 								{
@@ -328,7 +330,11 @@ if (isset($_GET['BoardEQ']))
 						{
 							$value = $cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
-							if ($recu < $RSTvalue) $recu = $RSTvalue;
+							if ($recu < $RSTvalue)
+							{
+								jeedouino::log('debug', $CALLBACK . __('La valeur reçue est inférieure à la valeur connue RSTValue, elle ne sera pas mise à jour. C = ', __FILE__) . $recu);
+								$recu = $RSTvalue;
+							}
 							$cmd->setConfiguration('RSTvalue', $recu);
 							jeedouino::log('debug', $CALLBACK . 'RSTvalue Pin n° ' . $pins_id . ' = ' . $recu);
 						}

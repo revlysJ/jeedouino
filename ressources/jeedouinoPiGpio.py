@@ -42,7 +42,12 @@ JeedomPort=80
 JeedomCPL=''
 pin2gpio = [0,0,2,0,3,0,4,14,0,15,17,18,27,0,22,23,0,24,10,0,9,25,11,8,0,7,0,0,5,0,6,12,13,0,19,16,26,20,0,21]
 gpio2pin = [0,0,3,5,7,29,31,26,24,21,19,23,32,33,8,10,36,11,12,35,38,40,15,16,18,22,37,13,0,0,0,0,0,0,0,0,0,0,0,0]
+
+# s-Fallback
 BootMode = False
+Status_pins = {}
+# e-Fallback
+
 ProbeDelay = 5
 bmp180 = False
 bme280 = False
@@ -166,11 +171,13 @@ class myThread1 (threading.Thread):
 							GPIO.setup(j, GPIO.OUT)
 							GPIO.remove_event_detect(j)
 							GPIO.output(j, BootMode)
+							swtch[i + 1] = BootMode
+							GPIOStr += '&' + str(i + 1) + '=' + str(BootMode)
 						elif Status_pins[i]=='p':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
 							GPIO.add_event_detect(j, GPIO.BOTH, callback=toggle_inputs)
-							GPIOStr +='&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
+							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i]=='c':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
@@ -436,12 +443,12 @@ def toggle_cpts(u):
 	# On compte le nombre d'impulsions
 	uu = gpio2pin[u]
 	CounterPinValue[uu] += GPIO.input(u)
-	GPIO.remove_event_detect(u)
+	#GPIO.remove_event_detect(u)
 	# on verifie qu'il y ai suffisamment de temps d'ecoule pour ne pas saturer jeedom et le reseau
 	if PinNextSend[uu] < time.time():
 		PinNextSend[uu] = time.time() + 30  #30s environ
 		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
-	GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_cpts)
+	#GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_cpts)
 
 def toggle_inputs(u):
 	global CounterPinValue,PinNextSend,Status_pins,GPIO,NextRefresh,PinValue,TimeValue,swtch,ProbeDelay
@@ -594,13 +601,16 @@ class myThread2 (threading.Thread):
 					elif Status_pins[i]=='b': # ds18b20
 						DS.pinsStartConversion([pin2gpio[i]])
 						time.sleep(1)
-						k = sensors[i][0]
-						pinStr += '&' + str(j) + '=' + str(DS.read(False, pin2gpio[i], k) * 100)
-						pinStr2 = ''
-						for k in sensors[i]:
-							pinStr2 += '"' + str(k) + '":"' + str(DS.read(False, pin2gpio[i], k) * 100) + '",'
-						if pinStr2 != '':
-							pinStr += '&DS18list={' + pinStr2[:-1] + '}'
+						try:
+							k = sensors[i][0]
+							pinStr += '&' + str(j) + '=' + str(DS.read(False, pin2gpio[i], k) * 100)
+							pinStr2 = ''
+							for k in sensors[i]:
+								pinStr2 += '"' + str(k) + '":"' + str(DS.read(False, pin2gpio[i], k) * 100) + '",'
+							if pinStr2 != '':
+								pinStr += '&DS18list_' + str(j) + '={' + pinStr2[:-1] + '}'
+						except:
+							pass
 					elif Status_pins[i]=='r': # BMP085/180
 						if pinDHT:
 							time.sleep(2)
@@ -657,15 +667,16 @@ class myThread2 (threading.Thread):
 
 			#on reclame la valeur des compteurs
 			if sendCPT == 0 and timeCPT < time.time():
-				sendCPT = 1
 				if JeedomIP != '' and eqLogic != '':
+					sendCPT = 1
 					if sendPINMODE == 0:
 						pinStr = '&PINMODE=1'
 						sendPINMODE = 1
 					else:
 						pinStr = ''
 					for i in range(1, 41):
-						pinStr += '&CPT_' + str(i) + '=' + str(i)
+						if Status_pins[i - 1] == 'c':
+							pinStr += '&CPT_' + str(i) + '=' + str(i)
 					if pinStr != '':
 						SimpleSend(pinStr)
 			time.sleep(0.1)
@@ -754,7 +765,6 @@ if __name__ == "__main__":
 	PinNextSend={}
 	TempoPinHIGH={}
 	TempoPinLOW={}
-	Status_pins={}
 	PinValue={}
 	TimeValue={}
 	swtch={}
@@ -770,10 +780,26 @@ if __name__ == "__main__":
 		PinNextSend[i] = 0
 		TempoPinHIGH[i] = 0
 		TempoPinLOW[i] = 0
-		swtch[i] = 0
-		Status_pins[i-1]='.'
 		PinValue[i] = 0
 		TimeValue[i] = 0
+		j = pin2gpio[i - 1]
+		try:
+			if Status_pins[i - 1]=='o' or Status_pins[i - 1]=='y' or Status_pins[i - 1]=='s' or Status_pins[i - 1]=='l' or Status_pins[i - 1]=='h' or Status_pins[i - 1]=='u' or Status_pins[i - 1]=='v' or Status_pins[i - 1]=='w':
+				GPIO.setup(j, GPIO.OUT)
+				GPIO.remove_event_detect(j)
+				GPIO.output(j, BootMode)
+				swtch[i] = BootMode
+				pinStr += '&' + str(i) + '=' + str(BootMode)
+			elif Status_pins[i - 1] == 'p' or Status_pins[i - 1] == 'i':
+				GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
+				GPIO.remove_event_detect(j)
+				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
+		except:
+			Status_pins[i - 1] = '.'
+			swtch[i] = 0
+
+	if pinStr != '':
+		SimpleSend(pinStr)
 
 	threadLock = threading.Lock()
 	threads = []

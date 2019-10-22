@@ -33,7 +33,11 @@ eqLogic=''
 boardId=32
 JeedomPort=80
 JeedomCPL=''
-BootMode = 0
+
+# s-Fallback
+BootMode = False
+Status_pins = {}
+# e-Fallback
 
 # Tests Threads alives
 thread_1 = 0
@@ -150,6 +154,8 @@ class myThread1 (threading.Thread):
 							bus.set_pin_direction(j, 0)				# output
 							bus.invert_pin(j, 0)
 							bus.write_pin(j, BootMode)
+							swtch[i] = BootMode
+							PiPlusStr += '&' + str(i) + '=' + str(BootMode)
 						elif Status_pins[i] == 'p':
 							bus.set_pin_direction(j, 1)				# input
 							bus.set_pin_pullup(j, 1)				# pull_up
@@ -406,15 +412,18 @@ class myThread2 (threading.Thread):
 
 			#on reclame la valeur des compteurs
 			if sendCPT==0 and timeCPT<time.time():
-				sendCPT=1
-				if sendPINMODE == 0:
-					pinStr = '&PINMODE=1'
-					sendPINMODE = 1
-				else:
-					pinStr = ''
-				for i in range(0,16):
-					pinStr +='&CPT_' + str(i) + '=' + str(i)
-				SimpleSend(pinStr)
+				if JeedomIP != '' and eqLogic != '':
+					sendCPT=1
+					if sendPINMODE == 0:
+						pinStr = '&PINMODE=1'
+						sendPINMODE = 1
+					else:
+						pinStr = ''
+					for i in range(0,16):
+						if Status_pins[i] == 'c':
+							pinStr +='&CPT_' + str(i) + '=' + str(i)
+					if pinStr != '':
+						SimpleSend(pinStr)
 			time.sleep(0.1)
 		s.close()
 		sys.exit()
@@ -474,7 +483,6 @@ if __name__ == "__main__":
 	PinNextSend={}
 	TempoPinHIGH={}
 	TempoPinLOW={}
-	Status_pins={}
 	Status_INPUTS={}
 	swtch={}
 	exit=0
@@ -485,19 +493,27 @@ if __name__ == "__main__":
 	SetAllPulseHIGH=0
 	pinStr = ''
 	for i in range(0,16):
-		bus.set_pin_direction(i+1, 1)
-		input=bus.read_pin(i+1)
-		Status_INPUTS[i]=input
-		pinStr += '&IN_' + str(i) + '=' + str(input)
 		CounterPinValue[i] = 0
 		PinNextSend[i] = 0
 		TempoPinHIGH[i] = 0
 		TempoPinLOW[i] = 0
-		swtch[i] = 0
-		Status_pins[i]='.'
+		j = i + 1
+		try:
+			if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
+				bus.set_pin_direction(j, 0)				# output
+				bus.invert_pin(j, 0)
+				bus.write_pin(j, BootMode)
+				swtch[i] = BootMode
+				pinStr += '&' + str(i) + '=' + str(BootMode)
+			elif Status_pins[i]=='p' or Status_pins[i]=='i':
+				bus.set_pin_direction(j, 1)
+				input = bus.read_pin(j)
+				Status_INPUTS[i] = input
+				pinStr += '&IN_' + str(i) + '=' + str(input)
+		except:
+			Status_pins[i]='.'
+			swtch[i] = 0
 
-
-	# Envoi de l'etats des inputs au boot
 	if pinStr!='':
 		SimpleSend(pinStr)
 
@@ -548,16 +564,16 @@ if __name__ == "__main__":
 			# Boucle qui remplace le listener (qui bug avec plusieurs piPlus)
 			pinStr = ''
 			for i in range(0,16):
-				if Status_pins[i]!='.':
-					input=bus.read_pin(i+1)
-					if Status_INPUTS[i]!=input:
-						Status_INPUTS[i]=input
-						if Status_pins[i]=='c':
+				if Status_pins[i]=='p' or Status_pins[i]=='i' or Status_pins[i]=='c':
+					input = bus.read_pin(i + 1)
+					if Status_INPUTS[i] != input:
+						Status_INPUTS[i] = input
+						if Status_pins[i] == 'c':
 							# On compte le nombre d'impulsions
 							CounterPinValue[i] += input
 							# on verifie qu'il y ai suffisamment de temps d'ecoule pour ne pas saturer jeedom et le reseau
-							if PinNextSend[i]<time.time():
-								PinNextSend[i]=time.time()+10  #10s environ
+							if PinNextSend[i] < time.time():
+								PinNextSend[i] = time.time() + 10  #10s environ
 								pinStr +='&' + str(i) + '=' + str(CounterPinValue[i])
 						else:
 							pinStr +='&' + str(i) + '=' + str(input)

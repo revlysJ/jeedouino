@@ -155,6 +155,7 @@ try {
 	}
   	if (init('action') == 'installGPIO')
     {
+        exec('sudo pip3 install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
         exec('sudo pip install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
 		ajax::success();
 	}

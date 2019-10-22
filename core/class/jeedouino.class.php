@@ -216,36 +216,19 @@ class jeedouino extends eqLogic {
 	{
 		$return = array();
 		$return['log'] = 'jeedouino_update';
-		$return['last_launch'] = '';
 		$return['progress_file'] = '/tmp/dependances_jeedouino_en_cours';
-		if (@shell_exec('ls /usr/local/lib/python3*/dist-packages/serial/serialposix.py | wc -l') == 0)
-		{
-			$return['state'] = 'nok';
-		}
-		else
-		{
-			$return['state'] = 'ok';
-			if (strpos(strtolower(config::byKey('hardware_name')), 'rpi') == true)
-			{
-				if (@shell_exec('ls /usr/local/lib/python3*/dist-packages/Adafruit_DHT*.egg | wc -l') == 0) $return['state'] = 'nok';
-			}
-		}
-		if ($return['state'] == 'nok') $return['advice'] = __('Normal si ce n\'est pas sur un Raspberry PI.', __FILE__);
-
-		// Cas du maitre qui n'est pas un RPI
-		if (strpos(strtolower(config::byKey('hardware_name')), 'rpi') === false)
-		{
-			$return['state'] = 'ok';
-			log::add('jeedouino_update', 'debug', __('ATTENTION ! Ce n\'est pas un Raspberry PI, les dépendances afférentes ne s(er)ont pas installées.', __FILE__));
-		}
+		$return['state'] = 'ok';
+		if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) $return['state'] = 'nok';
+		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "setuptools" | wc -l') == 0) $return['state'] = 'nok';
+		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "pyserial" | wc -l') == 0) $return['state'] = 'nok';
 		return $return;
 	}
 	public static function dependancy_install()
 	{
-		if (file_exists('/tmp/dependances_jeedouino_en_cours')) return;	// Install déja en cours
-		exec('sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/Jeedouino.sh >> ' . log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-
-		log::add('jeedouino_update', 'debug', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
+		log::remove(__CLASS__ . '_update');
+		jeedouino::log('info', __('L\'installation des dépendances générales va débuter.', __FILE__));
+		jeedouino::log('info', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
+		return array('script' => dirname(__FILE__) . '/../../ressources/Jeedouino.sh /tmp/dependances_jeedouino_en_cours', 'log' => log::getPathToLog(__CLASS__ . '_update'));
 	}
 	public static function health()
 	{
@@ -1342,7 +1325,7 @@ class jeedouino extends eqLogic {
 
 		// test
 		$jeedouinocfg = '{"IP":"' . jeedouino::GetJeedomIP(). '","Port":"' . jeedouino::GetJeedomPort(). '","Cpl":"' . jeedouino::GetJeedomComplement(). '"}';
-		$test = "echo '" . $jeedouinocfg . "' | sudo tee /var/www/html/JeedouinoExt/jeedouino.cfg";
+		$test = "echo '" . $jeedouinocfg . "' | sudo tee /tmp/JeedouinoExt/jeedouino.cfg";
 
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
 		{
@@ -1365,13 +1348,14 @@ class jeedouino extends eqLogic {
 				}
 				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
 				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'unzip ' . $to_path . ' -d /tmp');
-				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, '/bin/bash ' . $sh_path);
 				$result = jeedouino::SshCmdJeedouinoExt($connection, '', $test);
+				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, '/bin/bash ' . $sh_path);
 				$result = jeedouino::SshCmdJeedouinoExt($connection, '', 'exit');
 			}
 		}
 		if ($Noinstall)
 		{
+			sleep(11);
 			foreach (eqLogic::byType('jeedouino') as $eqLogic)
 			{
 				if ($eqLogic->getConfiguration('iparduino') == $jeedouino_ext['IP'])
@@ -1391,14 +1375,15 @@ class jeedouino extends eqLogic {
 		stream_set_blocking($error, true);
 		stream_set_blocking($stream, true);
 		$output = trim(stream_get_contents($stream));
+		$outputerr = trim(stream_get_contents($error));
 		fclose($error);
 		fclose($stream);
-		if ($output != '')
+		if ($outputerr != '')
 		{
-			jeedouino::log( 'error', __('Envoi via SSH de la commande : ', __FILE__) . $cmd . __(' impossible. ', __FILE__));
+			jeedouino::log( 'error', __('Envoi via SSH de la commande : ', __FILE__) . $cmd . __(' impossible. ', __FILE__). ' : ' . $outputerr);
 			return false;
 		}
-		jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);
+		if ($output != '') jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);
 		return true;
 	}
 	public function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)

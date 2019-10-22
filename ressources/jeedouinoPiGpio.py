@@ -667,8 +667,8 @@ class myThread2 (threading.Thread):
 
 			#on reclame la valeur des compteurs
 			if sendCPT == 0 and timeCPT < time.time():
-				sendCPT = 1
 				if JeedomIP != '' and eqLogic != '':
+					sendCPT = 1
 					if sendPINMODE == 0:
 						pinStr = '&PINMODE=1'
 						sendPINMODE = 1

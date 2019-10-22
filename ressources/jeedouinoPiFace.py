@@ -395,11 +395,14 @@ class myThread2 (threading.Thread):
 
 			#on reclame la valeur des compteurs
 			if sendCPT==0 and timeCPT<time.time():
-				sendCPT=1
-				pinStr=''
-				for i in range(0,8):
-					pinStr +='&CPT_' + str(i) + '=' + str(i)
-				SimpleSend(pinStr)
+				if JeedomIP != '' and eqLogic != '':
+					sendCPT=1
+					pinStr=''
+					for i in range(0,8):
+						if Status_pins[i]=='c':
+							pinStr +='&CPT_' + str(i) + '=' + str(i)
+					if pinStr != '':
+						SimpleSend(pinStr)
 			time.sleep(0.1)
 		s.close()
 		#listener.deactivate()

@@ -1,13 +1,16 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
-18/10/2019 v1.06
+22/10/2019 v1.06b
 ---
+
+- Améliorations des démons et des logs.
+- Corrections d'affichages diverses.
 
 Notes de mise à jour:
 - Le système doit être mis à jour avant l'installation des dépendances du plugin.
 - Les dépendances doivent être mises à jour pour l'utilisation des démons.
 - Les équipements arduinos/esp utilisant une/des sonde(s) DS18B20 doivent être re-flashés.
-    
+
 04/10/2019 v1.06
 ---
 

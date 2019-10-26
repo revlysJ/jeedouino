@@ -32,6 +32,7 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install python{,3}-pip python{,3}-setuptools
 sudo pip install wheel
 sudo pip3 install wheel
+pip3 install --upgrade setuptools pip
 
 echo 30 > ${PROGRESS_FILE}
 echo "-"

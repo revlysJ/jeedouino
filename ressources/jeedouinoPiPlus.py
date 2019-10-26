@@ -19,7 +19,8 @@ time.tzset()
 try:
 	from IOPi import IOPi
 	nodep = 0
-except Exception as errdep:
+except Exception as e:
+	errdep = e
 	nodep = 1
 
 #reload(sys)

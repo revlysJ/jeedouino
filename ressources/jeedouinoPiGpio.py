@@ -29,7 +29,8 @@ import DS18B20 as DS
 try:
 	import board, busio, adafruit_bmp280, adafruit_bme280, adafruit_bme680
 	nodep = 0
-except Exception as errdep:
+except Exception as e:
+	errdep = e
 	nodep = 1
 
 sensors = {}

@@ -35,6 +35,11 @@ if (isset($_GET['BoardEQ']))
 		config::save('lastCommunication' . $arduino_id, date('Y-m-d H:i:s'), 'jeedouino');
 
 		$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
+		if (config::byKey($arduino_id . '_HasDemon', 'jeedouino', 0))
+		{
+			$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
+			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+		}
 		// Specifique Analog to Digital pins OUT - Etat
 		$ard328 = false;
 		switch ($ModeleArduino)

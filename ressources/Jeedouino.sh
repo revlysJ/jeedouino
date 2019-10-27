@@ -30,9 +30,9 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance  python-pip"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install python{,3}-pip python{,3}-setuptools
+sudo pip3 install --upgrade setuptools pip
 sudo pip install wheel
 sudo pip3 install wheel
-pip3 install --upgrade setuptools pip
 
 echo 30 > ${PROGRESS_FILE}
 echo "-"
@@ -57,75 +57,90 @@ echo "Installation dependance git"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install git
 
-echo 60 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance Adafruit_Python_DHT"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-rm -Rf /tmp/Adafruit_Python_DHT
-git clone https://github.com/adafruit/Adafruit_Python_DHT.git
-cd /tmp/Adafruit_Python_DHT
-sudo python setup.py install
-sudo python3 setup.py install
-cd /tmp
+if [ -f /usr/bin/raspi-config ]; then
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "  Installation des dependances specifiques au Raspberry PI  "
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-echo 70 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance AB Electronics Python Libraries"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-rm -Rf /tmp/ABElectronics_Python_Libraries
-git clone https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
-cd /tmp/ABElectronics_Python_Libraries
-sudo python setup.py install
-sudo python3 setup.py install
-cd /tmp
+	echo 60 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance Adafruit_Python_DHT"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	rm -Rf /tmp/Adafruit_Python_DHT
+	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+	cd /tmp/Adafruit_Python_DHT
+	sudo python setup.py install
+	sudo python3 setup.py install
+	cd /tmp
 
-echo 75 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance Adafruit_Python_BMP085/180"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-rm -Rf /tmp/Adafruit_Python_BMP
-git clone https://github.com/adafruit/Adafruit_Python_BMP.git
-cd /tmp/Adafruit_Python_BMP
-sudo python setup.py install
-sudo python3 setup.py install
-cd /tmp
+	echo 65 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance RPi.GPIO"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	sudo pip3 install RPi.GPIO
+	cd /tmp
 
-echo 80 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance Adafruit_circuitpython"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-pip3 install adafruit-circuitpython-lis3dh
+	echo 70 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance AB Electronics Python Libraries"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	rm -Rf /tmp/ABElectronics_Python_Libraries
+	git clone https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
+	cd /tmp/ABElectronics_Python_Libraries
+	sudo python setup.py install
+	sudo python3 setup.py install
+	cd /tmp
 
-echo 85 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance Adafruit_Python_BME280"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo pip3 install adafruit-circuitpython-bme280
-sudo pip3 install adafruit-circuitpython-bmp280
+	echo 75 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance Adafruit_Python_BMP085/180"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	rm -Rf /tmp/Adafruit_Python_BMP
+	git clone https://github.com/adafruit/Adafruit_Python_BMP.git
+	cd /tmp/Adafruit_Python_BMP
+	sudo python setup.py install
+	sudo python3 setup.py install
+	cd /tmp
 
-echo 90 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance Adafruit_Python_BME680"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo pip3 install adafruit-circuitpython-bme680
+	echo 80 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance Adafruit_circuitpython"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	pip3 install adafruit-circuitpython-lis3dh
 
-echo 95 > ${PROGRESS_FILE}
-echo "-"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance danjperron/BitBangingDS18B20"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-rm -Rf /tmp/BitBangingDS18B20
-git clone https://github.com/danjperron/BitBangingDS18B20.git
-cd /tmp/BitBangingDS18B20/python
-sudo python setup.py install
-sudo python3 setup.py install
-cd /tmp
+	echo 85 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance Adafruit_Python_BME280"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	sudo pip3 install adafruit-circuitpython-bme280
+	sudo pip3 install adafruit-circuitpython-bmp280
+
+	echo 90 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance Adafruit_Python_BME680"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	sudo pip3 install adafruit-circuitpython-bme680
+
+	echo 95 > ${PROGRESS_FILE}
+	echo "-"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	echo "Installation dependance danjperron/BitBangingDS18B20"
+	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+	rm -Rf /tmp/BitBangingDS18B20
+	git clone https://github.com/danjperron/BitBangingDS18B20.git
+	cd /tmp/BitBangingDS18B20/python
+	sudo python setup.py install
+	sudo python3 setup.py install
+	cd /tmp
+fi
 
 echo 100 > ${PROGRESS_FILE}
 echo "-"

@@ -221,6 +221,7 @@ class jeedouino extends eqLogic {
 		if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) $return['state'] = 'nok';
 		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "setuptools" | wc -l') == 0) $return['state'] = 'nok';
 		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "pyserial" | wc -l') == 0) $return['state'] = 'nok';
+		if ($return['state'] == 'nok') message::add('jeedouino', __('Si les dépendances sont/restent NOK, veuillez mettre à jour votre système linux, puis relancer l\'installation des dépendances générales. Merci', __FILE__));
 		return $return;
 	}
 	public static function dependancy_install()
@@ -1380,7 +1381,7 @@ class jeedouino extends eqLogic {
 		fclose($stream);
 		if ($outputerr != '')
 		{
-			jeedouino::log( 'error', __('Envoi via SSH de la commande : ', __FILE__) . $cmd . __(' impossible. ', __FILE__). ' : ' . $outputerr);
+			jeedouino::log( 'error', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $outputerr . ' : ' . $output);
 			return false;
 		}
 		if ($output != '') jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);

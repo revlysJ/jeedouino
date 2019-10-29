@@ -129,7 +129,7 @@ $ip = jeedouino::GetJeedomIP();
                             </div>
                         </div>
 						<div class="form-group JeedouinoExtNew">
-                            <label class="col-sm-3 control-label">{{Ou}}</label>
+                            <label class="col-sm-3 control-label">{{Ou (mise à jour)}}</label>
                             <div class="col-sm-9">
                                 <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles2"><i class="fas fa-spinner"></i> {{Envoi et redémarrage du/des démon(s)}}</a>
 								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/JeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs JeedouinoExt}}</a>

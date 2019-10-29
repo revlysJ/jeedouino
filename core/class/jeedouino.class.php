@@ -1379,9 +1379,9 @@ class jeedouino extends eqLogic {
 		$outputerr = trim(stream_get_contents($error));
 		fclose($error);
 		fclose($stream);
-		if ($outputerr != '')
+		if ($outputerr != '' and $cmd != 'exit')
 		{
-			jeedouino::log( 'error', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $outputerr . ' : ' . $output);
+			jeedouino::log( 'error', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $outputerr . ' ( ' . $output . ' )');
 			return false;
 		}
 		if ($output != '') jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);

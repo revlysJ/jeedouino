@@ -125,6 +125,7 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['THREADSDEAD']))
 		{
+			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
 			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			jeedouino::log( 'error', $CALLBACK . __('Les threads du démon sont hs. Tentative de redémarrage du démon en cours...', __FILE__));
 			jeedouino::ReStartBoardDemon($arduino_id, 0, $ModeleArduino);
@@ -139,6 +140,7 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['NOPORTFOUND']))
 		{
+			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
 			jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver un port de libre automatiquement. Veuillez en choisir un autre.', __FILE__));
 		}
 		if (isset($_GET['PORTFOUND']))

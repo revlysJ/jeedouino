@@ -1,6 +1,6 @@
 Description
 ===========
-- **Jeedouino v1.06**  
+- **Jeedouino v1.07**  
 
    This plugin enable you to control in many ways the input/output of the following boards :
 
@@ -585,7 +585,6 @@ Pins Entrées (Input)
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos :_**
       + **Sonde DHT 11,21,22** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
-      + **Sonde DS18x20** - Permet d'avoir une commande avec la température
       + **Entrée téléinfo ERDF ( pin RX )** - Permet d'avoir une commande de réception de message série pour la téléinfo.
       > **[TIP]**
       >
@@ -594,9 +593,12 @@ Pins Entrées (Input)
 
       **_Uniquement sur Raspberry PI GPIO :_**
       + **Sonde DHT 11, 22 (AM2302)** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
-      + **Sonde DS18B20** - Permet d'avoir une commande avec la température
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :_**
+      + **Sonde DS18B20** - Permet d'avoir une/des commande(s) avec la température.
+      >Une seule commande est créée à la sauvegarde.  
+      En cas de plusieurs ds18b20, les commandes suivantes seront générées au fur et mesure des remontées de température.
+
       + **Entrée Bouton poussoir avec PULL-DOWN**
       + **Entrée Bouton poussoir avec PULL-UP**
 

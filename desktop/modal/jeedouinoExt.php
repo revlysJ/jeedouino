@@ -123,15 +123,15 @@ $ip = jeedouino::GetJeedomIP();
                         <div class="form-group JeedouinoExtNew">
                             <label class="col-sm-3 control-label">{{Fichiers JeedouinoExt}}</label>
                             <div class="col-sm-9">
-                                <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles"><i class="fas fa-spinner"></i> {{Envoi et Installation}}</a>
-								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/tmp/InstallJeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs d'install}}</a>
-                                <a class="btn btn-info" target="_blank" download href="/../../plugins/jeedouino/ressources/JeedouinoExt.zip"><i class="fas fa-download"></i> {{Zip}}</a>
+                                <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles"><i class="fas fa-spinner"></i> {{Envoi pour Installation}}</a>
+								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/tmp/InstallJeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs d'installation}}</a>
+                                <!-- <a class="btn btn-info" target="_blank" download href="/../../plugins/jeedouino/ressources/JeedouinoExt.zip"><i class="fas fa-download"></i> {{Zip}}</a>-->
                             </div>
                         </div>
 						<div class="form-group JeedouinoExtNew">
-                            <label class="col-sm-3 control-label">{{Ou (mise à jour)}}</label>
+                            <label class="col-sm-3 control-label">{{Ou}}</label>
                             <div class="col-sm-9">
-                                <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles2"><i class="fas fa-spinner"></i> {{Envoi et redémarrage du/des démon(s)}}</a>
+                                <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles2"><i class="fas fa-spinner"></i> {{Envoi pour mise à jour}}</a>
 								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/JeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs JeedouinoExt}}</a>
                             </div>
                         </div>

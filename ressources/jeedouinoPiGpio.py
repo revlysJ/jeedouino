@@ -179,10 +179,15 @@ class myThread1 (threading.Thread):
 							GPIO.remove_event_detect(j)
 							GPIO.add_event_detect(j, GPIO.BOTH, callback=toggle_inputs)
 							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
-						elif Status_pins[i]=='c':
-							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_UP)
+						elif Status_pins[i] == 'c':
+							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback=toggle_cpts)
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts)
+							time.sleep(0.1)
+						elif Status_pins[i] == 'G':
+							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
+							GPIO.remove_event_detect(j)
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts)
 							time.sleep(0.1)
 						elif Status_pins[i]=='n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
@@ -566,9 +571,9 @@ class myThread2 (threading.Thread):
 			pinStr=''
 			for i in range(0,40):
 				j=i+1
-				if Status_pins[i]=='c' and PinNextSend[j]<time.time() and PinNextSend[j]!=0:
+				if (Status_pins[i] == 'c' or Status_pins[i] == 'G') and PinNextSend[j] < time.time() and PinNextSend[j] != 0:
 					pinStr +='&' + str(j) + '=' + str(CounterPinValue[j])
-					PinNextSend[j]=0
+					PinNextSend[j] = 0
 			if pinStr!='':
 				SimpleSend(pinStr)
 
@@ -676,7 +681,7 @@ class myThread2 (threading.Thread):
 					else:
 						pinStr = ''
 					for i in range(1, 41):
-						if Status_pins[i - 1] == 'c':
+						if Status_pins[i - 1] == 'c' or Status_pins[i - 1] == 'G':
 							pinStr += '&CPT_' + str(i) + '=' + str(i)
 					if pinStr != '':
 						SimpleSend(pinStr)

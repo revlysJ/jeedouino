@@ -66,6 +66,12 @@ $port =  jeedouino::GetJeedomPort();
 						</div>
 				</div>
                 <div class="alert alert-info"><a href="<?php echo $cpl; ?>/index.php?v=d&p=administration#logtab"><i class="fas fa-arrow-right"></i> {{ N.B. Pensez aussi a activer les logs de niveau debug dans Jeedom.}} </a></div>
+                <div class="form-group" >
+						<label class="col-lg-7 control-label">{{Activer l'affichage du menu gauche}} <i class="fas fa-question-circle tooltips" title="{{Permet d'afficher le menu de gauche du plugin comme précédemment}}"></i></label>
+						<div class="col-lg-3">
+							<input type="checkbox" class="configKey " data-l1key="ShowSideBar" />
+						</div>
+				</div>
 				<?php if (method_exists('virtual', 'copyFromEqLogic'))
 						{
 				?>

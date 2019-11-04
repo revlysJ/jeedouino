@@ -8,5 +8,8 @@
 	"category" : "automation protocol",
 	"hasDependency" : true,
 	"changelog" : "https://revlysj.github.io/jeedouino/#language#/changelog",
-	"documentation" : "https://revlysj.github.io/jeedouino/#language#/index"
+	"documentation" : "https://revlysj.github.io/jeedouino/#language#/index",
+	"link" : { "forum" : "https://community.jeedom.com/t/plugin-jeedouino/2574" },
+	"language" : ["fr_FR","en_US","de_DE","sp_SP","ru_RU","id_ID","it_IT"],
+	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","v4"]
 }

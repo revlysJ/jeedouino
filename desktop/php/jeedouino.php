@@ -54,9 +54,14 @@ foreach ($eqLogics as $eqLogic)
     if ($eqLogic->getConfiguration('alone') == '1') $eqLogicsEXT .= $HTML;
     else $eqLogicsHTML .= $HTML;
 }
+if (config::byKey('ShowSideBar', 'jeedouino', false)) $ShowSideBar = "col-lg-10 col-md-9 col-sm-8";
+else $ShowSideBar = "col-xs-12";
 ?>
 
 <div class="row row-overflow">
+<?php if (config::byKey('ShowSideBar', 'jeedouino', false))
+{
+?>
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
@@ -78,8 +83,9 @@ foreach ($eqLogics as $eqLogic)
             <ul id="ul_eqLogicView" class="nav nav-pills nav-stacked"></ul> <!-- la sidebar -->
         </div>
     </div>
+<?php } ?>
 
-    <div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
+    <div class="<?php echo $ShowSideBar;?> eqLogicThumbnailDisplay">
         <legend><i class="fas fa-cog"></i> {{Gestion}}</legend> <!-- changer pour votre type d'équipement -->
 
 		<div class="eqLogicThumbnailContainer">
@@ -138,7 +144,7 @@ foreach ($eqLogics as $eqLogic)
         ?>
 	</div>
     <!-- Affichage de l'eqLogic sélectionné -->
-    <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
+    <div class="<?php echo $ShowSideBar;?> eqLogic eqLogic_active" data-eqLogic_id = "" style="display: none;">
 		<div style="padding-bottom:40px;">
 			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fas fa-check-circle"></i> {{Sauver / Générer}}</a>
 			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fas fa-minus-circle"></i> </a>
@@ -470,7 +476,7 @@ foreach ($eqLogics as $eqLogic)
         <table id="table_cmd" class="table table-bordered table-condensed">
             <thead>
                 <tr>
-                    <th>{{Nom}}</th><th>{{Type (Sous-Type)}}</th><th>{{Type Générique}}</th><th>{{Paramètres}}</th><th>{{Affichage}}</th><th>{{Valeur}}</th><th>{{Plus}}</th>
+                    <th>{{Nom}}</th><th>{{Types}}</th><th>{{Paramètres}}</th><th>{{Affichage}}</th><th>{{Valeur}}</th><th>{{Plus}}</th>
                 </tr>
             </thead>
             <tbody>

@@ -32,7 +32,7 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 		//$('.esp8266').hide();
 		if ($(this).value()=='usbarduino')
 		{
-			$('.sketchUSB' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+			$('.sketchUSB' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
 			//$('.sketchUSB').show();
 			$('.ActiveExt').show();
 		}
@@ -43,12 +43,12 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value().substr(0, 1)=='e')
 			{
 				$('.ActiveExt').hide();
-				$('.sketchESP' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+				$('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
 			}
 			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value().substr(0, 1)=='a')
 			{
 				$('.ActiveExt').hide();
-				$('.sketchLAN' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+				$('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
 			}
 		}
 	 }
@@ -136,8 +136,8 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 		$('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').attr('disabled','disabled');
 		$('.sketchs').hide();
 		$('.sketchUSB').hide();
-		$('.sketchLAN' + $('.li_eqLogic.active').attr('data-eqLogic_id')).hide();
-		$('.sketchESP' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+		$('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).hide();
+		$('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
 		$('.sketchsLib').show();
 		$('.esp8266').show();
 		$('.sketchstab').show();
@@ -166,19 +166,19 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
         $('.UsbLan').show();
 		$('.sketchs').hide();
 		$('.sketchUSB').hide();
-		if ($('.li_eqLogic.active').attr('data-eqLogic_id') != undefined)
+		if ($('.eqLogic_active').attr('data-eqLogic_id') != undefined)
 		{
 			$('.sketchsLib').show();
 
-			$('.sketchESP' + $('.li_eqLogic.active').attr('data-eqLogic_id')).hide();
+			$('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).hide();
 			 if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value() != 'usbarduino')
 			 {
-				$('.sketchLAN' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+				$('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
 				$('.ActiveExt').hide();
 			 }
 			 else
 			 {
-				 $('.sketchUSB' + $('.li_eqLogic.active').attr('data-eqLogic_id')).show();
+				 $('.sketchUSB' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
 				//$('.sketchUSB').show();
 				$('.ActiveExt').show();
 			 }
@@ -247,6 +247,10 @@ $('.bt_plugin_view_log').on('click',function(){
    }
 });
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+function prePrintEqLogic(id)
+{
+    $('.eqLogic_active').attr('data-eqLogic_id', id);
+}
 function printEqLogic(_data)
 {
     var control = init(_data.logicalId);
@@ -297,12 +301,12 @@ function addCmdToTable(_cmd) {
     {
         $('.control').show();
     }
-	var ctype = init(_cmd.type);
-	var stype = init(_cmd.subType);
-	var mtype = init(_cmd.configuration.modePIN);
-	var gtype = init(_cmd.generic_type);
-	var pins_id = init(_cmd.configuration.pins_id);
-	if (pins_id>999) pins_id -= 1000;
+    var ctype = init(_cmd.type);
+    var stype = init(_cmd.subType);
+    var mtype = init(_cmd.configuration.modePIN);
+    var gtype = init(_cmd.generic_type);
+    var pins_id = init(_cmd.configuration.pins_id);
+    if (pins_id>999) pins_id -= 1000;
     if (pins_id>999) pins_id -= 1000;
     if (pins_id>999) pins_id -= 1000;
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
@@ -315,7 +319,7 @@ function addCmdToTable(_cmd) {
     tr += '<option value="">Aucune</option>';
     tr += '</select>';	 */
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="pins_id" disabled style="display : none;">';
-	if (control != 'JeedouinoControl') tr +=  '<span class="label label-info">PIN No : ' + pins_id + '</span>';
+	if (control != 'JeedouinoControl') tr +=  '<span class="label label-info" title="Pin mode : ' + mtype + '">PIN No : ' + pins_id + '</span>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="modePIN" disabled style="display : none;">';
 
 	tr += '</td>';
@@ -328,9 +332,7 @@ function addCmdToTable(_cmd) {
 		} else {
 		tr += '<div class="label label-success" style="text-transform: uppercase;">' + ctype + ' ( ' + stype + ' ) </div></br>';
 	}
-	tr += '</td>';
-	tr += '<td>';
-	tr += '<div class="label label-primary" >' + gtype + '</div>';
+    tr += '<div class="label label-primary" >' + gtype + '</div>';
 	tr += '</td>';
 
 	tr += '<td>';
@@ -344,13 +346,20 @@ function addCmdToTable(_cmd) {
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
     				break;
     			case 'Send2LCD':
-    				tr += '<span class="label label-info">16 Caractères max.</span>';
+    				tr += '<span class="label label-warning">{{16x2 Caractères max.}}</span>';
     			case 'output_message':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="title" style="display : none;">';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="message" style="display : none;">';
     				break;
+                case 'high_pulse_slide':
+    			case 'low_pulse_slide':
+                    tr += '<div class="label label-warning">{{Durée en dixième de secondes. 5 Chiffres max.}}</div><br>';
+                case 'resetcpt':
+                    tr += '<span class="label label-success">{{Valeur affectée via scénario}}</span>';
     			case 'switch':
     			case 'none':
+                case 'low_pin_all':
+                case 'high_pin_all':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" style="display : none;">';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
     				break;
@@ -365,15 +374,13 @@ function addCmdToTable(_cmd) {
     				break;
     			case 'high_pulse':
     			case 'low_pulse':
-    			case 'high_pulse_slide':
-    			case 'low_pulse_slide':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
-    				tr += '<span class="label label-warning">Durée en dixième de secondes. 5 Chiffres max.</span>';
+    				tr += '<span class="label label-warning">{{Durée en dixième de secondes. 5 Chiffres max.}}</span>';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" >';
     				break;
     			case 'trigger':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
-    				tr += '<span class="label label-info">Numéro de la PIN ECHO correspondante.</span>';
+    				tr += '<span class="label label-info">{{Numéro de la PIN ECHO correspondante.}}</span>';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" >';
     				break;
     			case 'output':
@@ -388,22 +395,22 @@ function addCmdToTable(_cmd) {
     			case 'double_pulse_low':
     			case 'double_pulse_high':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
-    				tr += '<span class="label label-warning">Durées clic + pause en dixième de s. 3 + 3 Chiffres.</span>';
+    				tr += '<span class="label label-warning">{{Durées clic + pause en dixième de s. 3 + 3 Chiffres.}}</span>';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" >';
     				break;
     			default:
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" >';
-    				tr += '<span class="label label-warning">Durée en dixième de secondes. 5 Chiffres max.</span>';
+    				tr += '<span class="label label-warning">{{Durée en dixième de secondes. 5 Chiffres max.}}</span>';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" >';
     		}
     	}
     	else if ( ctype == 'info')
     	{
-    		if ( mtype == 'compteur_pullup')
+    		if ( mtype == 'compteur_pullup' || mtype == 'compteur_pulldown')
     		{
     			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
-    			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="RSTvalue" >';
-    			tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{Reset compteur}}</a>';
+    			tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{MàJ compteur avec valeur ci-dessous:}}</a>';
+                tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="RSTvalue" >';
     		}
             else if ( mtype == 'ds18b20')
             {
@@ -453,7 +460,7 @@ $('body').undelegate('.cmd .cmdAction[data-action=ResetCPT]', 'click').delegate(
 		url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php", // url du fichier php
 		data: {
 			action: "ResetCPT",
-			boardid : $('.li_eqLogic.active').attr('data-eqLogic_id'),
+			boardid : $('.eqLogic_active').attr('data-eqLogic_id'),
 			RSTvalue : $(this).closest('.cmd').find('.cmdAttr[data-l1key=configuration][data-l2key=RSTvalue]').value(),
 			CMDid : $(this).closest('.cmd').attr('data-cmd_id')
 		},

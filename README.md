@@ -1,4 +1,4 @@
-# Jeedouino v1.06
+# Jeedouino v1.07
 Plugin pour Jeedom  
 
 Description  

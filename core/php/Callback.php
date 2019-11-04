@@ -37,8 +37,7 @@ if (isset($_GET['BoardEQ']))
 		$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
 		if (config::byKey($arduino_id . '_HasDemon', 'jeedouino', 0))
 		{
-			$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
-			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+			jeedouino::updateControlCmd($arduino_id, true);
 		}
 		// Specifique Analog to Digital pins OUT - Etat
 		$ard328 = false;
@@ -125,7 +124,7 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['THREADSDEAD']))
 		{
-			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+			jeedouino::updateControlCmd($arduino_id, false);
 			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			jeedouino::log( 'error', $CALLBACK . __('Les threads du démon sont hs. Tentative de redémarrage du démon en cours...', __FILE__));
 			jeedouino::ReStartBoardDemon($arduino_id, 0, $ModeleArduino);
@@ -140,7 +139,7 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['NOPORTFOUND']))
 		{
-			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+			jeedouino::updateControlCmd($arduino_id, false);
 			jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver un port de libre automatiquement. Veuillez en choisir un autre.', __FILE__));
 		}
 		if (isset($_GET['PORTFOUND']))
@@ -217,12 +216,13 @@ if (isset($_GET['BoardEQ']))
 				else
 				{
 					config::save('NODEP_' . $arduino_id, '', 'jeedouino');
-					config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+					jeedouino::updateControlCmd($arduino_id, true);
 				}
 				jeedouino::log( 'debug', __('Envoi de ', __FILE__) . $PinMode . __(' - Réponse : ', __FILE__) . $reponse);
 			}
 		}
-		else // Informations fournies par tous
+		//else // Informations fournies par tous
+		if (true)
 		{
 			foreach ($eqLogic->getCmd('info') as $cmd)
 			{
@@ -333,7 +333,7 @@ if (isset($_GET['BoardEQ']))
 								}
 							}
 						}
-						elseif ($cmd->getConfiguration('modePIN') == 'compteur_pullup')
+						elseif ($cmd->getConfiguration('modePIN') == 'compteur_pullup' or $cmd->getConfiguration('modePIN') == 'compteur_pulldown')
 						{
 							$value = $cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
@@ -380,7 +380,7 @@ if (isset($_GET['BoardEQ']))
 					}
 					elseif (array_key_exists('CPT_' . $pins_id, $_GET))
 					{
-						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup') // uniquement les valeurs de compteur
+						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup' or $cmd->getConfiguration('modePIN') == 'compteur_pulldown') // uniquement les valeurs de compteur
 						{
 							$value=$cmd->getConfiguration('value');
 							list(,$board) = jeedouino::GetPinsByBoard($arduino_id);

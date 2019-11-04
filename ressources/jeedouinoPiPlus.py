@@ -506,7 +506,7 @@ if __name__ == "__main__":
 				bus.write_pin(j, BootMode)
 				swtch[i] = BootMode
 				pinStr += '&' + str(i) + '=' + str(BootMode)
-			elif Status_pins[i]=='p' or Status_pins[i]=='i':
+			elif Status_pins[i]=='p' or Status_pins[i]=='i' or Status_pins[i]=='c':
 				bus.set_pin_direction(j, 1)
 				input = bus.read_pin(j)
 				Status_INPUTS[i] = input

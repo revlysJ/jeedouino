@@ -485,7 +485,7 @@ class jeedouino extends eqLogic {
 			$myPin = config::byKey($arduino_id . '_' . $pins_id, 'jeedouino', 'not_used');
 			switch ($myPin)
 			{
-				// dispo : 0-9 G-Z
+				// dispo : 0-9 H-Z
 				case 'double_pulse_low':
 				case 'double_pulse_high':
 				case 'double_pulse':
@@ -565,6 +565,9 @@ class jeedouino extends eqLogic {
 					break;
 				case 'compteur_pullup':
 					$PinMode .= 'c';
+					break;
+				case 'compteur_pulldown':
+					$PinMode .= 'G';
 					break;
 				case 'low_relais':
 					$PinMode .= 'l';
@@ -719,6 +722,7 @@ class jeedouino extends eqLogic {
 					case 'input_pullup':
 					case 'analog_input':
 					case 'compteur_pullup':
+					case 'compteur_pulldown':
 					case 'pwm_output':
 					case 'switch':
 					case 'servo':
@@ -1144,6 +1148,21 @@ class jeedouino extends eqLogic {
 		$Control->refreshWidget();
 	}
 
+	public function updateControlCmd($eqLogic_id, $StatusDemon)
+	{
+		config::save($eqLogic_id . '_StatusDemon', $StatusDemon, 'jeedouino');
+		$Control = jeedouino::byLogicalId('JeedouinoControl', 'jeedouino');
+		if (is_object($Control))
+		{
+			$cmd = $Control->getCmd(null, 'StatusDaemon' . $eqLogic_id);
+			if (is_object($cmd))
+			{
+				$cmd->event($StatusDemon);
+				//$cmd->save();
+			}
+			//$Control->refreshWidget();
+		}
+	}
 	public function updateDemons()
 	{
 		$eqLogics = eqLogic::byType('jeedouino');
@@ -1171,7 +1190,7 @@ class jeedouino extends eqLogic {
 				{
 					//jeedouino::log('debug','StatusDaemon' . $eqLogic->getId() . ' , event :' . $StatusDemon );
 					$cmd->event($StatusDemon);
-					$cmd->save();
+					//$cmd->save();
 				}
 			}
 		}
@@ -1636,12 +1655,12 @@ class jeedouino extends eqLogic {
 				if ($reponse != 'BMOK')
 				{
 					jeedouino::log( 'debug', __('Erreur d\'envoi de la configuration du BootMode sur l\'équipement ', __FILE__) . $board_id . ' ( ' . $name . ' ) - Réponse :' . $reponse);
-					config::byKey($board_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+					config::save($board_id . '_StatusDemon', false, 'jeedouino');
 				}
 				else
 				{
 					config::save('NODEP_' . $board_id, '', 'jeedouino');
-					config::byKey($board_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+					config::save($board_id . '_StatusDemon', true, 'jeedouino');
 				}
 			}
 			elseif ($DemonTypeF == 'USB' ) $PinMode = 'USB=' . $PinMode;
@@ -1667,11 +1686,11 @@ class jeedouino extends eqLogic {
 				if (in_array($reponse, $waitforArr))
 				{
 					jeedouino::log( 'debug', __('Réponse différée reçue de l\'équipement ', __FILE__) . $board_id . ' ( ' . $name . ' ) - Réponse :' . $reponse);
-					config::byKey($board_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+					config::save($board_id . '_StatusDemon', true, 'jeedouino');
 				}
 				elseif ($reponse != 'COK')
 				{
-					config::byKey($board_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+					config::save($board_id . '_StatusDemon', false, 'jeedouino');
 					jeedouino::log( 'debug', __('Erreur d\'envoi de la configuration des pins sur l\'équipement ', __FILE__) . $board_id.' ( ' . $name . ' ) - Réponse :' . $reponse);
 				}
 				sleep(2);
@@ -1679,7 +1698,7 @@ class jeedouino extends eqLogic {
 			if ($reponse == 'COK')
 			{
 				config::save('NODEP_' . $board_id, '', 'jeedouino');
-				config::byKey($board_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+				config::save($board_id . '_StatusDemon', true, 'jeedouino');
 			}
 			config::save('SENDING_'.$board_id, 0, 'jeedouino');
 		}
@@ -1737,7 +1756,7 @@ class jeedouino extends eqLogic {
 		}
 
 		self::StopBoardDemonCMD($board_id, $DemonType); // Stoppe le(s) processus du Démon local
-		config::save($board_id . '_' . $DemonTypeF . 'DaemonState', false, 'jeedouino');
+		config::save($board_id . '_StatusDemon', false, 'jeedouino');
 
 		$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '5');
 		if ($JeedomCPL == '') $JeedomCPL = '.';
@@ -1778,7 +1797,7 @@ class jeedouino extends eqLogic {
 			return false;
 		}
 		else  jeedouino::log('debug', __('Le démon ', __FILE__) . $DemonTypeF . __(' est en cours de démarrage.  - ', __FILE__) . $reponse);
-		config::save($board_id . '_' . $DemonTypeF . 'DaemonState', true, 'jeedouino');
+		config::save($board_id . '_StatusDemon', true, 'jeedouino');
 		return true;
 	}
 	public function StopBoardDemon($board_id, $useless=0, $DemonType)	// Stoppe le Démon
@@ -1797,7 +1816,7 @@ class jeedouino extends eqLogic {
 		config::save($board_id . '_OLDPORT', '', 'jeedouino');
 		// est il toujours en marche (processus)? Arrét hard.
 		self::ForceStopBoardDemon($board_id, 0, $DemonType);
-		config::save($board_id . '_' . $DemonTypeF . 'DaemonState', false, 'jeedouino');
+		config::save($board_id . '_StatusDemon', false, 'jeedouino');
 	}
 	public function ForceStopBoardDemon($board_id, $useless=0, $DemonType)	// Stoppe le(s) processus du Démon local ou déporté
 	{
@@ -1851,14 +1870,14 @@ class jeedouino extends eqLogic {
 		if ($LastPING > time() and $forceCache == 0)
 		{
 			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoi de la valeur cache...', __FILE__));
-			return config::byKey($_board_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+			return config::byKey($_board_id . '_StatusDemon', 'jeedouino', false);
 		}
 		config::save($_board_id . '_' . $DemonTypeF . 'LastPING', $Time, 'jeedouino');
 
 		jeedouino::log( 'debug','PING ' . $id_type . __(' en marche ??? Envoi d\'un PING...', __FILE__));
  		$reponse = self::SendToBoardDemon($_board_id, 'PING=1', $DemonType); // On le PINGue
 
-		config::save($_board_id . '_' . $DemonTypeF . 'DaemonState', false, 'jeedouino');
+		config::save($_board_id . '_StatusDemon', false, 'jeedouino');
 		if (strpos($reponse, '111') !== false) return false; // Connection refused
 		if ($reponse != 'PINGOK')
 		{
@@ -1869,7 +1888,7 @@ class jeedouino extends eqLogic {
 			{
 				config::save('NODEP_' . $_board_id, '', 'jeedouino');
 				config::save($_board_id . '_' . $DemonTypeF . 'CountBadPING', 0, 'jeedouino');	// RAZ
-				config::save($_board_id . '_' . $DemonTypeF . 'DaemonState', true, 'jeedouino');
+				config::save($_board_id . '_StatusDemon', true, 'jeedouino');
 				return true;
 			}
 			if (strpos($reponse, '111') !== false) return false; // Connection refused
@@ -1893,7 +1912,7 @@ class jeedouino extends eqLogic {
 		{
 			config::save('NODEP_' . $_board_id, '', 'jeedouino');
 			config::save($_board_id . '_' . $DemonTypeF . 'CountBadPING', 0, 'jeedouino');	// RAZ
-			config::save($_board_id . '_' . $DemonTypeF . 'DaemonState', true, 'jeedouino');
+			config::save($_board_id . '_StatusDemon', true, 'jeedouino');
 			return true;
 		}
 	}
@@ -2662,7 +2681,6 @@ class jeedouino extends eqLogic {
 							$value3 = '0';
 							$quadruple_cmd = $myPin . '_g';
 							$value4 = '0';
-
 						break;
 						case 'bme680b':
 							$bme680 |= 2;			// i2c x77
@@ -2723,12 +2741,15 @@ class jeedouino extends eqLogic {
 							$tempo='0';
 							$value='1';
 						break;
+						case 'compteur_pulldown':
 						case 'compteur_pullup':
 							$myType='info';
 							$mySubType='numeric';
 							$myinvertBinary='0';
 							$tempo='0';
 							$value='0';
+							$double_cmd='resetcpt';
+							$value2 = '0';
 						break;
 						case 'low_relais':
 							$myType='action';
@@ -2870,7 +2891,13 @@ class jeedouino extends eqLogic {
 						// cas du low_pulse_slide et du high_pulse_slide
 						if ($myPin == 'low_pulse_slide' or $myPin == 'high_pulse_slide') $mySubType = 'other';
 						// cas du WS2811 (led strip)
-						if ($myPin == 'WS2811' ) $mySubType = 'slider';
+						if ($myPin == 'WS2811') $mySubType = 'slider';
+						// cas du reset compteur
+						if ($double_cmd == 'resetcpt')
+						{
+							$myType = 'action';
+							$mySubType = 'slider';
+						}
 
 						// Tentative d'adapter le generic_type pour la double commande
 						if (strpos($generic_type, '_ON') !== false) 		$generic_type = str_replace('_ON', '_OFF', $generic_type);
@@ -2935,7 +2962,7 @@ class jeedouino extends eqLogic {
 															);
 						$quadruple_cmd = '';
 					}
-					if (($myType == 'action') and ($mySubType == 'other' or $mySubType == 'slider') and ($myPin != 'trigger') and ($myPin != 'servo') and ($myPin != 'WS2811'))
+					if (($myType == 'action') and ($mySubType == 'other' or $mySubType == 'slider') and ($myPin != 'trigger') and ($myPin != 'servo') and ($myPin != 'WS2811') and ($myPin != 'compteur_pulldown') and ($myPin != 'compteur_pullup'))
 					{
 						// Tentative d'adapter le generic_type pour le retour d'etat
 						$GT = array('_ON', '_OFF', '_UP', '_DOWN', '_TOGGLE', '_OPEN', '_CLOSE', '_SET_STATE');
@@ -3002,7 +3029,7 @@ class jeedouino extends eqLogic {
 												'subtype' 		=> 'other',
 												'tempo' 		=> '0',
 												'value' 		=> '0',
-												'modePIN' 		=> 'none',
+												'modePIN' 		=> 'low_pin_all',
 												'double_cmd' 	=> '',
 												'double_key' 	=> '',
 												'pins_id' 		=> '990',
@@ -3018,7 +3045,7 @@ class jeedouino extends eqLogic {
 												'subtype' 		=> 'other',
 												'tempo' 		=> '0',
 												'value' 		=> '1',
-												'modePIN' 		=> 'none',
+												'modePIN' 		=> 'high_pin_all',
 												'double_cmd' 	=> '',
 												'double_key' 	=> '',
 												'pins_id' 		=> '991',
@@ -3034,7 +3061,7 @@ class jeedouino extends eqLogic {
 												'subtype' 		=> 'other',
 												'tempo' 		=> '0',
 												'value' 		=> '1',
-												'modePIN' 		=> 'none',
+												'modePIN' 		=> 'switch',
 												'double_cmd' 	=> '',
 												'double_key' 	=> '',
 												'pins_id' 		=> '992',
@@ -3182,15 +3209,34 @@ class jeedouino extends eqLogic {
 				$cmd->setOrder($order);
 
 				$generic_type = $cmd_info['generic_type'];
+				$mxv = 180;
 				switch ($cmd_info['modePIN'])
 				{
+					case 'resetcpt':
+						$cmd->setIsVisible(0);
+						$cmd->setConfiguration('maxValue', 999999);
+						$pins_id2 = $cmd_info['pins_id'] - 1000;
+						$cmd2 = $this->getCmd(null, 'ID' . $pins_id2 . 'a');
+						if (is_object($cmd2))
+						{
+							$cmd->setConfiguration('cmdID', $cmd2->getId());
+							$cmd->setConfiguration('value', $cmd2->getConfiguration('RSTvalue'));
+						}
+						else $cmd->setConfiguration('cmdID', '');
+						$generic_type = 'GENERIC_ACTION';
+						break;
 					case 'compteur_pullup':
+					case 'compteur_pulldown':
 						$cmd->setTemplate('dashboard', 'tile');
 						$cmd->setTemplate('mobile', 'tile');
 						$generic_type = 'GENERIC_INFO';
+						if ($cmd->getConfiguration('RSTvalue') != '') $cmd->setConfiguration('value', $cmd->getConfiguration('RSTvalue'));
 						break;
 					case 'pwm_output':
+						$mxv = 255;
 					case 'servo':
+						$cmd->setConfiguration('minValue',0);
+						$cmd->setConfiguration('maxValue', $mxv);
 						$cmd->setTemplate('dashboard', 'default');
 						$cmd->setTemplate('mobile', 'default');
 						$generic_type = 'LIGHT_SLIDER';
@@ -3203,6 +3249,8 @@ class jeedouino extends eqLogic {
 						if ($cmd_info['type'] == 'info') $generic_type = 'LIGHT_COLOR';
 						break;
 					case 'WSmode':
+						$cmd->setConfiguration('minValue',0);
+						$cmd->setConfiguration('maxValue',17);
 						$cmd->setTemplate('dashboard', 'default');
 						$cmd->setTemplate('mobile', 'default');
 						$generic_type = 'LIGHT_MODE';
@@ -3250,6 +3298,9 @@ class jeedouino extends eqLogic {
 						$generic_type = 'AIR_QUALITY';
 						$cmd->setUnite('Ohms');
 						break;
+					case 'low_pulse_slide':
+					case 'high_pulse_slide':
+						$cmd->setIsVisible(0);
 					case 'output_other':
 					case 'output_slider':
 					case 'output_message':
@@ -3258,8 +3309,6 @@ class jeedouino extends eqLogic {
 					case 'output_pulse':
 					case 'low_pulse':
 					case 'high_pulse':
-					case 'low_pulse_slide':
-					case 'high_pulse_slide':
 					case 'low_relais':
 					case 'high_relais':
 					case 'double_pulse_low':
@@ -3287,24 +3336,6 @@ class jeedouino extends eqLogic {
 						if ($cmd_info['type'] == 'info') $generic_type = 'LIGHT_STATE';
 						break;
 				}
-				switch ($cmd_info['modePIN'])
-				{
-					case 'pwm_output':
-						$cmd->setConfiguration('minValue',0);
-						$cmd->setConfiguration('maxValue',255);
-						break;
-					case 'servo':
-						$cmd->setConfiguration('minValue',0);
-						$cmd->setConfiguration('maxValue',180);
-						break;
-					case 'WSmode':
-						$cmd->setConfiguration('minValue',0);
-						$cmd->setConfiguration('maxValue',17);
-						break;
-					case 'compteur_pullup':
-						if ($cmd->getConfiguration('RSTvalue')!='') $cmd->setConfiguration('value',$cmd->getConfiguration('RSTvalue'));
-						break;
-				}
 				switch ($cmd_info['generic_type'])
 				{
 					case '0': // Auto
@@ -3326,10 +3357,13 @@ class jeedouino extends eqLogic {
 				$cmd->setEqLogic_id($this->getId());
 				$cmd->save();
 
+				if ($cmd_info['modePIN'] == 'resetcpt')
+				{
+					$cmd->setValue($cmd->getId());
+					$cmd->save();
+				}
 				if ($cmd_info['type']=='info') // après 'save' pour avoir l'id
 				{
-					//$cmd->setEventOnly(1);
-					//$cmd->setValue(null);	//
 					$cmd->setValue($cmd->getId());
 					$cmd->save();
 					// On va indiquer aux actions l'etat parent pour l'app mobile
@@ -3474,25 +3508,23 @@ class jeedouino extends eqLogic {
 		else jeedouino::log( 'error', __('Impossible de trouver le plugin Virtuel !', __FILE__));
 	}
 
-	public function ResetCPT($arduino_id, $RSTvalue=0, $CMDid='')
+	public function ResetCPT($arduino_id, $RSTvalue = 0, $CMDid = '')
 	{
-		list(, $board) = self::GetPinsByBoard($arduino_id);
-
-		//jeedouino::log( 'debug','LOG ResetCompteur pour ' . $board . ' eqID ( ' . $arduino_id . ' )' . ' RSTvalue ( ' . $RSTvalue . ' )' . ' CMDid ( ' . $CMDid . ' )');
 		// on envoie une reinit aux compteurs
 		if ($CMDid != '')
 		{
-			jeedouino::log( 'debug', 'Début de ResetCompteur pour ' . $board . ' eqID ( ' . $arduino_id . ' )');
+			list(, $board) = self::GetPinsByBoard($arduino_id);
+			jeedouino::log( 'debug', __('Début de ResetCompteur pour ', __FILE__) . $board . ' eqID ( ' . $arduino_id . ' )');
 
 			$cmd = cmd::byid($CMDid);
 			$pins_id = $cmd->getConfiguration('pins_id');
 
-			jeedouino::log( 'debug', 'Compteur sur pin n° ' . $pins_id . ' - Valeur de reset envoyée : ' . $RSTvalue);
+			jeedouino::log( 'debug', __('Compteur sur pin n° ', __FILE__) . $pins_id . __(' - Valeur de reset envoyée : ', __FILE__) . $RSTvalue);
 
 			$cmd->setCollectDate('');
 			$cmd->event($RSTvalue);
-			$cmd->setConfiguration('value',$RSTvalue);
-			$cmd->setConfiguration('RSTvalue',$RSTvalue);
+			$cmd->setConfiguration('value', $RSTvalue);
+			$cmd->setConfiguration('RSTvalue', $RSTvalue);
 			$cmd->save();
 
 			switch ($board)
@@ -3507,12 +3539,11 @@ class jeedouino extends eqLogic {
 				case 'piplus':
 					$message  = 'RazCPT=' . $pins_id;
 					$message .= '&ValCPT=' . $RSTvalue;
-					jeedouino::log( 'debug', $log_txt . $message);
 					$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
-					if ($reponse != 'SCOK') jeedouino::log( 'error','ERREUR ENVOI ResetCompteur - Réponse :' . $reponse);
+					if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI ResetCompteur - Réponse : ', __FILE__) . $reponse);
 					break;
 			}
-			jeedouino::log( 'debug', 'Fin de ResetCompteur');
+			jeedouino::log( 'debug', __('Fin de ResetCompteur', __FILE__));
 		}
 	}
 
@@ -4032,6 +4063,12 @@ class jeedouinoCmd extends cmd {
 						$this->save();
 						//jeedouino::log( 'debug','Liste $sprintf("%02s", $value) = '. sprintf("%02s", $value));
 						if (jeedouino::ConfigurePinValue($pins_id, sprintf("%02s", $value), $this->getEqLogic_id())) return true;
+					}
+					elseif ($modePIN == 'resetcpt')
+					{
+						$RSTvalue = round($_options['slider']);
+						jeedouino::ResetCPT($this->getEqLogic_id(), $RSTvalue, $this->getConfiguration('cmdID'));
+						return true;
 					}
 					else
 					{

@@ -237,7 +237,7 @@ $('.eqLogicAction[data-action=bt_jeedouinoExt]').on('click', function () {
 $('.eqLogicAction[data-action=bt_docSpecific]').on('click', function () {
     window.open('https://revlysj.github.io/jeedouino/fr_FR/');
 });
-$('.bt_plugin_view_log').on('click',function(){
+$('.bt_plugin_view_log').on('click', function() {
     if($('#md_modal').is(':visible')){
         $('#md_modal2').dialog({title: "{{Logs de Jeedouino}}"});
         $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')+'&slaveId='+$(this).attr('data-slaveId')).dialog('open');
@@ -247,9 +247,19 @@ $('.bt_plugin_view_log').on('click',function(){
    }
 });
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+
+$(".li_eqLogic2").on('click', function () {
+    $('.eqLogicDisplayCard[data-eqLogic_id="' + $(this).attr('data-eqLogic_id') + '"]').click();
+});
+
 function prePrintEqLogic(id)
 {
     $('.eqLogic_active').attr('data-eqLogic_id', id);
+    if($('.li_eqLogic2[data-eqLogic_id=' + id + ']').html() != undefined)
+    {
+        $('.li_eqLogic2').removeClass('active');
+        $('.li_eqLogic2[data-eqLogic_id=' + id + ']').addClass('active');
+    }
 }
 function printEqLogic(_data)
 {

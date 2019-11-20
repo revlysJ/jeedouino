@@ -76,7 +76,7 @@ else $ShowSideBar = "col-xs-12";
 				foreach ($eqLogics as $eqLogic)
 				{
 					$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-					echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+					echo '<li class="cursor li_eqLogic2" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 				}
 				?>
             </ul>

@@ -1051,6 +1051,7 @@ class jeedouino extends eqLogic {
 		}
 		$Control->setLogicalId('JeedouinoControl');
 		$Control->setConfiguration('LogicalId', 'JeedouinoControl');
+		$Control->setConfiguration('alone', '0');
 		$Control->setEqType_name('jeedouino');
 		$Control->save();
 		// pour respecter l'ordre des commandes si possible
@@ -3291,7 +3292,8 @@ class jeedouino extends eqLogic {
 					case 'bme280b_p':
 					case 'bme680b_p':
 						$generic_type = 'PRESSURE';
-						$cmd->setUnite('Pa');
+						if (($board == 'arduino') or ($board == 'esp')) $cmd->setUnite('Pa');
+						else $cmd->setUnite('hPa');
 						break;
 					case 'bme680_g': // gas cov
 					case 'bme680b_g': // gas cov

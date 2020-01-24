@@ -604,10 +604,10 @@ Pins Entrées (Input)
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :_**
       + **Sonde(s) DS18B20** - Permet d'avoir une/des commande(s) avec la température.
-      >Une seule commande est créée à la sauvegarde.  
-      En cas de plusieurs ds18b20, les commandes suivantes seront générées au fur et mesure des remontées de température.  
+      >Une seule commande (par pin) est créée à la sauvegarde.  
+      En cas de plusieurs ds18b20 (sur la même pin), les commandes suivantes seront générées au fur et mesure des remontées de température.  
       Le délai de remontée par défaut est de 5 minutes.  
-      Il est paramétrable dans l'onglet options du menu Pins/GPIO.
+      Il est paramétrable dans l'onglet **Options** du menu **Pins/GPIO**.
 
       + **Entrée multi-clicks avec PULL-DOWN**
       + **Entrée multi-clicks avec PULL-UP**

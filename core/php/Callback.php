@@ -187,7 +187,7 @@ if (isset($_GET['BoardEQ']))
 				if ($message != '' and config::byKey('SENDING_'.$arduino_id, 'jeedouino', 0) == 0)
 				{
 					config::save('SENDING_'.$arduino_id, 1, 'jeedouino');
-					jeedouino::log( 'debug', __("Pause de 4s pour laisser l'arduino finir de communiquer avec le démon qui vient de demarrer", __FILE__));
+					jeedouino::log( 'debug', __("Pause de 4s pour laisser l'arduino finir sa communication de démarrage.", __FILE__));
 					sleep(4);
 					$message='S'.$message.'F';
 					jeedouino::log( 'debug', __('Envoi les valeurs des pins suite à la demande de la carte (Reboot?) ', __FILE__) . $BOARDNAME . '- Message : ' . $message);

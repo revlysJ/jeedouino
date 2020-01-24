@@ -567,7 +567,6 @@ if (isset($_GET['id']))
 						$TmpPins .= '</optgroup>';
 					}
 					$TmpPins .= '</select>';
-					$TmpPins .= '<span class="HC_trigger hide"><i class="fas fa-arrow-right"></i> {{Pensez à selectionner la pin $TmpPins .=.}}</span>';
 					$TmpPins .= '</td>';
 
 					// Type Générique pour App Mobile
@@ -657,7 +656,7 @@ if (isset($_GET['id']))
 				<table class="table table-bordered table-condensed tablesorter">
 					<thead>
 					<tr>
-						<th>{{Arduino/ESP/RPI  Pins}}</th><th>{{Fonctions}}</th><th>{{Type Générique}}</th><?php if (config::byKey('ActiveVirtual', 'jeedouino', false)) echo '<th>{{Groupes Virtuels}}</th>'; ?>
+						<th>{{Arduino/ESP/RPI Pins}}</th><th>{{Fonctions}}</th><th>{{Type Générique}}</th><?php if (config::byKey('ActiveVirtual', 'jeedouino', false)) echo '<th>{{Groupes Virtuels}}</th>'; ?>
 					</tr>
 					</thead>
 					<tbody>
@@ -693,16 +692,6 @@ if (isset($_GET['id']))
 		</div>
 </div>
 <script>
-	$('.configKeyPins').on('change',function(){
-		if ($(this).value()=='trigger')
-		{
-			$('.HC_trigger').show();
-		}
-		else
-		{
-			$('.HC_trigger').hide();
-		}
-	});
 	// jeedom.backup_class.js
 	$(".bt_savebackup_pins").on('click', function (event) {
 		//$.hideAlert();

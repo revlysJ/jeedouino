@@ -1864,7 +1864,7 @@ class jeedouino extends eqLogic {
 		if ($DemonTypeF == null) return false;
 		if ($_board_id == 0) $_board_id = $this->getEqLogic_id();
 		$my_Board = eqLogic::byid($_board_id);
-		$id_type = '( ' . $my_Board->getName() . ' - EqID: ' . $_board_id . ' ) Démon ' . $DemonTypeF;
+		$id_type = $my_Board->getConfiguration('iparduino') . ' ( ' . $my_Board->getName() . ' - EqID: ' . $_board_id . ' ) Démon ' . $DemonTypeF;
 
 		$Time = time() + 180; // duree du cache 3 min
 		$LastPING = config::byKey($_board_id . '_' . $DemonTypeF . 'LastPING', 'jeedouino', 0);
@@ -3646,7 +3646,7 @@ class jeedouino extends eqLogic {
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
-				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
+				$MasterFile = str_replace('unsigned long ProbePauseDelay = 60000;' , 'unsigned long ProbePauseDelay = ' . 60000 * $_ProbeDelay . ';' , $MasterFile);
 				if (config::byKey($board_id.'_BMP180', 'jeedouino', 0))
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
@@ -3760,7 +3760,7 @@ class jeedouino extends eqLogic {
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
-				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
+				$MasterFile = str_replace('unsigned long ProbePauseDelay = 60000;' , 'unsigned long ProbePauseDelay = ' . 60000 * $_ProbeDelay . ';' , $MasterFile);
 				if (config::byKey($board_id.'_BMP180', 'jeedouino', 0))
 				{
 				 	$MasterFile = str_replace('#define UseBMP180 0' , '#define UseBMP180 1' , $MasterFile);
@@ -3853,7 +3853,7 @@ class jeedouino extends eqLogic {
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);
 
-				$MasterFile = str_replace('PinNextSend[i]=millis()+60000;' , 'PinNextSend[i]=millis()+' . 60000 * $_ProbeDelay . ';' , $MasterFile);
+				$MasterFile = str_replace('unsigned long ProbePauseDelay = 60000;' , 'unsigned long ProbePauseDelay = ' . 60000 * $_ProbeDelay . ';' , $MasterFile);
 
 				if (config::byKey($board_id.'_BMP180', 'jeedouino', 0))
 				{

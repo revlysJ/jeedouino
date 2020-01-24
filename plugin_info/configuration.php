@@ -144,7 +144,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{RPi.GPIO Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installGPIO" ><i class="fas fa-play"></i> {{sudo pip install RPi.GPIO}}</a>
+												<a class="btn btn-info bt_installGPIO" ><i class="fas fa-play"></i> {{sudo pip3 install RPi.GPIO}}</a>
 										</div>
 								</div>
 							</td>
@@ -155,7 +155,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Pifacedigitalio Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPIFACE" ><i class="fas fa-play"></i> {{sudo apt-get/pip install python-pifacedigitalio}}</a>
+												<a class="btn btn-info bt_installPIFACE" ><i class="fas fa-play"></i> {{sudo pip3 install pifacecommon pifacedigitalio }}</a>
 										</div>
 								</div>
 							</td>
@@ -166,7 +166,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{IO.PiPlus smbus Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPiPlus" ><i class="fas fa-play"></i> {{sudo install python-smbus}}</a>
+												<a class="btn btn-info bt_installPiPlus" ><i class="fas fa-play"></i> {{sudo install python3-smbus}}</a>
 										</div>
 								</div>
 							</td>
@@ -177,7 +177,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{BitBangingDS18B20 Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo python setup.py install}}</a>
+												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo python3 setup.py install}}</a>
 										</div>
 								</div>
 							</td>

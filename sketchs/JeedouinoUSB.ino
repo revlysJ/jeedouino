@@ -94,10 +94,11 @@ byte RepByJeedom=0;
 // Temporisation sorties
 unsigned long TempoPinHIGH[NB_TOTALPIN ]; // pour tempo pins sorties HIGH
 unsigned long TempoPinLOW[NB_TOTALPIN ]; // pour tempo pins sorties LOW
-unsigned long pinTempo=0;
-unsigned long NextRefresh=0;
-unsigned long ProbeNextSend=millis();
+unsigned long pinTempo = 0;
+unsigned long NextRefresh = 0;
+unsigned long ProbeNextSend = millis();
 unsigned long timeout = 0;
+unsigned long ProbePauseDelay = 60000;
 
 #if (DEBUGtoSERIAL == 1)
 	#include <SoftwareSerial.h>
@@ -338,7 +339,7 @@ void loop()
 					}
 					Load_EEPROM(0);								// On met en place
 					Serial.println(F("COK"));							// On reponds a JEEDOM
-					ProbeNextSend=millis()+60000; 			// Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend = millis() + ProbePauseDelay; 			// Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
 			else if (c[0]=='P' && c[n]=='G')	// On repond au ping
@@ -346,7 +347,7 @@ void loop()
 				if (n==3)					// Petite securite
 				{
 					Serial.println(F("PINGOK"));								// On reponds a JEEDOM
-					ProbeNextSend=millis()+10000; 			// Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend = millis() + 10000; 			// Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
 			else if (c[0]=='E' && c[n]=='Q')	 // Recuperation de l' eqLogic de Jeedom concernant cet arduino
@@ -359,7 +360,7 @@ void loop()
 					eqLogic += (char)c[i];
 				}
 				Serial.println(F("EOK"));							// On reponds a JEEDOM
-				ProbeNextSend=millis()+60000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+				ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 			}
 			else if (c[0]=='I' && c[n]=='P')	 // Recuperation de l' IP de Jeedom ( I192.168.000.044P )
 			{
@@ -385,7 +386,7 @@ void loop()
 					EEPROM.update(28, IP_JEEDOM[2]);
 					EEPROM.update(29, IP_JEEDOM[3]);
 					Serial.println(F("IPOK"));								// On reponds a JEEDOM
-					ProbeNextSend=millis()+60000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
 			else if (c[0]=='S' && c[n]=='S')	 // Modifie la valeur d'une pin sortie
@@ -820,10 +821,8 @@ void loop()
 					jeedom += i+1000;
 					jeedom += '=';
 					jeedom += int (myDHT[i]->readHumidity()*100);
-					PinNextSend[i]=millis()+60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-					ProbeNextSend=millis()+10000; // Permet de decaler la lecture entre chaque sonde DHT sinon ne marche pas cf librairie (3000 mini)
-					//jeedom += F("&FREERAM=");
-					//jeedom += freeRam();
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 5000; // Permet de decaler la lecture entre chaque sonde DHT sinon ne marche pas cf librairie (3000 mini)
 				}
 				break;
 			#endif
@@ -836,8 +835,8 @@ void loop()
 					jeedom += i;
 					jeedom += '=';
 					jeedom += reponse;
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-					ProbeNextSend = millis() + 10000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 12000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
 				}
 				break;
 			#endif
@@ -907,7 +906,7 @@ void loop()
 					jeedom += i + 1000;
 					jeedom += '=';
 					jeedom += bmp.readPressure();
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 				}
 				break;
 			#endif
@@ -928,7 +927,7 @@ void loop()
 						jeedom += i + 2000;
 						jeedom += '=';
 						jeedom += bme280.readHumidity();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -948,7 +947,7 @@ void loop()
 						jeedom += i + 2000;
 						jeedom += '=';
 						jeedom += bme280b.readHumidity();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -974,7 +973,7 @@ void loop()
 						jeedom += i + 3000;
 						jeedom += '=';
 						jeedom += bme680.gas_resistance;
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -998,7 +997,7 @@ void loop()
 						jeedom += i + 3000;
 						jeedom += '=';
 						jeedom += bme680b.gas_resistance;
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1016,7 +1015,7 @@ void loop()
 						jeedom += i + 1000;
 						jeedom += '=';
 						jeedom += bmp280.readPressure();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1032,16 +1031,16 @@ void loop()
 						jeedom += i + 1000;
 						jeedom += '=';
 						jeedom += bmp280b.readPressure();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
 			#endif
 		}
 	}
-	if (NextRefresh<millis())
+	if (NextRefresh < millis())
 	{
-		NextRefresh=millis()+60000;	// Refresh auto toutes les 60s
+		NextRefresh = millis() + 60000;	// Refresh auto toutes les 60s
 		if (RepByJeedom) // sert a verifier que jeedom a bien repondu a la demande dans Load_eeprom
 		{
 			jeedom += F("&ASK=1"); // Sinon on redemande
@@ -1287,20 +1286,20 @@ void Load_EEPROM(int k)
 			#if (UseDHT == 1)
 			case 'd': // DHT11
 				myDHT[i] = new DHT(i, 11);	// DHT11
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			case 'e': // DHT21
 				myDHT[i] = new DHT(i, 21);	// DHT21
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			case 'f': // DHT 22
 				myDHT[i] = new DHT(i, 22);	// DHT22
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			#endif
 			#if (UseDS18x20 == 1)
 			case 'b': // DS18x20
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			#endif
 			#if (UseServo == 1)

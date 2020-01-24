@@ -42,10 +42,10 @@ $UserModePins = array(	"not_used" 			=> "Non utilisée",
 						);
 
 $ArduinoMODEpins = array(	"not_used" 			=> "Non utilisée",
-							"input" 			=> "iEntrée Numérique",
-							"input_pullup"		=> "iEntrée Numérique avec PULL-UP (Antiparasite et Signal inversé)",
-							"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
-							"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+							"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+							"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
+							"bp_input" 			=> "iEntrée multi-clicks avec PULL-DOWN",
+							"bp_input_pullup"	=> "iEntrée multi-clicks avec PULL-UP ",
 							"compteur_pullup" 	=> "iEntrée compteur impulsions avec PULL-UP (Antiparasite et Signal inversé)",
 							"pwm_input" 		=> "iEntrée Numérique Variable (0-255 sur 10s) en PULL-UP",
 							"dht11" 			=> "iSonde DHT11",
@@ -76,13 +76,13 @@ $ArduinoESPanalogPins = array(	"not_used" 			=> __("Non utilisée", __FILE__),
 								"low_pulse_slide" 	=> "oSortie mise à LOW avec temporisation (minuterie) par slider ",
 								"high_pulse_slide" 	=> "oSortie mise à HIGH avec temporisation (minuterie) par slider",
 								"analog_input" 		=> "Entrée Analogique",
-								"input" 			=> "iEntrée Numérique",
-								"input_pullup"		=> "iEntrée Numérique avec PULL-UP",
+								"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+								"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
 								"compteur_pullup" 	=> "iEntrée compteur impulsions avec PULL-UP"
 							);
 $PifaceMODEpinsIN = array(
 							"not_used" 			=> "Non utilisée",
-							"input_pullup"		=> "Entrée Numérique avec PULL-UP ",
+							"input_pullup"		=> "Entrée Numérique avec PULL-UP (binaire)",
 							"compteur_pullup" 	=> "Entrée compteur impulsions avec PULL-UP "
 							);
 $PifaceMODEpinsOUT = array(
@@ -99,10 +99,10 @@ $PifaceMODEpinsOUT = array(
 							);
 $PiGPIOpins = array(
 					"not_used" 			=> "Non utilisée",
-					"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-					"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
-					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+					"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+					"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
+					"bp_input" 			=> "iEntrée multi-clicks avec PULL-DOWN",
+					"bp_input_pullup"	=> "iEntrée multi-clicks avec PULL-UP ",
 					"compteur_pullup" 	=> "iEntrée compteur impulsions avec PULL-UP",
 					"compteur_pulldown" => "iEntrée compteur impulsions avec PULL-DOWN",
 					"dht11" 			=> "iSonde DHT11",
@@ -122,8 +122,8 @@ $PiGPIOpins = array(
 					);
 $PiPluspins = array(
 					"not_used" 			=> "Non utilisée",
-					"input" 			=> "iEntrée Numérique",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
+					"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+					"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
 					"compteur_pullup" 	=> "iEntrée compteur impulsions avec PULL-UP",
 					"switch" 			=> "oInverser la Sortie (SWITCH ON/OFF)",
 					"low_relais" 		=> "oSortie mise à LOW (HIGH générée aussi) ",
@@ -137,10 +137,10 @@ $PiPluspins = array(
 					);
 $ESP8266pins = array(
 						"not_used" 			=> "Non utilisée",
-						"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-						"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-						"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
-						"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+						"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+						"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
+						"bp_input" 			=> "iEntrée multi-clicks avec PULL-DOWN",
+						"bp_input_pullup"	=> "iEntrée multi-clicks avec PULL-UP ",
 						"compteur_pullup"	=> "iEntrée compteur impulsions avec PULL-UP",
 						"pwm_input" 		=> "iEntrée Numérique Variable (0-255 sur 10s) en PULL-UP",
 						"dht11" 			=> "iSonde DHT11",
@@ -167,10 +167,10 @@ $ESP8266pins = array(
 						);
 $SonoffPow = array(
 					"not_used" 			=> " Non utilisée",
-					"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-					"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
-					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+					"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+					"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
+					"bp_input" 			=> "iEntrée multi-clicks avec PULL-DOWN",
+					"bp_input_pullup"	=> "iEntrée multi-clicks avec PULL-UP ",
 					"compteur_pullup" 	=> "iEntrée compteur impulsions avec PULL-UP",
 					"switch" 			=> "oInverser la Sortie (SWITCH ON/OFF)",
 					"low_relais" 		=> "oSortie mise à LOW (HIGH générée aussi) ",
@@ -184,10 +184,10 @@ $SonoffPow = array(
 					);
 $Sonoff4ch = array(
 					"not_used" 			=> " Non utilisée",
-					"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-					"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
-					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+					"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+					"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
+					"bp_input" 			=> "iEntrée multi-clicks avec PULL-DOWN",
+					"bp_input_pullup"	=> "iEntrée multi-clicks avec PULL-UP ",
 					"compteur_pullup"	=> "iEntrée compteur impulsions avec PULL-UP",
 					"dht11" 			=> "jSonde DHT11",
 					"dht21" 			=> "jSonde DHT21 (AM2301)",
@@ -207,10 +207,10 @@ $Sonoff4ch = array(
 					);
 $$ElectroDragonSPDT = array(
 					"not_used" 			=> " Non utilisée",
-					"input" 			=> "iEntrée Numérique avec PULL-DOWN",
-					"input_pullup"		=> "iEntrée Numérique avec PULL-UP ",
-					"bp_input" 			=> "iEntrée Bouton poussoir avec PULL-DOWN",
-					"bp_input_pullup"	=> "iEntrée Bouton poussoir avec PULL-UP ",
+					"input" 			=> "iEntrée Numérique avec PULL-DOWN (binaire)",
+					"input_pullup"		=> "iEntrée Numérique avec PULL-UP (binaire)",
+					"bp_input" 			=> "iEntrée multi-clicks avec PULL-DOWN",
+					"bp_input_pullup"	=> "iEntrée multi-clicks avec PULL-UP ",
 					"compteur_pullup"	=> "iEntrée compteur impulsions avec PULL-UP",
 					"dht11" 			=> "jSonde DHT11",
 					"dht21" 			=> "jSonde DHT21 (AM2301)",
@@ -410,14 +410,14 @@ $PiGPIO26pins = array(
     '16' 	=> array('Nom_pin' => 'GPIO23', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 16'),
     '17' 	=> array('Nom_pin' => '3.3V',       'disable' => 1, 'ethernet' => 0, 'option' => ''),
     '18' 	=> array('Nom_pin' => 'GPIO24', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 18'),
-    '19' 	=> array('Nom_pin' => 'GPIO10 SPI', 'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '19' 	=> array('Nom_pin' => 'GPIO10 SPI', 'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 19'),
     '20' 	=> array('Nom_pin' => 'G N D', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
-    '21' 	=> array('Nom_pin' => 'GPIO9 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '21' 	=> array('Nom_pin' => 'GPIO9 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 21'),
     '22' 	=> array('Nom_pin' => 'GPIO25', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 22'),
-    '23' 	=> array('Nom_pin' => 'GPIO11 SPI', 'disable' => 1, 'ethernet' => 0, 'option' => ''),
-    '24' 	=> array('Nom_pin' => 'GPIO8 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '23' 	=> array('Nom_pin' => 'GPIO11 SPI', 'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 23'),
+    '24' 	=> array('Nom_pin' => 'GPIO8 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 24'),
     '25' 	=> array('Nom_pin' => 'G N D', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
-    '26' 	=> array('Nom_pin' => 'GPIO7 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => '')
+    '26' 	=> array('Nom_pin' => 'GPIO7 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 26')
  );
 $PiGPIO40pins = array(
     '1' 	=> array('Nom_pin' => '3.3V', 	  	'disable' => 1, 'ethernet' => 0, 'option' => ''),
@@ -438,14 +438,14 @@ $PiGPIO40pins = array(
     '16' 	=> array('Nom_pin' => 'GPIO23', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 16'),
     '17' 	=> array('Nom_pin' => '3.3V', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
     '18' 	=> array('Nom_pin' => 'GPIO24', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 18'),
-    '19' 	=> array('Nom_pin' => 'GPIO10 SPI', 'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '19' 	=> array('Nom_pin' => 'GPIO10 SPI', 'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 19'),
     '20' 	=> array('Nom_pin' => 'G N D', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
-    '21' 	=> array('Nom_pin' => 'GPIO9 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '21' 	=> array('Nom_pin' => 'GPIO9 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 21'),
     '22' 	=> array('Nom_pin' => 'GPIO25', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 22'),
-    '23' 	=> array('Nom_pin' => 'GPIO11 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => ''),
-    '24' 	=> array('Nom_pin' => 'GPIO8 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '23' 	=> array('Nom_pin' => 'GPIO11 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 23'),
+    '24' 	=> array('Nom_pin' => 'GPIO8 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 24'),
     '25' 	=> array('Nom_pin' => 'G N D', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
-    '26' 	=> array('Nom_pin' => 'GPIO7 SPI',	'disable' => 1, 'ethernet' => 0, 'option' => ''),
+    '26' 	=> array('Nom_pin' => 'GPIO7 SPI',	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 26'),
     '27' 	=> array('Nom_pin' => 'D N C', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
     '28' 	=> array('Nom_pin' => 'D N C', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
     '29' 	=> array('Nom_pin' => 'GPIO5', 	    'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 29'),

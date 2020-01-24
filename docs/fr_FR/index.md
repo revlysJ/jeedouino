@@ -577,14 +577,22 @@ Pins Entrées (Input)
 
       ![image409](../images/compteur.png)
 
-      + **Entrée Numérique en PULL-UP** (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
+      + **Entrée Numérique avec PULL-DOWN**
+      + **Entrée Numérique avec PULL-UP** (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
       + **Entrée Numérique Variable (0-255 sur 10s)** (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)
+      + **BMP 085/180** Capteur Température et pression (pins SDA / SCL)
+      + **BMP 280** Capteur Température et pression (pins SDA / SCL)
+      + **BME 280** Capteur Température, humidité et pression (pins SDA / SCL)
+      + **BME 680** Capteur Température, humidité, gas cov et pression (pins SDA / SCL)
       + **HC-SR04 Echo** En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.
+      > **[NOTE]**
+      >
+      > Pensez à l'activer dans l'entête du sketch : #define UseHCSR04 1
 
       ![image410](../images/hc_sr04.png)
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos :_**
-      + **Sonde DHT 11,21,22** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
+      + **Sonde DHT 11, 21, 22** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
       + **Entrée téléinfo ERDF ( pin RX )** - Permet d'avoir une commande de réception de message série pour la téléinfo.
       > **[TIP]**
 	  >
@@ -595,12 +603,14 @@ Pins Entrées (Input)
       + **Sonde DHT 11, 22 (AM2302)** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :_**
-      + **Sonde DS18B20** - Permet d'avoir une/des commande(s) avec la température.
+      + **Sonde(s) DS18B20** - Permet d'avoir une/des commande(s) avec la température.
       >Une seule commande est créée à la sauvegarde.  
-      En cas de plusieurs ds18b20, les commandes suivantes seront générées au fur et mesure des remontées de température.
+      En cas de plusieurs ds18b20, les commandes suivantes seront générées au fur et mesure des remontées de température.  
+      Le délai de remontée par défaut est de 5 minutes.  
+      Il est paramétrable dans l'onglet options du menu Pins/GPIO.
 
-      + **Entrée Bouton poussoir avec PULL-DOWN**
-      + **Entrée Bouton poussoir avec PULL-UP**
+      + **Entrée multi-clicks avec PULL-DOWN**
+      + **Entrée multi-clicks avec PULL-UP**
 
       > **[NOTE]**
 	  >
@@ -656,7 +666,7 @@ Pins Sorties (output)
       >Les 3 premiers concernent le durée du click.
       >Les 3 suivants, la durée de la pause.
 
-      + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
+      + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason. Cf pin Echo.
 
 
    + **Numériques/pseudo-Analogiques**  

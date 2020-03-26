@@ -172,7 +172,8 @@ if (isset($_GET['id']))
                     </div>
                 </div>
 				<?php
-					if ($PortArduino != 'usbarduino' && $ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
+					//if ($PortArduino != 'usbarduino' && $ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
+                    if ($ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
 				}
 				elseif (substr($ModeleArduino,0,6) == 'piGPIO')
 				{

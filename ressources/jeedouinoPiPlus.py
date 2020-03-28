@@ -1,5 +1,5 @@
 """
-JEEDOUINO IO PiPlus DEMON v0.8 Dec2015-2019
+JEEDOUINO IO PiPlus DEMON v0.8 Dec2015 - 2020
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 				http://www.tutorialspoint.com/python/python_multithreading.htm

@@ -4035,6 +4035,11 @@ class jeedouinoCmd extends cmd {
 						$tempo = $this->getConfiguration('tempo');
 						if ($tempo == '0') $tempo = '';
 						elseif ($tempo != '999999')  $tempo = substr(sprintf("%05s", $tempo), -5);
+						if ($pins_id >= 500)
+						{
+							$tempo = '';
+							if (trim($this->getConfiguration('value')) == '') $this->setConfiguration('value', '0');
+						}
 						$this->setConfiguration('tempo', $tempo);
 						$this->save();
 						if (jeedouino::ConfigurePinValue($pins_id, $this->getConfiguration('value') . $tempo, $this->getEqLogic_id())) return true;

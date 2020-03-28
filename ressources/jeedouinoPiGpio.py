@@ -1,5 +1,5 @@
 """
-JEEDOUINO PIGPIO DEMON v0.8 Dec2015- 2019
+JEEDOUINO PIGPIO DEMON v0.8 Dec2015 - 2020
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				https://piface.github.io/pifacedigitalio/example.html#interrupts
@@ -43,6 +43,7 @@ JeedomPort=80
 JeedomCPL=''
 pin2gpio = [0,0,2,0,3,0,4,14,0,15,17,18,27,0,22,23,0,24,10,0,9,25,11,8,0,7,0,0,5,0,6,12,13,0,19,16,26,20,0,21]
 gpio2pin = [0,0,3,5,7,29,31,26,24,21,19,23,32,33,8,10,36,11,12,35,38,40,15,16,18,22,37,13,0,0,0,0,0,0,0,0,0,0,0,0]
+CptNextReArm = time.time() + 3600
 
 # s-Fallback
 BootMode = False
@@ -103,7 +104,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -180,14 +181,30 @@ class myThread1 (threading.Thread):
 							GPIO.add_event_detect(j, GPIO.BOTH, callback=toggle_inputs)
 							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'c':
+							k = i % 4
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts)
+							if k == 1:
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts1)
+							elif k == 2:
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts2)
+							elif k == 3:
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts3)
+							else:
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts0)
 							time.sleep(0.1)
 						elif Status_pins[i] == 'G':
+							k = i % 4
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts)
+							if k == 1:
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts1)
+							elif k == 2:
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts2)
+							elif k == 3:
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts3)
+							else:
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0)
 							time.sleep(0.1)
 						elif Status_pins[i]=='n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
@@ -443,7 +460,7 @@ def SetPin(u, v, m):
 		pinStr += '&REP=' + str(m)
 	SimpleSend(pinStr)
 
-def toggle_cpts(u):
+def toggle_cpts0(u):
 	global CounterPinValue, PinNextSend, Status_pins, GPIO
 	# if Status_pins[u-1] == 'c':
 	# On compte le nombre d'impulsions
@@ -455,6 +472,30 @@ def toggle_cpts(u):
 		PinNextSend[uu] = time.time() + 30  #30s environ
 		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
 	#GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_cpts)
+
+def toggle_cpts1(u):
+	global CounterPinValue, PinNextSend, Status_pins, GPIO
+	uu = gpio2pin[u]
+	CounterPinValue[uu] += GPIO.input(u)
+	if PinNextSend[uu] < time.time():
+		PinNextSend[uu] = time.time() + 30  #30s environ
+		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
+
+def toggle_cpts2(u):
+	global CounterPinValue, PinNextSend, Status_pins, GPIO
+	uu = gpio2pin[u]
+	CounterPinValue[uu] += GPIO.input(u)
+	if PinNextSend[uu] < time.time():
+		PinNextSend[uu] = time.time() + 30  #30s environ
+		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
+
+def toggle_cpts3(u):
+	global CounterPinValue, PinNextSend, Status_pins, GPIO
+	uu = gpio2pin[u]
+	CounterPinValue[uu] += GPIO.input(u)
+	if PinNextSend[uu] < time.time():
+		PinNextSend[uu] = time.time() + 30  #30s environ
+		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
 
 def toggle_inputs(u):
 	global CounterPinValue,PinNextSend,Status_pins,GPIO,NextRefresh,PinValue,TimeValue,swtch,ProbeDelay
@@ -510,7 +551,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm
 
 		while exit==0:
 			thread_2 = 1
@@ -577,6 +618,38 @@ class myThread2 (threading.Thread):
 			if pinStr!='':
 				SimpleSend(pinStr)
 
+			# Essai : ReArm compteur si bloqué (toutes les heures)
+			if CptNextReArm < time.time():
+				CptNextReArm = time.time() + 3600
+				for i in range(0,40):
+					j = pin2gpio[i]
+					if Status_pins[i] == 'c':
+						k = i % 4
+						GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
+						GPIO.remove_event_detect(j)
+						time.sleep(1)
+						if k == 1:
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts1)
+						elif k == 2:
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts2)
+						elif k == 3:
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts3)
+						else:
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts0)
+					elif Status_pins[i] == 'G':
+						k = i % 4
+						GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
+						GPIO.remove_event_detect(j)
+						time.sleep(1)
+						if k == 1:
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts1)
+						elif k == 2:
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts2)
+						elif k == 3:
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts3)
+						else:
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0)
+
 			# Renvois des sondes toutes les 300s par defaut
 			if NextRefresh<time.time():
 				NextRefresh=time.time()+(60*ProbeDelay)  #300s environ par defaut
@@ -605,6 +678,7 @@ class myThread2 (threading.Thread):
 							pinStr +='&' + str(1000+j) + '=' + str(humidity*100)
 							pinDHT=1
 					elif Status_pins[i]=='b': # ds18b20
+						sensors[i] = DS.scan(pin2gpio[i])
 						DS.pinsStartConversion([pin2gpio[i]])
 						time.sleep(1)
 						try:

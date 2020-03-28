@@ -1,5 +1,5 @@
 """
-JEEDOUINO PIFACE DEMON v0.7 Dec2015 - 2019
+JEEDOUINO PIFACE DEMON v0.7 Dec2015 - 2020
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				https://piface.github.io/pifacedigitalio/example.html#interrupts

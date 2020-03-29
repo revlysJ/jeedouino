@@ -64,12 +64,14 @@ if (isset($_GET['BoardEQ']))
 			jeedouino::log( 'debug', $CALLBACK . __('vient d\'envoyer une trame téléinfo. J\'essaye de la transmettre au plugin adapté.', __FILE__));
 			if (method_exists('teleinfo', 'createFromDef'))
 			{
-				$ApiKey = config::byKey('api');
-				if ($ApiKey == '')  jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver la clé API de votre Jeedom.', __FILE__));
+				//$ApiKey = config::byKey('api');
+				$ApiKey = jeedom::getApiKey('teleinfo');
+				if ($ApiKey == '')  jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver la clé API du plugin Téléinfo.', __FILE__));
 				else
 				{
 					// Traitement de la trame
 					$message = '';
+					$deviceTeleinfo= '';
 					$etiquettes = array('ADCO' , 'OPTARIF' , 'ISOUSC' , 'BASE' , 'PTEC' , 'IINST' , 'IMAX' , 'PAPP' , 'MOTDETAT' , 'BBRHCJB' , 'BBRHPJB' , 'BBRHCJW' , 'BBRHPJW' , 'BBRHCJR' , 'BBRHPJR' , 'DEMAIN' , 'HCHC' , 'HCHP' , 'EJPHN' , 'EJPHPM' , 'PEJP' , 'ADPS' , 'HHPHC' );
 					$teleinfo = array_unique(explode(';' , $_GET['ADCO']));
 					jeedouino::log( 'debug', $CALLBACK . 'Teleinfo :' . json_encode($teleinfo));
@@ -81,13 +83,15 @@ if (isset($_GET['BoardEQ']))
 						{
 							if (in_array($champs[0], $etiquettes))
 							{
-								$message .= '&' . $champs[0] . '=' . $champs[1];
+								$message .= ',"' . $champs[0] . '":"' . $champs[1] . '"';
+								if ( $champs[0] == 'ADCO' ) $deviceTeleinfo = $champs[1];
 								jeedouino::log( 'debug', $CALLBACK . 'Champ compris :' . $champs[0] . ' = ' . $champs[1]);
 							}
 							else jeedouino::log( 'debug', $CALLBACK . 'Etiquette non trouvée :' . json_encode($champs));
 						}
 						else jeedouino::log( 'debug', $CALLBACK . 'Champ non compris :' . json_encode($champs));
 					}
+					$message = '{"device":{"' . $deviceTeleinfo . '":{"device":"' . $deviceTeleinfo . '"' . $message . '}}}';
 
 					// Envoi le tout au plugin Téléinfo
 					$http_ = trim(config::byKey('internalProtocol'));
@@ -95,9 +99,19 @@ if (isset($_GET['BoardEQ']))
 					$JeedomIP = jeedouino::GetJeedomIP();
 					$JeedomPort = jeedouino::GetJeedomPort();
 					$JeedomCPL =jeedouino::GetJeedomComplement();
-					$url = $http_ . $JeedomIP . ':' . $JeedomPort . $JeedomCPL . '/plugins/teleinfo/core/php/jeeTeleinfo.php?api=' . $ApiKey . $message;
+					$url = $http_ . $JeedomIP . ':' . $JeedomPort . $JeedomCPL . '/plugins/teleinfo/core/php/jeeTeleinfo.php?apikey=' . $ApiKey;
 					jeedouino::log( 'debug', 'Appel de : ' . $url);
-					return trim(@file_get_contents($url));
+					jeedouino::log( 'debug', 'Message POST : ' . $message);
+
+					$options = array('http' => array(	'method'  			=> 'POST',
+																						'header'  			=> "Content-Type: application/json",
+																						'ignore_errors' => true,
+																						'timeout' 			=> 10,
+																						'content' 			=> $message,
+																					),
+													);
+					$context  = stream_context_create($options);
+					return trim(@file_get_contents($url, false, $context));
 				}
 			}
 			else jeedouino::log( 'error', $CALLBACK . __(' - Impossible de trouver le plugin téléinfo.', __FILE__));

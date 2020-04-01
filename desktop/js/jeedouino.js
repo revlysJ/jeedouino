@@ -329,7 +329,7 @@ function addCmdToTable(_cmd) {
     tr += '<option value="">Aucune</option>';
     tr += '</select>';	 */
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="pins_id" disabled style="display : none;">';
-	if (control != 'JeedouinoControl') tr +=  '<span class="label label-info" title="Pin mode : ' + mtype + '">PIN No : ' + pins_id + '</span>';
+	if (control != 'JeedouinoControl') tr +=  '<span class="label label-info" title="Pin mode : ' + mtype + '"><i class="fas fa-question-circle tooltips"></i> PIN No : ' + pins_id + '</span>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="modePIN" disabled style="display : none;">';
 
 	tr += '</td>';
@@ -364,7 +364,7 @@ function addCmdToTable(_cmd) {
                 case 'high_pulse_slide':
     			case 'low_pulse_slide':
                     tr += '<div class="label label-warning">{{Durée en dixième de secondes. 5 Chiffres max.}}</div><br>';
-                case 'resetcpt':
+          case 'resetcpt':
                     tr += '<span class="label label-success">{{Valeur affectée via scénario}}</span>';
     			case 'switch':
     			case 'none':
@@ -418,25 +418,25 @@ function addCmdToTable(_cmd) {
     	{
     		if ( mtype == 'compteur_pullup' || mtype == 'compteur_pulldown')
     		{
-    			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
-    			tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{MàJ compteur avec valeur ci-dessous:}}</a>';
-                tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="RSTvalue" >';
+          tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
+          tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{MàJ compteur avec valeur ci-dessous:}}</a>';
+          tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="RSTvalue" >';
     		}
-            else if ( mtype == 'ds18b20')
-            {
-                var ds18b20 = init(_cmd.configuration.ds18id);
-                if ( ds18b20 != '') tr += '<div class="label label-info" ><i class="fas fa-fingerprint"></i> ID: ' + ds18b20 + '</div>';
-            }
+        else if ( mtype == 'ds18b20')
+        {
+            var ds18b20 = init(_cmd.configuration.ds18id);
+            if ( ds18b20 != '') tr += '<div class="label label-info" ><i class="fas fa-fingerprint"></i> ID: ' + ds18b20 + '</div>';
+        }
     	}
     }
 	tr += '</td>';
 
 	tr += '<td>';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isVisible" data-size="mini" checked />{{Afficher}}</label></span> ';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary" data-size="mini" />{{Inverser}}</label></span> ';
-	if ( ctype == 'info') {
-		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isHistorized" data-size="mini" />{{Historiser}}</label></span> ';
+	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isVisible" data-size="mini" checked />{{Afficher}}</label></span><br> ';
+  if ( ctype == 'info') {
+		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isHistorized" data-size="mini" />{{Historiser}}</label></span><br> ';
 	}
+	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary" data-size="mini" />{{Inverser}}</label></span><br> ';
 	tr += '</td>';
 
 	tr += '<td>';

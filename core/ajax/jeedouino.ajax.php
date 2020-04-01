@@ -114,71 +114,82 @@ try {
     }
     ////
 
-    // Actions pour la gestion du reset compteur
- 	if (init('action') == 'ResetCPT')
+    // Actions pour la gestion du reset compteur / RéArm event compteurs
+    if (init('action') == 'ResetCPT')
     {
-        jeedouino::ResetCPT(init('boardid'),init('RSTvalue'),init('CMDid'));
-		ajax::success();
-	}
+      jeedouino::ResetCPT(init('boardid'), init('RSTvalue'), init('CMDid'));
+      ajax::success();
+    }
+    if (init('action') == 'CptDelay')
+    {
+      jeedouino::CptDelay(init('boardid'), init('CptDelay'));
+      ajax::success();
+    }
+    // Action pour mettre à jour le délai de relève des sondes
+    if (init('action') == 'ProbeDelay')
+    {
+      jeedouino::ProbeDelay(init('boardid'), init('ProbeDelay'));
+      ajax::success();
+    }
 
     // Actions pour la gestion des démons  / Jeedouino
- 	if (init('action') == 'StartBoardDemon')
+   	if (init('action') == 'StartBoardDemon')
     {
-        jeedouino::StartBoardDemon(init('boardid'), init('id'), init('DemonType'));
-		ajax::success();
-	}
-  	if (init('action') == 'ReStartBoardDemon')
+      jeedouino::StartBoardDemon(init('boardid'), init('id'), init('DemonType'));
+      ajax::success();
+    }
+    if (init('action') == 'ReStartBoardDemon')
     {
-        jeedouino::ReStartBoardDemon(init('boardid'), init('id'), init('DemonType'));
-		ajax::success();
-	}
- 	if (init('action') == 'StopBoardDemon')
+      jeedouino::ReStartBoardDemon(init('boardid'), init('id'), init('DemonType'));
+      ajax::success();
+    }
+    if (init('action') == 'StopBoardDemon')
     {
-        jeedouino::StopBoardDemon(init('boardid'), init('id'), init('DemonType'));
-		ajax::success();
-	}
+      jeedouino::StopBoardDemon(init('boardid'), init('id'), init('DemonType'));
+      ajax::success();
+    }
 
     // Actions pour l'Installation des dépendances
-  	if (init('action') == 'installUpdate')
+    if (init('action') == 'installUpdate')
     {
-        exec('sudo apt-get -y update >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-        exec('sudo apt-get -y upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-        exec('sudo apt-get -y dist-upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		ajax::success();
-	}
+      exec('sudo apt-get -y update >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+      exec('sudo apt-get -y upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+      exec('sudo apt-get -y dist-upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
+      ajax::success();
+    }
   	if (init('action') == 'installSerial')
     {
-        exec('sudo apt-get -y install python{,3}-pip python-serial>> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-        exec('sudo pip3 uninstall serial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-        exec('sudo pip3 install pyserial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-		ajax::success();
-	}
+      exec('sudo apt-get -y install python{,3}-pip python-serial>> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+      exec('sudo pip3 uninstall serial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+      exec('sudo pip3 install pyserial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
+      ajax::success();
+    }
   	if (init('action') == 'installGPIO')
     {
-        exec('sudo pip3 install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
-        exec('sudo pip install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
-		ajax::success();
-	}
- 	if (init('action') == 'installPIFACE')
+      exec('sudo pip3 install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
+      exec('sudo pip install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
+      ajax::success();
+    }
+    if (init('action') == 'installPIFACE')
     {
-        exec('sudo apt-get -y install python{,3}-pip python{,3}-setuptools >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip3 install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-        // enable spi
-        exec('sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt');
-		ajax::success();
-	}
- 	if (init('action') == 'installPiPlus')
+      exec('sudo apt-get -y install python{,3}-pip python{,3}-setuptools >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+      exec('sudo pip3 install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+      exec('sudo pip install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
+      // enable spi
+      exec('sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt');
+      ajax::success();
+    }
+    if (init('action') == 'installPiPlus')
     {
-        exec('sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
-        //exec('sudo apt-get -y install python{,3}-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
-        // enable i2c
-        exec('sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt');
-        exec('sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt');
-        exec('sudo echo i2c-dev | sudo tee -a /etc/modules');
-        exec('sudo echo i2c-bcm2708 | sudo tee -a /etc/modules');
-        ajax::success();
-	}
+      exec('sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+      //exec('sudo apt-get -y install python{,3}-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
+      // enable i2c
+      exec('sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt');
+      exec('sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt');
+      exec('sudo echo i2c-dev | sudo tee -a /etc/modules');
+      exec('sudo echo i2c-bcm2708 | sudo tee -a /etc/modules');
+      ajax::success();
+    }
  	if (init('action') == 'installDS18B20')
     {
         exec('cd ; git clone https://github.com/danjperron/BitBangingDS18B20.git >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');

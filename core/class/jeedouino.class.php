@@ -1759,7 +1759,8 @@ class jeedouino extends eqLogic {
 		self::StopBoardDemonCMD($board_id, $DemonType); // Stoppe le(s) processus du Démon local
 		config::save($board_id . '_StatusDemon', false, 'jeedouino');
 
-		$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '5');
+		$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', 5);
+		$_ProbeDelay = round($_ProbeDelay);
 		if ($JeedomCPL == '') $JeedomCPL = '.';
 		switch ($DemonTypeF)
 		{
@@ -2257,7 +2258,8 @@ class jeedouino extends eqLogic {
 			// copie des options
 			$choix_boot = config::byKey($Original_ID . '_choix_boot', 'jeedouino', '2');
 			config::save($arduino_id . '_choix_boot', $choix_boot, 'jeedouino');
-			$_ProbeDelay = config::byKey($Original_ID . '_ProbeDelay', 'jeedouino', '5');
+			$_ProbeDelay = config::byKey($Original_ID . '_ProbeDelay', 'jeedouino', 5);
+			$_ProbeDelay = round($_ProbeDelay);
 			config::save($arduino_id . '_ProbeDelay', $_ProbeDelay, 'jeedouino');
 		}
 
@@ -2309,7 +2311,8 @@ class jeedouino extends eqLogic {
 		if ($reponse!='OK') jeedouino::log( 'error', __('Pb Envoi cmd SetJeedomCFG sur Jeedouino déporté eqID ( ', __FILE__) . $arduino_id . ' ) - Réponse :' . $reponse);
 
 		$ToSend = false;
-		$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', '5');
+		$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 5);
+		$_ProbeDelay = round($_ProbeDelay);
 		if ($JeedomCPL == '') $JeedomCPL = '.';
 		if ($board == 'arduino' and $usb)
 		{
@@ -2377,8 +2380,9 @@ class jeedouino extends eqLogic {
 		$arduino_id = $this->getId();
 
 		// petit correctif concernant le delai de renvoi des temp des sondes
-		$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', '5');
-		if ($_ProbeDelay < 1 or $_ProbeDelay>1000) $_ProbeDelay = 5;
+		$_ProbeDelay = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 5);
+		if ($_ProbeDelay < 1 or $_ProbeDelay > 1000) $_ProbeDelay = 5;
+		$_ProbeDelay = round($_ProbeDelay);
 		config::save($arduino_id . '_ProbeDelay', $_ProbeDelay, 'jeedouino');
 
 		if ($this->getIsEnable() == 0)
@@ -3510,13 +3514,67 @@ class jeedouino extends eqLogic {
 		else jeedouino::log( 'error', __('Impossible de trouver le plugin Virtuel !', __FILE__));
 	}
 
+	public function ProbeDelay($arduino_id, $ProbeDelay = 5)
+	{
+		if ($ProbeDelay < 1 or $ProbeDelay > 1000) $ProbeDelay = 5;
+		$ProbeDelay = round($ProbeDelay);
+		$oldValue = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 'none');
+		config::save($arduino_id . '_ProbeDelay', $ProbeDelay, 'jeedouino');
+		list(, $board) = self::GetPinsByBoard($arduino_id);
+		jeedouino::log( 'debug', __('Début de MàJ du délai de relève des sondes pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
+		switch ($board)
+		{
+			case 'arduino':
+			case 'esp':
+				sleep(2);
+				self::SendToArduino($arduino_id, 'S' . $ProbeDelay . 'P', 'ProbeDelay', 'SOK');
+				break;
+			case 'piface':
+			case 'gpio':
+			case 'piplus':
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __(' vers la nouvelle : ', __FILE__) . $ProbeDelay);
+				$message  = 'ProbeDelay=' . $ProbeDelay;
+				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				if ($reponse != 'SOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai de relève des sondes - Réponse : ', __FILE__) . $reponse);
+				break;
+		}
+		jeedouino::log( 'debug', __('Fin de MàJ du délai de relève des sondes.', __FILE__));
+	}
+
+	public function CptDelay($arduino_id, $CptDelay = 3600)
+	{
+		if ($CptDelay < 600 or $CptDelay > 86400) $CptDelay = 3600;
+		$CptDelay = round($CptDelay);
+		$oldValue = config::byKey($arduino_id . '_CptDelay', 'jeedouino', 'none');
+		config::save($arduino_id . '_CptDelay', $CptDelay, 'jeedouino');
+		list(, $board) = self::GetPinsByBoard($arduino_id);
+		jeedouino::log( 'debug', __('Début de MàJ du délai de RéArm Event pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
+		switch ($board)
+		{
+			case 'arduino':
+			case 'esp':
+				sleep(2);
+				//self::SendToArduino($arduino_id, 'S' . $CptDelay . 'D', 'ReArmDelaiCompteurs', 'SCOK');
+				break;
+			case 'piface':
+			case 'gpio':
+			case 'piplus':
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __(' vers la nouvelle : ', __FILE__) . $CptDelay);
+				$message  = 'CptDelay=' . $CptDelay;
+				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai de RéArm Event - Réponse : ', __FILE__) . $reponse);
+				break;
+		}
+		jeedouino::log( 'debug', __('Fin de MàJ du délai de RéArm Event.', __FILE__));
+	}
+
 	public function ResetCPT($arduino_id, $RSTvalue = 0, $CMDid = '')
 	{
 		// on envoie une reinit aux compteurs
 		if ($CMDid != '')
 		{
 			list(, $board) = self::GetPinsByBoard($arduino_id);
-			jeedouino::log( 'debug', __('Début de ResetCompteur pour ', __FILE__) . $board . ' eqID ( ' . $arduino_id . ' )');
+			jeedouino::log( 'debug', __('Début de ResetCompteur pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
 
 			$cmd = cmd::byid($CMDid);
 			$pins_id = $cmd->getConfiguration('pins_id');
@@ -3634,7 +3692,8 @@ class jeedouino extends eqLogic {
 				$TeleInfoTX = config::byKey($board_id.'_TeleInfoTX', 'jeedouino', 0);
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
-				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
+				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', 5);
+				$_ProbeDelay = round($_ProbeDelay);
 				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 				$WS2811 = config::byKey($board_id.'_WS2811', 'jeedouino', 0);
 
@@ -3737,7 +3796,8 @@ class jeedouino extends eqLogic {
 				$TeleInfoTX = config::byKey($board_id.'_TeleInfoTX', 'jeedouino', 0);
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
-				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
+				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', 5);
+				$_ProbeDelay = round($_ProbeDelay);
 				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 				$WS2811 = config::byKey($board_id.'_WS2811', 'jeedouino', false);
 
@@ -3841,7 +3901,8 @@ class jeedouino extends eqLogic {
 				$TeleInfoTX = config::byKey($board_id.'_TeleInfoTX', 'jeedouino', 0);
 				$Send2LCD = config::byKey($board_id.'_Send2LCD', 'jeedouino', 0);
 				$UserSketch = config::byKey($board_id.'_UserSketch', 'jeedouino', 0);
-				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', '1');
+				$_ProbeDelay = config::byKey($board_id . '_ProbeDelay', 'jeedouino', 5);
+				$_ProbeDelay = round($_ProbeDelay);
 				$servo = config::byKey($board_id.'_SERVO', 'jeedouino', 0);
 				$WS2811 = config::byKey($board_id.'_WS2811', 'jeedouino', 0);
 

@@ -628,6 +628,29 @@ void loop()
 						jeedom+=F("&REP=SCOK");
 					}
 			}
+			else if (c[0]=='S' && c[n]=='P')		 	// Reçoi le délai de relève des sondes
+			{
+				if (n > 1)										// Petite securite
+				{
+					for (int i = 1; i < n; i++)
+					{
+						if (isDigit(c[i])) c[i] = c[i] - '0';
+					}
+
+					int multiple = 1;
+					pinTempo = 0;
+					for (int i = n-1; i > 0; i--)										// récupération de la valeur
+					{
+						pinTempo += int(c[i]) * multiple;
+						multiple *= 10;
+					}
+					if (pinTempo < 1 || pinTempo > 1000) pinTempo = 5;
+					ProbePauseDelay = 60000 * pinTempo;
+
+					client.print(F("SOK"));												// On reponds a JEEDOM
+					jeedom+=F("&REP=SOK");
+				}
+			}
 			else if (c[0]=='S' && c[n]=='F') 	// Modifie la valeur de toutes les pins sortie (suite reboot )
 			{
 				// NB_TOTALPIN = NB_DIGITALPIN	+ NB_ANALOGPIN

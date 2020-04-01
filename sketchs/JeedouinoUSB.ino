@@ -215,10 +215,6 @@ void setup()
 		DebugSerial.println(eqLogic);
 	#endif
 
-	#if (UseTeleInfo == 1)
-		teleinfo.begin(1200);	 // vitesse par EDF
-	#endif
-
 	#if (UseLCD16x2 == 1)
 		lcd.begin(16, 2);
 		lcd.setCursor(0,0);
@@ -483,6 +479,29 @@ void loop()
 					NextRefresh=millis()+60000;
 					ProbeNextSend=millis()+10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
 					Serial.println(F("SCOK"));							 // On reponds a JEEDOM
+				}
+			}
+			else if (c[0]=='S' && c[n]=='P')		 	// Reçoi le délai de relève des sondes
+			{
+				if (n > 1)										// Petite securite
+				{
+					for (int i = 1; i < n; i++)
+					{
+						if (isDigit(c[i])) c[i] = c[i] - '0';
+					}
+
+					int multiple = 1;
+					pinTempo = 0;
+					for (int i = n-1; i > 0; i--)										// récupération de la valeur
+					{
+						pinTempo += int(c[i]) * multiple;
+						multiple *= 10;
+					}
+					if (pinTempo < 1 || pinTempo > 1000) pinTempo = 5;
+					ProbePauseDelay = 60000 * pinTempo;
+
+					client.print(F("SOK"));												// On reponds a JEEDOM
+					jeedom+=F("&REP=SOK");
 				}
 			}
 			else if (c[0]=='S' && c[n]=='F')	 // Modifie la valeur de toutes les pins sortie (suite reboot )
@@ -849,6 +868,7 @@ void loop()
 						DebugSerial.print(i);
 						DebugSerial.print(F(") : "));
 					#endif
+					teleinfo.begin(1200);	 // vitesse par EDF
 					char recu = 0;
 					int cntChar=0;
 					timeout = millis()+1000;
@@ -887,6 +907,7 @@ void loop()
 							else jeedom += recu;
 						}
 					}
+					teleinfo.end();
 					#if (DEBUGtoSERIAL == 1)
 						DebugSerial.println(F("/finRX"));
 					#endif

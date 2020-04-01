@@ -1,5 +1,15 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+01/04/2020 v1.07b
+---
+
+- Ajout de la modification directe du délai de relève des sondes.
+- Ajout d'un réarm event des compteurs (piGpio).
+- Ajout de la modification directe du délai de réarm  des compteurs (piGpio).
+- Ajout d'un scan régulier de la présence des sondes ds18b20 (piGpio).
+- Correction Appel API du plugin Téléinfo (fix par @Seb-Othis).
+- Corrections diverses.
+
 03/11/2019 v1.07
 ---
 

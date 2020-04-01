@@ -436,7 +436,7 @@ else $ShowSideBar = "col-xs-12";
 <legend><i class="fas fa-cog"></i> {{Paramètres facultatifs}}</legend>
             <div class="datasource rj45arduino">
                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Port réseau}}</label>
+                    <label class="col-sm-3 control-label">{{Port réseau libre}}</label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
                     </div>
@@ -444,7 +444,7 @@ else $ShowSideBar = "col-xs-12";
             </div>
             <div class="datasource usbarduino">
                 <div class="form-group arduinoport usblocal usbdeporte">
-                    <label class="col-sm-3 control-label">{{Port réseau du démon}}</label>
+                    <label class="col-sm-3 control-label">{{Port réseau libre pour le démon}}</label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortDemon" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('PortDemon'); ?>"/>
                     </div>

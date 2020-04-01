@@ -43,7 +43,11 @@ JeedomPort=80
 JeedomCPL=''
 pin2gpio = [0,0,2,0,3,0,4,14,0,15,17,18,27,0,22,23,0,24,10,0,9,25,11,8,0,7,0,0,5,0,6,12,13,0,19,16,26,20,0,21]
 gpio2pin = [0,0,3,5,7,29,31,26,24,21,19,23,32,33,8,10,36,11,12,35,38,40,15,16,18,22,37,13,0,0,0,0,0,0,0,0,0,0,0,0]
-CptNextReArm = time.time() + 3600
+
+# compteurs:
+ReArmDelay = 3600
+CptNextReArm = time.time() + ReArmDelay
+
 
 # s-Fallback
 BootMode = False
@@ -104,7 +108,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -386,18 +390,18 @@ class myThread1 (threading.Thread):
 					q = query.index("Trigger")
 					u = int(query[q+1])
 					q = query.index("Echo")
-					v = int(query[q+1])
+					v = int(query[q + 1])
 					RepStr = GetDistance(u,v)
 					reponse='SOK'
 
 				if 'SetLOWdoublepulse' in query:
 					q = query.index("SetLOWdoublepulse")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					r = pin2gpio[u - 1]
 					q = query.index("tempclick")
-					v = float(query[q+1]) / 10
+					v = float(query[q + 1]) / 10
 					q = query.index("temppause")
-					w = float(query[q+1]) / 10
+					w = float(query[q + 1]) / 10
 					GPIO.output(r, 0)
 					time.sleep(v)
 					GPIO.output(r, 1)
@@ -409,12 +413,12 @@ class myThread1 (threading.Thread):
 
 				if 'SetHIGHdoublepulse' in query:
 					q = query.index("SetHIGHdoublepulse")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					r = pin2gpio[u - 1]
 					q = query.index("tempclick")
-					v = float(query[q+1]) / 10
+					v = float(query[q + 1]) / 10
 					q = query.index("temppause")
-					w = float(query[q+1]) / 10
+					w = float(query[q + 1]) / 10
 					GPIO.output(r, 1)
 					time.sleep(v)
 					GPIO.output(r, 0)
@@ -424,27 +428,37 @@ class myThread1 (threading.Thread):
 					reponse='SOK'
 					SetPin(u, 0, reponse)
 
+				if 'CptDelay' in query:
+					q = query.index("CptDelay")
+					ReArmDelay = int(query[q + 1])
+					reponse='SCOK'
+
+				if 'ProbeDelay' in query:
+					q = query.index("ProbeDelay")
+					ProbeDelay = int(query[q + 1])
+					reponse='SOK'
+
 				if 'PING' in query:
-					reponse='PINGOK'
-					RepStr='&REP=' + str(reponse)
+					reponse = 'PINGOK'
+					RepStr = '&REP=' + str(reponse)
 
 				if 'EXIT' in query:
-					exit=1
-					reponse='EXITOK'
+					exit = 1
+					reponse = 'EXITOK'
 
-				if reponse!='':
+				if reponse != '':
 					c.send(reponse.encode('ascii'))
 					log ('>>Reponse a la requete :',str(reponse))
-					if RepStr!='':
+					if RepStr != '':
 						SimpleSend(RepStr)
 
-				if exit==1:
+				if exit == 1:
 					break
 
 			c.close()
 			time.sleep(0.1)
 		s.close()
-		if exit==1:
+		if exit == 1:
 			try:
 				GPIO.cleanup()
 			except:
@@ -551,7 +565,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm,ReArmDelay
 
 		while exit==0:
 			thread_2 = 1
@@ -620,7 +634,7 @@ class myThread2 (threading.Thread):
 
 			# Essai : ReArm compteur si bloqué (toutes les heures)
 			if CptNextReArm < time.time():
-				CptNextReArm = time.time() + 3600
+				CptNextReArm = time.time() + ReArmDelay
 				for i in range(0,40):
 					j = pin2gpio[i]
 					if Status_pins[i] == 'c':

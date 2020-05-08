@@ -24,6 +24,7 @@ Installation et mise à jour du plugin
 > **[IMPORTANT]**
 >
 > Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.  
+> Il est fortement conseillé de mette à jour votre système linux auparavant.
 > Un reboot peut même être nécéssaire dans certains cas.  
 > Il suffit de suivre les logs des dépendances pour surveiller la progression.   
 
@@ -82,7 +83,8 @@ Onglet : Dépendances
 
 ![image102](../images/configuration0.png)
 
-Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.
+Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.   
+Seul celui de www.arduino.CC est considéré comme comptaible.
 
 * <https://www.arduino.cc/en/Main/Software>
 
@@ -585,9 +587,9 @@ Pins Entrées (Input)
       + **BME 280** Capteur Température, humidité et pression (pins SDA / SCL)
       + **BME 680** Capteur Température, humidité, gas cov et pression (pins SDA / SCL)
       + **HC-SR04 Echo** En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.
-      > **[NOTE]**
-      >
-      > Pensez à l'activer dans l'entête du sketch : #define UseHCSR04 1
+          > **[NOTE]**
+          >
+          > Pensez à l'activer dans l'entête du sketch : #define UseHCSR04 1
 
       ![image410](../images/hc_sr04.png)
 
@@ -609,8 +611,8 @@ Pins Entrées (Input)
       Le délai de remontée par défaut est de 5 minutes.  
       Il est paramétrable dans l'onglet **Options** du menu **Pins/GPIO**.
 
-      + **Entrée multi-clicks avec PULL-DOWN**
-      + **Entrée multi-clicks avec PULL-UP**
+      + **Entrée multi-clics avec PULL-DOWN**
+      + **Entrée multi-clics avec PULL-UP**
 
       > **[NOTE]**
 	  >
@@ -657,13 +659,13 @@ Pins Sorties (output)
       >Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).  
       >Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s).
 
-      + **Sortie double click mise à HIGH (click) LOW (pause) HIGH (click)**.  Permet de simuler un double click (pour une télécommande de volets par ex).
-         La durée du click/pause/click est modifiable.
+      + **Sortie double clic mise à HIGH (clic) LOW (pause) HIGH (clic)**.  Permet de simuler un double clic (pour une télécommande de volets par ex).
+         La durée du clic/pause/clic est modifiable.
          Attention à ne pas choisir des durées trop longues car cela est bloquant.
       > **[NOTE]**
    	  >
       >Durée exprimée en dixième de secondes et 3 + 3 chiffres max. Soit de 0.1s a 99.9s.
-      >Les 3 premiers concernent le durée du click.
+      >Les 3 premiers concernent la durée du clic.
       >Les 3 suivants, la durée de la pause.
 
       + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason. Cf pin Echo.

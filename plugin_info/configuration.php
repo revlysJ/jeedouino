@@ -103,6 +103,19 @@ $port =  jeedouino::GetJeedomPort();
 
 	<div class="tab-pane" id="tab_dep">
 	<br/>
+<?php
+$dep = '';
+if (@file_exists('/tmp/dependances_jeedouino_en_cours')) $dep = trim(file_get_contents('/tmp/dependances_jeedouino_en_cours'));
+if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
+  { ?>
+    <div class="alert alert-danger"><i class="fas fa-arrow-right"></i> {{ Il y a déjà une installation en cours. Veuillez patienter et la suivre via le log.}} </div>
+    <div class="alert alert-info"><i class="fas fa-cogs"></i> {{ Important : <br> L'installation peut prendre pas mal de temps, il faut être patient.<br>
+    Cependant, si elle vous semble bloquée, elle nécessite peut-être une manipulation de votre part.<br>
+    Dans ce cas, il faudra rebooter puis via ssh procéder aux commandes manuelles suivantes:}}<br>
+    <code>sudo dpkg --configure -a --force-confdef</code><br>
+    <code>sudo apt -y --fix-broken install</code><br>
+   </div>
+<?php } else { ?>
 		<div class="alert alert-warning"><i class="fas fa-arrow-right"></i> {{ A n'installer que si nécéssaire.}} </div>
 		<form class="form-horizontal">
 			<fieldset>
@@ -119,7 +132,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Télécharger l'Arduino IDE}}</label>
 										<div class="col-lg-5">
-											<a href="https://www.arduino.cc/en/Main/Software" target="_blank" class="btn btn-success" ><i class='fas fa-floppy-o'></i>{{ Aller sur le site }}</a>
+											<a href="https://www.arduino.cc/en/Main/Software" target="_blank" class="btn btn-success" ><i class='fas fa-floppy-o'></i>{{ www.arduino.CC }}</a>
 										</div>
 								</div>
 							</td>
@@ -128,9 +141,9 @@ $port =  jeedouino::GetJeedomPort();
 						<tr>
 							<td>
 								<div class="form-group" >
-										<label class="col-lg-5 control-label">{{Install Python-Serial}}</label>
+										<label class="col-lg-5 control-label">{{Install Python3-pySerial}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installSerial" ><i class="fas fa-play"></i> {{sudo pip3 install pyserial}}</a>
+												<a class="btn btn-info bt_installSerial" ><i class="fas fa-play"></i> {{sudo install}}</a>
 										</div>
 								</div>
 							</td>
@@ -144,7 +157,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{RPi.GPIO Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installGPIO" ><i class="fas fa-play"></i> {{sudo pip3 install RPi.GPIO}}</a>
+												<a class="btn btn-info bt_installGPIO" ><i class="fas fa-play"></i> {{sudo install}}</a>
 										</div>
 								</div>
 							</td>
@@ -155,7 +168,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{Pifacedigitalio Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPIFACE" ><i class="fas fa-play"></i> {{sudo pip3 install pifacecommon pifacedigitalio }}</a>
+												<a class="btn btn-info bt_installPIFACE" ><i class="fas fa-play"></i> {{sudo install}}</a>
 										</div>
 								</div>
 							</td>
@@ -166,7 +179,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{IO.PiPlus smbus Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installPiPlus" ><i class="fas fa-play"></i> {{sudo install python3-smbus}}</a>
+												<a class="btn btn-info bt_installPiPlus" ><i class="fas fa-play"></i> {{sudo install}}</a>
 										</div>
 								</div>
 							</td>
@@ -177,7 +190,7 @@ $port =  jeedouino::GetJeedomPort();
 								<div class="form-group" >
 										<label class="col-lg-5 control-label">{{BitBangingDS18B20 Installation}}</label>
 										<div class="col-lg-5">
-												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo python3 setup.py install}}</a>
+												<a class="btn btn-info bt_installDS18B20" ><i class="fas fa-play"></i> {{sudo install}}</a>
 										</div>
 								</div>
 							</td>
@@ -186,20 +199,21 @@ $port =  jeedouino::GetJeedomPort();
 					</tbody>
 				</table>
 
-			<?php
-			/*
+
+
 				<div class="form-group" >
-						<label class="col-lg-5 control-label">{{Dépendance : MàJ Système}}</label>
+						<label class="col-lg-5 control-label">{{Dépendance : Mise à Jour Système}}</label>
 						<div class="col-lg-5">
-								<a class="btn btn-info bt_installUpdate" ><i class="fas fa-play"></i> {{sudo apt-get update}}</a>
+								<a class="btn btn-warning bt_installUpdate" ><i class="fas fa-play"></i> {{ sudo apt-get update / upgrade / dist-upgrade}}</a>
 						</div>
 				</div>
-			*/
-			?>
+
+
 
 
 			</fieldset>
 		</form>
+<?php } ?>
 	</div>
 
 	<div class="tab-pane" id="tab_demon">

@@ -353,8 +353,8 @@ if (isset($_GET['BoardEQ']))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
 							if ($recu < $RSTvalue)
 							{
-								jeedouino::log('debug', $CALLBACK . __('La valeur reçue est inférieure à la valeur connue RSTValue, elle ne sera pas mise à jour. C = ', __FILE__) . $recu);
-								$recu = $RSTvalue;
+								jeedouino::log('debug', $CALLBACK . __('La valeur reçue est inférieure à la valeur connue RSTValue (', __FILE__) . $RSTvalue . __('), elle y sera additionnée. Cpt = ', __FILE__) . $recu);
+								$recu += $RSTvalue;
 							}
 							$cmd->setConfiguration('RSTvalue', $recu);
 							jeedouino::log('debug', $CALLBACK . 'RSTvalue Pin n° ' . $pins_id . ' = ' . $recu);

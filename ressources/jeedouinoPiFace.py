@@ -128,7 +128,7 @@ class myThread1 (threading.Thread):
 			thread_tries = 0
 			query=SimpleParse(m)
 			if query:
-				log ('Requete :',str(query))
+				log ('Requete', str(query))
 
 				reponse='NOK'
 				exit=0
@@ -282,7 +282,7 @@ class myThread1 (threading.Thread):
 
 				if reponse!='':
 					c.send(reponse.encode('ascii'))
-					log ('>>Reponse a la requete :',str(reponse))
+					log ('>>Reponse a la requete', str(reponse))
 					if RepStr!='':
 						SimpleSend(RepStr)
 
@@ -412,11 +412,15 @@ class myThread2 (threading.Thread):
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
 	if JeedomIP!='' and eqLogic!='':
-		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
-		conn = httplib.HTTPConnection(JeedomIP,JeedomPort)
-		conn.request("GET", url )
-		#resp = conn.getresponse()
-		conn.close()
+		url = str(JeedomCPL) + "/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
+		try:
+			conn = httplib.HTTPConnection(JeedomIP, JeedomPort)
+			conn.request("GET", url)
+			conn.close()
+		except:
+			conn = httplib.HTTPConnection('127.0.0.1', 80)
+			conn.request("GET", url)
+			conn.close()
 		log("GET", url )
 	else:
 		log('Error', "JeedomIP et/ou eqLogic non fourni(s)")

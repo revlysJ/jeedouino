@@ -108,7 +108,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_tries,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_2,thread_tries1,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -150,10 +150,10 @@ class myThread1 (threading.Thread):
 			if exit==1:
 				break
 			m = c.recv(1024)
-			thread_tries = 0
+			thread_tries1 = 0
 			query=SimpleParse(m)
 			if query:
-				log ('Requete :',str(query))
+				log ('Requete', str(query))
 
 				reponse='NOK'
 				exit=0
@@ -189,26 +189,26 @@ class myThread1 (threading.Thread):
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
 							if k == 1:
-								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts1)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
 							elif k == 2:
-								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts2)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
 							elif k == 3:
-								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts3)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
 							else:
-								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts0)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
 							time.sleep(0.1)
 						elif Status_pins[i] == 'G':
 							k = i % 4
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
 							if k == 1:
-								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts1)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
 							elif k == 2:
-								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts2)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
 							elif k == 3:
-								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts3)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
 							else:
-								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0)
+								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
 							time.sleep(0.1)
 						elif Status_pins[i]=='n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
@@ -439,7 +439,10 @@ class myThread1 (threading.Thread):
 					reponse='SOK'
 
 				if 'PING' in query:
-					reponse = 'PINGOK'
+					if thread_2 == 1:
+						reponse = 'PINGOK'
+					else:
+						reponse = 'PINGKO'
 					RepStr = '&REP=' + str(reponse)
 
 				if 'EXIT' in query:
@@ -448,7 +451,7 @@ class myThread1 (threading.Thread):
 
 				if reponse != '':
 					c.send(reponse.encode('ascii'))
-					log ('>>Reponse a la requete :',str(reponse))
+					log ('>> Reponse a la requete' ,str(reponse))
 					if RepStr != '':
 						SimpleSend(RepStr)
 
@@ -565,7 +568,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm,ReArmDelay
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_1,thread_2,thread_tries2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm,ReArmDelay
 
 		while exit==0:
 			thread_2 = 1
@@ -584,6 +587,7 @@ class myThread2 (threading.Thread):
 			if pinStr!='':
 				SimpleSend(pinStr)
 
+			thread_tries2 = 0
 			if SetAllLOW==1:
 				pinStr = '&REP=SOK'
 				for i in range(0,40):
@@ -636,33 +640,33 @@ class myThread2 (threading.Thread):
 			if CptNextReArm < time.time():
 				CptNextReArm = time.time() + ReArmDelay
 				for i in range(0,40):
+					if Status_pins[i] == 'c' or Status_pins[i] == 'G':
+						GPIO.remove_event_detect(pin2gpio[i])
+				time.sleep(7)
+				for i in range(0,40):
 					j = pin2gpio[i]
 					if Status_pins[i] == 'c':
 						k = i % 4
 						GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
-						GPIO.remove_event_detect(j)
-						time.sleep(1)
 						if k == 1:
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts1)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
 						elif k == 2:
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts2)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
 						elif k == 3:
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts3)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
 						else:
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts0)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
 					elif Status_pins[i] == 'G':
 						k = i % 4
 						GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
-						GPIO.remove_event_detect(j)
-						time.sleep(1)
 						if k == 1:
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts1)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
 						elif k == 2:
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts2)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
 						elif k == 3:
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts3)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
 						else:
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
 
 			# Renvois des sondes toutes les 300s par defaut
 			if NextRefresh<time.time():
@@ -784,11 +788,15 @@ class myThread2 (threading.Thread):
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
 	if JeedomIP!='' and eqLogic!='':
-		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
-		conn = httplib.HTTPConnection(JeedomIP,JeedomPort)
-		conn.request("GET", url )
-		#resp = conn.getresponse()
-		conn.close()
+		url = str(JeedomCPL) + "/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
+		try:
+			conn = httplib.HTTPConnection(JeedomIP, JeedomPort)
+			conn.request("GET", url)
+			conn.close()
+		except:
+			conn = httplib.HTTPConnection('127.0.0.1', 80)
+			conn.request("GET", url)
+			conn.close()
 		log("GET", url )
 	else:
 		log('Error', "JeedomIP et/ou eqLogic non fourni(s)")
@@ -843,7 +851,7 @@ if __name__ == "__main__":
 
 	# On va demander la valeur des compteurs avec un peu de retard expres
 	timeCPT = time.time() + 4
-	NextRefresh = time.time() + 40
+	NextRefresh = time.time() + 7
 	sendCPT = 0
 
 	if (nodep):
@@ -902,6 +910,10 @@ if __name__ == "__main__":
 	thread1 = myThread1(1, "First Network thread")
 	thread2 = myThread2(2, "Second Network thread")
 
+	# Settings as daemon
+	thread1.daemon = True
+	thread2.daemon = True
+
 	# Start new Threads
 	thread1.start()
 	thread2.start()
@@ -912,7 +924,8 @@ if __name__ == "__main__":
 
 	thread_delay = 900
 	thread_refresh = time.time() + thread_delay
-	thread_tries = 0
+	thread_tries1 = 0
+	thread_tries2 = 0
 
 	log('info', "Jeedouino PiGpio daemon running...")
 	try:
@@ -922,8 +935,15 @@ if __name__ == "__main__":
 			if thread_refresh<time.time():
 				thread_refresh = time.time() + thread_delay
 				if thread_1 == 0:
-					if thread_tries < 2:
-						thread_tries += 1
+					if thread_tries1 < 1:
+						thread_tries1 += 1
+						log('Warning' , '1st Thread maybe dead or waiting for a too long period, trying a re-start of it.')
+						time.sleep(5)
+						SimpleSend('&THREADSRESTART=1')
+						if not thread1.isAlive():
+							thread1.start()
+					elif thread_tries1 < 2:
+						thread_tries1 += 1
 						log('Warning' , '1st Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
 						time.sleep(2)
 						SimpleSend('&PINGME=1')
@@ -934,11 +954,24 @@ if __name__ == "__main__":
 						SimpleSend('&THREADSDEAD=1')
 						break
 				if thread_2 == 0:
-					exit = 1
-					log('Error' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
-					time.sleep(2)
-					SimpleSend('&THREADSDEAD=1')
-					break
+					if thread_tries2 < 1:
+						thread_tries2 += 1
+						log('Warning' , '2nd Thread maybe dead or waiting for a too long period, trying a re-start of it.')
+						time.sleep(5)
+						SimpleSend('&THREADSRESTART=2')
+						if not thread2.isAlive():
+							thread2.start()
+					elif thread_tries2 < 2:
+						thread_tries2 += 1
+						log('Warning' , '2nd Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
+						time.sleep(2)
+						SimpleSend('&PINGME=1')
+					else:
+						exit = 1
+						log('Error' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
+						time.sleep(2)
+						SimpleSend('&THREADSDEAD=1')
+						break
 				thread_1 = 0
 				thread_2 = 0
 			time.sleep(0.1)

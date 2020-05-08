@@ -1,5 +1,13 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+08/05/2020 v1.07c
+---
+
+- Corrections diverses.
+- Corrections des démons.
+- Amélioration de l'installation des dépendances.
+- Améliorations cosmétiques.
+
 01/04/2020 v1.07b
 ---
 

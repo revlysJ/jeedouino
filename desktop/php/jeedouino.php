@@ -39,7 +39,8 @@ foreach ($eqLogics as $eqLogic)
     }
     $style = 'style="background-image: url(plugins/jeedouino/icons/' . $icon . '.png);background-repeat: no-repeat;"';
     $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" >';
+    $JExtname = trim(config::byKey('JExtname-' . $eqLogic->getConfiguration('iparduino'), 'jeedouino', ''));
+    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" title="' . $JExtname . '">';
     $HTML .= "<center>";
     if (!file_exists(dirname(__FILE__) . '/../../icons/jeedouino_' . $ModeleArduino . '.png'))
     {
@@ -66,6 +67,9 @@ else $ShowSideBar = "col-xs-12";
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
                 <a class="btn btn-warning eqLogicAction pull-left" data-action="gotoPluginConf" title="{{Configuration avancée de l'équipement}}"><i class="fas fa-wrench"></i></a>
+                <?php if (config::byKey('ActiveExt', 'jeedouino', false)) { ?>
+                      <a class="btn btn-warning eqLogicAction pull-left" data-action="bt_jeedouinoExt"  title="{{Configuration des JeedouinoExt}}"><i class="fas fa-screwdriver"></i></a>
+                <?php } ?>
                 <a class="btn btn-info eqLogicAction pull-left bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fas fa-file"></i></a>
                 <a class="btn btn-info eqLogicAction pull-left" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fas fa-medkit"></i></a>
                 <a class="btn btn-default eqLogicAction" style="margin-top : 5px;margin-bottom: 5px;" data-action="add">
@@ -154,6 +158,9 @@ else $ShowSideBar = "col-xs-12";
 
 			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fas fa-cogs"></i> </a>
 			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fas fa-wrench"></i> </a>
+<?php if (config::byKey('ActiveExt', 'jeedouino', false)) { ?>
+      <a class="btn btn-warning eqLogicAction pull-right" data-action="bt_jeedouinoExt"  title="{{Configuration des JeedouinoExt}}"><i class="fas fa-screwdriver"></i> </a>
+<?php } ?>
 			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fas fa-medkit"></i> </a>
 			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fas fa-file"></i> </a>
 			<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>

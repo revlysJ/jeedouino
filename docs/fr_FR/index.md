@@ -24,7 +24,7 @@ Installation et mise à jour du plugin
 > **[IMPORTANT]**
 >
 > Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.  
-> Il est fortement conseillé de mette à jour votre système linux auparavant.
+> Il est fortement conseillé de mette à jour votre système linux auparavant.   
 > Un reboot peut même être nécéssaire dans certains cas.  
 > Il suffit de suivre les logs des dépendances pour surveiller la progression.   
 

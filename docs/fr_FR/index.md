@@ -84,7 +84,7 @@ Onglet : Dépendances
 ![image102](../images/configuration0.png)
 
 Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.   
-Seul celui de www.arduino.CC est considéré comme comptaible.
+Seul celui de www.arduino.CC est considéré comme compatible.
 
 * <https://www.arduino.cc/en/Main/Software>
 

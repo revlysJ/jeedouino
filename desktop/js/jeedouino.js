@@ -324,7 +324,11 @@ function addCmdToTable(_cmd) {
 	tr += '<td>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}}">';
-    if (control == 'JeedouinoControl') tr +=  '<span class="label label-info">' + control + '</span>';
+    if (control == 'JeedouinoControl')
+    {
+      if (init(_cmd.logicalId) != 'refresh') tr +=  '<span class="label label-info">eqID: ' + init(_cmd.configuration.boardid) + '</span>';
+      else tr +=  '<span class="label label-info">' + control + '</span>';
+    }
 /*     tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display : none;margin-top : 5px;" title="Action Value = ID Info">';
     tr += '<option value="">Aucune</option>';
     tr += '</select>';	 */

@@ -1112,11 +1112,11 @@ class jeedouino extends eqLogic {
 			if (!is_object($cmd))
 			{
 				$cmd = new jeedouinoCmd();
-				$cmd->setName(__('Etat Démon', __FILE__) . ' ' . $eqLogic->getName());
 				$cmd->setTemplate('mobile', 'line');
 				$cmd->setTemplate('dashboard', 'line');
 				$cmd->setOrder($i++);
 			}
+			$cmd->setName(__('Etat Démon', __FILE__) . ' ' . $eqLogic->getName());
 			$cmd->setConfiguration('control', 'JeedouinoControl');
 			$cmd->setConfiguration('boardid', $eqLogic->getId());
 			$cmd->setConfiguration('demontype', $eqLogic->getConfiguration('arduino_board'));
@@ -1132,9 +1132,9 @@ class jeedouino extends eqLogic {
 			if (!is_object($cmd))
 			{
 				$cmd = new jeedouinoCmd();
-				$cmd->setName(__('Start Démon', __FILE__) . ' ' . $eqLogic->getName());
 				$cmd->setOrder($i++);
 			}
+			$cmd->setName(__('Start Démon', __FILE__) . ' ' . $eqLogic->getName());
 			$cmd->setConfiguration('control', 'JeedouinoControl');
 			$cmd->setConfiguration('boardid', $eqLogic->getId());
 			$cmd->setConfiguration('demontype', $eqLogic->getConfiguration('arduino_board'));
@@ -1149,9 +1149,9 @@ class jeedouino extends eqLogic {
 			if (!is_object($cmd))
 			{
 				$cmd = new jeedouinoCmd();
-				$cmd->setName(__('Stop Démon', __FILE__) . ' ' . $eqLogic->getName());
 				$cmd->setOrder($i++);
 			}
+			$cmd->setName(__('Stop Démon', __FILE__) . ' ' . $eqLogic->getName());
 			$cmd->setConfiguration('control', 'JeedouinoControl');
 			$cmd->setConfiguration('boardid', $eqLogic->getId());
 			$cmd->setConfiguration('demontype', $eqLogic->getConfiguration('arduino_board'));

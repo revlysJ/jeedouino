@@ -1059,6 +1059,12 @@ void loop()
 			#endif
 		}
 	}
+
+	#if (UserSketch == 1)
+		//UserLoop(); // Appel de votre loop() permanent
+		if (NextRefresh < millis()) UserLoop(); // Appel de votre loop() toutes les 60s
+	#endif
+
 	if (NextRefresh < millis())
 	{
 		NextRefresh = millis() + 60000;	// Refresh auto toutes les 60s
@@ -1067,11 +1073,6 @@ void loop()
 			jeedom += F("&ASK=1"); // Sinon on redemande
 		}
 	}
-
-	#if (UserSketch == 1)
-		UserLoop(); // Appel de votre loop() permanent
-		// if (NextRefresh<millis()) UserLoop(); // Appel de votre loop() toutes les 60s
-	#endif
 
 	// #if (UseLCD16x2 == 1 || UseLCD16x2 == 2)
 		// lcd.setCursor(0,1);

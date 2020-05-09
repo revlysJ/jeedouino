@@ -37,8 +37,7 @@ if (isset($_GET['BoardEQ']))
 		$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
 		if (config::byKey($arduino_id . '_HasDemon', 'jeedouino', 0))
 		{
-			$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
-			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+			jeedouino::updateControlCmd($arduino_id, true);
 		}
 		// Specifique Analog to Digital pins OUT - Etat
 		$ard328 = false;
@@ -65,12 +64,14 @@ if (isset($_GET['BoardEQ']))
 			jeedouino::log( 'debug', $CALLBACK . __('vient d\'envoyer une trame téléinfo. J\'essaye de la transmettre au plugin adapté.', __FILE__));
 			if (method_exists('teleinfo', 'createFromDef'))
 			{
-				$ApiKey = config::byKey('api');
-				if ($ApiKey == '')  jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver la clé API de votre Jeedom.', __FILE__));
+				//$ApiKey = config::byKey('api');
+				$ApiKey = jeedom::getApiKey('teleinfo');
+				if ($ApiKey == '')  jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver la clé API du plugin Téléinfo.', __FILE__));
 				else
 				{
 					// Traitement de la trame
 					$message = '';
+					$deviceTeleinfo= '';
 					$etiquettes = array('ADCO' , 'OPTARIF' , 'ISOUSC' , 'BASE' , 'PTEC' , 'IINST' , 'IMAX' , 'PAPP' , 'MOTDETAT' , 'BBRHCJB' , 'BBRHPJB' , 'BBRHCJW' , 'BBRHPJW' , 'BBRHCJR' , 'BBRHPJR' , 'DEMAIN' , 'HCHC' , 'HCHP' , 'EJPHN' , 'EJPHPM' , 'PEJP' , 'ADPS' , 'HHPHC' );
 					$teleinfo = array_unique(explode(';' , $_GET['ADCO']));
 					jeedouino::log( 'debug', $CALLBACK . 'Teleinfo :' . json_encode($teleinfo));
@@ -82,13 +83,15 @@ if (isset($_GET['BoardEQ']))
 						{
 							if (in_array($champs[0], $etiquettes))
 							{
-								$message .= '&' . $champs[0] . '=' . $champs[1];
+								$message .= ',"' . $champs[0] . '":"' . $champs[1] . '"';
+								if ( $champs[0] == 'ADCO' ) $deviceTeleinfo = $champs[1];
 								jeedouino::log( 'debug', $CALLBACK . 'Champ compris :' . $champs[0] . ' = ' . $champs[1]);
 							}
 							else jeedouino::log( 'debug', $CALLBACK . 'Etiquette non trouvée :' . json_encode($champs));
 						}
 						else jeedouino::log( 'debug', $CALLBACK . 'Champ non compris :' . json_encode($champs));
 					}
+					$message = '{"device":{"' . $deviceTeleinfo . '":{"device":"' . $deviceTeleinfo . '"' . $message . '}}}';
 
 					// Envoi le tout au plugin Téléinfo
 					$http_ = trim(config::byKey('internalProtocol'));
@@ -96,9 +99,19 @@ if (isset($_GET['BoardEQ']))
 					$JeedomIP = jeedouino::GetJeedomIP();
 					$JeedomPort = jeedouino::GetJeedomPort();
 					$JeedomCPL =jeedouino::GetJeedomComplement();
-					$url = $http_ . $JeedomIP . ':' . $JeedomPort . $JeedomCPL . '/plugins/teleinfo/core/php/jeeTeleinfo.php?api=' . $ApiKey . $message;
+					$url = $http_ . $JeedomIP . ':' . $JeedomPort . $JeedomCPL . '/plugins/teleinfo/core/php/jeeTeleinfo.php?apikey=' . $ApiKey;
 					jeedouino::log( 'debug', 'Appel de : ' . $url);
-					return trim(@file_get_contents($url));
+					jeedouino::log( 'debug', 'Message POST : ' . $message);
+
+					$options = array('http' => array(	'method'  			=> 'POST',
+																						'header'  			=> "Content-Type: application/json",
+																						'ignore_errors' => true,
+																						'timeout' 			=> 10,
+																						'content' 			=> $message,
+																					),
+													);
+					$context  = stream_context_create($options);
+					return trim(@file_get_contents($url, false, $context));
 				}
 			}
 			else jeedouino::log( 'error', $CALLBACK . __(' - Impossible de trouver le plugin téléinfo.', __FILE__));
@@ -125,7 +138,7 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['THREADSDEAD']))
 		{
-			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+			jeedouino::updateControlCmd($arduino_id, false);
 			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			jeedouino::log( 'error', $CALLBACK . __('Les threads du démon sont hs. Tentative de redémarrage du démon en cours...', __FILE__));
 			jeedouino::ReStartBoardDemon($arduino_id, 0, $ModeleArduino);
@@ -140,7 +153,7 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['NOPORTFOUND']))
 		{
-			config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', false);
+			jeedouino::updateControlCmd($arduino_id, false);
 			jeedouino::log( 'error', $CALLBACK . __('Impossible de trouver un port de libre automatiquement. Veuillez en choisir un autre.', __FILE__));
 		}
 		if (isset($_GET['PORTFOUND']))
@@ -188,7 +201,7 @@ if (isset($_GET['BoardEQ']))
 				if ($message != '' and config::byKey('SENDING_'.$arduino_id, 'jeedouino', 0) == 0)
 				{
 					config::save('SENDING_'.$arduino_id, 1, 'jeedouino');
-					jeedouino::log( 'debug', __("Pause de 4s pour laisser l'arduino finir de communiquer avec le démon qui vient de demarrer", __FILE__));
+					jeedouino::log( 'debug', __("Pause de 4s pour laisser l'arduino finir sa communication de démarrage.", __FILE__));
 					sleep(4);
 					$message='S'.$message.'F';
 					jeedouino::log( 'debug', __('Envoi les valeurs des pins suite à la demande de la carte (Reboot?) ', __FILE__) . $BOARDNAME . '- Message : ' . $message);
@@ -217,12 +230,13 @@ if (isset($_GET['BoardEQ']))
 				else
 				{
 					config::save('NODEP_' . $arduino_id, '', 'jeedouino');
-					config::byKey($arduino_id . '_' . $DemonTypeF . 'DaemonState', 'jeedouino', true);
+					jeedouino::updateControlCmd($arduino_id, true);
 				}
 				jeedouino::log( 'debug', __('Envoi de ', __FILE__) . $PinMode . __(' - Réponse : ', __FILE__) . $reponse);
 			}
 		}
-		else // Informations fournies par tous
+		//else // Informations fournies par tous
+		if (true)
 		{
 			foreach ($eqLogic->getCmd('info') as $cmd)
 			{
@@ -333,14 +347,14 @@ if (isset($_GET['BoardEQ']))
 								}
 							}
 						}
-						elseif ($cmd->getConfiguration('modePIN') == 'compteur_pullup')
+						elseif ($cmd->getConfiguration('modePIN') == 'compteur_pullup' or $cmd->getConfiguration('modePIN') == 'compteur_pulldown')
 						{
 							$value = $cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
 							if ($recu < $RSTvalue)
 							{
-								jeedouino::log('debug', $CALLBACK . __('La valeur reçue est inférieure à la valeur connue RSTValue, elle ne sera pas mise à jour. C = ', __FILE__) . $recu);
-								$recu = $RSTvalue;
+								jeedouino::log('debug', $CALLBACK . __('La valeur reçue est inférieure à la valeur connue RSTValue (', __FILE__) . $RSTvalue . __('), elle y sera additionnée. Cpt = ', __FILE__) . $recu);
+								$recu += $RSTvalue;
 							}
 							$cmd->setConfiguration('RSTvalue', $recu);
 							jeedouino::log('debug', $CALLBACK . 'RSTvalue Pin n° ' . $pins_id . ' = ' . $recu);
@@ -357,7 +371,47 @@ if (isset($_GET['BoardEQ']))
 							$cmd->setConfiguration('value', $recu);
 							$cmd->save();
 							$eqLogic->refreshWidget();
-							jeedouino::log('debug', $CALLBACK . 'Pin n° ' . $pins_id . ' = ' . $recu);
+
+							$probeMSG = '';
+							$modepin = str_replace('80B', '80', strtoupper($cmd->getConfiguration('modePIN')));
+							switch($cmd->getConfiguration('modePIN'))
+							{
+								case 'dht11':
+								case 'dht21':
+								case 'dht22':
+								case 'bmp180':
+								case 'bmp280':
+								case 'bmp280b':
+								case 'bme280':
+								case 'bme280b':
+								case 'bme680':
+								case 'bme680b':
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Température) ', __FILE__);
+									break;
+								case 'dht11_h':
+								case 'dht21_h':
+								case 'dht22_h':
+								case 'bme280_h':
+								case 'bme280b_h':
+								case 'bme680_h':
+								case 'bme680b_h':
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Humidité) ', __FILE__);
+									break;
+								case 'bmp180_p':
+								case 'bmp280_p':
+								case 'bmp280b_p':
+								case 'bme280_p':
+								case 'bme280b_p':
+								case 'bme680_p':
+								case 'bme680b_p':
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Pression) ', __FILE__);
+									break;
+								case 'bme680_g':
+								case 'bme680b_g':
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Gas) ', __FILE__);
+									break;
+							}
+							jeedouino::log('debug', $CALLBACK . $probeMSG . 'Pin n° ' . $pins_id . ' = ' . $recu);
 						}
 						else
 						{
@@ -380,7 +434,7 @@ if (isset($_GET['BoardEQ']))
 					}
 					elseif (array_key_exists('CPT_' . $pins_id, $_GET))
 					{
-						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup') // uniquement les valeurs de compteur
+						if ($cmd->getConfiguration('modePIN') == 'compteur_pullup' or $cmd->getConfiguration('modePIN') == 'compteur_pulldown') // uniquement les valeurs de compteur
 						{
 							$value=$cmd->getConfiguration('value');
 							list(,$board) = jeedouino::GetPinsByBoard($arduino_id);

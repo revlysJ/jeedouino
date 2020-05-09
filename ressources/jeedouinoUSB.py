@@ -1,5 +1,5 @@
 """
-JEEDOUINO ARDUINO USB DEMON v0.8 , Dec 2015 - 2019
+JEEDOUINO ARDUINO USB DEMON v0.8 , Dec 2015 - 2020
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original :	https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -165,7 +165,7 @@ class myThread1 (threading.Thread):
 
 				if reponse != '':
 					c.send(reponse.encode('ascii'))
-					log (' >  > Reponse a la requete', str(reponse))
+					log ('>> Reponse a la requete', str(reponse))
 
 				if exit == 1:
 					break
@@ -236,11 +236,15 @@ class myThread2 (threading.Thread):
 def SimpleSend(rep):
 	global eqLogic, JeedomIP, JeedomPort, JeedomCPL
 	if JeedomIP != '' and eqLogic != '':
-		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
-		conn = httplib.HTTPConnection(JeedomIP, JeedomPort)
-		conn.request("GET", url )
-		#resp = conn.getresponse()
-		conn.close()
+		url = str(JeedomCPL) + "/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
+		try:
+			conn = httplib.HTTPConnection(JeedomIP, JeedomPort)
+			conn.request("GET", url)
+			conn.close()
+		except:
+			conn = httplib.HTTPConnection('127.0.0.1', 80)
+			conn.request("GET", url)
+			conn.close()
 		log("GET", url )
 	else:
 		log('Error', "JeedomIP et/ou eqLogic non fourni(s)")
@@ -296,6 +300,10 @@ if __name__  ==  "__main__":
 	thread1 = myThread1(1, "Network thread")
 	thread2 = myThread2(2, "Usb thread")
 
+	# Settings as daemon
+	thread1.daemon = True
+	thread2.daemon = True
+
 	# Start new Threads
 	thread1.start()
 	thread2.start()
@@ -318,18 +326,18 @@ if __name__  ==  "__main__":
 						thread_tries +=  1
 						log('Warning' , '1st Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
 						time.sleep(2)
-						SimpleSend('&PINGME = 1')
+						SimpleSend('&PINGME=1')
 					else:
 						exit = 1
 						log('Error' , '1st Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
 						time.sleep(2)
-						SimpleSend('&THREADSDEAD = 1')
+						SimpleSend('&THREADSDEAD=1')
 						break
 				if thread_2  ==  0:
 					exit = 1
 					log('Error' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
 					time.sleep(2)
-					SimpleSend('&THREADSDEAD = 1')
+					SimpleSend('&THREADSDEAD=1')
 					break
 				thread_1 = 0
 				thread_2 = 0

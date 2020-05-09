@@ -114,78 +114,101 @@ try {
     }
     ////
 
-    // Actions pour la gestion du reset compteur
- 	if (init('action') == 'ResetCPT')
+    // Actions pour la gestion du reset compteur / RéArm event compteurs
+    if (init('action') == 'ResetCPT')
     {
-        jeedouino::ResetCPT(init('boardid'),init('RSTvalue'),init('CMDid'));
-		ajax::success();
-	}
+      jeedouino::ResetCPT(init('boardid'), init('RSTvalue'), init('CMDid'));
+      ajax::success();
+    }
+    if (init('action') == 'CptDelay')
+    {
+      jeedouino::CptDelay(init('boardid'), init('CptDelay'));
+      ajax::success();
+    }
+    // Action pour mettre à jour le délai de relève des sondes
+    if (init('action') == 'ProbeDelay')
+    {
+      jeedouino::ProbeDelay(init('boardid'), init('ProbeDelay'));
+      ajax::success();
+    }
 
     // Actions pour la gestion des démons  / Jeedouino
- 	if (init('action') == 'StartBoardDemon')
+   	if (init('action') == 'StartBoardDemon')
     {
-        jeedouino::StartBoardDemon(init('boardid'), init('id'), init('DemonType'));
-		ajax::success();
-	}
-  	if (init('action') == 'ReStartBoardDemon')
+      jeedouino::StartBoardDemon(init('boardid'), init('id'), init('DemonType'));
+      ajax::success();
+    }
+    if (init('action') == 'ReStartBoardDemon')
     {
-        jeedouino::ReStartBoardDemon(init('boardid'), init('id'), init('DemonType'));
-		ajax::success();
-	}
- 	if (init('action') == 'StopBoardDemon')
+      jeedouino::ReStartBoardDemon(init('boardid'), init('id'), init('DemonType'));
+      ajax::success();
+    }
+    if (init('action') == 'StopBoardDemon')
     {
-        jeedouino::StopBoardDemon(init('boardid'), init('id'), init('DemonType'));
-		ajax::success();
-	}
+      jeedouino::StopBoardDemon(init('boardid'), init('id'), init('DemonType'));
+      ajax::success();
+    }
 
     // Actions pour l'Installation des dépendances
-  	if (init('action') == 'installUpdate')
+    $title = str_replace('install', '', init('action'));
+    $sudo = system::getCmdSudo();
+    $exec = "echo '======= Start of $title installation ======='\n";
+    $xEnd = "echo '======= End of $title installation ======='\n";
+    if (init('action') == 'installUpdate')
     {
-        exec('sudo apt-get -y update >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-        exec('sudo apt-get -y upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-        exec('sudo apt-get -y dist-upgrade >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		ajax::success();
-	}
+      $exec .= "$sudo apt-get -y update \n";
+      $exec .= "$sudo apt-get -y upgrade \n";
+      $exec .= "$sudo apt-get -y dist-upgrade \n";
+      jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_update'));
+      ajax::success();
+    }
   	if (init('action') == 'installSerial')
     {
-        exec('sudo apt-get -y install python{,3}-pip python-serial>> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-        exec('sudo pip3 uninstall serial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-        exec('sudo pip3 install pyserial >> '.jeedouino::getPathToLog('jeedouino_usb') . ' 2>&1 &');
-		ajax::success();
-	}
+      $exec .= "$sudo apt-get -y install python{,3}-pip \n";
+      $exec .= "$sudo apt-get -y python-serial \n";
+      $exec .= "$sudo pip install --upgrade pip \n";
+      $exec .= "$sudo pip3 uninstall serial \n";
+      $exec .= "$sudo pip3 install pyserial \n";
+      jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_usb'));
+      ajax::success();
+    }
   	if (init('action') == 'installGPIO')
     {
-        exec('sudo pip3 install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
-        exec('sudo pip install RPi.GPIO >> '.jeedouino::getPathToLog('jeedouino_pigpio') . ' 2>&1 &');
-		ajax::success();
-	}
- 	if (init('action') == 'installPIFACE')
+      $exec .= "$sudo pip3 install RPi.GPIO \n";
+      $exec .= "$sudo pip install RPi.GPIO \n";
+      jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_pigpio'));
+      ajax::success();
+    }
+    if (init('action') == 'installPIFACE')
     {
-        exec('sudo apt-get -y install python{,3}-pip python{,3}-setuptools >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip3 install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-		exec('sudo pip install pifacecommon pifacedigitalio >> ' . jeedouino::getPathToLog('jeedouino_piface') . ' 2>&1 &');
-        // enable spi
-        exec('sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt');
-		ajax::success();
-	}
- 	if (init('action') == 'installPiPlus')
+      $exec .= "$sudo apt-get -y install python{,3}-pip \n";
+      $exec .= "$sudo apt-get -y python{,3}-setuptools \n";
+      $exec .= "$sudo pip install --upgrade pip \n";
+      $exec .= "$sudo pip3 install pifacecommon pifacedigitalio \n";
+      $exec .= "$sudo pip install pifacecommon pifacedigitalio \n";
+      $exec .= "$sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt \n";
+      jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_piface'));
+      ajax::success();
+    }
+    if (init('action') == 'installPiPlus')
     {
-        exec('sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
-        //exec('sudo apt-get -y install python{,3}-smbus >> '.jeedouino::getPathToLog('jeedouino_piplus') . ' 2>&1 &');
-        // enable i2c
-        exec('sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt');
-        exec('sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt');
-        exec('sudo echo i2c-dev | sudo tee -a /etc/modules');
-        exec('sudo echo i2c-bcm2708 | sudo tee -a /etc/modules');
-        ajax::success();
-	}
+      $exec .= "$sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus \n";
+      $exec .= "$sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt \n";
+      $exec .= "$sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt \n";
+      $exec .= "$sudo echo i2c-dev | sudo tee -a /etc/modules \n";
+      $exec .= "$sudo echo i2c-bcm2708 | sudo tee -a /etc/modules \n";
+      jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_piplus'));
+      ajax::success();
+    }
  	if (init('action') == 'installDS18B20')
     {
-        exec('cd ; git clone https://github.com/danjperron/BitBangingDS18B20.git >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-        sleep(3);
-        exec('cd BitBangingDS18B20/python; sudo python setup.py install >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-        exec('cd BitBangingDS18B20/python; sudo python3 setup.py install >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-		ajax::success();
+        $exec .= "$sudo rm -Rf /tmp/ds \n";
+        $exec .= "$sudo git clone https://github.com/danjperron/BitBangingDS18B20.git /tmp/ds \n";
+        $exec .= "cd /tmp/ds/python \n";
+        $exec .= "$sudo python3 setup.py install \n";
+        $exec .= "$sudo python setup.py install \n";
+        jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_pigpio'));
+        ajax::success();
 	}
     // action qui permet d'effectuer la sauvegarde des données en asynchrone
     if (init('action') == 'saveStack') {

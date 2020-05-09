@@ -1,6 +1,6 @@
 Description
 ===========
-- **Jeedouino v1.06**  
+- **Jeedouino v1.07**  
 
    Ce plugin vous permet de contrôler de différentes manières les pins entrées/sorties des cartes suivantes :
 
@@ -24,6 +24,7 @@ Installation et mise à jour du plugin
 > **[IMPORTANT]**
 >
 > Une installation ou une mise à jour du plugin, sur un système un peu ancien, peut prendre du temps pour la mise à jour de celui-ci.  
+> Il est fortement conseillé de mette à jour votre système linux auparavant.   
 > Un reboot peut même être nécéssaire dans certains cas.  
 > Il suffit de suivre les logs des dépendances pour surveiller la progression.   
 
@@ -82,7 +83,8 @@ Onglet : Dépendances
 
 ![image102](../images/configuration0.png)
 
-Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.
+Un lien est disponible pour aller télécharger le dernier Arduino IDE pour flasher les sketchs sur vos cartes idoines.   
+Seul celui de www.arduino.CC est considéré comme compatible.
 
 * <https://www.arduino.cc/en/Main/Software>
 
@@ -577,15 +579,22 @@ Pins Entrées (Input)
 
       ![image409](../images/compteur.png)
 
-      + **Entrée Numérique en PULL-UP** (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
+      + **Entrée Numérique avec PULL-DOWN**
+      + **Entrée Numérique avec PULL-UP** (Bouton poussoir, interrupteur, capteur d'ouverture, capteur de mouvement.. )
       + **Entrée Numérique Variable (0-255 sur 10s)** (Bouton poussoir maintenu de 0 à 10s pour commander via scénario un variateur par ex)
+      + **BMP 085/180** Capteur Température et pression (pins SDA / SCL)
+      + **BMP 280** Capteur Température et pression (pins SDA / SCL)
+      + **BME 280** Capteur Température, humidité et pression (pins SDA / SCL)
+      + **BME 680** Capteur Température, humidité, gas cov et pression (pins SDA / SCL)
       + **HC-SR04 Echo** En lien avec la pin Trigger, permet de récupérer la distance mesurée par le capteur ultrason.
+          > **[NOTE]**
+          >
+          > Pensez à l'activer dans l'entête du sketch : #define UseHCSR04 1
 
       ![image410](../images/hc_sr04.png)
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos :_**
-      + **Sonde DHT 11,21,22** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
-      + **Sonde DS18x20** - Permet d'avoir une commande avec la température
+      + **Sonde DHT 11, 21, 22** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
       + **Entrée téléinfo ERDF ( pin RX )** - Permet d'avoir une commande de réception de message série pour la téléinfo.
       > **[TIP]**
 	  >
@@ -594,11 +603,16 @@ Pins Entrées (Input)
 
       **_Uniquement sur Raspberry PI GPIO :_**
       + **Sonde DHT 11, 22 (AM2302)** - Permet d'avoir 2 commandes, une pour la température, et une pour l'humidité.
-      + **Sonde DS18B20** - Permet d'avoir une commande avec la température
 
       **_Uniquement sur Arduino / ESP / NodeMCU / Wemos et Raspberry PI GPIO :_**
-      + **Entrée Bouton poussoir avec PULL-DOWN**
-      + **Entrée Bouton poussoir avec PULL-UP**
+      + **Sonde(s) DS18B20** - Permet d'avoir une/des commande(s) avec la température.
+      >Une seule commande (par pin) est créée à la sauvegarde.  
+      En cas de plusieurs ds18b20 (sur la même pin), les commandes suivantes seront générées au fur et mesure des remontées de température.  
+      Le délai de remontée par défaut est de 5 minutes.  
+      Il est paramétrable dans l'onglet **Options** du menu **Pins/GPIO**.
+
+      + **Entrée multi-clics avec PULL-DOWN**
+      + **Entrée multi-clics avec PULL-UP**
 
       > **[NOTE]**
 	  >
@@ -645,16 +659,16 @@ Pins Sorties (output)
       >Actionner un relais d'une élèctrovanne pour commander l'arrosage du jardin pendant un durée déterminée (ex: 06000 pour 10min).  
       >Actionner des relais pour l'ouverture/fermeture de volets roulants (ex: 00400 pour 40s).
 
-      + **Sortie double click mise à HIGH (click) LOW (pause) HIGH (click)**.  Permet de simuler un double click (pour une télécommande de volets par ex).
-         La durée du click/pause/click est modifiable.
+      + **Sortie double clic mise à HIGH (clic) LOW (pause) HIGH (clic)**.  Permet de simuler un double clic (pour une télécommande de volets par ex).
+         La durée du clic/pause/clic est modifiable.
          Attention à ne pas choisir des durées trop longues car cela est bloquant.
       > **[NOTE]**
    	  >
       >Durée exprimée en dixième de secondes et 3 + 3 chiffres max. Soit de 0.1s a 99.9s.
-      >Les 3 premiers concernent le durée du click.
+      >Les 3 premiers concernent la durée du clic.
       >Les 3 suivants, la durée de la pause.
 
-      + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason.
+      + **HC-SR04 Trigger** En lien avec la pin Echo, permet de lancer la mesure de la distance par le capteur ultrason. Cf pin Echo.
 
 
    + **Numériques/pseudo-Analogiques**  

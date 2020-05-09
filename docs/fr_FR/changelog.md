@@ -1,5 +1,34 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+08/05/2020 v1.07c
+---
+
+- Corrections diverses.
+- Corrections des démons.
+- Amélioration de l'installation des dépendances.
+- Améliorations cosmétiques.
+
+01/04/2020 v1.07b
+---
+
+- Ajout de la modification directe du délai de relève des sondes.
+- Ajout d'un réarm event des compteurs (piGpio).
+- Ajout de la modification directe du délai de réarm  des compteurs (piGpio).
+- Ajout d'un scan régulier de la présence des sondes ds18b20 (piGpio).
+- Correction Appel API du plugin Téléinfo (fix par @Seb-Othis).
+- Corrections diverses.
+
+03/11/2019 v1.07
+---
+
+- Correction du démon PiPlus.
+- Ajout "compteur_pulldown" au démon PiGpio.
+- Ajout d'une commande resetcpt pour changer la valeur d'un compteur via scénario.
+- Conformité V4 : suppression du menu de gauche par défaut (option en page configuration).
+- Amélioration du rafraîchissement de JeedouinoControl.
+- Amélioration de l'installation des dépendances générales.
+- Corrections diverses.
+
 22/10/2019 v1.06b
 ---
 

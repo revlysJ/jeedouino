@@ -141,9 +141,11 @@ if (isset($_GET['id']))
 			{
 				$_ProbeDelay = '
 				<div class="form-group">
-					<label class="col-sm-6 control-label "><p class="hidden-xs"><br/>{{Délai de renvoi des valeurs des sondes T°/H en minutes. <br>(En tests)}}</p></label>
+					<label class="col-sm-6 control-label hidden-xs">{{Délai de renvoi des valeurs des sondes T°/H en Minutes : }} <i class="fas fa-question-circle tooltips" title="{{Délai sondes en Minutes : 1min à 1000min max.}}"></i></label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1 à 1000 max." min="1" max="1000"/>
+						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1min à 1000min max." min="1" max="1000"/>
+            <a class="btn btn-warning btn-xs bt_ProbeDelay"><i class="fas fa-rss"></i> {{MàJ le délai entre sondes avec valeur ci-dessus:}}</a>
+            <br><br>
 					</div>
 				</div>';
 			?>
@@ -152,13 +154,13 @@ if (isset($_GET['id']))
 				{
 				?>
                 <div class="form-group">
-                    <label class="col-sm-6 control-label "><p class="hidden-xs"><br/>{{Choix de sauvegarde de l'état des pins suite a un redémarrage de l'Arduino/esp (Coupure de courant, reset,etc...)}}</p></label>
+                    <label class="col-sm-6 control-label hidden-xs">{{Choix de sauvegarde de l'état des pins suite a un redémarrage de l'Arduino/esp (Coupure de courant, reset,etc...)}}</label>
                     <div class="col-sm-6">
 						<?php
 							if (config::byKey($arduino_id . '_choix_boot', 'jeedouino', 'none') != 'none') $message_a = '';
 							else $message_a=' selected ';
 
-							echo '<br><br>';
+							//echo '<br><br>';
 							echo '<select class="form-control configKeyPins" data-l1key="' . $arduino_id . '_choix_boot">';
 							echo '<option value="0">{{Pas de sauvegarde - Toutes les pins sorties non modifiées au démarrage.}}</option>';
 							echo '<option value="1">{{Pas de sauvegarde - Toutes les pins sorties mises à LOW au démarrage.}}</option>';
@@ -168,30 +170,39 @@ if (isset($_GET['id']))
 							echo '<option value="4" style="color: #a94442!important;">{{Sauvegarde sur EEPROM- Toutes les pins sorties mises suivant leur sauvegarde dans l\'EEPROM. Autonome, rapide mais durée de vie de l\'eeprom fortement réduite.}}</option>';
 							echo '</select>';
 						 ?>
-					<br>
+             <br><br>
                     </div>
                 </div>
 				<?php
-					if ($PortArduino != 'usbarduino' && $ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
+					//if ($PortArduino != 'usbarduino' && $ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
+          if ($ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
 				}
 				elseif (substr($ModeleArduino,0,6) == 'piGPIO')
 				{
 				?>
                 <div class="form-group">
-                    <label class="col-sm-6 control-label "><p class="hidden-xs"><br/>{{Choix de l'état des pins sorties au démarrage du démon piGPIO. (En tests)}}</p></label>
+                    <label class="col-sm-6 control-label hidden-xs">{{Choix de l'état des pins sorties au démarrage du démon piGPIO : }}</label>
                     <div class="col-sm-6">
 						<?php
-							echo '<br><br>';
+							//echo '<br>';
 							echo '<select class="form-control  configKeyPins" data-l1key="'.$arduino_id.'_PiGpio_boot">';
 							echo '<option value="0">{{Toutes les pins sorties mises à LOW au démarrage du démon}}</option>';
 							echo '<option value="1">{{Toutes les pins sorties mises à HIGH au démarrage du démon}}</option>';
 							echo '</select>';
 						 ?>
-					<br>
+					<br><br>
                     </div>
                 </div>
 				<?php
 					echo $_ProbeDelay;
+          echo '<div class="form-group">
+      					<label class="col-sm-6 control-label hidden-xs">{{Délai RéArm Event compteurs en Secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 3600 pour UNE heure  : 600s à 86400s max.}}"></i></label>
+      					<div class="col-sm-6">
+      						<input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_CptDelay"  placeholder="Mettre ici 3600 pour UNE heure  : 600s à 86400s max." min="600" max="86400"/>
+                  <a class="btn btn-warning btn-xs bt_CptDelay"><i class="fas fa-rss"></i> {{MàJ le délai de RéArm Event des compteurs avec valeur ci-dessus:}}</a>
+                  <br><br>
+      					</div>
+      				</div>';
 				}
 				elseif ($ModeleArduino == 'piPlus')
 				{
@@ -317,8 +328,10 @@ if (isset($_GET['id']))
 				foreach ($Arduino_pins as $pins_id => $pin_datas)
 				{
 					$TmpPins = '<tr class="pinoche" data-logicalId="' . $pins_id . '">';
-					if ($pin_datas['option'] != '') $TmpPins .= '<td>' . $pin_datas['Nom_pin'] . ' - ( ' . $pin_datas['option'] . ' ) </td>';
-					else $TmpPins .= '<td>' . $pin_datas['Nom_pin'] . '</td>';
+					if ($pin_datas['option'] != '') $TmpPins .= '<td>' . $pin_datas['Nom_pin'] . ' - ( ' . $pin_datas['option'] . ' ) ';
+					else $TmpPins .= '<td>' . $pin_datas['Nom_pin'] . ' ';
+          if ($ModeleArduino == 'esp01' or $ModeleArduino == 'esp07' or $ModeleArduino == 'espMCU01' or $ModeleArduino == 'esp32dev') $TmpPins .= '<br><span class="label label-info" >PIN No : ' . $pins_id . '</span></td>';
+          else $TmpPins .= '</td>';
 
 					// pins non disponibles
 					if ($pin_datas['disable'] == '1')
@@ -567,7 +580,6 @@ if (isset($_GET['id']))
 						$TmpPins .= '</optgroup>';
 					}
 					$TmpPins .= '</select>';
-					$TmpPins .= '<span class="HC_trigger hide"><i class="fas fa-arrow-right"></i> {{Pensez à selectionner la pin $TmpPins .=.}}</span>';
 					$TmpPins .= '</td>';
 
 					// Type Générique pour App Mobile
@@ -657,7 +669,7 @@ if (isset($_GET['id']))
 				<table class="table table-bordered table-condensed tablesorter">
 					<thead>
 					<tr>
-						<th>{{Arduino/ESP/RPI  Pins}}</th><th>{{Fonctions}}</th><th>{{Type Générique}}</th><?php if (config::byKey('ActiveVirtual', 'jeedouino', false)) echo '<th>{{Groupes Virtuels}}</th>'; ?>
+						<th>{{Arduino/ESP/RPI Pins}}</th><th>{{Fonctions}}</th><th>{{Type Générique}}</th><?php if (config::byKey('ActiveVirtual', 'jeedouino', false)) echo '<th>{{Groupes Virtuels}}</th>'; ?>
 					</tr>
 					</thead>
 					<tbody>
@@ -693,16 +705,52 @@ if (isset($_GET['id']))
 		</div>
 </div>
 <script>
-	$('.configKeyPins').on('change',function(){
-		if ($(this).value()=='trigger')
-		{
-			$('.HC_trigger').show();
+// Onglet Options
+$(".bt_CptDelay").on('click', function (event) {
+	$.ajax({
+		type: "POST",
+		url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php",
+		data: {
+			action: "CptDelay",
+			boardid : <?php echo $arduino_id; ?>,
+			CptDelay : $('.configKeyPins[data-l1key=<?php echo $arduino_id; ?>_CptDelay]').value()
+		},
+		dataType: 'json',
+		error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+		success: function (data) {
+		if (data.state != 'ok') {
+			$('#div_alert').showAlert({message: data.result, level: 'danger'});
+			return;
 		}
-		else
-		{
-			$('.HC_trigger').hide();
+		$('#div_alert').showAlert({message: '{{La valeur délai de RéArm Event des compteurs a bien été envoyée.}}', level: 'success'});
+	}
+});
+});
+$(".bt_ProbeDelay").on('click', function (event) {
+	$.ajax({
+		type: "POST",
+		url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php",
+		data: {
+			action: "ProbeDelay",
+			boardid : <?php echo $arduino_id; ?>,
+			ProbeDelay : $('.configKeyPins[data-l1key=<?php echo $arduino_id; ?>_ProbeDelay]').value()
+		},
+		dataType: 'json',
+		error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+		success: function (data) {
+		if (data.state != 'ok') {
+			$('#div_alert').showAlert({message: data.result, level: 'danger'});
+			return;
 		}
-	});
+		$('#div_alert').showAlert({message: '{{La valeur délai de relève des sondes a bien été envoyée.}}', level: 'success'});
+	}
+});
+});
+
 	// jeedom.backup_class.js
 	$(".bt_savebackup_pins").on('click', function (event) {
 		//$.hideAlert();
@@ -744,7 +792,7 @@ if (isset($_GET['id']))
 				$('#div_alertpins').showAlert({message: data.result, level: 'danger'});
 				return;
 			}
-//			$('#md_modal').dialog('close');
+      //			$('#md_modal').dialog('close');
 			$('#jqueryLoadingDiv').hide();		// A surveiller, élimine la "roue" qui tourne mais laisse celle lors de la sauvegarde de équipement. bug ??
 
 			modifyWithoutSave = false;

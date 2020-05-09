@@ -24,6 +24,15 @@ cd /tmp
 #sudo apt-get -y upgrade
 #sudo apt-get -y dist-upgrade
 
+echo 10 > ${PROGRESS_FILE}
+echo "-"
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "Auto-Fix et Nettoyage preventif"
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+sudo apt -y --fix-broken install
+sudo dpkg --configure -a --force-confdef
+sudo apt -y autoremove
+
 echo 20 > ${PROGRESS_FILE}
 echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"

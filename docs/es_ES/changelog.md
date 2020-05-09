@@ -1,5 +1,16 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+03/11/2019 v1.07
+---
+
+- Correction du démon PiPlus.
+- Ajout "compteur_pulldown" au démon PiGpio.
+- Ajout d'une commande resetcpt pour changer la valeur d'un compteur via scénario.
+- Conformité V4 : suppression du menu de gauche par défaut (option en page configuration).
+- Amélioration du rafraîchissement de JeedouinoControl.
+- Amélioration de l'installation des dépendances générales.
+- Corrections diverses.
+
 22/10/2019 v1.06b
 ---
 

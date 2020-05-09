@@ -1,5 +1,5 @@
 """
-JEEDOUINO IO PiPlus DEMON v0.8 Dec2015-2019
+JEEDOUINO IO PiPlus DEMON v0.8 Dec2015 - 2020
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original : https://github.com/abelectronicsuk/ABElectronics_Python_Libraries
 				http://www.tutorialspoint.com/python/python_multithreading.htm
@@ -88,7 +88,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,SetAllLOW,SetAllHIGH,CounterPinValue,s,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,BootMode,thread_1,thread_tries,sendPINMODE
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,SetAllLOW,SetAllHIGH,CounterPinValue,s,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,BootMode,thread_1,thread_2,thread_tries1,sendPINMODE
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -130,10 +130,10 @@ class myThread1 (threading.Thread):
 			if exit==1:
 				break
 			m = c.recv(1024)
-			thread_tries = 0
+			thread_tries1 = 0
 			query=SimpleParse(m)
 			if query:
-				log ('Requete :',str(query))
+				log ('Requete', str(query))
 
 				reponse='NOK'
 				exit=0
@@ -304,7 +304,10 @@ class myThread1 (threading.Thread):
 					SetPin(u, 0, reponse)
 
 				if 'PING' in query:
-					reponse = 'PINGOK'
+					if thread_2 == 1:
+						reponse = 'PINGOK'
+					else:
+						reponse = 'PINGKO'
 					RepStr = '&REP=' + str(reponse)
 
 				if 'EXIT' in query:
@@ -313,7 +316,7 @@ class myThread1 (threading.Thread):
 
 				if reponse != '':
 					c.send(reponse.encode('ascii'))
-					log ('>>Reponse a la requete :', str(reponse))
+					log ('>> Reponse a la requete', str(reponse))
 					if RepStr != '':
 						SimpleSend(RepStr)
 
@@ -345,7 +348,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_2,sendPINMODE
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_1,thread_2,thread_tries2,sendPINMODE
 
 		while exit==0:
 			thread_2 = 1
@@ -364,6 +367,7 @@ class myThread2 (threading.Thread):
 			if pinStr!='':
 				SimpleSend(pinStr + '&Tempo=1')
 
+			thread_tries2 = 0
 			if SetAllLOW==1:
 				pinStr = '&REP=SOK'
 				for i in range(0,16):
@@ -432,12 +436,16 @@ class myThread2 (threading.Thread):
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
 	if JeedomIP!='' and eqLogic!='':
-		url = str(JeedomCPL)+"/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
-		conn = httplib.HTTPConnection(JeedomIP,JeedomPort)
-		conn.request("GET", url)
-		#resp = conn.getresponse()
-		conn.close()
-		log("GET", str(JeedomIP) + ':' + str(JeedomPort) + url )
+		url = str(JeedomCPL) + "/plugins/jeedouino/core/php/Callback.php?BoardEQ=" + str(eqLogic) + str(rep)
+		try:
+			conn = httplib.HTTPConnection(JeedomIP, JeedomPort)
+			conn.request("GET", url)
+			conn.close()
+		except:
+			conn = httplib.HTTPConnection('127.0.0.1', 80)
+			conn.request("GET", url)
+			conn.close()
+		log("GET", url )
 	else:
 		log('Error', "JeedomIP et/ou eqLogic non fourni(s)")
 
@@ -506,7 +514,7 @@ if __name__ == "__main__":
 				bus.write_pin(j, BootMode)
 				swtch[i] = BootMode
 				pinStr += '&' + str(i) + '=' + str(BootMode)
-			elif Status_pins[i]=='p' or Status_pins[i]=='i':
+			elif Status_pins[i]=='p' or Status_pins[i]=='i' or Status_pins[i]=='c':
 				bus.set_pin_direction(j, 1)
 				input = bus.read_pin(j)
 				Status_INPUTS[i] = input
@@ -535,7 +543,8 @@ if __name__ == "__main__":
 
 	thread_delay = 900
 	thread_refresh = time.time() + thread_delay
-	thread_tries = 0
+	thread_tries1 = 0
+	thread_tries2 = 0
 
 	log('info', "Jeedouino PiPlus daemon running...")
 	try:
@@ -543,8 +552,15 @@ if __name__ == "__main__":
 			if thread_refresh<time.time():
 				thread_refresh = time.time() + thread_delay
 				if thread_1 == 0:
-					if thread_tries < 2:
-						thread_tries += 1
+					if thread_tries1 < 1:
+						thread_tries1 += 1
+						log('Warning' , '1st Thread maybe dead or waiting for a too long period, trying a re-start of it.')
+						time.sleep(5)
+						SimpleSend('&THREADSRESTART=1')
+						if not thread1.isAlive():
+							thread1.start()
+					elif thread_tries1 < 2:
+						thread_tries1 += 1
 						log('Warning' , '1st Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
 						time.sleep(2)
 						SimpleSend('&PINGME=1')
@@ -555,11 +571,24 @@ if __name__ == "__main__":
 						SimpleSend('&THREADSDEAD=1')
 						break
 				if thread_2 == 0:
-					exit = 1
-					log('Error' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
-					time.sleep(2)
-					SimpleSend('&THREADSDEAD=1')
-					break
+					if thread_tries2 < 1:
+						thread_tries2 += 1
+						log('Warning' , '2nd Thread maybe dead or waiting for a too long period, trying a re-start of it.')
+						time.sleep(5)
+						SimpleSend('&THREADSRESTART=2')
+						if not thread2.isAlive():
+							thread2.start()
+					elif thread_tries2 < 2:
+						thread_tries2 += 1
+						log('Warning' , '2nd Thread maybe dead or waiting for a too long period, ask Jeedouino for a ping and wait for one more try.')
+						time.sleep(2)
+						SimpleSend('&PINGME=1')
+					else:
+						exit = 1
+						log('Error' , '2nd Thread dead, shutting down daemon server and ask Jeedouino for a restart.')
+						time.sleep(2)
+						SimpleSend('&THREADSDEAD=1')
+						break
 				thread_1 = 0
 				thread_2 = 0
 			# Boucle qui remplace le listener (qui bug avec plusieurs piPlus)

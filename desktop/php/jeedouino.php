@@ -39,7 +39,8 @@ foreach ($eqLogics as $eqLogic)
     }
     $style = 'style="background-image: url(plugins/jeedouino/icons/' . $icon . '.png);background-repeat: no-repeat;"';
     $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" >';
+    $JExtname = trim(config::byKey('JExtname-' . $eqLogic->getConfiguration('iparduino'), 'jeedouino', ''));
+    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" title="' . $JExtname . '">';
     $HTML .= "<center>";
     if (!file_exists(dirname(__FILE__) . '/../../icons/jeedouino_' . $ModeleArduino . '.png'))
     {
@@ -54,13 +55,21 @@ foreach ($eqLogics as $eqLogic)
     if ($eqLogic->getConfiguration('alone') == '1') $eqLogicsEXT .= $HTML;
     else $eqLogicsHTML .= $HTML;
 }
+if (config::byKey('ShowSideBar', 'jeedouino', false)) $ShowSideBar = "col-lg-10 col-md-9 col-sm-8";
+else $ShowSideBar = "col-xs-12";
 ?>
 
 <div class="row row-overflow">
+<?php if (config::byKey('ShowSideBar', 'jeedouino', false))
+{
+?>
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
                 <a class="btn btn-warning eqLogicAction pull-left" data-action="gotoPluginConf" title="{{Configuration avancée de l'équipement}}"><i class="fas fa-wrench"></i></a>
+                <?php if (config::byKey('ActiveExt', 'jeedouino', false)) { ?>
+                      <a class="btn btn-warning eqLogicAction pull-left" data-action="bt_jeedouinoExt"  title="{{Configuration des JeedouinoExt}}"><i class="fas fa-screwdriver"></i></a>
+                <?php } ?>
                 <a class="btn btn-info eqLogicAction pull-left bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fas fa-file"></i></a>
                 <a class="btn btn-info eqLogicAction pull-left" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fas fa-medkit"></i></a>
                 <a class="btn btn-default eqLogicAction" style="margin-top : 5px;margin-bottom: 5px;" data-action="add">
@@ -71,15 +80,16 @@ foreach ($eqLogics as $eqLogic)
 				foreach ($eqLogics as $eqLogic)
 				{
 					$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-					echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+					echo '<li class="cursor li_eqLogic2" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 				}
 				?>
             </ul>
             <ul id="ul_eqLogicView" class="nav nav-pills nav-stacked"></ul> <!-- la sidebar -->
         </div>
     </div>
+<?php } ?>
 
-    <div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
+    <div class="<?php echo $ShowSideBar;?> eqLogicThumbnailDisplay">
         <legend><i class="fas fa-cog"></i> {{Gestion}}</legend> <!-- changer pour votre type d'équipement -->
 
 		<div class="eqLogicThumbnailContainer">
@@ -138,7 +148,7 @@ foreach ($eqLogics as $eqLogic)
         ?>
 	</div>
     <!-- Affichage de l'eqLogic sélectionné -->
-    <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
+    <div class="<?php echo $ShowSideBar;?> eqLogic eqLogic_active" data-eqLogic_id = "" style="display: none;">
 		<div style="padding-bottom:40px;">
 			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fas fa-check-circle"></i> {{Sauver / Générer}}</a>
 			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fas fa-minus-circle"></i> </a>
@@ -148,6 +158,9 @@ foreach ($eqLogics as $eqLogic)
 
 			<a class="btn btn-default eqLogicAction pull-right" data-action="configure" title="{{Configuration avancée de l'équipement}}"><i class="fas fa-cogs"></i> </a>
 			<a class="btn btn-default eqLogicAction pull-right" data-action="gotoPluginConf"  title="{{Page de Configuration du plugin}}"><i class="fas fa-wrench"></i> </a>
+<?php if (config::byKey('ActiveExt', 'jeedouino', false)) { ?>
+      <a class="btn btn-warning eqLogicAction pull-right" data-action="bt_jeedouinoExt"  title="{{Configuration des JeedouinoExt}}"><i class="fas fa-screwdriver"></i> </a>
+<?php } ?>
 			<a class="btn btn-info eqLogicAction pull-right" data-action="bt_healthSpecific" title="{{Page de Santé du plugin}}"><i class="fas fa-medkit"></i> </a>
 			<a class="btn btn-info eqLogicAction pull-right bt_plugin_view_log" data-slaveid="-1" data-log="jeedouino" title="{{Logs du plugin}}"><i class="fas fa-file"></i> </a>
 			<a href="https://revlysj.github.io/jeedouino/fr_FR/" target="_blank" class="btn btn-success eqLogicAction pull-right"  title="{{Lien vers la Documentation du plugin}}"><i class="fas fa-book"></i> </a>
@@ -430,7 +443,7 @@ foreach ($eqLogics as $eqLogic)
 <legend><i class="fas fa-cog"></i> {{Paramètres facultatifs}}</legend>
             <div class="datasource rj45arduino">
                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Port réseau}}</label>
+                    <label class="col-sm-3 control-label">{{Port réseau libre}}</label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
                     </div>
@@ -438,7 +451,7 @@ foreach ($eqLogics as $eqLogic)
             </div>
             <div class="datasource usbarduino">
                 <div class="form-group arduinoport usblocal usbdeporte">
-                    <label class="col-sm-3 control-label">{{Port réseau du démon}}</label>
+                    <label class="col-sm-3 control-label">{{Port réseau libre pour le démon}}</label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="PortDemon" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('PortDemon'); ?>"/>
                     </div>
@@ -470,7 +483,7 @@ foreach ($eqLogics as $eqLogic)
         <table id="table_cmd" class="table table-bordered table-condensed">
             <thead>
                 <tr>
-                    <th>{{Nom}}</th><th>{{Type (Sous-Type)}}</th><th>{{Type Générique}}</th><th>{{Paramètres}}</th><th>{{Affichage}}</th><th>{{Valeur}}</th><th>{{Plus}}</th>
+                    <th>{{Nom}}</th><th>{{Types}}</th><th>{{Paramètres}}</th><th>{{Affichage}}</th><th>{{Valeur}}</th><th>{{Plus}}</th>
                 </tr>
             </thead>
             <tbody>

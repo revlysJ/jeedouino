@@ -59,7 +59,11 @@ int read_DSx(int pinD);
 // Fin palliatif
 ////////
 
-#include <ESP8266WiFi.h>
+#if defined(ARDUINO_ARCH_ESP8266)
+	#include <ESP8266WiFi.h>
+#else
+	#include <WiFi.h>
+#endif
 
 const char* ssid = "MonSSID";
 const char* password = "MonPassword";
@@ -173,6 +177,7 @@ unsigned long NextRefresh = 0;
 unsigned long ConnectRefresh = millis() + 60000;
 unsigned long ProbeNextSend = millis();
 unsigned long timeout = 0;
+unsigned long ProbePauseDelay = 60000;
 char myIpString[24];
 
 #if (UseDHT == 1)
@@ -480,7 +485,7 @@ void loop()
 					Load_EEPROM(0);							 // On met en place
 					client.print(F("COK"));								// On reponds a JEEDOM
 					jeedom+=F("&REP=COK");
-					ProbeNextSend=millis()+60000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
 			else if (c[0]=='E' && c[n]=='Q') 	// Recuperation de l' eqLogic de Jeedom concernant cet arduino
@@ -495,7 +500,7 @@ void loop()
 				EEPROM.commit();
 				client.print(F("EOK"));								// On reponds a JEEDOM
 				jeedom+=F("&REP=EOK");
-				ProbeNextSend=millis()+60000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+				ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 			}
 			else if (c[0]=='I' && c[n]=='P') 	// Recuperation de l' IP de Jeedom ( I192.168.000.044P )
 			{
@@ -523,7 +528,7 @@ void loop()
 					EEPROM.commit();
 					client.print(F("IPOK"));							// On reponds a JEEDOM
 					jeedom+=F("&REP=IPOK");
-					ProbeNextSend=millis()+60000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
 			else if (c[0]=='S' && c[n]=='S') 	// Modifie la valeur d'une pin sortie
@@ -622,6 +627,29 @@ void loop()
 						client.print(F("SCOK"));												// On reponds a JEEDOM
 						jeedom+=F("&REP=SCOK");
 					}
+			}
+			else if (c[0]=='S' && c[n]=='P')		 	// Reçoi le délai de relève des sondes
+			{
+				if (n > 1)										// Petite securite
+				{
+					for (int i = 1; i < n; i++)
+					{
+						if (isDigit(c[i])) c[i] = c[i] - '0';
+					}
+
+					int multiple = 1;
+					pinTempo = 0;
+					for (int i = n-1; i > 0; i--)										// récupération de la valeur
+					{
+						pinTempo += int(c[i]) * multiple;
+						multiple *= 10;
+					}
+					if (pinTempo < 1 || pinTempo > 1000) pinTempo = 5;
+					ProbePauseDelay = 60000 * pinTempo;
+
+					client.print(F("SOK"));												// On reponds a JEEDOM
+					jeedom+=F("&REP=SOK");
+				}
 			}
 			else if (c[0]=='S' && c[n]=='F') 	// Modifie la valeur de toutes les pins sortie (suite reboot )
 			{
@@ -968,10 +996,8 @@ void loop()
 					jeedom += i + 1000;
 					jeedom += '=';
 					jeedom += int (myDHT[i]->readHumidity()*100);
-					PinNextSend[i]=millis()+60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-					ProbeNextSend=millis()+10000; // Permet de decaler la lecture entre chaque sonde DHT sinon ne marche pas cf librairie (3000 mini)
-					//jeedom += F("&FREERAM=");
-					//jeedom += freeRam();
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 5000; // Permet de decaler la lecture entre chaque sonde DHT sinon ne marche pas cf librairie (3000 mini)
 				}
 				break;
 			#endif
@@ -984,8 +1010,8 @@ void loop()
 					jeedom += i;
 					jeedom += '=';
 					jeedom += reponse;
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-					ProbeNextSend = millis() + 10000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 12000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
 				}
 				break;
 			#endif
@@ -1055,7 +1081,7 @@ void loop()
 					jeedom += i + 1000;
 					jeedom += '=';
 					jeedom += bmp.readPressure();
-					PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 				}
 				break;
 			#endif
@@ -1076,7 +1102,7 @@ void loop()
 						jeedom += i + 2000;
 						jeedom += '=';
 						jeedom += bme280.readHumidity();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1096,7 +1122,7 @@ void loop()
 						jeedom += i + 2000;
 						jeedom += '=';
 						jeedom += bme280b.readHumidity();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1122,7 +1148,7 @@ void loop()
 						jeedom += i + 3000;
 						jeedom += '=';
 						jeedom += bme680.gas_resistance;
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1146,7 +1172,7 @@ void loop()
 						jeedom += i + 3000;
 						jeedom += '=';
 						jeedom += bme680b.gas_resistance;
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1164,7 +1190,7 @@ void loop()
 						jeedom += i + 1000;
 						jeedom += '=';
 						jeedom += bmp280.readPressure();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1180,7 +1206,7 @@ void loop()
 						jeedom += i + 1000;
 						jeedom += '=';
 						jeedom += bmp280b.readPressure();
-						PinNextSend[i] = millis() + 60000;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
 					}
 					break;
 				#endif
@@ -1279,7 +1305,9 @@ void loop()
 void WIFI_Connect()
 {
 	WiFi.disconnect();	// Not sure
+	#if defined(ARDUINO_ARCH_ESP8266)
 	WiFi.hostname("JeedouinoESPTAG");
+	#endif
 	WiFi.enableAP(0);
 	WiFi.begin(ssid, password);
 
@@ -1510,20 +1538,20 @@ void Load_EEPROM(int k)
 		#if (UseDHT == 1)
 			case 'd': // DHT11
 				myDHT[i] = new DHT(i, 11);	// DHT11
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			case 'e': // DHT21
 				myDHT[i] = new DHT(i, 21);	// DHT21
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			case 'f': // DHT 22
 				myDHT[i] = new DHT(i, 22);	// DHT22
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 		#endif
 		#if (UseDS18x20 == 1)
 			case 'b': // DS18x20
-				PinNextSend[i]=millis()+60000;
+				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 		#endif
 			#if (UseServo == 1)

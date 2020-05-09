@@ -1055,6 +1055,8 @@ class jeedouino extends eqLogic {
 		$_path = str_replace('/var', '', $_path);
 		$_path = str_replace('/www', '', $_path);
 		$_path = str_replace('/html', '', $_path);
+		// save new pathinfo
+		config::save('path-' . $IPboard, $_path, 'jeedouino');
 
 		jeedouino::log('debug', 'CallJeedouinoExt (' . $IPboard . ':' . $Port . ') $message -> ' . $message);
 

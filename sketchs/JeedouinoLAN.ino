@@ -1129,8 +1129,8 @@ void loop()
 	}
 
 	#if (UserSketch == 1)
-		UserLoop(); // Appel de votre loop() permanent
-		// if (NextRefresh<millis()) UserLoop(); // Appel de votre loop() toutes les 60s
+		//UserLoop(); // Appel de votre loop() permanent
+		if (NextRefresh < millis()) UserLoop(); // Appel de votre loop() toutes les 60s
 	#endif
 
 	if (NextRefresh < millis())

@@ -1213,6 +1213,12 @@ void loop()
 			#endif
 		}
 	}
+
+	#if (UserSketch == 1)
+		//UserLoop(); // Appel de votre loop() permanent
+		 if (NextRefresh < millis()) UserLoop(); // Appel de votre loop() toutes les 60s
+	#endif
+
 	if (NextRefresh < millis())
 	{
 		NextRefresh = millis() + 60000;	// Refresh auto toutes les 60s
@@ -1241,11 +1247,6 @@ void loop()
 			jeedom += F("&5=");
 			jeedom += (int) (100 * hlw8012.getPowerFactor());
 		}
-	#endif
-
-	#if (UserSketch == 1)
-		UserLoop(); // Appel de votre loop() permanent
-		// if (NextRefresh<millis()) UserLoop(); // Appel de votre loop() toutes les 60s
 	#endif
 
 	if (jeedom != "") SendToJeedom();

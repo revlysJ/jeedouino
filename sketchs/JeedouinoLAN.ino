@@ -1180,21 +1180,27 @@ void loop()
 	}
 	void UserAction()
 	{
-		// Ens cas d'une reception d'une commande user action depuis jeedom
+		// En cas d'une reception d'une commande user action depuis jeedom
 		// c[0]='U' & c[n]='R')
 		//
-		// c[1] = c[1]-'0';	==5 (user pin start at 500)
-		// c[2] = c[2]-'0';
-		// c[3] = c[3]-'0';
+		// c[1] = c[1] - '0';	==5 (user pin start at 500)
+		// c[2] = c[2] - '0';
+		// c[3] = c[3] - '0';
+		// ou : for (int i = 1; i < n; i++) if (isDigit(c[i])) c[i] = c[i] - '0'; // conversion simple char(ascii) vers int
 		// pin_id = 100 * int(c[1]) + 10 * int(c[2]) + int(c[3]); 	// pin action number
 		//
 		// c[4] to c[n-1] 	// pin action value
 		//
-		// Ex:
-		// U5000R -> U 500 0 R = binary 0 pin 500
-		// U5001R -> U 500 1 R = binary 1 pin 500
-		// U502128R -> U 502 128 R = Slider Value 128 pin 502
-		// U507[Jeedom] Message|Ceci est un testR -> U 507 [Jeedom] Message | Ceci est un test R = Message pin 507
+		// Ex1:
+		// JEEDOM  : Sortie Numérique (Sous-type Jeedom: défaut)
+		// ARDUINO : c[] = U5000R -> U 500 0 R = binary 0 pin 500 -> c[4] = '0'
+		// ARDUINO : c[] = U5001R -> U 500 1 R = binary 1 pin 500 -> c[4] = '1'
+		// Ex2:
+		// JEEDOM  : Sortie Numérique (Sous-type Jeedom: curseur)
+		// ARDUINO : c[] = U502128R -> U 502 128 R = Slider, Value 128, pin 502 -> c[4] = '1', c[5] = '2', c[5] = '8'
+		// Ex3:
+		// JEEDOM  : Sortie Numérique (Sous-type Jeedom: message)
+		// ARDUINO : c[] = U507[Jeedom] Message|Ceci est un testR -> U 507 [Jeedom] Message | Ceci est un test R = Message, pin 507
 
 		// /!\ attention de ne pas mettre de code bloquant (avec trop de "delays") - max time 2s
 	}

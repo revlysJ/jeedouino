@@ -801,7 +801,7 @@ class jeedouino extends eqLogic {
 		}
 
 		$PinValue = '';
-		if ( $pins_id == '990') 		$PinValue = 'SetAllLOW=1';		// Set To LOW all Output pins
+				if ( $pins_id == '990') 	$PinValue = 'SetAllLOW=1';		// Set To LOW all Output pins
 		elseif ( $pins_id == '991') 	$PinValue = 'SetAllHIGH=1';		// Set To HIGH all Output pins
 		elseif ( $pins_id == '992') 	$PinValue = 'SetAllSWITCH=1';		// Switch/Toggle all Output pins
 		elseif ( $pins_id == '993') 	$PinValue = 'SetAllPulseLOW=1&tempo=' . substr($value, -5);		// Pulse To LOW  all Output pins
@@ -879,9 +879,9 @@ class jeedouino extends eqLogic {
 			}
 		}
 
-		jeedouino::log( 'debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
 		if ($ModeleArduino == 'piface' or $ModeleArduino == 'piGPIO26' or $ModeleArduino == 'piGPIO40' or $ModeleArduino == 'piPlus')
 		{
+			jeedouino::log( 'debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
 			if ($PinValue != '')  $reponse = self::SendToBoardDemon($arduino_id, $PinValue, $ModeleArduino);
 		}
 		else // Arduinos
@@ -905,6 +905,7 @@ class jeedouino extends eqLogic {
 					else $PinValue = 'C' . sprintf("%02s", $pins_id) . 'M' . sprintf("%02s", $value) . 'R'; // C09M12R >>>Led Strip sur pin 09 valeur 12 (effet)
 				}
 			}
+			jeedouino::log( 'debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
 			$reponse = self::SendToBoard($arduino_id, $PinValue);
 		}
 		if ($reponse != 'SOK' and $reponse != 'SMOK')

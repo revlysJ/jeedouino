@@ -56,6 +56,8 @@ try {
             throw new Exception(__('/!\ IP non renseignée. /!\ ', __FILE__) . $ip, 9999);
         if (filter_var($ip, FILTER_VALIDATE_IP) === false)
             throw new Exception(__('/!\ IP non valide. /!\ ', __FILE__) . $ip, 9999);
+        if ($ip == '127.0.0.1')
+            throw new Exception(__('/!\ IP non valide. /!\ ', __FILE__) . $ip, 9999);
 //        $ListExtIP = config::byKey('ListExtIP', 'jeedouino', []);
 //        if (in_array($ip, $ListExtIP))
 //            throw new Exception(__('/!\ IP déja utilisée. /!\ ', __FILE__) . $ip, 9999);

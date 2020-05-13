@@ -1851,7 +1851,7 @@ class jeedouino extends eqLogic {
 		// Arrét soft
 		jeedouino::log( 'debug',  __('Demande d\'arrêt au démon ', __FILE__) . $DemonTypeF .  __(' de l\'équipement : ', __FILE__) . eqLogic::byid($board_id)->getName() . ' ( eqID ' . $board_id . ' )');
 		$reponse = self::SendToBoardDemon($board_id, 'EXIT=1', $DemonType);
-		if ($reponse != 'EXITOK') jeedouino::log( 'error',  __('Le démon ', __FILE__) . $DemonTypeF .  __(' ne réponds pas correctement. - Réponse : ', __FILE__) . $reponse);
+		if ($reponse != 'EXITOK') jeedouino::log( 'error',  __('Le démon ', __FILE__) . $DemonTypeF . ' (eqID: ' . $board_id . __(') ne réponds pas correctement. - Réponse : ', __FILE__) . $reponse);
 		else
 		{
 			usleep(1000000);  // 1s , petite pause pour laisser au script python le temps de stopper

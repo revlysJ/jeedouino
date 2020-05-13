@@ -29,11 +29,11 @@ except Exception as e:
 
 port = 8000
 portusb = ''
-JeedomIP=''
-eqLogic=''
-boardId=0
-JeedomPort=80
-JeedomCPL=''
+JeedomIP = ''
+eqLogic = ''
+boardId = 0
+JeedomPort = 80
+JeedomCPL = ''
 
 # Tests Threads alives
 thread_1 = 0
@@ -512,7 +512,7 @@ if __name__ == "__main__":
 	thread_refresh = time.time() + thread_delay
 	thread_tries = 0
 
-	log('info', "Jeedouino PiFace daemon running...")
+	log('info', "Jeedouino PiFace daemon (eqID: " + str(eqLogic) + ") running...")
 	try:
 		while exit==0:
 			if thread_refresh<time.time():

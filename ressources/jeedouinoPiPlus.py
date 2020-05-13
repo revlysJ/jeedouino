@@ -29,11 +29,11 @@ except Exception as e:
 sendPINMODE = 0
 port = 8000
 portusb = ''
-JeedomIP=''
-eqLogic=''
-boardId=32
-JeedomPort=80
-JeedomCPL=''
+JeedomIP = ''
+eqLogic = ''
+boardId = 32
+JeedomPort = 80
+JeedomCPL = ''
 
 # s-Fallback
 BootMode = False
@@ -47,7 +47,7 @@ thread_2 = 0
 logFile = "JeedouinoPiPlus.log"
 
 def log(level,message):
-	fifi=open(logFile, "a+")
+	fifi = open(logFile, "a+")
 	try:
 		fifi.write('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
 	except:
@@ -56,13 +56,13 @@ def log(level,message):
 	fifi.close()
 
 def SimpleParse(m):
-	m=m.decode('ascii')
-	m=m.replace('/', '')
+	m = m.decode('ascii')
+	m = m.replace('/', '')
 	u = m.find('?')
-	if u>-1:
-		u+= 1
+	if u > -1:
+		u += 1
 		v = m.find(' HTTP',u)
-		if v>-1:
+		if v > -1:
 			url = m[u:v]
 			cmds = url.split("&")
 			get = []
@@ -142,16 +142,16 @@ class myThread1 (threading.Thread):
 
 				if 'BootMode' in query:
 					q = query.index("BootMode")
-					BootMode = int(query[q+1])
+					BootMode = int(query[q + 1])
 					reponse='BMOK'
 
 				if 'ConfigurePins' in query:
 					q = query.index("ConfigurePins")
-					Status_pins = query[q+1]
+					Status_pins = query[q + 1]
 					sendPINMODE = 1
 					for i in range(0,16):
 						j = i + 1
-						if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
+						if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
 							bus.set_pin_direction(j, 0)				# output
 							bus.invert_pin(j, 0)
 							bus.write_pin(j, BootMode)
@@ -176,63 +176,63 @@ class myThread1 (threading.Thread):
 
 				if 'eqLogic' in query:
 					q = query.index("eqLogic")
-					eqLogic = query[q+1]
+					eqLogic = query[q + 1]
 					reponse = 'EOK'
 
 				if 'JeedomIP' in query:
 					q = query.index("JeedomIP")
-					JeedomIP = query[q+1]
+					JeedomIP = query[q + 1]
 					reponse = 'IPOK'
 
 				if 'SetPinLOW' in query:
 					q = query.index("SetPinLOW")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					reponse = 'SOK'
 					SetPin(u, 0, reponse)
 
 				if 'SetPinHIGH' in query:
 					q = query.index("SetPinHIGH")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					reponse = 'SOK'
 					SetPin(u, 1, reponse)
 
 				if 'SetLOWpulse' in query:
 					q = query.index("SetLOWpulse")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					q = query.index("tempo")
-					TempoPinLOW[u] = time.time() * 10 + int(query[q+1])
+					TempoPinLOW[u] = time.time() * 10 + int(query[q + 1])
 					reponse = 'SOK'
 					SetPin(u, 0, reponse)
 
 				if 'SetHIGHpulse' in query:
 					q = query.index("SetHIGHpulse")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					q = query.index("tempo")
-					TempoPinHIGH[u] = time.time() * 10 + int(query[q+1])
+					TempoPinHIGH[u] = time.time() * 10 + int(query[q + 1])
 					reponse = 'SOK'
 					SetPin(u, 1, reponse)
 
 				if 'SwitchPin' in query:
 					q = query.index("SwitchPin")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					v = 1 - swtch[u]
 					reponse = 'SOK'
 					SetPin(u, v, reponse)
 
 				if 'SetCPT' in query:
 					q = query.index("SetCPT")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					q = query.index("ValCPT")
-					ValCPT = int(query[q+1])
+					ValCPT = int(query[q + 1])
 					CounterPinValue[u] += ValCPT
 					reponse = 'SCOK'
 					RepStr = '&REP=' + str(reponse)
 
 				if 'RazCPT' in query:
 					q = query.index("RazCPT")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					q = query.index("ValCPT")
-					ValCPT = int(query[q+1])
+					ValCPT = int(query[q + 1])
 					CounterPinValue[u] = ValCPT
 					reponse = 'SCOK'
 					RepStr = '&REP=' + str(reponse)
@@ -253,10 +253,10 @@ class myThread1 (threading.Thread):
 					RepStr = '&REP=SOK'
 					q = query.index("tempo")
 					for i in range(0,16):
-						if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
+						if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
 							swtch[i] = 0
 							bus.write_pin(i + 1, 0)
-							TempoPinLOW[i] = time.time() * 10 + int(query[q+1])
+							TempoPinLOW[i] = time.time() * 10 + int(query[q + 1])
 							RepStr += '&' + str(i) + '=0'
 					reponse = 'SOK'
 
@@ -264,20 +264,20 @@ class myThread1 (threading.Thread):
 					RepStr = '&REP=SOK'
 					q = query.index("tempo")
 					for i in range(0,16):
-						if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
+						if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
 							swtch[i] = 1
 							bus.write_pin(i + 1, 1)
-							TempoPinHIGH[i] = time.time() * 10 + int(query[q+1])
+							TempoPinHIGH[i] = time.time() * 10 + int(query[q + 1])
 							RepStr += '&' + str(i) + '=1'
 					reponse = 'SOK'
 
 				if 'SetLOWdoublepulse' in query:
 					q = query.index("SetLOWdoublepulse")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					q = query.index("tempclick")
-					v = float(query[q+1]) / 10
+					v = float(query[q + 1]) / 10
 					q = query.index("temppause")
-					w = float(query[q+1]) / 10
+					w = float(query[q + 1]) / 10
 					bus.write_pin(u + 1, 0)
 					time.sleep(v)
 					bus.write_pin(u + 1, 1)
@@ -289,11 +289,11 @@ class myThread1 (threading.Thread):
 
 				if 'SetHIGHdoublepulse' in query:
 					q = query.index("SetHIGHdoublepulse")
-					u = int(query[q+1])
+					u = int(query[q + 1])
 					q = query.index("tempclick")
-					v = float(query[q+1]) / 10
+					v = float(query[q + 1]) / 10
 					q = query.index("temppause")
-					w = float(query[q+1]) / 10
+					w = float(query[q + 1]) / 10
 					bus.write_pin(u + 1, 1)
 					time.sleep(v)
 					bus.write_pin(u + 1, 0)
@@ -354,15 +354,15 @@ class myThread2 (threading.Thread):
 			thread_2 = 1
 			pinStr = ''
 			for i in range(0,16):	# Gestion des impulsions
-				if TempoPinHIGH[i]!=0 and TempoPinHIGH[i]<int(time.time()*10):
-					TempoPinHIGH[i]=0
-					swtch[i]=0
-					bus.write_pin(i+1, 0)
+				if TempoPinHIGH[i] != 0 and TempoPinHIGH[i] < int(time.time()*10):
+					TempoPinHIGH[i] = 0
+					swtch[i] = 0
+					bus.write_pin(i + 1, 0)
 					pinStr += '&' + str(i) + '=0'
-				elif TempoPinLOW[i]!=0 and TempoPinLOW[i]<int(time.time()*10):
-					TempoPinLOW[i]=0
-					swtch[i]=1
-					bus.write_pin(i+1, 1)
+				elif TempoPinLOW[i] != 0 and TempoPinLOW[i] < int(time.time()*10):
+					TempoPinLOW[i] = 0
+					swtch[i] = 1
+					bus.write_pin(i + 1, 1)
 					pinStr += '&' + str(i) + '=1'
 			if pinStr!='':
 				SimpleSend(pinStr + '&Tempo=1')
@@ -371,9 +371,9 @@ class myThread2 (threading.Thread):
 			if SetAllLOW==1:
 				pinStr = '&REP=SOK'
 				for i in range(0,16):
-					j=i+1
-					if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
-						swtch[j]=0
+					j = i + 1
+					if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
+						swtch[j] = 0
 						bus.write_pin(j, 0)
 						pinStr += '&' + str(i) + '=0'
 				SetAllLOW=0
@@ -382,9 +382,9 @@ class myThread2 (threading.Thread):
 			if SetAllHIGH==1:
 				pinStr = '&REP=SOK'
 				for i in range(0,16):
-					j=i+1
-					if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
-						swtch[j]=1
+					j = i + 1
+					if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
+						swtch[j] = 1
 						bus.write_pin(j, 1)
 						pinStr += '&' + str(i) + '=1'
 				SetAllHIGH=0
@@ -393,14 +393,14 @@ class myThread2 (threading.Thread):
 			if SetAllSWITCH==1:
 				pinStr = '&REP=SOK'
 				for i in range(0,16):
-					j=i+1
-					if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
-						if swtch[j]==0:
-							swtch[j]=1
+					j = i + 1
+					if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
+						if swtch[j] == 0:
+							swtch[j] = 1
 							bus.write_pin(j, 1)
 							pinStr += '&' + str(j) + '=1'
 						else:
-							swtch[j]=0
+							swtch[j] = 0
 							bus.write_pin(j, 0)
 							pinStr += '&' + str(j) + '=0'
 				SetAllSWITCH=0
@@ -409,9 +409,9 @@ class myThread2 (threading.Thread):
 			# On envoi le nombre d'impulsions connu si il n'y en a pas eu dans les 10s depuis le dernier envoi
 			pinStr=''
 			for i in range(0,16):
-				if Status_pins[i]=='c' and PinNextSend[i]<time.time() and PinNextSend[i]!=0:
+				if Status_pins[i] == 'c' and PinNextSend[i] < time.time() and PinNextSend[i] != 0:
 					pinStr +='&' + str(i) + '=' + str(CounterPinValue[i])
-					PinNextSend[i]=0
+					PinNextSend[i] = 0
 			if pinStr!='':
 				SimpleSend(pinStr)
 
@@ -494,6 +494,7 @@ if __name__ == "__main__":
 	TempoPinLOW={}
 	Status_INPUTS={}
 	swtch={}
+	etat_pins = list('................')
 	exit=0
 	SetAllLOW=0
 	SetAllHIGH=0
@@ -501,29 +502,31 @@ if __name__ == "__main__":
 	SetAllPulseLOW=0
 	SetAllPulseHIGH=0
 	pinStr = ''
-	for i in range(0,16):
+	for i in range(0, 16):
 		CounterPinValue[i] = 0
 		PinNextSend[i] = 0
 		TempoPinHIGH[i] = 0
 		TempoPinLOW[i] = 0
 		j = i + 1
 		try:
-			if Status_pins[i]=='o' or Status_pins[i]=='y' or Status_pins[i]=='s' or Status_pins[i]=='l' or Status_pins[i]=='h' or Status_pins[i]=='u' or Status_pins[i]=='v' or Status_pins[i]=='w':
+			if Status_pins[i] == 'o' or Status_pins[i] == 'y' or Status_pins[i] == 's' or Status_pins[i] == 'l' or Status_pins[i] == 'h' or Status_pins[i] == 'u' or Status_pins[i] == 'v' or Status_pins[i] == 'w':
 				bus.set_pin_direction(j, 0)				# output
 				bus.invert_pin(j, 0)
 				bus.write_pin(j, BootMode)
 				swtch[i] = BootMode
 				pinStr += '&' + str(i) + '=' + str(BootMode)
-			elif Status_pins[i]=='p' or Status_pins[i]=='i' or Status_pins[i]=='c':
+			elif Status_pins[i] == 'p' or Status_pins[i] == 'i' or Status_pins[i] == 'c':
 				bus.set_pin_direction(j, 1)
 				input = bus.read_pin(j)
 				Status_INPUTS[i] = input
 				pinStr += '&IN_' + str(i) + '=' + str(input)
+			etat_pins[i] = Status_pins[i]
 		except:
-			Status_pins[i]='.'
+			etat_pins[i] = '.'
 			swtch[i] = 0
+	Status_pins = '' . join(etat_pins)
 
-	if pinStr!='':
+	if pinStr != '':
 		SimpleSend(pinStr)
 
 	threadLock = threading.Lock()
@@ -546,7 +549,7 @@ if __name__ == "__main__":
 	thread_tries1 = 0
 	thread_tries2 = 0
 
-	log('info', "Jeedouino PiPlus daemon running...")
+	log('info', "Jeedouino PiPlus daemon (eqID: " + str(eqLogic) + ") running...")
 	try:
 		while exit==0:
 			if thread_refresh<time.time():
@@ -594,7 +597,7 @@ if __name__ == "__main__":
 			# Boucle qui remplace le listener (qui bug avec plusieurs piPlus)
 			pinStr = ''
 			for i in range(0,16):
-				if Status_pins[i]=='p' or Status_pins[i]=='i' or Status_pins[i]=='c':
+				if Status_pins[i] == 'p' or Status_pins[i] == 'i' or Status_pins[i] == 'c':
 					input = bus.read_pin(i + 1)
 					if Status_INPUTS[i] != input:
 						Status_INPUTS[i] = input

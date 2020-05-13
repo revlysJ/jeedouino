@@ -316,7 +316,7 @@ if __name__  ==  "__main__":
 	thread_refresh = time.time() + thread_delay
 	thread_tries = 0
 
-	log('info', "Jeedouino USB daemon running...")
+	log('info', "Jeedouino USB daemon (eqID: " + str(eqLogic) + ") running...")
 	try:
 		while exit == 0:
 			if thread_refresh < time.time():

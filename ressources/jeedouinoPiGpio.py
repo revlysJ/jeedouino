@@ -33,6 +33,13 @@ except Exception as e:
 	errdep = e
 	nodep = 1
 
+bme280 = None
+bmp280 = None
+bme680 = None
+bme280b = None
+bmp280b = None
+bme680b = None
+
 sensors = {}
 sendPINMODE = 0
 port = 8001
@@ -69,9 +76,9 @@ logFile = "JeedouinoPiGpio.log"
 def log(level,message):
 	fifi = open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PiGpio] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		fifi.write('[%s][Demon PiGpio][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
 	except:
-		print('[%s][Demon PiGpio] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		print('[%s][Demon PiGpio][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -242,44 +249,56 @@ class myThread1 (threading.Thread):
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
 								bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, 118) # hex76 = 118
-							except:
-								bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c) #hex77 default
-							bme280.sea_level_pressure = 1013.25
+								bme280.sea_level_pressure = 1013.25
+							except Exception as e:
+								log('Error' , 'Impossible de trouver la sonde bme280 sur x76. - ' + str(e))
+								SimpleSend('&NOBMEP=bme280(x76)')
+								exit = 1
 						elif Status_pins[i] == 'D':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
 								bme280b = adafruit_bme280.Adafruit_BME280_I2C(i2c) #hex77 default
-							except:
-								bme280b = adafruit_bme280.Adafruit_BME280_I2C(i2c, 118) # hex76 = 118
-							bme280b.sea_level_pressure = 1013.25
+								bme280b.sea_level_pressure = 1013.25
+							except Exception as e:
+								log('Error' , 'Impossible de trouver la sonde bme280 sur x77. - ' + str(e))
+								SimpleSend('&NOBMEP=bme280(x77)')
+								exit = 1
 						elif Status_pins[i] == 'B':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
 								bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, 118, debug=False)
-							except:
-								bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
-							bme680.sea_level_pressure = 1013.25
+								bme680.sea_level_pressure = 1013.25
+							except Exception as e:
+								log('Error' , 'Impossible de trouver la sonde bme680 sur x76. - ' + str(e))
+								SimpleSend('&NOBMEP=bme680(x76)')
+								exit = 1
 						elif Status_pins[i] == 'E':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
 								bme680b = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
-							except:
-								bme680b = adafruit_bme680.Adafruit_BME680_I2C(i2c, 118, debug=False)
-							bme680b.sea_level_pressure = 1013.25
+								bme680b.sea_level_pressure = 1013.25
+							except Exception as e:
+								log('Error' , 'Impossible de trouver la sonde bme680 sur x77. - ' + str(e))
+								SimpleSend('&NOBMEP=bme680(x77)')
+								exit = 1
 						elif Status_pins[i] == 'C':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
 								bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, 118)
-							except:
-								bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
-							bmp280.sea_level_pressure = 1013.25
+								bmp280.sea_level_pressure = 1013.25
+							except Exception as e:
+								log('Error' , 'Impossible de trouver la sonde bmp280 sur x76. - ' + str(e))
+								SimpleSend('&NOBMEP=bmp280(x76)')
+								exit = 1
 						elif Status_pins[i] == 'F':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
 								bmp280b = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
-							except:
-								bmp280b = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, 118)
-							bmp280b.sea_level_pressure = 1013.25
+								bmp280b.sea_level_pressure = 1013.25
+							except Exception as e:
+								log('Error' , 'Impossible de trouver la sonde bmp280 sur x77. - ' + str(e))
+								SimpleSend('&NOBMEP=bmp280(x77)')
+								exit = 1
 					reponse = 'COK'
 					RepStr = '&REP=' + str(reponse) + GPIOStr
 					gpioSET = True
@@ -704,41 +723,48 @@ class myThread2 (threading.Thread):
 						except:
 							pass
 					elif Status_pins[i] == 'r': # BMP085/180
-						temperature = bmp180.read_temperature()
-						pressure = bmp180.read_pressure()
-						pinStr += '&' + str(j) + '=' + str(temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(pressure)
-						pinDHT = 1
+						if bmp180 is not None:
+							temperature = bmp180.read_temperature()
+							pressure = bmp180.read_pressure()
+							pinStr += '&' + str(j) + '=' + str(temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(pressure)
+							pinDHT = 1
 					elif Status_pins[i] == 'A': # BME280
-						pinStr += '&' + str(j) + '=' + str(bme280.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bme280.pressure)
-						pinStr += '&' + str(2000 + j) + '=' + str(bme280.humidity)
-						pinDHT = 1
+						if bme280 is not None:
+							pinStr += '&' + str(j) + '=' + str(bme280.temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(bme280.pressure)
+							pinStr += '&' + str(2000 + j) + '=' + str(bme280.humidity)
+							pinDHT = 1
 					elif Status_pins[i] == 'D': # BME280
-						pinStr += '&' + str(j) + '=' + str(bme280b.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bme280b.pressure)
-						pinStr += '&' + str(2000 + j) + '=' + str(bme280b.humidity)
-						pinDHT = 1
+						if bme280b is not None:
+							pinStr += '&' + str(j) + '=' + str(bme280b.temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(bme280b.pressure)
+							pinStr += '&' + str(2000 + j) + '=' + str(bme280b.humidity)
+							pinDHT = 1
 					elif Status_pins[i] == 'B': # BME680
-						pinStr += '&' + str(j) + '=' + str(bme680.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bme680.pressure)
-						pinStr += '&' + str(2000 + j) + '=' + str(bme680.humidity)
-						pinStr += '&' + str(3000 + j) + '=' + str(bme680.gas)
-						pinDHT = 1
+						if bme680 is not None:
+							pinStr += '&' + str(j) + '=' + str(bme680.temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(bme680.pressure)
+							pinStr += '&' + str(2000 + j) + '=' + str(bme680.humidity)
+							pinStr += '&' + str(3000 + j) + '=' + str(bme680.gas)
+							pinDHT = 1
 					elif Status_pins[i] == 'E': # BME680
-						pinStr += '&' + str(j) + '=' + str(bme680b.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bme680b.pressure)
-						pinStr += '&' + str(2000 + j) + '=' + str(bme680b.humidity)
-						pinStr += '&' + str(3000 + j) + '=' + str(bme680b.gas)
-						pinDHT = 1
+						if bme680b is not None:
+							pinStr += '&' + str(j) + '=' + str(bme680b.temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(bme680b.pressure)
+							pinStr += '&' + str(2000 + j) + '=' + str(bme680b.humidity)
+							pinStr += '&' + str(3000 + j) + '=' + str(bme680b.gas)
+							pinDHT = 1
 					elif Status_pins[i] == 'C': # BMP280
-						pinStr += '&' + str(j) + '=' + str(bmp280.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bmp280.pressure)
-						pinDHT = 1
+						if bmp280 is not None:
+							pinStr += '&' + str(j) + '=' + str(bmp280.temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(bmp280.pressure)
+							pinDHT = 1
 					elif Status_pins[i] == 'F': # BMP280
-						pinStr += '&' + str(j) + '=' + str(bmp280b.temperature)
-						pinStr += '&' + str(1000 + j) + '=' + str(bmp280b.pressure)
-						pinDHT = 1
+						if bmp280b is not None:
+							pinStr += '&' + str(j) + '=' + str(bmp280b.temperature)
+							pinStr += '&' + str(1000 + j) + '=' + str(bmp280b.pressure)
+							pinDHT = 1
 				if pinStr != '':
 					SimpleSend(pinStr)
 
@@ -813,7 +839,7 @@ if __name__ == "__main__":
 			logFile = sys.argv[7]
 	if len(sys.argv) > 6:
 		ProbeDelay = int(sys.argv[6])
-		if ProbeDelay<1 or ProbeDelay>1000:
+		if ProbeDelay < 1 or ProbeDelay > 1000:
 			ProbeDelay = 5
 	if len(sys.argv) > 5:
 		JeedomCPL = sys.argv[5]
@@ -921,8 +947,8 @@ if __name__ == "__main__":
 						thread_tries1 += 1
 						log('Warning' , '1st Thread maybe dead or waiting for a too long period, trying a re-start of it.')
 						time.sleep(5)
-						SimpleSend('&THREADSRESTART=1')
-						if not thread1.isAlive():
+						SimpleSend('&PINGME=1')
+						if not thread1.is_alive():
 							thread1.start()
 					elif thread_tries1 < 2:
 						thread_tries1 += 1
@@ -940,8 +966,8 @@ if __name__ == "__main__":
 						thread_tries2 += 1
 						log('Warning' , '2nd Thread maybe dead or waiting for a too long period, trying a re-start of it.')
 						time.sleep(5)
-						SimpleSend('&THREADSRESTART=2')
-						if not thread2.isAlive():
+						SimpleSend('&PINGME=1')
+						if not thread2.is_alive():
 							thread2.start()
 					elif thread_tries2 < 2:
 						thread_tries2 += 1

@@ -40,6 +40,7 @@ foreach ($eqLogics as $eqLogic)
     $style = 'style="background-image: url(plugins/jeedouino/icons/' . $icon . '.png);background-repeat: no-repeat;"';
     $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
     $JExtname = trim(config::byKey('JExtname-' . $eqLogic->getConfiguration('iparduino'), 'jeedouino', ''));
+    if (trim($eqLogic->getConfiguration('iparduino')) != '') $JExtname .= ' [ IP : ' . $eqLogic->getConfiguration('iparduino') . ' ]';
     $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" title="' . $JExtname . '">';
     $HTML .= "<center>";
     if (!file_exists(dirname(__FILE__) . '/../../icons/jeedouino_' . $ModeleArduino . '.png'))

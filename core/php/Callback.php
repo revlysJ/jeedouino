@@ -122,13 +122,14 @@ if (isset($_GET['BoardEQ']))
 		{
 			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			config::save('NODEP_' . $arduino_id, $_GET['NODEP'], 'jeedouino');
-			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($_GET['NODEP'])) . __(' introuvables. Veuillez les reinstaller.' , __FILE__);
-			event::add('jeedom::error', array(
-				'level' => 'warning',
-				'page' => 'jeedouino',
-				'message' => $message
-				));
-			jeedouino::log('error', $message);
+			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($_GET['NODEP'])) . __(' introuvables. Veuillez les réinstaller.' , __FILE__);
+			jeedouino::logAlert('error', 'warning', $message);
+		}
+		if (isset($_GET['NOBMEP']))
+		{
+			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
+			$message = __('Sonde ', __FILE__) . ucfirst(strtolower($_GET['NOBMEP'])) . __(' introuvable. Veuillez vérifier l\'adresse i2c choisie.' , __FILE__);
+			jeedouino::logAlert('error', 'warning', $message);
 		}
 		if (isset($_GET['PINGME']))
 		{
@@ -219,9 +220,23 @@ if (isset($_GET['BoardEQ']))
 		}
 		if (isset($_GET['PINMODE']))
 		{
-			$PinMode = config::byKey($arduino_id . '_PinMode', 'jeedouino', 'none');
-			if ($PinMode != 'none' and config::byKey($arduino_id . '-ForceStart', 'jeedouino', '0') == '0')
+			//$PinMode = config::byKey($arduino_id . '_PinMode', 'jeedouino', 'none');
+			$PinMode = jeedouino::GetPinMode($arduino_id);
+			if ($PinMode != '')// and config::byKey($arduino_id . '-ForceStart', 'jeedouino', '0') == '0')
 			{
+				switch ($ModeleArduino)
+				{
+					case 'piGPIO26':
+						$PinMode .= '..............';
+					case 'piGPIO40':
+					case 'piface':
+					case 'piPlus':
+						$PinMode = 'ConfigurePins=' . $PinMode;
+						break;
+					default:
+						$PinMode = 'C' . $PinMode . 'C';
+				}
+				config::save($arduino_id . '_PinMode', $PinMode, 'jeedouino');
 				jeedouino::log( 'debug', $CALLBACK . __('Le démon réclame l\'envoi du mode des pins.', __FILE__));
 				$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
 				if ($DemonTypeF == 'USB' ) $PinMode = 'USB=' . $PinMode;
@@ -240,6 +255,7 @@ if (isset($_GET['BoardEQ']))
 		{
 			foreach ($eqLogic->getCmd('info') as $cmd)
 			{
+				//jeedouino::log( 'debug','>>> Liste $cmd = '. json_encode(utils::o2a($cmd)));
 				if (is_object($cmd))
 				{
 					$pins_id = $cmd->getConfiguration('pins_id');
@@ -353,8 +369,9 @@ if (isset($_GET['BoardEQ']))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
 							if ($recu < $RSTvalue)
 							{
-								jeedouino::log('debug', $CALLBACK . __('La valeur reçue est inférieure à la valeur connue RSTValue (', __FILE__) . $RSTvalue . __('), elle y sera additionnée. Cpt = ', __FILE__) . $recu);
-								$recu += $RSTvalue;
+								$message = $CALLBACK . __('La valeur de comptage reçue (', __FILE__) . $recu . __(') est inférieure à la valeur déjà connue (', __FILE__) . $RSTvalue . __('), est-ce voulu ?', __FILE__);
+								jeedouino::logAlert('debug', 'warning', $message);
+								$recu = $RSTvalue;
 							}
 							$cmd->setConfiguration('RSTvalue', $recu);
 							jeedouino::log('debug', $CALLBACK . 'RSTvalue Pin n° ' . $pins_id . ' = ' . $recu);

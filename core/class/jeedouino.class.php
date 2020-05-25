@@ -331,6 +331,15 @@ class jeedouino extends eqLogic {
 		//$log2 = filter_var($log2, FILTER_SANITIZE_STRING);
 		if (config::byKey('ActiveLog', 'jeedouino', false)) log::add('jeedouino', $log1, $log2);
 	}
+	public static function logAlert($type, $level, $message)
+	{
+		jeedouino::log($type, $message);
+		event::add(	'jeedom::alert', array(
+								'level' 	=> $level,
+								'page' 		=> 'jeedouino',
+								'message' => $message
+								));
+	}
 	public static function getPathToLog($log)
 	{
 		if (config::byKey('ActiveDemonLog', 'jeedouino', false)) return log::getPathToLog($log);
@@ -950,12 +959,7 @@ class jeedouino extends eqLogic {
 					return 'NOK';
 				}
 				$tell = __('Attention vous avez changé le port (', __FILE__) . $oldport . __('), il faudra reflasher ou le remettre !  (Nouveau : ', __FILE__) . $IPArduino . ':' . $ipPort . ') ';
-				event::add('jeedom::alert', array(
-					'level' => 'warning',
-					'page' => 'jeedouino',
-					'message' => $tell
-					));
-				jeedouino::log('debug', $tell);
+				jeedouino::logAlert('debug', 'warning', $tell);
 			}
 
 			stream_set_timeout($fp, 9);
@@ -1560,12 +1564,7 @@ class jeedouino extends eqLogic {
 			if ($IPJeedom != $IPBoard and $IPBoard != '127.0.0.1')
 			{
 				if ($IPBoard == '') $IPBoard = __(' non definie ', __FILE__);
-				event::add('jeedom::alert', array(
-					'level' => 'danger',
-					'page' => 'jeedouino',
-					'message' => __('Attention l\'IP (', __FILE__) . $IPBoard . __(') du démon local ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') et de Jeedom (', __FILE__) . $IPJeedom . __(') diffèrent. Veuillez vérifier.' , __FILE__)
-					));
-				jeedouino::log('error', __('Attention l\'IP (', __FILE__) . $IPBoard . __(') du démon local ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') et de Jeedom (', __FILE__) . $IPJeedom . __(') diffèrent. Veuillez vérifier. ', __FILE__));
+				jeedouino::logAlert('error', 'danger', __('Attention l\'IP (', __FILE__) . $IPBoard . __(') du démon local ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') et de Jeedom (', __FILE__) . $IPJeedom . __(') diffèrent. Veuillez vérifier. ', __FILE__));
 				$IPBoard = $IPJeedom;
 			}
 		}
@@ -1573,12 +1572,7 @@ class jeedouino extends eqLogic {
 		{
 			if ($IPBoard == '')
 			{
-				event::add('jeedom::alert', array(
-					'level' => 'danger',
-					'page' => 'jeedouino',
-					'message' => __('Attention l\'IP du démon ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') n\'est pas définie. Veuillez vérifier.' , __FILE__)
-					));
-				jeedouino::log('error', __('Attention l\'IP du démon ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') n\'est pas définie. Veuillez vérifier. ', __FILE__));
+				jeedouino::logAlert('error', 'danger', __('Attention l\'IP du démon ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') n\'est pas définie. Veuillez vérifier. ', __FILE__));
 				$IPBoard = $IPJeedom;
 			}
 		}
@@ -1752,12 +1746,7 @@ class jeedouino extends eqLogic {
 		if ($NODEP != '')
 		{
 			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($NODEP)) . __(' introuvables. Imposssible de démarrer le démon.' , __FILE__);
-			event::add('jeedom::error', array(
-				'level' => 'warning',
-				'page' => 'jeedouino',
-				'message' => $message
-				));
-			jeedouino::log('error', $message);
+			jeedouino::logAlert('error', 'warning', $message);
 			return false;
 		}
 		return true;
@@ -2065,13 +2054,8 @@ class jeedouino extends eqLogic {
 		{
 			if ($this->getId() != '' and $this->getId() > 0)
 			{
-				$message = __('L\'équipement ', __FILE__) . $this->getName() . ' id '. $this->getId() . __(' est désactivé. Pas la peine de continuer.' , __FILE__);
-				jeedouino::log( 'debug', $message);
-				event::add('jeedom::alert', array(
-					'level' => 'warning',
-					'page' => 'jeedouino',
-					'message' => $message
-					));
+				$message = __('L\'équipement ', __FILE__) . $this->getName() . ' (id: '. $this->getId() . __(') est désactivé. Pas la peine de continuer.' , __FILE__);
+				jeedouino::logAlert('debug', 'warning', $message);
 			}
 			return;
 		}

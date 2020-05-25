@@ -244,8 +244,8 @@ void setup()
 			#endif
 			#if (UseWatchdog == 1)
 				wdt_enable(WDTO_15MS); // try reboot
+				while(1){}
 			#endif
-			while(1){}
 		}
 		IPAddress IP_ARDUINO = Ethernet.localIP();
 		jeedom = F("&ipwifi=");
@@ -1264,15 +1264,17 @@ void SendToJeedom()
 		if (UIPEFailCount>10 and millis()>UIPEFailTime+60000)
 		{
 			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Waiting 10s & reboot if wdg"));
+				Serial.println(F("Waiting 10s & reboot if UseWatchdog is set"));
 			#endif
 			delay(10000); // tentative soft pour laisser le temps a la lib de se resaisir
 			#if (UseWatchdog == 1)
 				wdt_enable(WDTO_15MS); // try reboot
+				while(1){}
 			#endif
-			delay(20000); // tentative soft pour laisser le temps a la lib de se resaisir
 			JEEDOMclient.stop();
+			delay(1000);
 			Ethernet.begin(mac, IP_ARDUINO);
+			delay(1000);
 			server.begin();
 			UIPEFailTime = millis() + 60000;
 			delay(999);

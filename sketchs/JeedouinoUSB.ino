@@ -500,7 +500,7 @@ void loop()
 					if (pinTempo < 1 || pinTempo > 1000) pinTempo = 5;
 					ProbePauseDelay = 60000 * pinTempo;
 
-					client.print(F("SOK"));												// On reponds a JEEDOM
+					Serial.println(F("SOK"));												// On reponds a JEEDOMSerial.println
 					jeedom+=F("&REP=SOK");
 				}
 			}

@@ -49,9 +49,9 @@ logFile = "JeedouinoPiPlus.log"
 def log(level,message):
 	fifi = open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		fifi.write('[%s][Demon PiPlus][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
 	except:
-		print('[%s][Demon PiPlus] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		print('[%s][Demon PiPlus][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -559,8 +559,8 @@ if __name__ == "__main__":
 						thread_tries1 += 1
 						log('Warning' , '1st Thread maybe dead or waiting for a too long period, trying a re-start of it.')
 						time.sleep(5)
-						SimpleSend('&THREADSRESTART=1')
-						if not thread1.isAlive():
+						SimpleSend('&PINGME=1')
+						if not thread1.is_alive():
 							thread1.start()
 					elif thread_tries1 < 2:
 						thread_tries1 += 1
@@ -578,8 +578,8 @@ if __name__ == "__main__":
 						thread_tries2 += 1
 						log('Warning' , '2nd Thread maybe dead or waiting for a too long period, trying a re-start of it.')
 						time.sleep(5)
-						SimpleSend('&THREADSRESTART=2')
-						if not thread2.isAlive():
+						SimpleSend('&PINGME=1')
+						if not thread2.is_alive():
 							thread2.start()
 					elif thread_tries2 < 2:
 						thread_tries2 += 1

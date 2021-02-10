@@ -1297,6 +1297,10 @@ void Load_EEPROM(int k)
 		switch (Status_pins[i])
 		{
 			case 'i':		// input
+				pinMode(i, INPUT);
+				OLDPinValue[i]=2; // Pour forcer l'envoye d'une première valeur
+				PinNextSend[i]=millis();
+				break;
 			case 'a':		// analog_input
 			case 'n':		// BP_input_pulldown
 				pinMode(i, INPUT);
@@ -1343,6 +1347,11 @@ void Load_EEPROM(int k)
 				pinMode(i, INPUT);
 				break;
 			case 'p':		// input_pullup
+				pinMode(i, INPUT_PULLUP);   // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
+				// Arduino Doc : An internal 20K-ohm resistor is pulled to 5V.
+				OLDPinValue[i]=2; // Pour forcer l'envoye d'une première valeur
+				PinNextSend[i]=millis();
+				break;
 			case 'g':     // pwm_input
 			case 'q':		// BP_input_pullup
 				pinMode(i, INPUT_PULLUP);   // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed

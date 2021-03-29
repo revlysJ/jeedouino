@@ -188,7 +188,7 @@ class myThread1 (threading.Thread):
 						elif Status_pins[i] == 'p':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = 500)
 							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'c':
 							k = i % 4
@@ -219,15 +219,15 @@ class myThread1 (threading.Thread):
 						elif Status_pins[i] == 'n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_inputs)
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_inputs, bouncetime = 500)
 						elif Status_pins[i] == 'q':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_inputs)
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_inputs, bouncetime = 500)
 						elif Status_pins[i] == 'i':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = 500)
 							GPIOStr +='&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'd' or Status_pins[i] == 'f': # Sondes DHT(11,22)
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
@@ -254,6 +254,7 @@ class myThread1 (threading.Thread):
 								log('Error' , 'Impossible de trouver la sonde bme280 sur x76. - ' + str(e))
 								SimpleSend('&NOBMEP=bme280(x76)')
 								exit = 1
+								break
 						elif Status_pins[i] == 'D':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -263,6 +264,7 @@ class myThread1 (threading.Thread):
 								log('Error' , 'Impossible de trouver la sonde bme280 sur x77. - ' + str(e))
 								SimpleSend('&NOBMEP=bme280(x77)')
 								exit = 1
+								break
 						elif Status_pins[i] == 'B':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -272,6 +274,7 @@ class myThread1 (threading.Thread):
 								log('Error' , 'Impossible de trouver la sonde bme680 sur x76. - ' + str(e))
 								SimpleSend('&NOBMEP=bme680(x76)')
 								exit = 1
+								break
 						elif Status_pins[i] == 'E':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -281,6 +284,7 @@ class myThread1 (threading.Thread):
 								log('Error' , 'Impossible de trouver la sonde bme680 sur x77. - ' + str(e))
 								SimpleSend('&NOBMEP=bme680(x77)')
 								exit = 1
+								break
 						elif Status_pins[i] == 'C':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -290,6 +294,7 @@ class myThread1 (threading.Thread):
 								log('Error' , 'Impossible de trouver la sonde bmp280 sur x76. - ' + str(e))
 								SimpleSend('&NOBMEP=bmp280(x76)')
 								exit = 1
+								break
 						elif Status_pins[i] == 'F':
 							i2c = busio.I2C(board.SCL, board.SDA)
 							try:
@@ -299,7 +304,11 @@ class myThread1 (threading.Thread):
 								log('Error' , 'Impossible de trouver la sonde bmp280 sur x77. - ' + str(e))
 								SimpleSend('&NOBMEP=bmp280(x77)')
 								exit = 1
-					reponse = 'COK'
+								break
+					if exit == 1:
+						reponse = 'NOK'
+					else:
+						reponse = 'COK'
 					RepStr = '&REP=' + str(reponse) + GPIOStr
 					gpioSET = True
 
@@ -565,11 +574,11 @@ def toggle_inputs(u):
 				break
 
 		if Status_pins[uu - 1] == 'n':
-			GPIO.add_event_detect(u, GPIO.RISING, callback=toggle_inputs)
+			GPIO.add_event_detect(u, GPIO.RISING, callback=toggle_inputs, bouncetime = 500)
 		elif Status_pins[uu - 1] == 'q':
-			GPIO.add_event_detect(u, GPIO.FALLING, callback=toggle_inputs)
+			GPIO.add_event_detect(u, GPIO.FALLING, callback=toggle_inputs, bouncetime = 500)
 		else:
-			GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_inputs)
+			GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_inputs, bouncetime = 500)
 	else:
 		pinStr = '&' + str(uu) + '=' + str(v)
 
@@ -898,8 +907,12 @@ if __name__ == "__main__":
 				GPIO.output(j, BootMode)
 				swtch[i] = BootMode
 				pinStr += '&' + str(i) + '=' + str(BootMode)
-			elif Status_pins[i - 1] == 'p' or Status_pins[i - 1] == 'i':
+			elif Status_pins[i - 1] == 'p':
 				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+				GPIO.remove_event_detect(j)
+				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
+			elif Status_pins[i - 1] == 'i':
+				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 				GPIO.remove_event_detect(j)
 				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
 			etat_pins[i - 1] = Status_pins[i - 1]

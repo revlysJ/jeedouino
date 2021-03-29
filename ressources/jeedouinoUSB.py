@@ -283,7 +283,7 @@ if __name__  ==  "__main__":
 		USBArduino.flush()
 	except Exception as e:
 		USBArduino = ''
-		SimpleSend('&NODEP = SERIAL')
+		SimpleSend('&NODEP=SERIAL')
 		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller. - ' + str(e))
 		sys.exit('Dependances Serial introuvables. - ' + str(e))
 

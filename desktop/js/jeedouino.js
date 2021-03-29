@@ -125,23 +125,23 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	}
 	else if ($(this).value().substr(0, 1)=='e')
 	{
-        RPIlocal();
-        $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
-        $('.control').show();
-        $('.UsbLan').show();
-		$('.config_pin').show();
-		$('.piFacePortID').hide();
-		$('.piPlusPortI2C').hide();
-		$('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value('rj45arduino');
-		$('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').attr('disabled','disabled');
-		$('.sketchs').hide();
-		$('.sketchUSB').hide();
-		$('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).hide();
-		$('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
-		$('.sketchsLib').show();
-		$('.esp8266').show();
-		$('.sketchstab').show();
-		$('.ActiveExt').hide();
+    RPIlocal();
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+    $('.control').show();
+    $('.UsbLan').show();
+    $('.config_pin').show();
+    $('.piFacePortID').hide();
+    $('.piPlusPortI2C').hide();
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value('rj45arduino');
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').attr('disabled','disabled');
+    $('.sketchs').hide();
+    $('.sketchUSB').hide();
+    $('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).hide();
+    $('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+    $('.sketchsLib').show();
+    $('.esp8266').show();
+    $('.sketchstab').show();
+    $('.ActiveExt').hide();
 	}
 	else if ($(this).value().substr(0, 1)=='a')
 	{
@@ -440,13 +440,18 @@ function addCmdToTable(_cmd) {
   if ( ctype == 'info') {
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isHistorized" data-size="mini" />{{Historiser}}</label></span><br> ';
 	}
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary" data-size="mini" />{{Inverser}}</label></span><br> ';
+  //if ( mtype != 'ds18b20' && mtype.substr(0, 3) != 'dht' && mtype.substr(0, 3) != 'bmp' && mtype.substr(0, 3) != 'bme' )
+  if ( ctype == 'info' && stype == 'binary' && control != 'JeedouinoControl')
+  {
+	   tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary" data-size="mini" />{{Inverser}}</label></span><br> ';
+  }
 	tr += '</td>';
 
 	tr += '<td>';
 	if ( ctype == 'info' && stype == 'binary' && control != 'JeedouinoControl') {
 		tr += '<span ><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinare" data-size="mini" />{{Inverser}}</label></span> ';
 	}
+  tr += '<input class="cmdAttr form-control tooltips input-sm" data-l1key="unite" style="width : 100px;" placeholder="Unité" title="{{Unité}}">';
 	tr += '</td>';
 
 	tr += '<td>';

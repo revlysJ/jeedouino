@@ -144,7 +144,14 @@ if (isset($_GET['id']))
 					<label class="col-sm-6 control-label hidden-xs">{{Délai de renvoi des valeurs des sondes T°/H en Minutes : }} <i class="fas fa-question-circle tooltips" title="{{Délai sondes en Minutes : 1min à 1000min max.}}"></i></label>
 					<div class="col-sm-6">
 						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1min à 1000min max." min="1" max="1000"/>
-            <a class="btn btn-warning btn-xs bt_ProbeDelay"><i class="fas fa-rss"></i> {{MàJ le délai entre sondes avec valeur ci-dessus:}}</a>
+            <a class="btn btn-warning btn-xs bt_ProbeDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai entre sondes avec valeur ci-dessus:}}</a>
+            <br><br>
+					</div>
+				</div>
+        <div class="form-group">
+					<label class="col-sm-6 control-label hidden-xs">{{Ne pas logguer les erreurs hors-limites des sondes. }} </label>
+					<div class="col-sm-6">
+						<input type="checkbox" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_ProbeNoLog" />
             <br><br>
 					</div>
 				</div>';
@@ -199,7 +206,7 @@ if (isset($_GET['id']))
       					<label class="col-sm-6 control-label hidden-xs">{{Délai RéArm Event compteurs en Secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 3600 pour UNE heure  : 600s à 86400s max.}}"></i></label>
       					<div class="col-sm-6">
       						<input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_CptDelay"  placeholder="Mettre ici 3600 pour UNE heure  : 600s à 86400s max." min="600" max="86400"/>
-                  <a class="btn btn-warning btn-xs bt_CptDelay"><i class="fas fa-rss"></i> {{MàJ le délai de RéArm Event des compteurs avec valeur ci-dessus:}}</a>
+                  <a class="btn btn-warning btn-xs bt_CptDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai de RéArm Event des compteurs avec valeur ci-dessus:}}</a>
                   <br><br>
       					</div>
       				</div>';

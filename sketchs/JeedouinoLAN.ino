@@ -100,7 +100,7 @@ EthernetServer server(80);
 
 // Etat des pins de l'arduino ( Mode )
 char Status_pins[NB_TOTALPIN];
-byte pin_id;
+int pin_id;
 byte echo_pin;
 
 String eqLogic = "";
@@ -1187,7 +1187,7 @@ void loop()
 		// c[2] = c[2] - '0';
 		// c[3] = c[3] - '0';
 		// ou : for (int i = 1; i < n; i++) if (isDigit(c[i])) c[i] = c[i] - '0'; // conversion simple char(ascii) vers int
-		// pin_id = 100 * int(c[1]) + 10 * int(c[2]) + int(c[3]); 	// pin action number
+		// int pin_id = 100 * int(c[1]) + 10 * int(c[2]) + int(c[3]); 	// pin action number
 		//
 		// c[4] to c[n-1] 	// pin action value
 		//
@@ -1380,8 +1380,12 @@ void Set_OutputPin(int i)
 			break;
 
 		case 'm': // pwm_output
-			pinTempo=100*int(c[3])+10*int(c[4])+int(c[5]);	// the duty cycle: between 0 (always off) and 255 (always on).
+			pinTempo = 100 * int(c[3]) + 10 * int(c[4]) + int(c[5]); 	// the duty cycle: between 0 (always off) and 255 (always on).
 			analogWrite(i, pinTempo);
+			jeedom += '&';
+			jeedom += i;
+			jeedom += '=';
+			jeedom += pinTempo;
 			break;
 	}
 }
@@ -1429,6 +1433,9 @@ void Load_EEPROM(int k)
 		switch (Status_pins[i])
 		{
 			case 'i': // input
+				OLDPinValue[i] = 2;				//@cpaillet
+				PinNextSend[i] = millis();
+				break;
 			case 'a': // analog_input
 			case 'n':		// BP_input_pulldown
 				pinMode(i, INPUT);
@@ -1475,13 +1482,16 @@ void Load_EEPROM(int k)
 				pinMode(i, INPUT);
 				break;
 			case 'p':		 // input_pullup
+				OLDPinValue[i] = 2;				//@cpaillet
+				PinNextSend[i] = millis();
+				break;
 			case 'g':		 // pwm_input
 			case 'q':		// BP_input_pullup
 					pinMode(i, INPUT_PULLUP); // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
 					// Arduino Doc : An internal 20K-ohm resistor is pulled to 5V.
-				swtch[i]=0; 	// init pour pwm_input
-				OLDPinValue[i]=1;
-				PinNextSend[i]=millis();
+				swtch[i] = 0; 	// init pour pwm_input
+				OLDPinValue[i] = 1;
+				PinNextSend[i] = millis();
 					break;
 			case 'c':		 // compteur_pullup
 					pinMode(i, INPUT_PULLUP); // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed

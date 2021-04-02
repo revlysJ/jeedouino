@@ -780,14 +780,14 @@ void loop()
 		case 'i': // input
 		case 'p': // input_pullup
 			PinValue = digitalRead(i);
-			if (PinValue!=OLDPinValue[i] && (PinNextSend[i]<millis() || NextRefresh<millis()))
+			if (PinValue != OLDPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
 			{
-				OLDPinValue[i]=PinValue;
+				OLDPinValue[i] = PinValue;
 				jeedom += '&';
 				jeedom += i;
 				jeedom += '=';
 				jeedom += PinValue;
-				PinNextSend[i]=millis()+1000; // Delai pour eviter trop d'envois
+				PinNextSend[i] = millis() + 1000; // Delai pour eviter trop d'envois
 			}
 			break;
 		case 'n':		// BP_input_pulldown
@@ -803,10 +803,10 @@ void loop()
 			if (PinNextSend[i] < millis() && PinValue != swtch[i])
 			{
 				if (PinValue == BPvalue) CounterPinValue[i] += 1;
-				OLDAnalogPinValue[i] = millis() + 250;	 // Delai entre clicks
+				OLDAnalogPinValue[i] = millis() + 1200;	 // Delai Appui long
 				swtch[i] = PinValue;
 			}
-			if (OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0)
+			if ((OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0) || (PinNextSend[i] < millis() && PinValue != OLDPinValue[i]))
 			{
 				if (PinValue == BPvalue) CounterPinValue[i] = 99; // Appui long
 				jeedom += '&';

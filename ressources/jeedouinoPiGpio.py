@@ -16,6 +16,7 @@ import socket
 import threading
 import os, time
 import sys
+
 try:
 	import http.client as httplib
 except:
@@ -83,12 +84,12 @@ def log(level,message):
 	fifi.close()
 
 def SimpleParse(m):
-	m = m.decode('ascii')
+	m = m.decode("utf-8")
 	m = m.replace('/', '')
 	u = m.find('?')
 	if u > -1:
 		u += 1
-		v = m.find(' HTTP',u)
+		v = m.find(' HTTP', u)
 		if v > -1:
 			url = m[u:v]
 			cmds = url.split("&")
@@ -185,11 +186,6 @@ class myThread1 (threading.Thread):
 							GPIO.output(j, BootMode)
 							swtch[i + 1] = BootMode
 							GPIOStr += '&' + str(i + 1) + '=' + str(BootMode)
-						elif Status_pins[i] == 'p':
-							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
-							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = 500)
-							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'c':
 							k = i % 4
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
@@ -219,16 +215,21 @@ class myThread1 (threading.Thread):
 						elif Status_pins[i] == 'n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_inputs, bouncetime = 500)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
 						elif Status_pins[i] == 'q':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_inputs, bouncetime = 500)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
 						elif Status_pins[i] == 'i':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = 500)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
 							GPIOStr +='&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
+						elif Status_pins[i] == 'p':
+							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
+							GPIO.remove_event_detect(j)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
+							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'd' or Status_pins[i] == 'f': # Sondes DHT(11,22)
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
@@ -540,13 +541,9 @@ def toggle_cpts3(u):
 		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
 
 def toggle_inputs(u):
-	global CounterPinValue,PinNextSend,Status_pins,GPIO,NextRefresh,PinValue,TimeValue,swtch,ProbeDelay
+	global Status_pins, GPIO, NextRefresh, ProbeDelay
 
-	t = time.time()
-	v = GPIO.input(u)
 	uu = gpio2pin[u]
-
-	pinStr = ''
 	BPvalue = 1
 	if Status_pins[uu - 1] == 'n' or Status_pins[uu - 1] == 'q':
 		GPIO.remove_event_detect(u)
@@ -555,34 +552,28 @@ def toggle_inputs(u):
 			NextRefresh = NewNextRefresh
 		if Status_pins[uu - 1] == 'q':
 			BPvalue = 0
-		TimeOut = time.time() + 2
-		while TimeOut > time.time():
+
+		TimeOut = time.time() + 1.2
+		count = 0
+		etat = 1 - BPvalue
+		while time.time() < TimeOut:
 			v = GPIO.input(u)
-			if v != PinValue[uu]:
-				PinNextSend[uu] = t + 0.250  									# (ms) Delai antirebond
-				PinValue[uu] = v
-			if PinNextSend[uu] < time.time() and v != swtch[uu]:
-				if v == BPvalue:
-					CounterPinValue[uu] += 1
-				TimeValue[uu] = time.time() + 0.500 								# (ms) Delai entre clicks
-				swtch[uu] = v
-			if TimeValue[uu] < time.time() and CounterPinValue[uu] != 0:
-				if v == BPvalue:
-					CounterPinValue[uu] = 99										# Appui long
-				pinStr = '&' + str(uu) + '=' + str(CounterPinValue[uu])
-				CounterPinValue[uu] = 0
-				break
-
-		if Status_pins[uu - 1] == 'n':
-			GPIO.add_event_detect(u, GPIO.RISING, callback=toggle_inputs, bouncetime = 500)
-		elif Status_pins[uu - 1] == 'q':
-			GPIO.add_event_detect(u, GPIO.FALLING, callback=toggle_inputs, bouncetime = 500)
-		else:
-			GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_inputs, bouncetime = 500)
+			if v != etat:
+				if v != BPvalue:
+					count += 1
+				etat = 1 - etat
+				#TimeOut += 0.05
+				time.sleep(0.05)
+		if count == 0:
+			count = 99
+		pinStr = '&' + str(uu) + '=' + str(count)
+		SimpleSend(pinStr)
+		while GPIO.input(u) == BPvalue:
+			time.sleep(0.01)
+		GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs)
 	else:
+		v = GPIO.input(u)
 		pinStr = '&' + str(uu) + '=' + str(v)
-
-	if pinStr != '':
 		SimpleSend(pinStr)
 
 class myThread2 (threading.Thread):
@@ -729,7 +720,8 @@ class myThread2 (threading.Thread):
 							if pinStr2 != '':
 								pinStr += '&DS18list_' + str(j) + '={' + pinStr2[:-1] + '}'
 							pinDHT = 1
-						except:
+						except Exception as e:
+							log('Error' , 'Probleme lecture sonde ds18b20 : ' + str(e))
 							pass
 					elif Status_pins[i] == 'r': # BMP085/180
 						if bmp180 is not None:

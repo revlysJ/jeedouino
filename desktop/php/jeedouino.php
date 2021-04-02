@@ -532,7 +532,7 @@ else $ShowSideBar = "col-xs-12";
 				<div class="form-group">
 				  <label class="col-sm-3 control-label"></label>
 				  <div class="col-sm-9">
-					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr configuration" data-l1key="configuration" data-l2key="ActiveCmdAll" checked/> {{Création automatique des commandes génériques ALL_*}}</label>
+					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr configuration" data-l1key="configuration" data-l2key="ActiveCmdAll" /> {{Création automatique des commandes génériques ALL_*}}</label>
 				  </div>
 				</div>
 			</form>

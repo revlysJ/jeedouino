@@ -348,7 +348,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_1,thread_2,thread_tries2,sendPINMODE
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,CounterPinValue,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_1,thread_2,thread_tries2,sendPINMODE
 
 		while exit==0:
 			thread_2 = 1
@@ -416,9 +416,9 @@ class myThread2 (threading.Thread):
 				SimpleSend(pinStr)
 
 			#on reclame la valeur des compteurs
-			if sendCPT==0 and timeCPT<time.time():
+			if sendCPT == 0 and timeCPT < time.time():
 				if JeedomIP != '' and eqLogic != '':
-					sendCPT=1
+					sendCPT = 1
 					if sendPINMODE == 0:
 						pinStr = '&PINMODE=1'
 						sendPINMODE = 1
@@ -471,8 +471,8 @@ if __name__ == "__main__":
 		port = int(sys.argv[1])
 
 	# On va demander la valeur des compteurs avec un peu de retard expres
-	timeCPT=time.time() +  4
-	NextRefresh=time.time() + 40
+	timeCPT = time.time() +  4
+	NextRefresh = time.time() + 7
 	sendCPT=0
 
 	if (nodep):
@@ -609,7 +609,8 @@ if __name__ == "__main__":
 								PinNextSend[i] = time.time() + 10  #10s environ
 								pinStr +='&' + str(i) + '=' + str(CounterPinValue[i])
 						else:
-							pinStr +='&' + str(i) + '=' + str(input)
+							if NextRefresh < time.time():
+								pinStr +='&' + str(i) + '=' + str(input)
 			if pinStr!='':
 				SimpleSend(pinStr + '&Main=1')
 			time.sleep(0.2)

@@ -713,14 +713,14 @@ void loop()
 			case 'i':		// input
 			case 'p':		// input_pullup
 				PinValue = digitalRead(i);
-				if (PinValue!=OLDPinValue[i] && (PinNextSend[i]<millis() || NextRefresh<millis()))
+				if (PinValue != OLDPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
 				{
-					OLDPinValue[i]=PinValue;
+					OLDPinValue[i] = PinValue;
 					jeedom += '&';
 					jeedom += i;
 					jeedom += '=';
 					jeedom += PinValue;
-					PinNextSend[i]=millis()+1000;		// Delai 1s pour eviter trop d'envois
+					PinNextSend[i] = millis() + 1000;		// Delai 1s pour eviter trop d'envois
 				}
 				break;
 			case 'n':		// BP_input_pulldown
@@ -736,10 +736,10 @@ void loop()
 				if (PinNextSend[i] < millis() && PinValue != swtch[i])
 				{
 					if (PinValue == BPvalue) CounterPinValue[i] += 1;
-					OLDAnalogPinValue[i] = millis() + 250;   // Delai entre clicks
+					OLDAnalogPinValue[i] = millis() + 1200;   // Delai Appui long
 					swtch[i] = PinValue;
 				}
-				if (OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0)
+				if ((OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0) || (PinNextSend[i] < millis() && PinValue != OLDPinValue[i]))
 				{
 					if (PinValue == BPvalue) CounterPinValue[i] = 99; // Appui long
 					jeedom += '&';
@@ -1357,7 +1357,7 @@ void Load_EEPROM(int k)
 			case 'q':		// BP_input_pullup
 				pinMode(i, INPUT_PULLUP);   // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
 				// Arduino Doc : An internal 20K-ohm resistor is pulled to 5V.
-				swtch[i]=0; 	// init pour pwm_input
+				swtch[i] = 0; 	// init pour pwm_input
 				OLDPinValue[i] = 1;
 				PinNextSend[i] = millis();
 				break;

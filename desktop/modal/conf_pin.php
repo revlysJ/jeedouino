@@ -133,8 +133,14 @@ if (isset($_GET['id']))
 			<li role="presentation"><a href="#userpinstab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-code"></i> {{Pins Utilisateur}}</a></li>
 				<?php
 				}
+        if (substr($ModeleArduino, 0, 2) == 'pi')
+        {
 				?>
-		</ul>
+        <li role="presentation"><a href="https://fr.pinout.xyz/" target="_blank" aria-controls="profile" role="tab" ><img src="plugins/jeedouino/icons/pinout.jpg" style="width:20px; height: 20px;"/></a></li>
+        <?php
+				}
+				?>
+  	</ul>
 
 		<div class="tab-content" style="height:calc(100% - 70px);overflow:auto;overflow-x: hidden;">
 			<?php if (substr($ModeleArduino, 0, 2) != 'pi' or (substr($ModeleArduino, 0, 6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
@@ -144,7 +150,7 @@ if (isset($_GET['id']))
 					<label class="col-sm-6 control-label hidden-xs">{{Délai de renvoi des valeurs des sondes T°/H en Minutes : }} <i class="fas fa-question-circle tooltips" title="{{Délai sondes en Minutes : 1min à 1000min max.}}"></i></label>
 					<div class="col-sm-6">
 						<input type="number" class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_ProbeDelay"  placeholder="Délai sondes en Minutes : 1min à 1000min max." min="1" max="1000"/>
-            <a class="btn btn-warning btn-xs bt_ProbeDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai entre sondes avec valeur ci-dessus:}}</a>
+            <a class="btn btn-warning btn-xs bt_ProbeDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai entre sondes avec la valeur ci-dessus:}}</a>
             <br><br>
 					</div>
 				</div>
@@ -206,7 +212,7 @@ if (isset($_GET['id']))
       					<label class="col-sm-6 control-label hidden-xs">{{Délai RéArm Event compteurs en Secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 3600 pour UNE heure  : 600s à 86400s max.}}"></i></label>
       					<div class="col-sm-6">
       						<input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_CptDelay"  placeholder="Mettre ici 3600 pour UNE heure  : 600s à 86400s max." min="600" max="86400"/>
-                  <a class="btn btn-warning btn-xs bt_CptDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai de RéArm Event des compteurs avec valeur ci-dessus:}}</a>
+                  <a class="btn btn-warning btn-xs bt_CptDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai de RéArm Event des compteurs avec la valeur ci-dessus:}}</a>
                   <br><br>
       					</div>
       				</div>';

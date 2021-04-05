@@ -127,6 +127,11 @@ try {
       jeedouino::CptDelay(init('boardid'), init('CptDelay'));
       ajax::success();
     }
+    if (init('action') == 'bounceDelay')
+    {
+      jeedouino::bounceDelay(init('boardid'), init('bounceDelay'));
+      ajax::success();
+    }
     // Action pour mettre à jour le délai de relève des sondes
     if (init('action') == 'ProbeDelay')
     {

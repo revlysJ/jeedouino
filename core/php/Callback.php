@@ -375,14 +375,15 @@ if (isset($_GET['BoardEQ']))
 						{
 							$value = $cmd->getConfiguration('value');	// En cas de mauvais reboot d'une carte, evite le renvoi d'une valeur de cpt infrieure (souvent 0))
 							$RSTvalue = $cmd->getConfiguration('RSTvalue');
-							if ($recu < ($RSTvalue / 2))
+							if ($recu < ($RSTvalue / 2) and $recu > 0)
 							{
 								$message = $CALLBACK . __('La valeur de comptage reçue (', __FILE__) . $recu . __(') est inférieure à la valeur déjà connue (', __FILE__) . $RSTvalue . __('), est-ce voulu ?', __FILE__);
 								jeedouino::logAlert('debug', 'warning', $message);
 								$recu = $RSTvalue;
 							}
+							elseif ($recu == 0) $recu = $RSTvalue;
 							$cmd->setConfiguration('RSTvalue', $recu);
-							jeedouino::log('debug', $CALLBACK . 'RSTvalue Pin n° ' . $pins_id . ' = ' . $recu);
+							jeedouino::log('debug', $CALLBACK .  __('Valeur compteur sur Pin n° ', __FILE__) . $pins_id . ' = ' . $recu . ' ( +' . ($recu - $RSTvalue) . ' )');
 						}
 						if ($MaJ)
 						{

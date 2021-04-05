@@ -3544,7 +3544,7 @@ class jeedouino extends eqLogic {
 	{
 		if ($ProbeDelay < 1 or $ProbeDelay > 1000) $ProbeDelay = 5;
 		$ProbeDelay = round($ProbeDelay);
-		$oldValue = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 'none');
+		$oldValue = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 5);
 		config::save($arduino_id . '_ProbeDelay', $ProbeDelay, 'jeedouino');
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		jeedouino::log( 'debug', __('Début de MàJ du délai de relève des sondes pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
@@ -3558,7 +3558,7 @@ class jeedouino extends eqLogic {
 			case 'piface':
 			case 'gpio':
 			case 'piplus':
-				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __(' vers la nouvelle : ', __FILE__) . $ProbeDelay);
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('min vers la nouvelle : ', __FILE__) . $ProbeDelay . 'min(s) ');
 				$message  = 'ProbeDelay=' . $ProbeDelay;
 				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
 				if ($reponse != 'SOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai de relève des sondes - Réponse : ', __FILE__) . $reponse);
@@ -3571,27 +3571,42 @@ class jeedouino extends eqLogic {
 	{
 		if ($CptDelay < 600 or $CptDelay > 86400) $CptDelay = 3600;
 		$CptDelay = round($CptDelay);
-		$oldValue = config::byKey($arduino_id . '_CptDelay', 'jeedouino', 'none');
+		$oldValue = config::byKey($arduino_id . '_CptDelay', 'jeedouino', 3600);
 		config::save($arduino_id . '_CptDelay', $CptDelay, 'jeedouino');
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		jeedouino::log( 'debug', __('Début de MàJ du délai de RéArm Event pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
 		switch ($board)
 		{
-			case 'arduino':
-			case 'esp':
-				sleep(2);
-				//self::SendToArduino($arduino_id, 'S' . $CptDelay . 'D', 'ReArmDelaiCompteurs', 'SCOK');
-				break;
 			case 'piface':
 			case 'gpio':
 			case 'piplus':
-				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __(' vers la nouvelle : ', __FILE__) . $CptDelay);
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('s vers la nouvelle : ', __FILE__) . $CptDelay . 's ');
 				$message  = 'CptDelay=' . $CptDelay;
 				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
 				if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai de RéArm Event - Réponse : ', __FILE__) . $reponse);
 				break;
 		}
 		jeedouino::log( 'debug', __('Fin de MàJ du délai de RéArm Event.', __FILE__));
+	}
+
+	public function bounceDelay($arduino_id, $bounceDelay = 200)
+	{
+		if ($bounceDelay < 50 or $bounceDelay > 10000) $bounceDelay = 200;
+		$bounceDelay = round($bounceDelay);
+		$oldValue = config::byKey($arduino_id . '_bounceDelay', 'jeedouino', 200);
+		config::save($arduino_id . '_bounceDelay', $bounceDelay, 'jeedouino');
+		list(, $board) = self::GetPinsByBoard($arduino_id);
+		jeedouino::log( 'debug', __('Début de MàJ du délai anti-rebonds pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
+		switch ($board)
+		{
+			case 'gpio':
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('ms vers la nouvelle : ', __FILE__) . $bounceDelay . 'ms ');
+				$message  = 'bounceDelay=' . $bounceDelay;
+				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai anti-rebonds - Réponse : ', __FILE__) . $reponse);
+				break;
+		}
+		jeedouino::log( 'debug', __('Fin de MàJ du délai anti-rebonds.', __FILE__));
 	}
 
 	public function ResetCPT($arduino_id, $RSTvalue = 0, $CMDid = '')

@@ -155,7 +155,7 @@ if (isset($_GET['id']))
 					</div>
 				</div>
         <div class="form-group">
-					<label class="col-sm-6 control-label hidden-xs">{{Ne pas logguer les erreurs hors-limites des sondes. }} </label>
+					<label class="col-sm-6 control-label hidden-xs">{{Pas de logs pour les erreurs hors-limites des sondes. }} </label>
 					<div class="col-sm-6">
 						<input type="checkbox" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_ProbeNoLog" />
             <br><br>
@@ -163,7 +163,7 @@ if (isset($_GET['id']))
 				</div>';
 			?>
 			<div role="tabpanel" class="tab-pane" id="optionstab">
-				<?php if (substr($ModeleArduino,0,2)!='pi')
+				<?php if (substr($ModeleArduino,0,2) != 'pi')
 				{
 				?>
                 <div class="form-group">
@@ -207,15 +207,23 @@ if (isset($_GET['id']))
                     </div>
                 </div>
 				<?php
-					echo $_ProbeDelay;
+          echo $_ProbeDelay;
           echo '<div class="form-group">
-      					<label class="col-sm-6 control-label hidden-xs">{{Délai RéArm Event compteurs en Secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 3600 pour UNE heure  : 600s à 86400s max.}}"></i></label>
-      					<div class="col-sm-6">
-      						<input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_CptDelay"  placeholder="Mettre ici 3600 pour UNE heure  : 600s à 86400s max." min="600" max="86400"/>
+          			<label class="col-sm-6 control-label hidden-xs">{{Délai RéArm Event compteurs en Secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 3600 pour UNE heure  : 600s à 86400s max.}}"></i></label>
+          			<div class="col-sm-6">
+          				<input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_CptDelay"  placeholder="Mettre ici 3600 pour UNE heure  : 600s à 86400s max." min="600" max="86400"/>
                   <a class="btn btn-warning btn-xs bt_CptDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai de RéArm Event des compteurs avec la valeur ci-dessus:}}</a>
                   <br><br>
-      					</div>
-      				</div>';
+          			</div>
+          		</div>';
+          echo '<div class="form-group">
+          			<label class="col-sm-6 control-label hidden-xs">{{Délai anti-rebonds compteurs en milli-secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 200 pour 200ms de bounceTime.}}"></i></label>
+          			<div class="col-sm-6">
+          				<input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_bounceDelay"  placeholder="Mettre ici 200 pour 200ms de bounceTime." min="50" max="10000"/>
+                  <a class="btn btn-warning btn-xs bt_bounceDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai anti-rebonds des compteurs avec la valeur ci-dessus:}}</a>
+                  <br><br>
+          			</div>
+          		</div>';
 				}
 				elseif ($ModeleArduino == 'piPlus')
 				{
@@ -738,6 +746,28 @@ $(".bt_CptDelay").on('click', function (event) {
 			return;
 		}
 		$('#div_alert').showAlert({message: '{{La valeur délai de RéArm Event des compteurs a bien été envoyée.}}', level: 'success'});
+	}
+});
+});
+$(".bt_bounceDelay").on('click', function (event) {
+	$.ajax({
+		type: "POST",
+		url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php",
+		data: {
+			action: "bounceDelay",
+			boardid : <?php echo $arduino_id; ?>,
+			bounceDelay : $('.configKeyPins[data-l1key=<?php echo $arduino_id; ?>_bounceDelay]').value()
+		},
+		dataType: 'json',
+		error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+		success: function (data) {
+		if (data.state != 'ok') {
+			$('#div_alert').showAlert({message: data.result, level: 'danger'});
+			return;
+		}
+		$('#div_alert').showAlert({message: '{{La valeur délai anti-rebonds des compteurs a bien été envoyée.}}', level: 'success'});
 	}
 });
 });

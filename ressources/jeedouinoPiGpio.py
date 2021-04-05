@@ -53,8 +53,9 @@ pin2gpio = [0,0,2,0,3,0,4,14,0,15,17,18,27,0,22,23,0,24,10,0,9,25,11,8,0,7,0,0,5
 gpio2pin = [0,0,3,5,7,29,31,26,24,21,19,23,32,33,8,10,36,11,12,35,38,40,15,16,18,22,37,13,0,0,0,0,0,0,0,0,0,0,0,0]
 
 # compteurs:
-ReArmDelay = 3600
+ReArmDelay = 3600 # secondes
 CptNextReArm = time.time() + ReArmDelay
+bounceDelay = 200 # millisecondes
 
 
 # s-Fallback
@@ -116,7 +117,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_2,thread_tries1,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay
+		global eqLogic,JeedomIP,PinNextSend,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_2,thread_tries1,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay,bounceDelay
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -187,30 +188,32 @@ class myThread1 (threading.Thread):
 							swtch[i + 1] = BootMode
 							GPIOStr += '&' + str(i + 1) + '=' + str(BootMode)
 						elif Status_pins[i] == 'c':
+							PinNextSend[i + 1] = time.time() + 30  #30s environ
 							k = i % 4
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
 							if k == 1:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts1, bouncetime = bounceDelay)
 							elif k == 2:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts2, bouncetime = bounceDelay)
 							elif k == 3:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts3, bouncetime = bounceDelay)
 							else:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
+								GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts0, bouncetime = bounceDelay)
 							time.sleep(0.1)
 						elif Status_pins[i] == 'G':
+							PinNextSend[i + 1] = time.time() + 30  #30s environ
 							k = i % 4
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
 							if k == 1:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts1, bouncetime = bounceDelay)
 							elif k == 2:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts2, bouncetime = bounceDelay)
 							elif k == 3:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts3, bouncetime = bounceDelay)
 							else:
-								GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
+								GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0, bouncetime = bounceDelay)
 							time.sleep(0.1)
 						elif Status_pins[i] == 'n':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
@@ -459,6 +462,11 @@ class myThread1 (threading.Thread):
 					ReArmDelay = int(query[q + 1])
 					reponse = 'SCOK'
 
+				if 'bounceDelay' in query:
+					q = query.index("bounceDelay")
+					bounceDelay = int(query[q + 1])
+					reponse = 'SCOK'
+
 				if 'ProbeDelay' in query:
 					q = query.index("ProbeDelay")
 					ProbeDelay = int(query[q + 1])
@@ -504,49 +512,32 @@ def SetPin(u, v, m):
 	SimpleSend(pinStr)
 
 def toggle_cpts0(u):
-	global CounterPinValue, PinNextSend, Status_pins, GPIO
-	# if Status_pins[u-1] == 'c':
-	# On compte le nombre d'impulsions
+	global CounterPinValue
 	uu = gpio2pin[u]
-	CounterPinValue[uu] += GPIO.input(u)
-	#GPIO.remove_event_detect(u)
-	# on verifie qu'il y ai suffisamment de temps d'ecoule pour ne pas saturer jeedom et le reseau
-	if PinNextSend[uu] < time.time():
-		PinNextSend[uu] = time.time() + 30  #30s environ
-		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
-	#GPIO.add_event_detect(u, GPIO.BOTH, callback=toggle_cpts)
+	CounterPinValue[uu] += 1
 
 def toggle_cpts1(u):
-	global CounterPinValue, PinNextSend, Status_pins, GPIO
+	global CounterPinValue
 	uu = gpio2pin[u]
-	CounterPinValue[uu] += GPIO.input(u)
-	if PinNextSend[uu] < time.time():
-		PinNextSend[uu] = time.time() + 30  #30s environ
-		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
+	CounterPinValue[uu] += 1
 
 def toggle_cpts2(u):
-	global CounterPinValue, PinNextSend, Status_pins, GPIO
+	global CounterPinValue
 	uu = gpio2pin[u]
-	CounterPinValue[uu] += GPIO.input(u)
-	if PinNextSend[uu] < time.time():
-		PinNextSend[uu] = time.time() + 30  #30s environ
-		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
+	CounterPinValue[uu] += 1
 
 def toggle_cpts3(u):
-	global CounterPinValue, PinNextSend, Status_pins, GPIO
+	global CounterPinValue
 	uu = gpio2pin[u]
-	CounterPinValue[uu] += GPIO.input(u)
-	if PinNextSend[uu] < time.time():
-		PinNextSend[uu] = time.time() + 30  #30s environ
-		SimpleSend('&' + str(uu) + '=' + str(CounterPinValue[uu]))
+	CounterPinValue[uu] += 1
 
 def toggle_inputs(u):
 	global Status_pins, GPIO, NextRefresh, ProbeDelay
-
+	GPIO.remove_event_detect(u)
 	uu = gpio2pin[u]
 	BPvalue = 1
 	if Status_pins[uu - 1] == 'n' or Status_pins[uu - 1] == 'q':
-		GPIO.remove_event_detect(u)
+
 		NewNextRefresh = time.time() + (60 * ProbeDelay) 			# Decale la lecture des sondes pour eviter un conflit
 		if NextRefresh < NewNextRefresh:
 			NextRefresh = NewNextRefresh
@@ -570,11 +561,12 @@ def toggle_inputs(u):
 		SimpleSend(pinStr)
 		while GPIO.input(u) == BPvalue:
 			time.sleep(0.01)
-		GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs)
 	else:
 		v = GPIO.input(u)
 		pinStr = '&' + str(uu) + '=' + str(v)
 		SimpleSend(pinStr)
+		time.sleep(0.05)
+	GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs)
 
 class myThread2 (threading.Thread):
 	def __init__(self, threadID, name):
@@ -584,7 +576,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_1,thread_2,thread_tries2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm,ReArmDelay
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,GPIO,SetAllLOW,SetAllHIGH,Status_pins,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,ProbeDelay,thread_1,thread_2,thread_tries2,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,sendPINMODE,CptNextReArm,ReArmDelay,bounceDelay
 
 		while exit==0:
 			thread_2 = 1
@@ -646,9 +638,9 @@ class myThread2 (threading.Thread):
 			pinStr = ''
 			for i in range(0, 40):
 				j = i + 1
-				if (Status_pins[i] == 'c' or Status_pins[i] == 'G') and PinNextSend[j] < time.time() and PinNextSend[j] != 0:
+				if (Status_pins[i] == 'c' or Status_pins[i] == 'G') and PinNextSend[j] < time.time():
 					pinStr +='&' + str(j) + '=' + str(CounterPinValue[j])
-					PinNextSend[j] = 0
+					PinNextSend[j] = time.time() + 30  #30s environ
 			if pinStr!='':
 				SimpleSend(pinStr)
 
@@ -662,27 +654,29 @@ class myThread2 (threading.Thread):
 				for i in range(0, 40):
 					j = pin2gpio[i]
 					if Status_pins[i] == 'c':
+						PinNextSend[i + 1] = time.time() + 30  #30s environ
 						k = i % 4
 						GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 						if k == 1:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts1, bouncetime = bounceDelay)
 						elif k == 2:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts2, bouncetime = bounceDelay)
 						elif k == 3:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts3, bouncetime = bounceDelay)
 						else:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
+							GPIO.add_event_detect(j, GPIO.FALLING, callback = toggle_cpts0, bouncetime = bounceDelay)
 					elif Status_pins[i] == 'G':
+						PinNextSend[i + 1] = time.time() + 30  #30s environ
 						k = i % 4
 						GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 						if k == 1:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts1)
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts1, bouncetime = bounceDelay)
 						elif k == 2:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts2)
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts2, bouncetime = bounceDelay)
 						elif k == 3:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts3)
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts3, bouncetime = bounceDelay)
 						else:
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_cpts0)
+							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0, bouncetime = bounceDelay)
 
 			# Renvois des sondes toutes les 300s par defaut
 			if NextRefresh < time.time():

@@ -233,22 +233,31 @@ if (isset($_GET['BoardEQ']))
 					case 'piface':
 					case 'piPlus':
 						$PinMode = 'ConfigurePins=' . $PinMode;
+						jeedouino::log( 'debug', $CALLBACK . __('Le démon réclame l\'envoi de la configuration des pins.', __FILE__));
+						$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
+						if ($DemonTypeF == 'USB' ) $PinMode = 'USB=' . $PinMode;
+						$reponse = jeedouino::SendToBoardDemon($arduino_id, $PinMode, $DemonTypeF);
+						if ($reponse != 'COK') jeedouino::log( 'debug', __('Erreur d\'envoi de la configuration des pins sur l\'équipement ', __FILE__) . $arduino_id.' ( ' . $eqLogic->getName() . ' ) - Réponse :' . $reponse);
+						else
+						{
+							config::save('NODEP_' . $arduino_id, '', 'jeedouino');
+							jeedouino::updateControlCmd($arduino_id, true);
+						}
+						jeedouino::log( 'debug', __('Envoi de ', __FILE__) . $PinMode . __(' - Réponse : ', __FILE__) . $reponse);
 						break;
 					default:
 						$PinMode = 'C' . $PinMode . 'C';
+						jeedouino::log( 'debug', $CALLBACK . __('L\'' . $board . ' réclame l\'envoi de la configuration des pins.', __FILE__));
+						$reponse = jeedouino::SendToArduino($arduino_id, $PinMode, 'PinMode', 'COK');
+						if ($reponse != 'NOK') $reponse = jeedouino::SendToArduino($arduino_id, 'B' . config::byKey($arduino_id . '_choix_boot', 'jeedouino', '2') . 'M', 'BootMode', 'BMOK');
+						else jeedouino::log( 'debug', __('Erreur d\'envoi de la configuration des pins sur l\'équipement ', __FILE__) . $arduino_id.' ( ' . $eqLogic->getName() . ' ) - Réponse :' . $reponse);
+						if (!$usb)
+						{
+							if ($reponse != 'NOK') $reponse = jeedouino::SendToArduino($arduino_id, 'E' . $arduino_id . 'Q', 'BoardEQ', 'EOK');
+							if ($reponse != 'NOK') $reponse = jeedouino::SendToArduino($arduino_id, 'I' . jeedouino::GetJeedomIP() . 'P', 'BoardIP', 'IPOK');
+						}
 				}
 				config::save($arduino_id . '_PinMode', $PinMode, 'jeedouino');
-				jeedouino::log( 'debug', $CALLBACK . __('Le démon réclame l\'envoi du mode des pins.', __FILE__));
-				$DemonTypeF = jeedouino::FilterDemon($ModeleArduino);
-				if ($DemonTypeF == 'USB' ) $PinMode = 'USB=' . $PinMode;
-				$reponse = jeedouino::SendToBoardDemon($arduino_id, $PinMode, $DemonTypeF);
-				if ($reponse != 'COK') jeedouino::log( 'debug', __('Erreur d\'envoi de la configuration des pins sur l\'équipement ', __FILE__) . $arduino_id.' ( ' . $eqLogic->getName() . ' ) - Réponse :' . $reponse);
-				else
-				{
-					config::save('NODEP_' . $arduino_id, '', 'jeedouino');
-					jeedouino::updateControlCmd($arduino_id, true);
-				}
-				jeedouino::log( 'debug', __('Envoi de ', __FILE__) . $PinMode . __(' - Réponse : ', __FILE__) . $reponse);
 			}
 		}
 		//else // Informations fournies par tous

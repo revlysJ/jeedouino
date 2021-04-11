@@ -1488,15 +1488,15 @@ void Set_OutputPin(int i)
 void Load_EEPROM(int k)
 {
 	// on recupere le BootMode
-	BootMode=EEPROM.read(14);
+	BootMode = EEPROM.read(14);
 	// Recuperation de l'eqLogic
 	eqLogic = "";
-	n=EEPROM.read(15);				// Recuperation de la longueur du eqLogic
-	if (n>0)				// bug probable si eqLogic_id<10 dans jeedom
+	n = EEPROM.read(15);				// Recuperation de la longueur du eqLogic
+	if (n > 0)				// bug probable si eqLogic_id<10 dans jeedom
 	{
 		for (int i = 1; i < n; i++)
 		{
-			eqLogic += EEPROM.read(15+i);
+			eqLogic += EEPROM.read(15 + i);
 		}
 	}
 	// Recuperation de l'IP
@@ -1506,20 +1506,34 @@ void Load_EEPROM(int k)
 	IP_JEEDOM[3]=EEPROM.read(29);
 
 	// on met en place le mode des pins
-	jeedom="";
-	byte y=1;
+	jeedom = "";
+	byte y = 1;
 	#if (UseTeleInfo == 1)
 		teleinfoRX = 0;
 		teleinfoTX = 0;
 	#endif
 	#if (DEBUGtoSERIAL == 1)
 		Serial.println(F("Conf. Pins:"));
-		for (int i = 0; i < NB_TOTALPIN; i++) Serial.print((char)EEPROM.read(30+i));
+		for (int i = 0; i < NB_TOTALPIN; i++) Serial.print((char)EEPROM.read(30 + i));
 		Serial.println();
 	#endif
+	// au cas ou l'arduino n'ai pas encore recu la conf. des pins.
+	#if (DEBUGtoSERIAL == 1)
+		Serial.println(F("Ask for Conf. Pins."));
+		Serial.println();
+	#endif
+	for (int i = 2; i < NB_TOTALPIN; i++)
+	{
+		byte e = EEPROM.read(30 + i);
+		if (e < ' ' || e > 'z')
+		{
+			jeedom += F("&PINMODE=1");
+			break;
+		}
+	}
 	for (int i = 0; i < NB_TOTALPIN; i++)
 	{
-		Status_pins[i] = EEPROM.read(30+i); // Etats des pins
+		Status_pins[i] = EEPROM.read(30 + i); // Etats des pins
 
 		// INITIALISATION DES TABLEAUX DE TEMPO SORTIES
 		TempoPinHIGH[i] = 0;
@@ -1670,7 +1684,7 @@ void Load_EEPROM(int k)
 		//SoftwareSerial teleinfo(teleinfoRX, teleinfoTX);
 	}
 	#endif
-	if (jeedom!="") SendToJeedom();
+	if (jeedom != "") SendToJeedom();
 }
 
 void PinWriteHIGH(long p)

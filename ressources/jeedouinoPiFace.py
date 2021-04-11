@@ -35,6 +35,9 @@ boardId = 0
 JeedomPort = 80
 JeedomCPL = ''
 
+# compteurs:
+bounceDelay = 200 # millisecondes
+
 # Tests Threads alives
 thread_1 = 0
 thread_2 = 0
@@ -83,7 +86,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,thread_1,thread_tries
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,thread_1,thread_tries,bounceDelay
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -272,6 +275,13 @@ class myThread1 (threading.Thread):
 					reponse='SOK'
 					SetPin(u, 0, reponse)
 
+				if 'bounceDelay' in query:
+					q = query.index("bounceDelay")
+					bounceDelay = int(query[q + 1])
+					if bounceDelay < 20 or bounceDelay > 300:
+						bounceDelay = 200
+					reponse = 'SCOK'
+
 				if 'PING' in query:
 					reponse='PINGOK'
 					SimpleSend('&REP=' + str(reponse))
@@ -334,7 +344,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_2
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,NextRefresh,CounterPinValue,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_2,bounceDelay
 
 		while exit==0:
 			thread_2 = 1
@@ -554,7 +564,7 @@ if __name__ == "__main__":
 						pinStr +='&' + str(i) + '=' + str(input)
 			if pinStr!='':
 				SimpleSend(pinStr + '&Main=1')
-			time.sleep(0.2)
+			time.sleep(bounceDelay / 1000)
 	except KeyboardInterrupt:
 		log('debug' , '^C received, shutting down daemon server')
 		exit=1  # permet de sortir du thread aussi

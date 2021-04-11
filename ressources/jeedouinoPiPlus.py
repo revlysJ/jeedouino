@@ -35,6 +35,9 @@ boardId = 32
 JeedomPort = 80
 JeedomCPL = ''
 
+# compteurs:
+bounceDelay = 200 # millisecondes
+
 # s-Fallback
 BootMode = False
 Status_pins = {}
@@ -88,7 +91,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,SetAllLOW,SetAllHIGH,CounterPinValue,s,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,BootMode,thread_1,thread_2,thread_tries1,sendPINMODE
+		global eqLogic,JeedomIP,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,SetAllLOW,SetAllHIGH,CounterPinValue,s,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,BootMode,thread_1,thread_2,thread_tries1,sendPINMODE,bounceDelay
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -303,6 +306,13 @@ class myThread1 (threading.Thread):
 					reponse = 'SOK'
 					SetPin(u, 0, reponse)
 
+				if 'bounceDelay' in query:
+					q = query.index("bounceDelay")
+					bounceDelay = int(query[q + 1])
+					if bounceDelay < 20 or bounceDelay > 300:
+						bounceDelay = 200
+					reponse = 'SCOK'
+
 				if 'PING' in query:
 					if thread_2 == 1:
 						reponse = 'PINGOK'
@@ -348,7 +358,7 @@ class myThread2 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,CounterPinValue,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_1,thread_2,thread_tries2,sendPINMODE
+		global TempoPinLOW,TempoPinHIGH,exit,swtch,SetAllLOW,SetAllHIGH,sendCPT,timeCPT,s,CounterPinValue,bus,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,PinNextSend,thread_1,thread_2,thread_tries2,sendPINMODE,bounceDelay
 
 		while exit==0:
 			thread_2 = 1
@@ -613,7 +623,7 @@ if __name__ == "__main__":
 								pinStr +='&' + str(i) + '=' + str(input)
 			if pinStr!='':
 				SimpleSend(pinStr + '&Main=1')
-			time.sleep(0.2)
+			time.sleep(bounceDelay / 1000)
 	except KeyboardInterrupt:
 		log('debug' , '^C received, shutting down daemon server')
 		exit=1  # permet de sortir du thread aussi

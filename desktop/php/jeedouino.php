@@ -448,7 +448,7 @@ else $ShowSideBar = "col-xs-12";
 <legend><i class="fas fa-cog"></i> {{Paramètres facultatifs}}</legend>
             <div class="datasource rj45arduino">
                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Port réseau libre}}</label>
+                    <label class="col-sm-3 control-label">{{Port réseau libre}} <i class="fas fa-question-circle tooltips" title="{{Tip sur R.Pi: laisser vide pour forcer le démon a redémarrer lors du Sauver/Générer.}}"></i></label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
                     </div>

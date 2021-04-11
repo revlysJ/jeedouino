@@ -119,12 +119,12 @@ if (isset($_GET['id']))
 			</div>
 
 		<ul class="nav nav-tabs" role="tablist" >
-				<?php if (substr($ModeleArduino,0,2) != 'pi' or (substr($ModeleArduino,0,6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
-				{
+				<?php// if (substr($ModeleArduino,0,2) != 'pi' or (substr($ModeleArduino,0,6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
+				//{
 				?>
 			<li role="presentation"><a href="#optionstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin"><i class="fas fa-wrench"></i> {{Options}}</a></li>
 				<?php
-				}
+				//}
 				?>
 			<li role="presentation" class="active"><a href="#boardpinstab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Pins Matérielles}}</a></li>
 				<?php if ($UserPinsStatus)
@@ -143,8 +143,8 @@ if (isset($_GET['id']))
   	</ul>
 
 		<div class="tab-content" style="height:calc(100% - 70px);overflow:auto;overflow-x: hidden;">
-			<?php if (substr($ModeleArduino, 0, 2) != 'pi' or (substr($ModeleArduino, 0, 6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
-			{
+			<?php //if (substr($ModeleArduino, 0, 2) != 'pi' or (substr($ModeleArduino, 0, 6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
+			//{ // 11
 				$_ProbeDelay = '
 				<div class="form-group">
 					<label class="col-sm-6 control-label hidden-xs">{{Délai de renvoi des valeurs des sondes T°/H en Minutes : }} <i class="fas fa-question-circle tooltips" title="{{Délai sondes en Minutes : 1min à 1000min max.}}"></i></label>
@@ -163,51 +163,38 @@ if (isset($_GET['id']))
 				</div>';
 			?>
 			<div role="tabpanel" class="tab-pane" id="optionstab">
-				<?php if (substr($ModeleArduino,0,2) != 'pi')
+				<?php if (substr($ModeleArduino, 0, 2) != 'pi')
 				{
-				?>
-                <div class="form-group">
-                    <label class="col-sm-6 control-label hidden-xs">{{Choix de sauvegarde de l'état des pins suite a un redémarrage de l'Arduino/esp (Coupure de courant, reset,etc...)}}</label>
-                    <div class="col-sm-6">
-						<?php
-							if (config::byKey($arduino_id . '_choix_boot', 'jeedouino', 'none') != 'none') $message_a = '';
-							else $message_a=' selected ';
+          echo '<div class="form-group">
+                <label class="col-sm-6 control-label hidden-xs">{{Choix de sauvegarde de l\'état des pins suite a un redémarrage de l\'Arduino/esp (Coupure de courant, reset,etc...)}}</label>
+                <div class="col-sm-6">';
+					if (config::byKey($arduino_id . '_choix_boot', 'jeedouino', 'none') != 'none') $message_a = '';
+					else $message_a = ' selected ';
 
-							//echo '<br><br>';
-							echo '<select class="form-control configKeyPins" data-l1key="' . $arduino_id . '_choix_boot">';
-							echo '<option value="0">{{Pas de sauvegarde - Toutes les pins sorties non modifiées au démarrage.}}</option>';
-							echo '<option value="1">{{Pas de sauvegarde - Toutes les pins sorties mises à LOW au démarrage.}}</option>';
-							echo '<option value="2">{{Pas de sauvegarde - Toutes les pins sorties mises à HIGH au démarrage.}}</option>';
-							echo '<option value="3" style="color: #3c763d!important;"' . $message_a . '>{{Sauvegarde sur JEEDOM - Toutes les pins sorties mises suivant leur sauvegarde dans Jeedom. Lent, Jeedom requis sinon pins mises à HIGH.}}</option>';
-							echo '<option value="5" style="color: #3c763d!important;">{{Sauvegarde sur JEEDOM - Toutes les pins sorties mises suivant leur sauvegarde dans Jeedom. Lent, Jeedom requis sinon pins mises à LOW.}}</option>';
-							echo '<option value="4" style="color: #a94442!important;">{{Sauvegarde sur EEPROM- Toutes les pins sorties mises suivant leur sauvegarde dans l\'EEPROM. Autonome, rapide mais durée de vie de l\'eeprom fortement réduite.}}</option>';
-							echo '</select>';
-						 ?>
-             <br><br>
-                    </div>
-                </div>
-				<?php
-					//if ($PortArduino != 'usbarduino' && $ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
+					echo '<select class="form-control configKeyPins" data-l1key="' . $arduino_id . '_choix_boot">';
+					echo '<option value="0">{{Pas de sauvegarde - Toutes les pins sorties non modifiées au démarrage.}}</option>';
+					echo '<option value="1">{{Pas de sauvegarde - Toutes les pins sorties mises à LOW au démarrage.}}</option>';
+					echo '<option value="2">{{Pas de sauvegarde - Toutes les pins sorties mises à HIGH au démarrage.}}</option>';
+					echo '<option value="3" style="color: #3c763d!important;"' . $message_a . '>{{Sauvegarde sur JEEDOM - Toutes les pins sorties mises suivant leur sauvegarde dans Jeedom. Lent, Jeedom requis sinon pins mises à HIGH.}}</option>';
+					echo '<option value="5" style="color: #3c763d!important;">{{Sauvegarde sur JEEDOM - Toutes les pins sorties mises suivant leur sauvegarde dans Jeedom. Lent, Jeedom requis sinon pins mises à LOW.}}</option>';
+					echo '<option value="4" style="color: #a94442!important;">{{Sauvegarde sur EEPROM- Toutes les pins sorties mises suivant leur sauvegarde dans l\'EEPROM. Autonome, rapide mais durée de vie de l\'eeprom fortement réduite.}}</option>';
+					echo '</select><br><br>';
+          echo '</div></div>';
           if ($ModeleArduino != 'espsonoffpow') echo $_ProbeDelay;
 				}
 				elseif (substr($ModeleArduino,0,6) == 'piGPIO')
 				{
-				?>
-                <div class="form-group">
-                    <label class="col-sm-6 control-label hidden-xs">{{Choix de l'état des pins sorties au démarrage du démon piGPIO : }}</label>
-                    <div class="col-sm-6">
-						<?php
-							//echo '<br>';
-							echo '<select class="form-control  configKeyPins" data-l1key="'.$arduino_id.'_PiGpio_boot">';
-							echo '<option value="0">{{Toutes les pins sorties mises à LOW au démarrage du démon}}</option>';
-							echo '<option value="1">{{Toutes les pins sorties mises à HIGH au démarrage du démon}}</option>';
-							echo '</select>';
-						 ?>
-					<br><br>
-                    </div>
-                </div>
-				<?php
+          echo '<div class="form-group">
+                <label class="col-sm-6 control-label hidden-xs">{{Choix de l\'état des pins sorties au démarrage du démon piGPIO : }}</label>
+                <div class="col-sm-6">';
+					echo '<select class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_PiGpio_boot">';
+					echo '<option value="0">{{Toutes les pins sorties mises à LOW au démarrage du démon}}</option>';
+					echo '<option value="1">{{Toutes les pins sorties mises à HIGH au démarrage du démon}}</option>';
+					echo '</select><br><br>';
+          echo '</div></div>';
+
           echo $_ProbeDelay;
+
           echo '<div class="form-group">
           			<label class="col-sm-6 control-label hidden-xs">{{Délai RéArm Event compteurs en Secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 3600 pour UNE heure  : 600s à 86400s max.}}"></i></label>
           			<div class="col-sm-6">
@@ -227,24 +214,36 @@ if (isset($_GET['id']))
 				}
 				elseif ($ModeleArduino == 'piPlus')
 				{
-				?>
-                <div class="form-group">
-                    <label class="col-sm-6 control-label "><p class="hidden-xs"><br/>{{Choix de l'état des pins sorties au démarrage du démon piPlus. (En tests)}}</p></label>
-                    <div class="col-sm-6">
-						<?php
-							echo '<br><br>';
-							echo '<select class="form-control  configKeyPins" data-l1key="'.$arduino_id.'_PiPlus_boot">';
-							echo '<option value="0">{{Toutes les pins sorties mises à LOW au démarrage du démon}}</option>';
-							echo '<option value="1">{{Toutes les pins sorties mises à HIGH au démarrage du démon}}</option>';
-							echo '</select>';
-						 ?>
-					<br>
-                    </div>
-                </div>
-				<?php
+          echo '<div class="form-group">
+                <label class="col-sm-6 control-label "><p class="hidden-xs"><br/>{{Choix de l\'état des pins sorties au démarrage du démon piPlus. (En tests)}}</p></label>
+                <div class="col-sm-6">';
+					echo '<select class="form-control  configKeyPins" data-l1key="' . $arduino_id . '_PiPlus_boot">';
+					echo '<option value="0">{{Toutes les pins sorties mises à LOW au démarrage du démon}}</option>';
+					echo '<option value="1">{{Toutes les pins sorties mises à HIGH au démarrage du démon}}</option>';
+					echo '</select><br><br>';
+          echo '</div></div>';
+          echo '<div class="form-group">
+              <label class="col-sm-6 control-label hidden-xs">{{Délai boucle compteurs en milli-secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 200 pour 200ms de délai.}}"></i></label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_bounceDelay"  placeholder="Mettre ici 200 pour 200ms de délai." min="20" max="300"/>
+                <a class="btn btn-warning btn-xs bt_bounceDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai de boucle des compteurs avec la valeur ci-dessus:}}</a>
+                <br><br>
+              </div>
+            </div>';
+				}
+        elseif ($ModeleArduino == 'piface')
+				{
+          echo '<div class="form-group">
+              <label class="col-sm-6 control-label hidden-xs">{{Délai boucle compteurs en milli-secondes (En test) : }} <i class="fas fa-question-circle tooltips" title="{{Mettre ici 200 pour 200ms de délai.}}"></i></label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control configKeyPins" data-l1key="' . $arduino_id . '_bounceDelay"  placeholder="Mettre ici 200 pour 200ms de délai." min="20" max="300"/>
+                <a class="btn btn-warning btn-xs bt_bounceDelay"><i class="fas fa-rss"></i> {{MàJ immédiatement le délai de boucle des compteurs avec la valeur ci-dessus:}}</a>
+                <br><br>
+              </div>
+            </div>';
 				}
 				echo '</div>'; // end tabpanel
-			}
+			//} // 11
 				// Html tabs echo
 				$UserPinsTab = '';
 				$BoardPinsTab = '';
@@ -299,7 +298,7 @@ if (isset($_GET['id']))
 						$Arduino_pins = '';
 					break;
                 }
-				// On créer la liste des virtuels communes a tous
+				// On créé la liste des virtuels commune a tous
 				if (method_exists('virtual', 'copyFromEqLogic'))
 				{
 					$Virtuels = '';

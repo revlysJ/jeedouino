@@ -331,6 +331,15 @@ class jeedouino extends eqLogic {
 		//$log2 = filter_var($log2, FILTER_SANITIZE_STRING);
 		if (config::byKey('ActiveLog', 'jeedouino', false)) log::add('jeedouino', $log1, $log2);
 	}
+	public static function logAlert($type, $level, $message)
+	{
+		jeedouino::log($type, $message);
+		event::add(	'jeedom::alert', array(
+								'level' 	=> $level,
+								'page' 		=> 'jeedouino',
+								'message' => $message
+								));
+	}
 	public static function getPathToLog($log)
 	{
 		if (config::byKey('ActiveDemonLog', 'jeedouino', false)) return log::getPathToLog($log);
@@ -801,7 +810,7 @@ class jeedouino extends eqLogic {
 		}
 
 		$PinValue = '';
-		if ( $pins_id == '990') 		$PinValue = 'SetAllLOW=1';		// Set To LOW all Output pins
+				if ( $pins_id == '990') 	$PinValue = 'SetAllLOW=1';		// Set To LOW all Output pins
 		elseif ( $pins_id == '991') 	$PinValue = 'SetAllHIGH=1';		// Set To HIGH all Output pins
 		elseif ( $pins_id == '992') 	$PinValue = 'SetAllSWITCH=1';		// Switch/Toggle all Output pins
 		elseif ( $pins_id == '993') 	$PinValue = 'SetAllPulseLOW=1&tempo=' . substr($value, -5);		// Pulse To LOW  all Output pins
@@ -879,9 +888,9 @@ class jeedouino extends eqLogic {
 			}
 		}
 
-		jeedouino::log( 'debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
 		if ($ModeleArduino == 'piface' or $ModeleArduino == 'piGPIO26' or $ModeleArduino == 'piGPIO40' or $ModeleArduino == 'piPlus')
 		{
+			jeedouino::log( 'debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
 			if ($PinValue != '')  $reponse = self::SendToBoardDemon($arduino_id, $PinValue, $ModeleArduino);
 		}
 		else // Arduinos
@@ -905,6 +914,7 @@ class jeedouino extends eqLogic {
 					else $PinValue = 'C' . sprintf("%02s", $pins_id) . 'M' . sprintf("%02s", $value) . 'R'; // C09M12R >>>Led Strip sur pin 09 valeur 12 (effet)
 				}
 			}
+			jeedouino::log( 'debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
 			$reponse = self::SendToBoard($arduino_id, $PinValue);
 		}
 		if ($reponse != 'SOK' and $reponse != 'SMOK')
@@ -949,12 +959,7 @@ class jeedouino extends eqLogic {
 					return 'NOK';
 				}
 				$tell = __('Attention vous avez changé le port (', __FILE__) . $oldport . __('), il faudra reflasher ou le remettre !  (Nouveau : ', __FILE__) . $IPArduino . ':' . $ipPort . ') ';
-				event::add('jeedom::alert', array(
-					'level' => 'warning',
-					'page' => 'jeedouino',
-					'message' => $tell
-					));
-				jeedouino::log('debug', $tell);
+				jeedouino::logAlert('debug', 'warning', $tell);
 			}
 
 			stream_set_timeout($fp, 9);
@@ -1559,12 +1564,7 @@ class jeedouino extends eqLogic {
 			if ($IPJeedom != $IPBoard and $IPBoard != '127.0.0.1')
 			{
 				if ($IPBoard == '') $IPBoard = __(' non definie ', __FILE__);
-				event::add('jeedom::alert', array(
-					'level' => 'danger',
-					'page' => 'jeedouino',
-					'message' => __('Attention l\'IP (', __FILE__) . $IPBoard . __(') du démon local ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') et de Jeedom (', __FILE__) . $IPJeedom . __(') diffèrent. Veuillez vérifier.' , __FILE__)
-					));
-				jeedouino::log('error', __('Attention l\'IP (', __FILE__) . $IPBoard . __(') du démon local ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') et de Jeedom (', __FILE__) . $IPJeedom . __(') diffèrent. Veuillez vérifier. ', __FILE__));
+				jeedouino::logAlert('error', 'danger', __('Attention l\'IP (', __FILE__) . $IPBoard . __(') du démon local ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') et de Jeedom (', __FILE__) . $IPJeedom . __(') diffèrent. Veuillez vérifier. ', __FILE__));
 				$IPBoard = $IPJeedom;
 			}
 		}
@@ -1572,12 +1572,7 @@ class jeedouino extends eqLogic {
 		{
 			if ($IPBoard == '')
 			{
-				event::add('jeedom::alert', array(
-					'level' => 'danger',
-					'page' => 'jeedouino',
-					'message' => __('Attention l\'IP du démon ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') n\'est pas définie. Veuillez vérifier.' , __FILE__)
-					));
-				jeedouino::log('error', __('Attention l\'IP du démon ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') n\'est pas définie. Veuillez vérifier. ', __FILE__));
+				jeedouino::logAlert('error', 'danger', __('Attention l\'IP du démon ', __FILE__) . $DemonTypeF . ' (' . $name . ' - EqID ' . $board_id . __(') n\'est pas définie. Veuillez vérifier. ', __FILE__));
 				$IPBoard = $IPJeedom;
 			}
 		}
@@ -1751,12 +1746,7 @@ class jeedouino extends eqLogic {
 		if ($NODEP != '')
 		{
 			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($NODEP)) . __(' introuvables. Imposssible de démarrer le démon.' , __FILE__);
-			event::add('jeedom::error', array(
-				'level' => 'warning',
-				'page' => 'jeedouino',
-				'message' => $message
-				));
-			jeedouino::log('error', $message);
+			jeedouino::logAlert('error', 'warning', $message);
 			return false;
 		}
 		return true;
@@ -1850,7 +1840,7 @@ class jeedouino extends eqLogic {
 		// Arrét soft
 		jeedouino::log( 'debug',  __('Demande d\'arrêt au démon ', __FILE__) . $DemonTypeF .  __(' de l\'équipement : ', __FILE__) . eqLogic::byid($board_id)->getName() . ' ( eqID ' . $board_id . ' )');
 		$reponse = self::SendToBoardDemon($board_id, 'EXIT=1', $DemonType);
-		if ($reponse != 'EXITOK') jeedouino::log( 'error',  __('Le démon ', __FILE__) . $DemonTypeF .  __(' ne réponds pas correctement. - Réponse : ', __FILE__) . $reponse);
+		if ($reponse != 'EXITOK') jeedouino::log( 'error',  __('Le démon ', __FILE__) . $DemonTypeF . ' (eqID: ' . $board_id . __(') ne réponds pas correctement. - Réponse : ', __FILE__) . $reponse);
 		else
 		{
 			usleep(1000000);  // 1s , petite pause pour laisser au script python le temps de stopper
@@ -2064,13 +2054,8 @@ class jeedouino extends eqLogic {
 		{
 			if ($this->getId() != '' and $this->getId() > 0)
 			{
-				$message = __('L\'équipement ', __FILE__) . $this->getName() . ' id '. $this->getId() . __(' est désactivé. Pas la peine de continuer.' , __FILE__);
-				jeedouino::log( 'debug', $message);
-				event::add('jeedom::alert', array(
-					'level' => 'warning',
-					'page' => 'jeedouino',
-					'message' => $message
-					));
+				$message = __('L\'équipement ', __FILE__) . $this->getName() . ' (id: '. $this->getId() . __(') est désactivé. Pas la peine de continuer.' , __FILE__);
+				jeedouino::logAlert('debug', 'warning', $message);
 			}
 			return;
 		}
@@ -3559,7 +3544,7 @@ class jeedouino extends eqLogic {
 	{
 		if ($ProbeDelay < 1 or $ProbeDelay > 1000) $ProbeDelay = 5;
 		$ProbeDelay = round($ProbeDelay);
-		$oldValue = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 'none');
+		$oldValue = config::byKey($arduino_id . '_ProbeDelay', 'jeedouino', 5);
 		config::save($arduino_id . '_ProbeDelay', $ProbeDelay, 'jeedouino');
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		jeedouino::log( 'debug', __('Début de MàJ du délai de relève des sondes pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
@@ -3573,7 +3558,7 @@ class jeedouino extends eqLogic {
 			case 'piface':
 			case 'gpio':
 			case 'piplus':
-				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __(' vers la nouvelle : ', __FILE__) . $ProbeDelay);
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('min vers la nouvelle : ', __FILE__) . $ProbeDelay . 'min(s) ');
 				$message  = 'ProbeDelay=' . $ProbeDelay;
 				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
 				if ($reponse != 'SOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai de relève des sondes - Réponse : ', __FILE__) . $reponse);
@@ -3586,27 +3571,46 @@ class jeedouino extends eqLogic {
 	{
 		if ($CptDelay < 600 or $CptDelay > 86400) $CptDelay = 3600;
 		$CptDelay = round($CptDelay);
-		$oldValue = config::byKey($arduino_id . '_CptDelay', 'jeedouino', 'none');
+		$oldValue = config::byKey($arduino_id . '_CptDelay', 'jeedouino', 3600);
 		config::save($arduino_id . '_CptDelay', $CptDelay, 'jeedouino');
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		jeedouino::log( 'debug', __('Début de MàJ du délai de RéArm Event pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
 		switch ($board)
 		{
-			case 'arduino':
-			case 'esp':
-				sleep(2);
-				//self::SendToArduino($arduino_id, 'S' . $CptDelay . 'D', 'ReArmDelaiCompteurs', 'SCOK');
-				break;
 			case 'piface':
 			case 'gpio':
 			case 'piplus':
-				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __(' vers la nouvelle : ', __FILE__) . $CptDelay);
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('s vers la nouvelle : ', __FILE__) . $CptDelay . 's ');
 				$message  = 'CptDelay=' . $CptDelay;
 				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
 				if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai de RéArm Event - Réponse : ', __FILE__) . $reponse);
 				break;
 		}
 		jeedouino::log( 'debug', __('Fin de MàJ du délai de RéArm Event.', __FILE__));
+	}
+
+	public function bounceDelay($arduino_id, $bounceDelay = 200)
+	{
+		if ($bounceDelay < 50 or $bounceDelay > 10000) $bounceDelay = 200;
+		$bounceDelay = round($bounceDelay);
+		$oldValue = config::byKey($arduino_id . '_bounceDelay', 'jeedouino', 200);
+		config::save($arduino_id . '_bounceDelay', $bounceDelay, 'jeedouino');
+		list(, $board) = self::GetPinsByBoard($arduino_id);
+		$mm = __('anti-rebonds', __FILE__);
+		if ($board == 'piface' or $board == 'piplus') $mm = __('de boucle compteurs', __FILE__);
+		jeedouino::log( 'debug', __('Début de MàJ du délai ', __FILE__) . $mm . __(' pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
+		switch ($board)
+		{
+			case 'piface':
+			case 'gpio':
+			case 'piplus':
+				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('ms vers la nouvelle : ', __FILE__) . $bounceDelay . 'ms ');
+				$message  = 'bounceDelay=' . $bounceDelay;
+				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai ', __FILE__) .  $mm . __(' - Réponse : ', __FILE__) . $reponse);
+				break;
+		}
+		jeedouino::log( 'debug', __('Fin de MàJ du délai ', __FILE__) . $mm );
 	}
 
 	public function ResetCPT($arduino_id, $RSTvalue = 0, $CMDid = '')
@@ -4137,6 +4141,7 @@ class jeedouinoCmd extends cmd {
 						$tempo = $this->getConfiguration('tempo');
 						if ($tempo == '0') $tempo = '';
 						elseif ($tempo != '999999')  $tempo = substr(sprintf("%05s", $tempo), -5);
+						if ($tempo == '00000') $tempo = '';
 						if ($pins_id >= 500)
 						{
 							$tempo = '';

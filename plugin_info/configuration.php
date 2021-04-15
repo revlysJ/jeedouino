@@ -110,7 +110,7 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
   { ?>
     <div class="alert alert-danger"><i class="fas fa-arrow-right"></i> {{ Il y a déjà une installation en cours. Veuillez patienter et la suivre via le log.}} </div>
     <div class="alert alert-info"><i class="fas fa-cogs"></i> {{ Important : <br> L'installation peut prendre pas mal de temps, il faut être patient.<br>
-    Cependant, si elle vous semble bloquée, elle nécessite peut-être une manipulation de votre part.<br>
+    Cependant, si elle vous semble bloquée, elle nécessite peut-être une intervention manuelle de votre part.<br>
     Dans ce cas, il faudra rebooter puis via ssh procéder aux commandes manuelles suivantes:}}<br>
     <code>sudo dpkg --configure -a --force-confdef</code><br>
     <code>sudo apt -y --fix-broken install</code><br>

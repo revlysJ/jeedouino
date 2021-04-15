@@ -22,7 +22,7 @@ jeedouino::log( 'debug','CALLBACK EXT - Requête reçue : ?'.$_SERVER['QUERY_STR
 if (isset($_GET['ip']))
 {
 	$ip = $_GET['ip'];
-	if (filter_var($ip, FILTER_VALIDATE_IP) !== false)
+	if (filter_var($ip, FILTER_VALIDATE_IP) !== false and $ip != '127.0.0.1')
 	{
 		jeedouino::AddIPJeedouinoExt($ip);
 		$id = jeedouino::AddIDJeedouinoExt($ip);

@@ -37,9 +37,9 @@ logFile = "JeedouinoUSB.log"
 def log(level,message):
 	fifi=open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		fifi.write('[%s][Demon USB][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
 	except:
-		print('[%s][Demon USB] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(level), str(message)))
+		print('[%s][Demon USB][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -283,7 +283,7 @@ if __name__  ==  "__main__":
 		USBArduino.flush()
 	except Exception as e:
 		USBArduino = ''
-		SimpleSend('&NODEP = SERIAL')
+		SimpleSend('&NODEP=SERIAL')
 		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller. - ' + str(e))
 		sys.exit('Dependances Serial introuvables. - ' + str(e))
 
@@ -316,7 +316,7 @@ if __name__  ==  "__main__":
 	thread_refresh = time.time() + thread_delay
 	thread_tries = 0
 
-	log('info', "Jeedouino USB daemon running...")
+	log('info', "Jeedouino USB daemon (eqID: " + str(eqLogic) + ") running...")
 	try:
 		while exit == 0:
 			if thread_refresh < time.time():

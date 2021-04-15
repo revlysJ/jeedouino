@@ -38,9 +38,9 @@ echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance  python-pip"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo apt-get -y install python{,3}-pip python{,3}-setuptools
+sudo apt-get -y install python3-pip python3-setuptools
 sudo pip3 install --upgrade setuptools pip
-sudo pip install wheel
+#sudo pip install wheel
 sudo pip3 install wheel
 
 echo 30 > ${PROGRESS_FILE}
@@ -49,7 +49,7 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance  python-serial"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install python-serial
-sudo pip3 uninstall serial
+#sudo pip3 uninstall serial
 sudo pip3 install pyserial
 
 echo 40 > ${PROGRESS_FILE}
@@ -57,7 +57,7 @@ echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance python-dev-openssl"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo apt-get -y install build-essential python{,3}-dev python{,3}-openssl
+sudo apt-get -y install build-essential python3-dev python3-openssl
 
 echo 50 > ${PROGRESS_FILE}
 echo "-"
@@ -80,7 +80,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	rm -Rf /tmp/Adafruit_Python_DHT
 	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 	cd /tmp/Adafruit_Python_DHT
-	sudo python setup.py install
+	#sudo python setup.py install
 	sudo python3 setup.py install
 	cd /tmp
 
@@ -100,7 +100,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	rm -Rf /tmp/ABElectronics_Python_Libraries
 	git clone https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
 	cd /tmp/ABElectronics_Python_Libraries
-	sudo python setup.py install
+	#sudo python setup.py install
 	sudo python3 setup.py install
 	cd /tmp
 
@@ -112,7 +112,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	rm -Rf /tmp/Adafruit_Python_BMP
 	git clone https://github.com/adafruit/Adafruit_Python_BMP.git
 	cd /tmp/Adafruit_Python_BMP
-	sudo python setup.py install
+	#sudo python setup.py install
 	sudo python3 setup.py install
 	cd /tmp
 
@@ -121,7 +121,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	echo "Installation dependance Adafruit_circuitpython"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-	pip3 install adafruit-circuitpython-lis3dh
+	sudo pip3 install adafruit-circuitpython-lis3dh
 
 	echo 85 > ${PROGRESS_FILE}
 	echo "-"
@@ -146,7 +146,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	rm -Rf /tmp/BitBangingDS18B20
 	git clone https://github.com/danjperron/BitBangingDS18B20.git
 	cd /tmp/BitBangingDS18B20/python
-	sudo python setup.py install
+	#sudo python setup.py install
 	sudo python3 setup.py install
 	cd /tmp
 fi

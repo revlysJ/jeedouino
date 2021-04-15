@@ -5,7 +5,7 @@
 //
 // JeEdUiNoTaG
 ////////
-#define DEBUGtoSERIAL 0	// 0, ou 1 pour debug dans la console serie
+#define DEBUGtoSERIAL 0	// 0, ou 1 pour debug dans la console serie - attention sur nano au manque de mémoire.
 #define UseWatchdog 0
 #define NODHCP 1					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
 #define UseDHT 1
@@ -100,7 +100,7 @@ EthernetServer server(80);
 
 // Etat des pins de l'arduino ( Mode )
 char Status_pins[NB_TOTALPIN];
-byte pin_id;
+int pin_id;
 byte echo_pin;
 
 String eqLogic = "";
@@ -244,8 +244,8 @@ void setup()
 			#endif
 			#if (UseWatchdog == 1)
 				wdt_enable(WDTO_15MS); // try reboot
+				while(1){}
 			#endif
-			while(1){}
 		}
 		IPAddress IP_ARDUINO = Ethernet.localIP();
 		jeedom = F("&ipwifi=");
@@ -264,7 +264,7 @@ void setup()
 	else Ethernet.begin(mac, IP_ARDUINO);
 
 	#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("Connection to LAN."));
+		Serial.println(F("Connection to: LAN"));
 	#endif
 	server.begin();
 	Load_EEPROM(1);
@@ -358,7 +358,7 @@ void loop()
 	if (client)
 	{
 		// on regarde si on recois des donnees
-		n=0;
+		n = 0;
 		#if (DEBUGtoSERIAL == 1)
 			Serial.println(F("\nRECEIVING:"));
 		#endif
@@ -780,14 +780,14 @@ void loop()
 		case 'i': // input
 		case 'p': // input_pullup
 			PinValue = digitalRead(i);
-			if (PinValue!=OLDPinValue[i] && (PinNextSend[i]<millis() || NextRefresh<millis()))
+			if (PinValue != OLDPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
 			{
-				OLDPinValue[i]=PinValue;
+				OLDPinValue[i] = PinValue;
 				jeedom += '&';
 				jeedom += i;
 				jeedom += '=';
 				jeedom += PinValue;
-				PinNextSend[i]=millis()+1000; // Delai pour eviter trop d'envois
+				PinNextSend[i] = millis() + 1000; // Delai pour eviter trop d'envois
 			}
 			break;
 		case 'n':		// BP_input_pulldown
@@ -803,10 +803,10 @@ void loop()
 			if (PinNextSend[i] < millis() && PinValue != swtch[i])
 			{
 				if (PinValue == BPvalue) CounterPinValue[i] += 1;
-				OLDAnalogPinValue[i] = millis() + 250;	 // Delai entre clicks
+				OLDAnalogPinValue[i] = millis() + 1200;	 // Delai Appui long
 				swtch[i] = PinValue;
 			}
-			if (OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0)
+			if ((OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0) || (PinNextSend[i] < millis() && PinValue != OLDPinValue[i]))
 			{
 				if (PinValue == BPvalue) CounterPinValue[i] = 99; // Appui long
 				jeedom += '&';
@@ -1180,21 +1180,27 @@ void loop()
 	}
 	void UserAction()
 	{
-		// Ens cas d'une reception d'une commande user action depuis jeedom
+		// En cas d'une reception d'une commande user action depuis jeedom
 		// c[0]='U' & c[n]='R')
 		//
-		// c[1] = c[1]-'0';	==5 (user pin start at 500)
-		// c[2] = c[2]-'0';
-		// c[3] = c[3]-'0';
-		// pin_id = 100 * int(c[1]) + 10 * int(c[2]) + int(c[3]); 	// pin action number
+		// c[1] = c[1] - '0';	==5 (user pin start at 500)
+		// c[2] = c[2] - '0';
+		// c[3] = c[3] - '0';
+		// ou : for (int i = 1; i < n; i++) if (isDigit(c[i])) c[i] = c[i] - '0'; // conversion simple char(ascii) vers int
+		// int pin_id = 100 * int(c[1]) + 10 * int(c[2]) + int(c[3]); 	// pin action number
 		//
 		// c[4] to c[n-1] 	// pin action value
 		//
-		// Ex:
-		// U5000R -> U 500 0 R = binary 0 pin 500
-		// U5001R -> U 500 1 R = binary 1 pin 500
-		// U502128R -> U 502 128 R = Slider Value 128 pin 502
-		// U507[Jeedom] Message|Ceci est un testR -> U 507 [Jeedom] Message | Ceci est un test R = Message pin 507
+		// Ex1:
+		// JEEDOM  : Sortie Numérique (Sous-type Jeedom: défaut)
+		// ARDUINO : c[] = U5000R -> U 500 0 R = binary 0 pin 500 -> c[4] = '0'
+		// ARDUINO : c[] = U5001R -> U 500 1 R = binary 1 pin 500 -> c[4] = '1'
+		// Ex2:
+		// JEEDOM  : Sortie Numérique (Sous-type Jeedom: curseur)
+		// ARDUINO : c[] = U502128R -> U 502 128 R = Slider, Value 128, pin 502 -> c[4] = '1', c[5] = '2', c[5] = '8'
+		// Ex3:
+		// JEEDOM  : Sortie Numérique (Sous-type Jeedom: message)
+		// ARDUINO : c[] = U507[Jeedom] Message|Ceci est un testR -> U 507 [Jeedom] Message | Ceci est un test R = Message, pin 507
 
 		// /!\ attention de ne pas mettre de code bloquant (avec trop de "delays") - max time 2s
 	}
@@ -1258,15 +1264,17 @@ void SendToJeedom()
 		if (UIPEFailCount>10 and millis()>UIPEFailTime+60000)
 		{
 			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Waiting 10s & reboot if wdg"));
+				Serial.println(F("Waiting 10s & reboot if UseWatchdog is set"));
 			#endif
 			delay(10000); // tentative soft pour laisser le temps a la lib de se resaisir
 			#if (UseWatchdog == 1)
 				wdt_enable(WDTO_15MS); // try reboot
+				while(1){}
 			#endif
-			delay(20000); // tentative soft pour laisser le temps a la lib de se resaisir
 			JEEDOMclient.stop();
+			delay(1000);
 			Ethernet.begin(mac, IP_ARDUINO);
+			delay(1000);
 			server.begin();
 			UIPEFailTime = millis() + 60000;
 			delay(999);
@@ -1372,8 +1380,12 @@ void Set_OutputPin(int i)
 			break;
 
 		case 'm': // pwm_output
-			pinTempo=100*int(c[3])+10*int(c[4])+int(c[5]);	// the duty cycle: between 0 (always off) and 255 (always on).
+			pinTempo = 100 * int(c[3]) + 10 * int(c[4]) + int(c[5]); 	// the duty cycle: between 0 (always off) and 255 (always on).
 			analogWrite(i, pinTempo);
+			jeedom += '&';
+			jeedom += i;
+			jeedom += '=';
+			jeedom += pinTempo;
 			break;
 	}
 }
@@ -1381,15 +1393,15 @@ void Set_OutputPin(int i)
 void Load_EEPROM(int k)
 {
 	// on recupere le BootMode
-	BootMode=EEPROM.read(14);
+	BootMode = EEPROM.read(14);
 	// Recuperation de l'eqLogic
 	eqLogic = "";
-	n=EEPROM.read(15);				// Recuperation de la longueur du eqLogic
-	if (n>0)				// bug probable si eqLogic_id<10 dans jeedom
+	n = EEPROM.read(15);				// Recuperation de la longueur du eqLogic
+	if (n > 0)		// bug probable si eqLogic_id<10 dans jeedom
 	{
 		for (int i = 1; i < n; i++)
 		{
-			eqLogic += EEPROM.read(15+i);
+			eqLogic += EEPROM.read(15 + i);
 		}
 	}
 	// Recuperation de l'IP
@@ -1399,20 +1411,35 @@ void Load_EEPROM(int k)
 	IP_JEEDOM[3]=EEPROM.read(29);
 
 	// on met en place le mode des pins
-	jeedom="";
-	byte y=1;
+	jeedom = "";
+	byte y = 1;
 	#if (UseTeleInfo == 1)
 		teleinfoRX = 0;
 		teleinfoTX = 0;
 	#endif
 	#if (DEBUGtoSERIAL == 1)
 		Serial.println(F("Conf. Pins:"));
-		for (int i = 0; i < NB_TOTALPIN; i++) Serial.print((char)EEPROM.read(30+i));
+		for (int i = 0; i < NB_TOTALPIN; i++) Serial.print((char)EEPROM.read(30 + i));
+		Serial.println();
+	#endif
+	// au cas ou l'arduino n'ai pas encore recu la conf. des pins.
+	#if (DEBUGtoSERIAL == 1)
+		Serial.println(F("Ask for Conf. Pins."));
 		Serial.println();
 	#endif
 	for (int i = 2; i < NB_TOTALPIN; i++)
 	{
-		Status_pins[i] = EEPROM.read(30+i); // Etats des pins
+		byte e = EEPROM.read(30 + i);
+		if (e < ' ' || e > 'z')
+		{
+			jeedom += F("&PINMODE=1");
+			break;
+		}
+	}
+
+	for (int i = 2; i < NB_TOTALPIN; i++)
+	{
+		Status_pins[i] = EEPROM.read(30 + i); // Etats des pins
 
 		// INITIALISATION DES TABLEAUX DE TEMPO SORTIES
 		TempoPinHIGH[i] = 0;
@@ -1421,6 +1448,9 @@ void Load_EEPROM(int k)
 		switch (Status_pins[i])
 		{
 			case 'i': // input
+				OLDPinValue[i] = 2;				//@cpaillet
+				PinNextSend[i] = millis();
+				break;
 			case 'a': // analog_input
 			case 'n':		// BP_input_pulldown
 				pinMode(i, INPUT);
@@ -1467,13 +1497,16 @@ void Load_EEPROM(int k)
 				pinMode(i, INPUT);
 				break;
 			case 'p':		 // input_pullup
+				OLDPinValue[i] = 2;				//@cpaillet
+				PinNextSend[i] = millis();
+				break;
 			case 'g':		 // pwm_input
 			case 'q':		// BP_input_pullup
 					pinMode(i, INPUT_PULLUP); // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
 					// Arduino Doc : An internal 20K-ohm resistor is pulled to 5V.
-				swtch[i]=0; 	// init pour pwm_input
-				OLDPinValue[i]=1;
-				PinNextSend[i]=millis();
+				swtch[i] = 0; 	// init pour pwm_input
+				OLDPinValue[i] = 1;
+				PinNextSend[i] = millis();
 					break;
 			case 'c':		 // compteur_pullup
 					pinMode(i, INPUT_PULLUP); // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
@@ -1556,7 +1589,7 @@ void Load_EEPROM(int k)
 			//SoftwareSerial teleinfo(teleinfoRX, teleinfoTX);
 		}
 	#endif
-	if (jeedom!="") SendToJeedom();
+	if (jeedom != "") SendToJeedom();
 }
 void PinWriteHIGH(long p)
 {

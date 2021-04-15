@@ -39,8 +39,10 @@ foreach ($eqLogics as $eqLogic)
     }
     $style = 'style="background-image: url(plugins/jeedouino/icons/' . $icon . '.png);background-repeat: no-repeat;"';
     $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
+    $opacityV4 = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
     $JExtname = trim(config::byKey('JExtname-' . $eqLogic->getConfiguration('iparduino'), 'jeedouino', ''));
-    $HTML = '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" title="' . $JExtname . '">';
+    if (trim($eqLogic->getConfiguration('iparduino')) != '') $JExtname .= ' [ IP : ' . $eqLogic->getConfiguration('iparduino') . ' ]';
+    $HTML = '<div class="eqLogicDisplayCard cursor ' . $opacityV4 . '" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '" title="' . $JExtname . '">';
     $HTML .= "<center>";
     if (!file_exists(dirname(__FILE__) . '/../../icons/jeedouino_' . $ModeleArduino . '.png'))
     {
@@ -79,7 +81,7 @@ else $ShowSideBar = "col-xs-12";
                 <?php
 				foreach ($eqLogics as $eqLogic)
 				{
-					$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
+					$opacity = ($eqLogic->getIsEnable()) ? '' : 'opacity: 0.4;';
 					echo '<li class="cursor li_eqLogic2" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 				}
 				?>
@@ -196,9 +198,12 @@ else $ShowSideBar = "col-xs-12";
                         <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
                             <option value="">{{Aucun}}</option>
                             <?php
-                            foreach (jeeObject::all() as $object) {
-                                echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
+                            $options = '';
+                            foreach ((jeeObject::buildTree(null, false)) as $object)
+                            {
+                              $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
                             }
+                            echo $options;
                             ?>
                         </select>
                     </div>
@@ -443,7 +448,7 @@ else $ShowSideBar = "col-xs-12";
 <legend><i class="fas fa-cog"></i> {{Paramètres facultatifs}}</legend>
             <div class="datasource rj45arduino">
                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Port réseau libre}}</label>
+                    <label class="col-sm-3 control-label">{{Port réseau libre}} <i class="fas fa-question-circle tooltips" title="{{Tip sur R.Pi: laisser vide pour forcer le démon a redémarrer lors du Sauver/Générer.}}"></i></label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="ipPort" placeholder="ex : <?php echo jeedouino::GiveMeFreePort('ipPort'); ?>"/>
                     </div>
@@ -527,7 +532,7 @@ else $ShowSideBar = "col-xs-12";
 				<div class="form-group">
 				  <label class="col-sm-3 control-label"></label>
 				  <div class="col-sm-9">
-					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr configuration" data-l1key="configuration" data-l2key="ActiveCmdAll" checked/> {{Création automatique des commandes génériques ALL_*}}</label>
+					<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr configuration" data-l1key="configuration" data-l2key="ActiveCmdAll" /> {{Création automatique des commandes génériques ALL_*}}</label>
 				  </div>
 				</div>
 			</form>

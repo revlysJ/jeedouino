@@ -28,6 +28,7 @@ function jeedouino_update()
     // update JeedouinoExt
     $ListExtIP = jeedouino::CleanIPJeedouinoExt();
     $IPsToNames = [];
+    $eqLogics = eqLogic::byType('jeedouino');
     foreach ($eqLogics as $eqLogic)
     {
         $ip = trim($eqLogic->getConfiguration('iparduino'));
@@ -37,7 +38,7 @@ function jeedouino_update()
             if ($ip != '' and filter_var($ip , FILTER_VALIDATE_IP))
             {
                 $eqLogic->setConfiguration('iparduino2', $ip);
-    			$eqLogic->save(true);
+                $eqLogic->save(true);
             }
         }
     }
@@ -56,9 +57,9 @@ function jeedouino_update()
 	// correction droits fichier DS18B20Scan
 	//exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 	//
-	$eqLogics = eqLogic::byType('jeedouino');
+	//$eqLogics = eqLogic::byType('jeedouino');
 	$IPJeedom = jeedouino::GetJeedomIP();
-	jeedouino::log( 'debug','-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-');
+	jeedouino::log( 'debug', __('-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-', __FILE__));
 	foreach ($eqLogics as $eqLogic)
 	{
 		$arduino_id = $eqLogic->getId();
@@ -101,14 +102,14 @@ function jeedouino_update()
 		}
 		sleep(2);
 	}
-	jeedouino::log( 'debug','-=-= Fin du démarrage des démons et de la re-génération des sketchs =-=-');
-    message::add('jeedouino', __('Suite mise à jour de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
-    message::add('jeedouino', __('Pensez à ré-installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
+  jeedouino::log( 'debug', __('-=-= Fin du démarrage des démons et de la re-génération des sketchs =-=-', __FILE__));
+  message::add('jeedouino', __('Suite mise à jour de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
+  message::add('jeedouino', __('Pensez à ré-installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
 }
 
-
-function jeedouino_remove() {
-
+function jeedouino_remove()
+{
+  jeedouino::log( 'info', __('-=-= Suppression du plugin. =-=-', __FILE__));
+  jeedouino::log( 'info', __('Bye.', __FILE__));
 }
-
 ?>

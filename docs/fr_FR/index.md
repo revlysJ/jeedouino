@@ -342,7 +342,7 @@ Les démons  ne démarrent pas ?
 Dans la majorité des cas, cela provient d'une absence ou d'une mauvaise installation des dépendances.
 Que ce soit pour une première installation du plugin, une mise à jour de celui-ci, ou la restauration d'un backup Jeedom, il faut (ré)installer les dépendances générales.
 
-Dans tous les cas, l'erreur est certainement indiquée dans les logs - il suffit de les consulter pour aviser.
+>Dans tous les cas, l'erreur est certainement indiquée dans les logs - il suffit de les consulter pour aviser.
 
 Sketchs Personnels/Modifiables et Commandes Utilisateur
 ---
@@ -359,7 +359,6 @@ Sketchs Personnels/Modifiables et Commandes Utilisateur
    >**#define UseTeleInfo 0**  
    >**#define UseLCD16x2 0**	// 0 # None (Aucun) / 1 # LCD Standard 6 pins / 2 # LCD via I2C  
    >**#define UseHCSR04 0**  
-   >**#define UsePwm_input 0**	// Code obsolete (sera supprimé)   
    >**#define UseBMP180 0**		// pour BMP085/180 Barometric Pressure & Temp Sensor  
    >**#define UseServo 0**  
    >**#define UseWS2811 0**		// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel  

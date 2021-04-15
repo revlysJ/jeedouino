@@ -1,5 +1,15 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+14/04/2021 v1.07d
+---
+
+- Corrections diverses.
+- Ajout d'un délai anti-rebonds des compteurs (piGpio).
+- Ajout de la modification directe du délai anti-rebonds des compteurs (piGpio).
+- Ajout d'un délai boucle des compteurs (piPlus / piFace).
+- Ajout de la modification directe du délai boucle des compteurs (piPlus / piFace).
+- Amélioration du multi-clics.
+
 08/05/2020 v1.07c
 ---
 

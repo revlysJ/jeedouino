@@ -342,7 +342,7 @@ Les démons  ne démarrent pas ?
 Dans la majorité des cas, cela provient d'une absence ou d'une mauvaise installation des dépendances.
 Que ce soit pour une première installation du plugin, une mise à jour de celui-ci, ou la restauration d'un backup Jeedom, il faut (ré)installer les dépendances générales.
 
->Dans tous les cas, l'erreur est certainement indiquée dans les logs - il suffit de les consulter pour aviser.
+   >Dans tous les cas, l'erreur est certainement indiquée dans les logs - il suffit de les consulter pour aviser.
 
 Sketchs Personnels/Modifiables et Commandes Utilisateur
 ---

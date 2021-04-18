@@ -69,7 +69,7 @@ $ip = jeedouino::GetJeedomIP();
 
 	<div class="col-lg-9 col-md-8 col-sm-7 col-xs-7 jeedouinoExt" style="border-left: solid 1px #00979C; padding-left: 25px;display:none;">
 		<a class="btn btn-success jeedouinoExtAction pull-right" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}</a>
-		<a class="btn btn-danger jeedouinoExtAction pull-right" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
+		<a class="btn btn-danger jeedouinoExtAction jeedouinoExtRemove pull-right" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
 
 		<ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="" class="jeedouinoExtAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
@@ -355,25 +355,27 @@ $ip = jeedouino::GetJeedomIP();
 
 	///
 	$('.jeedouinoExtAction[data-action=add]').on('click',function(){
-		$('.jeedouinoExt').show();
-        $('.jeedouinoExtThumbnailDisplay').hide();
-		$('.jeedouinoExtAttr').value('');
-        $('.jeedouinoExtAttr[data-l1key=IP]').prop( "disabled", false );
-        $('.JeedouinoExtPage').hide();
-        $('.JeedouinoExtNew').hide();
-        $('.jeedouinoExtEqTR').hide();
-        $('.jeedouinoExtAction[data-action=refresh]').attr('data-refresh-id', '');
-		hideLog();
-		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').tab('show');
-		$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').addClass('active');
-	});
+			$('.jeedouinoExt').show();
+			$('.jeedouinoExtThumbnailDisplay').hide();
+			$('.jeedouinoExtAttr').value('');
+			$('.jeedouinoExtAttr[data-l1key=IP]').prop( "disabled", false );
+			$('.JeedouinoExtPage').hide();
+			$('.JeedouinoExtNew').hide();
+			$('.jeedouinoExtEqTR').hide();
+
+			$('.jeedouinoExtAction[data-action=refresh]').attr('data-refresh-id', '');
+			hideLog();
+			$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').tab('show');
+			$('.jeedouinoExtRemove').hide();
+			$('.nav-tabs a[href="#jeedouinoExtConfigtab"]').addClass('active');
+		});
 
     $('.jeedouinoExtAction[data-action=returnToThumbnailDisplay]').on('click',function(){
-		$('.jeedouinoExt').hide();
-		$('.li_jeedouinoExt').removeClass('active');
-        $('.jeedouinoExtThumbnailDisplay').show();
-		hideLog();
-	});
+			$('.jeedouinoExt').hide();
+			$('.li_jeedouinoExt').removeClass('active');
+	    $('.jeedouinoExtThumbnailDisplay').show();
+			hideLog();
+		});
 
     $('.eqLogicDisplayCard').on('click',function(){
 		displayjeedouinoExt($(this).attr('data-jeedouinoExt_id'));

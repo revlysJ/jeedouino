@@ -44,35 +44,36 @@ try {
         $board_id = init('boardid');
         if (config::byKey('Auto_' . $board_id, 'jeedouino', 1)) config::save('Auto_' . $board_id, 0, 'jeedouino');
         else config::save('Auto_' . $board_id, 1, 'jeedouino');
-        ajax::success(['boardid'    => $board_id,
-				       'status'      => config::byKey('Auto_' . $board_id, 'jeedouino', 0)]);
+        ajax::success(['boardid' => $board_id, 'status' => config::byKey('Auto_' . $board_id, 'jeedouino', 0)]);
     }
 
     if (init('action') == 'save_jeedouinoExt')
     {
-		$JeedouinoExtSave = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
-        $ip = trim($JeedouinoExtSave['IP']);
-        if ($ip == '')
-            throw new Exception(__('/!\ IP non renseignée. /!\ ', __FILE__) . $ip, 9999);
-        if (filter_var($ip, FILTER_VALIDATE_IP) === false)
-            throw new Exception(__('/!\ IP non valide. /!\ ', __FILE__) . $ip, 9999);
-        if ($ip == '127.0.0.1')
-            throw new Exception(__('/!\ IP non valide. /!\ ', __FILE__) . $ip, 9999);
-//        $ListExtIP = config::byKey('ListExtIP', 'jeedouino', []);
-//        if (in_array($ip, $ListExtIP))
-//            throw new Exception(__('/!\ IP déja utilisée. /!\ ', __FILE__) . $ip, 9999);
-        $id = jeedouino::SaveIPJeedouinoExt($JeedouinoExtSave);
-		ajax::success(jeedom::toHumanReadable(jeedouino::GetJeedouinoExt($ip)));
-	}
+      $JeedouinoExtSave = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+      $ip = trim($JeedouinoExtSave['IP']);
+      if ($ip == '')
+          throw new Exception(__('/!\ IP non renseignée. /!\ ', __FILE__) . $ip, 9999);
+      if (filter_var($ip, FILTER_VALIDATE_IP) === false)
+          throw new Exception(__('/!\ Le format de l\'IP n\'est pas valide. /!\ ', __FILE__) . $ip, 9999);
+      if ($ip == '127.0.0.1')
+          throw new Exception(__('/!\ IP locale refusée, une IP distante est requise. /!\ ', __FILE__) . $ip, 9999);
+      if ($ip == jeedouino::GetJeedomIP())
+          throw new Exception(__('/!\ IP locale de ce jeedom refusée, une IP distante est requise. /!\ ', __FILE__) . $ip, 9999);
+      //        $ListExtIP = config::byKey('ListExtIP', 'jeedouino', []);
+      //        if (in_array($ip, $ListExtIP))
+      //            throw new Exception(__('/!\ IP déja utilisée. /!\ ', __FILE__) . $ip, 9999);
+      $id = jeedouino::SaveIPJeedouinoExt($JeedouinoExtSave);
+      ajax::success(jeedom::toHumanReadable(jeedouino::GetJeedouinoExt($ip)));
+    }
     if (init('action') == 'remove_jeedouinoExt')
     {
         $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
         if (!jeedouino::RemoveJeedouinoExt($ip))
         {
-			throw new Exception(__('JeedouinoExt inconnu : ' . $ip, __FILE__) . init('id'), 9999);
-		}
-		ajax::success();
-	}
+			       throw new Exception(__('JeedouinoExt inconnu : ' . $ip, __FILE__) . init('id'), 9999);
+        }
+        ajax::success();
+    }
     if (init('action') == 'get_jeedouinoExt')
     {
         if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . init('id'), 9999);

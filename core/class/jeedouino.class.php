@@ -406,7 +406,7 @@ class jeedouino extends eqLogic {
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 
-	public function GetPinsByBoard($arduino_id)	// Renvoi la liste des pins suivant le type de carte
+	public function GetPinsByBoard($arduino_id)	// Renvoie la liste des pins suivant le type de carte
 	{
 		global $ArduinoMODEpins, $Arduino328pins, $ArduinoMEGApins, $ArduinoESPanalogPins;
 		global $PifaceMODEpinsIN, $PifaceMODEpinsOUT, $Pifacepins;
@@ -731,7 +731,7 @@ class jeedouino extends eqLogic {
 		return $reponse;
 	}
 
-	public function ConfigureAllPinsValues($arduino_id) 	// Renvoi l'état de toutes les pins à l'arduino sur demande après reboot.
+	public function ConfigureAllPinsValues($arduino_id) 	// Renvoie l'état de toutes les pins à l'arduino sur demande après reboot.
 	{
 		$my_arduino = eqLogic::byid($arduino_id);
 		$ModeleArduino = $my_arduino->getConfiguration('arduino_board');
@@ -1678,7 +1678,7 @@ class jeedouino extends eqLogic {
 		}
 		if (!$result) return false;
 		if (!jeedouino::IsNoDep($board_id)) return false;
-		// Après un démarrage/redémarrage, on renvoi la config des pins
+		// Après un démarrage/redémarrage, on renvoie la config des pins
 		$PinMode = config::byKey($board_id . '_PinMode', 'jeedouino', 'none');
 		if ($PinMode != 'none')
 		{
@@ -1903,7 +1903,7 @@ class jeedouino extends eqLogic {
 		if ($LastPING > time() and $forceCache == 0)
 		{
 			$etat = config::byKey($_board_id . '_StatusDemon', 'jeedouino', false);
-			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoi de la valeur cache ( ' . $etat . ' )...', __FILE__));
+			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoie de la valeur cache ( ' . $etat . ' )...', __FILE__));
 			return $etat;
 		}
 		config::save($_board_id . '_' . $DemonTypeF . 'LastPING', $Time, 'jeedouino');
@@ -3133,7 +3133,7 @@ class jeedouino extends eqLogic {
 													'order'			=> $list_order_nb
 													);
 			}
-			$modif_cmd = false; //  // ne renvoi pas la config a la carte
+			$modif_cmd = false; //  // ne renvoie pas la config a la carte
 			jeedouino::log( 'debug', 'EqID ' . $arduino_id . __(' Effacement des commandes obsolètes.', __FILE__));
 			foreach ($this->getCmd() as $cmd)
 			{
@@ -3151,7 +3151,7 @@ class jeedouino extends eqLogic {
 						if (config::byKey('ActiveVirtual', 'jeedouino', false)) jeedouino::DelCmdOfVirtual($cmd, $Lid);
 						jeedouino::log( 'debug', __('Suppression de : ', __FILE__) . json_encode($cmd->getLogicalId()));
 						$cmd->remove();
-						$modif_cmd = true; // Renvoi la config a la carte
+						$modif_cmd = true; // Renvoie la config a la carte
 					}
 				}
 			}
@@ -3221,7 +3221,7 @@ class jeedouino extends eqLogic {
 				if ($create_cmd)
 				{
 					jeedouino::log( 'debug', __('Création de : ', __FILE__) . $cmd_info['name']);
-					$modif_cmd = true; // Renvoi la config a la carte
+					$modif_cmd = true; // Renvoie la config a la carte
 
 					$cmd = new jeedouinoCmd();
 					$cmd->setName($cmd_info['name']);

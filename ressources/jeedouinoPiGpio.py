@@ -532,7 +532,7 @@ def toggle_cpts3(u):
 	CounterPinValue[uu] += 1
 
 def toggle_inputs(u):
-	global Status_pins, GPIO, NextRefresh, ProbeDelay
+	global Status_pins, GPIO, NextRefresh, ProbeDelay, PinNextSend
 	GPIO.remove_event_detect(u)
 	uu = gpio2pin[u]
 	BPvalue = 1
@@ -567,10 +567,7 @@ def toggle_inputs(u):
 		v = GPIO.input(u)
 		pinStr = '&' + str(uu) + '=' + str(v)
 		SimpleSend(pinStr)
-		while GPIO.input(u) == v:
-			time.sleep(0.01)
-		pinStr = '&' + str(uu) + '=' + str(1 - v)
-		SimpleSend(pinStr)
+		PinNextSend[uu] = time.time() + 2 # renvoie la valeur du gpio si non detectée car changement trop rapide
 		GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
 
 class myThread2 (threading.Thread):
@@ -646,6 +643,10 @@ class myThread2 (threading.Thread):
 				if (Status_pins[i] == 'c' or Status_pins[i] == 'G') and PinNextSend[j] < time.time():
 					pinStr +='&' + str(j) + '=' + str(CounterPinValue[j])
 					PinNextSend[j] = time.time() + 30  #30s environ
+				elif (Status_pins[i] == 'i' or Status_pins[i] == 'p') and PinNextSend[j] < time.time()  and PinNextSend[j] != 0:
+					v = GPIO.input(pin2gpio[i])
+					pinStr += '&' + str(j) + '=' + str(v)
+					PinNextSend[j] = 0
 			if pinStr!='':
 				SimpleSend(pinStr)
 
@@ -683,7 +684,7 @@ class myThread2 (threading.Thread):
 						else:
 							GPIO.add_event_detect(j, GPIO.RISING, callback = toggle_cpts0, bouncetime = bounceDelay)
 
-			# Renvois des sondes toutes les 300s par defaut
+			# Renvoie des sondes toutes les 300s par defaut
 			if NextRefresh < time.time():
 				NextRefresh = time.time() + (60 * ProbeDelay)  #300s environ par defaut
 				pinStr = ''

@@ -226,12 +226,12 @@ class myThread1 (threading.Thread):
 						elif Status_pins[i] == 'i':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
 							GPIOStr +='&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'p':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
 							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'd' or Status_pins[i] == 'f': # Sondes DHT(11,22)
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
@@ -537,6 +537,7 @@ def toggle_inputs(u):
 	uu = gpio2pin[u]
 	BPvalue = 1
 	if Status_pins[uu - 1] == 'n' or Status_pins[uu - 1] == 'q':
+		#GPIO.remove_event_detect(u)
 
 		NewNextRefresh = time.time() + (60 * ProbeDelay) 			# Decale la lecture des sondes pour eviter un conflit
 		if NextRefresh < NewNextRefresh:
@@ -561,12 +562,16 @@ def toggle_inputs(u):
 		SimpleSend(pinStr)
 		while GPIO.input(u) == BPvalue:
 			time.sleep(0.01)
+		GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs)
 	else:
 		v = GPIO.input(u)
 		pinStr = '&' + str(uu) + '=' + str(v)
 		SimpleSend(pinStr)
-		time.sleep(0.05)
-	GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs)
+		while GPIO.input(u) == v:
+			time.sleep(0.01)
+		pinStr = '&' + str(uu) + '=' + str(1 - v)
+		SimpleSend(pinStr)
+		GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
 
 class myThread2 (threading.Thread):
 	def __init__(self, threadID, name):
@@ -894,11 +899,11 @@ if __name__ == "__main__":
 				swtch[i] = BootMode
 				pinStr += '&' + str(i) + '=' + str(BootMode)
 			elif Status_pins[i - 1] == 'p':
-				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 				GPIO.remove_event_detect(j)
 				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
 			elif Status_pins[i - 1] == 'i':
-				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 				GPIO.remove_event_detect(j)
 				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
 			etat_pins[i - 1] = Status_pins[i - 1]

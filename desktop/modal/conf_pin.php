@@ -95,7 +95,7 @@ if (isset($_GET['id']))
 		$UserPinsBase = 500;
 		$UserPinsStatus = false;
 		$user_pins = array();
-		if (config::byKey('ActiveUserCmd', 'jeedouino', false))
+		if (config::byKey('ActiveUserCmd', 'jeedouino', false) and substr($ModeleArduino, 0, 2) != 'pi')
 		{
 			$UserPinsMax = trim($my_arduino->getConfiguration('UserPinsMax'));
 			if (!is_numeric($UserPinsMax)) $UserPinsMax = 0;

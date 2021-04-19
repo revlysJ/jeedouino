@@ -1406,7 +1406,7 @@ class jeedouino extends eqLogic {
 					return false;
 				}
 				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
-				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'unzip ' . $to_path . ' -d /tmp');
+				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'unzip -o ' . $to_path . ' -d /tmp');
 				$result = jeedouino::SshCmdJeedouinoExt($connection, '', $test);
 				$result = jeedouino::SshCmdJeedouinoExt($connection, $preCmd, '/bin/bash ' . $sh_path);
 				$result = jeedouino::SshCmdJeedouinoExt($connection, '', 'exit');
@@ -1902,8 +1902,9 @@ class jeedouino extends eqLogic {
 		$LastPING = config::byKey($_board_id . '_' . $DemonTypeF . 'LastPING', 'jeedouino', 0);
 		if ($LastPING > time() and $forceCache == 0)
 		{
-			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoi de la valeur cache...', __FILE__));
-			return config::byKey($_board_id . '_StatusDemon', 'jeedouino', false);
+			$etat = config::byKey($_board_id . '_StatusDemon', 'jeedouino', false);
+			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoi de la valeur cache ( ' . $etat . ' )...', __FILE__));
+			return $etat;
 		}
 		config::save($_board_id . '_' . $DemonTypeF . 'LastPING', $Time, 'jeedouino');
 
@@ -3591,18 +3592,18 @@ class jeedouino extends eqLogic {
 
 	public function bounceDelay($arduino_id, $bounceDelay = 200)
 	{
-		if ($bounceDelay < 50 or $bounceDelay > 10000) $bounceDelay = 200;
 		$bounceDelay = round($bounceDelay);
+		if ($bounceDelay < 1) $bounceDelay = 1;
 		$oldValue = config::byKey($arduino_id . '_bounceDelay', 'jeedouino', 200);
-		config::save($arduino_id . '_bounceDelay', $bounceDelay, 'jeedouino');
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		$mm = __('anti-rebonds', __FILE__);
 		if ($board == 'piface' or $board == 'piplus') $mm = __('de boucle compteurs', __FILE__);
 		jeedouino::log( 'debug', __('Début de MàJ du délai ', __FILE__) . $mm . __(' pour ', __FILE__) . $board . ' (id: ' . $arduino_id . ' )');
 		switch ($board)
 		{
-			case 'piface':
 			case 'gpio':
+				if ($bounceDelay < 50 or $bounceDelay > 10000) $bounceDelay = 200;
+			case 'piface':
 			case 'piplus':
 				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('ms vers la nouvelle : ', __FILE__) . $bounceDelay . 'ms ');
 				$message  = 'bounceDelay=' . $bounceDelay;
@@ -3610,6 +3611,7 @@ class jeedouino extends eqLogic {
 				if ($reponse != 'SCOK') jeedouino::log( 'error', __('ERREUR ENVOI de MàJ du délai ', __FILE__) .  $mm . __(' - Réponse : ', __FILE__) . $reponse);
 				break;
 		}
+		config::save($arduino_id . '_bounceDelay', $bounceDelay, 'jeedouino');
 		jeedouino::log( 'debug', __('Fin de MàJ du délai ', __FILE__) . $mm );
 	}
 

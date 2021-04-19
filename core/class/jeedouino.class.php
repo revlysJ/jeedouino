@@ -1902,8 +1902,9 @@ class jeedouino extends eqLogic {
 		$LastPING = config::byKey($_board_id . '_' . $DemonTypeF . 'LastPING', 'jeedouino', 0);
 		if ($LastPING > time() and $forceCache == 0)
 		{
-			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoi de la valeur cache...', __FILE__));
-			return config::byKey($_board_id . '_StatusDemon', 'jeedouino', false);
+			$etat = config::byKey($_board_id . '_StatusDemon', 'jeedouino', false);
+			jeedouino::log( 'debug','PING ' . $id_type . __(' déja sollicité il y a moins de 3 minutes. Renvoi de la valeur cache ( ' . $etat . ' )...', __FILE__));
+			return $etat;
 		}
 		config::save($_board_id . '_' . $DemonTypeF . 'LastPING', $Time, 'jeedouino');
 

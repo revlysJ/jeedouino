@@ -237,7 +237,7 @@ else $ShowSideBar = "col-xs-12";
 					<?php if (config::byKey('ActiveExt', 'jeedouino', false))
 					{
 					?>
-					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
+					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI JeedouinoExt}} <i class="fas fa-question-circle tooltips" title="{{Jeedouino sur un RPI distant sans jeedom}}"></i></label>
 					<?php }  ?>
 					</div>
                 </div>

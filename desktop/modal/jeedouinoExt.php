@@ -120,7 +120,7 @@ $ip = jeedouino::GetJeedomIP();
 								<input type="number" class="jeedouinoExtAttr form-control" data-l1key="sshPort" placeholder="22"/>
 							</div>
 						</div>
-                        <div class="form-group JeedouinoExtNew">
+                        <div class="form-group JeedouinoExtNew JeedouinoExtNoLocal">
                             <label class="col-sm-3 control-label">{{Fichiers JeedouinoExt}}</label>
                             <div class="col-sm-9">
                                 <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles"><i class="fas fa-spinner"></i> {{Envoi pour Installation}}</a>
@@ -128,14 +128,14 @@ $ip = jeedouino::GetJeedomIP();
                                 <!-- <a class="btn btn-info" target="_blank" download href="/../../plugins/jeedouino/ressources/JeedouinoExt.zip"><i class="fas fa-download"></i> {{Zip}}</a>-->
                             </div>
                         </div>
-						<div class="form-group JeedouinoExtNew">
+						<div class="form-group JeedouinoExtNew JeedouinoExtNoLocal">
                             <label class="col-sm-3 control-label">{{Ou}}</label>
                             <div class="col-sm-9">
                                 <a class="btn btn-warning jeedouinoExtAction" data-action="sendFiles2"><i class="fas fa-spinner"></i> {{Envoi pour mise à jour}}</a>
 								<a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/JeedouinoExt.log"><i class="fas fa-file-alt"></i> {{Logs JeedouinoExt}}</a>
                             </div>
                         </div>
-                        <div class="alert alert-info JeedouinoExtNew">
+                        <div class="alert alert-info JeedouinoExtNew JeedouinoExtNoLocal">
 							{{La durée d'installation peut être trés (trés) longue selon les systèmes.}}<br>
 							{{Il faudra re-sauver le(s) équipement(s) après un envoi sur une installation existante si le redémarrage du/des démon(s) échoue.}}<br>
 						</div>
@@ -411,16 +411,17 @@ $ip = jeedouino::GetJeedomIP();
 					$('#div_jeedouinoExtAlert').showAlert({message: data.result, level: 'danger'});
 					return;
 				}
-                $('.jeedouinoExtEqTR').hide();
-                $('.jeedouinoExtThumbnailDisplay').hide();
+				$('.jeedouinoExtEqTR').hide();
+				$('.jeedouinoExtThumbnailDisplay').hide();
 				$('.jeedouinoExt').show();
 				$('.jeedouinoExtAttr').value('');
 				$('.jeedouinoExt').setValues(data.result,'.jeedouinoExtAttr');
-                $('.jeedouinoExtAttr[data-l1key=IP]').prop( "disabled", true );
-                $('.JeedouinoExtPage').show();
-                $('.JeedouinoExtNew').show();
-                $('.JeedouinoExtHREF').attr('href', 'http://' + data.result.IP + '/JeedouinoExt/JeedouinoExt.php');
-                $('.jeedouinoExtEqTR[data-jextid="' + _id + '"]').show();
+				$('.jeedouinoExtAttr[data-l1key=IP]').prop( "disabled", true );
+				$('.JeedouinoExtPage').show();
+				$('.JeedouinoExtNew').show();
+				if (data.result.IP == '127.0.0.1') { $('.JeedouinoExtNoLocal').hide(); }
+				$('.JeedouinoExtHREF').attr('href', 'http://' + data.result.IP + '/JeedouinoExt/JeedouinoExt.php');
+				$('.jeedouinoExtEqTR[data-jextid="' + _id + '"]').show();
 			}
 		});
 	}

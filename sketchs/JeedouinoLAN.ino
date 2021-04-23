@@ -104,6 +104,7 @@ int pin_id;
 byte echo_pin;
 
 String eqLogic = "";
+String eqLogic0 = "";
 String inString = "";
 String Message = "";
 byte BootMode;
@@ -1395,14 +1396,23 @@ void Load_EEPROM(int k)
 	// on recupere le BootMode
 	BootMode = EEPROM.read(14);
 	// Recuperation de l'eqLogic
-	eqLogic = "";
+	eqLogic = F("IDeqLogic");
+	eqLogic0 = "";
 	n = EEPROM.read(15);				// Recuperation de la longueur du eqLogic
 	if (n > 0)		// bug probable si eqLogic_id<10 dans jeedom
 	{
 		for (int i = 1; i < n; i++)
 		{
-			eqLogic += EEPROM.read(15 + i);
+			eqLogic0 += EEPROM.read(15 + i);
 		}
+	}
+	if (eqLogic != eqLogic0)
+	{
+		#if (DEBUGtoSERIAL == 1)
+			Serial.println(F("Reinit eqID etc"));
+			Serial.println();
+		#endif
+		Init_EEPROM();
 	}
 	// Recuperation de l'IP
 	IP_JEEDOM[0]=EEPROM.read(26);
@@ -1423,16 +1433,16 @@ void Load_EEPROM(int k)
 		Serial.println();
 	#endif
 	// au cas ou l'arduino n'ai pas encore recu la conf. des pins.
-	#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("Ask for Conf. Pins."));
-		Serial.println();
-	#endif
 	for (int i = 2; i < NB_TOTALPIN; i++)
 	{
 		byte e = EEPROM.read(30 + i);
 		if (e < ' ' || e > 'z')
 		{
 			jeedom += F("&PINMODE=1");
+			#if (DEBUGtoSERIAL == 1)
+				Serial.println(F("Demande la Conf. Pins."));
+				Serial.println();
+			#endif
 			break;
 		}
 	}

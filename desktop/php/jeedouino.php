@@ -398,7 +398,7 @@ else $ShowSideBar = "col-xs-12";
 		{
             echo '<optgroup label="JeedouinoExt sur ' . $ip . '">';
             $JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', 'JeedouinoExt'));
-			echo '<option value="' . $ip . '">' . $JExtname . '</option>';
+			echo '<option value="' . $ip . '">' . $JExtname . ' - ' . $ip . '</option>';
             echo '</optgroup>';
 		}
 	}

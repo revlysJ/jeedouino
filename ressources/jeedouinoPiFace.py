@@ -454,6 +454,9 @@ if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		port = int(sys.argv[1])
 
+	log('info', "---------")
+	log('info', "Jeedouino - Démarrage du daemon piFACE (eqID: " + str(eqLogic) + "). ")
+	log('info', "---------")
 	# On va demander la valeur des compteurs avec un peu de retard expres
 	timeCPT=time.time()+11
 	NextRefresh=time.time()+40

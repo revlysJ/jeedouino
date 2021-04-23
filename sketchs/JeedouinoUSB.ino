@@ -71,6 +71,7 @@ int pin_id;
 byte echo_pin;
 
 String eqLogic = "";
+String eqLogic0 = "";
 String inString = "";
 String Message = "";
 byte BootMode;
@@ -659,8 +660,8 @@ void loop()
 					Serial.println(F("SOK"));	// On reponds a JEEDOM avant le TIMEOUT
 					pinTempo = 10 * int(c[4]) + int(c[5]);
 					#if (DEBUGtoSERIAL == 1)
-						Serial.print(F("\startShow: "));
-						Serial.println(pinTempo);
+						DebugSerial.print(F("\startShow: "));
+						DebugSerial.println(pinTempo);
 					#endif
 					startShow(pinTempo);
 				}
@@ -673,12 +674,12 @@ void loop()
 						uint8_t g = 16 * int(c[6]) + int(c[7]);
 						uint8_t b = 16 * int(c[8]) + int(c[9]);
 						#if (DEBUGtoSERIAL == 1)
-							Serial.print(F("\R: "));
-							Serial.println(r);
-							Serial.print(F("\G: "));
-							Serial.println(g);
-							Serial.print(F("\B: "));
-							Serial.println(b);
+							DebugSerial.print(F("\R: "));
+							DebugSerial.println(r);
+							DebugSerial.print(F("\G: "));
+							DebugSerial.println(g);
+							DebugSerial.print(F("\B: "));
+							DebugSerial.println(b);
 						#endif
 						for(uint16_t z = 0; z < strip.numPixels(); z++)
 						{
@@ -887,7 +888,7 @@ void loop()
 						{
 							recu = teleinfo.read() & 0x7F;
 							#if (DEBUGtoSERIAL == 1)
-								Serial.print(recu);
+								DebugSerial.print(recu);
 							#endif
 							cntChar++;
 							if (cntChar > 280) break;
@@ -1262,14 +1263,23 @@ void Load_EEPROM(int k)
 	// on recupere le BootMode
 	BootMode = EEPROM.read(14);
 	// Recuperation de l'eqLogic
-	eqLogic = "";
+	eqLogic = F("IDeqLogic");
+	eqLogic0 = "";
 	n = EEPROM.read(15);				// Recuperation de la longueur du eqLogic
 	if (n > 0)		// bug probable si eqLogic_id<10 dans jeedom
 	{
 		for (int i = 1; i < n; i++)
 		{
-			eqLogic += EEPROM.read(15 + i);
+			eqLogic0 += EEPROM.read(15 + i);
 		}
+	}
+	if (eqLogic != eqLogic0)
+	{
+		#if (DEBUGtoSERIAL == 1)
+			DebugSerial.println(F("Reinit eqID etc"));
+			DebugSerial.println();
+		#endif
+		Init_EEPROM();
 	}
 	// Recuperation de l'IP
 	IP_JEEDOM[0]=EEPROM.read(26);
@@ -1285,21 +1295,21 @@ void Load_EEPROM(int k)
 		teleinfoTX = 0;
 	#endif
 	#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("Conf. Pins:"));
-		for (int i = 0; i < NB_TOTALPIN; i++) Serial.print((char)EEPROM.read(30 + i));
-		Serial.println();
+		DebugSerial.println(F("Conf. Pins:"));
+		for (int i = 0; i < NB_TOTALPIN; i++) DebugSerial.print((char)EEPROM.read(30 + i));
+		DebugSerial.println();
 	#endif
 	// au cas ou l'arduino n'ai pas encore recu la conf. des pins.
-	#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("Ask for Conf. Pins."));
-		Serial.println();
-	#endif
 	for (int i = 2; i < NB_TOTALPIN; i++)
 	{
 		byte e = EEPROM.read(30 + i);
 		if (e < ' ' || e > 'z')
 		{
 			jeedom += F("&PINMODE=1");
+			#if (DEBUGtoSERIAL == 1)
+				DebugSerial.println(F("Demande la Conf. Pins."));
+				DebugSerial.println();
+			#endif
 			break;
 		}
 	}
@@ -1529,14 +1539,14 @@ int read_DSx(int pinD)
 		if (OneWire::crc8(addr, 7) != addr[7]) //Check if there is no errors on transmission
 		{
 			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("CRC invalide..."));
+				DebugSerial.println(F("CRC invalide..."));
 			#endif
 			return 99999;
 		}
 		if (addr[0] != 0x28)
 		{
 			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Device is not a DS18B20."));
+				DebugSerial.println(F("Device is not a DS18B20."));
 			#endif
 			return 99999;
 		}
@@ -1549,7 +1559,7 @@ int read_DSx(int pinD)
 	{
 		ds.reset_search();
 		#if (DEBUGtoSERIAL == 1)
-			Serial.println(F("ds not found..."));
+			DebugSerial.println(F("ds not found..."));
 		#endif
 		delay(250);
 		return 99999;
@@ -1584,7 +1594,7 @@ int read_DSx(int pinD)
 		if (nb_ds18 == 0) first = temp;
 		nb_ds18++;
 		#if (DEBUGtoSERIAL == 1)
-			Serial.println(temp / 100);
+			DebugSerial.println(temp / 100);
 		#endif
 		jeedom += temp;
 		jeedom += '"';

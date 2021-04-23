@@ -2403,6 +2403,7 @@ class jeedouino extends eqLogic {
 			$setprm = $ipPort . ' ' . $arduino_id . ' ' . $JeedomIP . ' ' . $PiBoardID . ' ' . $JeedomPort . ' ' . $JeedomCPL;
 			$ToSend = true;
 		}
+		$setprm .= ' Jeedouino' . $DemonName . '_' . $arduino_id . '.log';
 		if ($ToSend)
 		{
 			$Fallback = [];

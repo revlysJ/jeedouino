@@ -368,7 +368,7 @@ else $ShowSideBar = "col-xs-12";
 			if (!$plugin_jeedouino_deporte)
 			{
 				?>
-				<legend class="col-lg-6 btn btn-warning btn-sm">{{Aucun plugin Jeedouino déporté ( Jeedom esclave ) trouvé.}}</legend>
+				<legend class="col-lg-6 btn btn-warning btn-sm">{{Aucun plugin Jeedouino déporté ( Jeedom distant ) trouvé.}}</legend>
 				<?php
 			}
 	//	}

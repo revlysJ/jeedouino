@@ -229,7 +229,7 @@ $ip = jeedouino::GetJeedomIP();
         else echo '<td><a class="btn btn-danger bt_AutoReStart" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-times"></i>  {{5min}}</a></td>';
 
         echo '<td>' . $jsButton . '</td>';
-		echo '<td><a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/Jeedouino' . $jsButton . '.log"><i class="fas fa-file-alt"></i> </a></td>';
+		echo '<td><a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/Jeedouino' . $jsButton . '_' . $eqLogic->getId() . '.log"><i class="fas fa-file-alt"></i> </a></td>';
         echo '</tr>';
     }
 ?>
@@ -243,11 +243,12 @@ $ip = jeedouino::GetJeedomIP();
 				<br>
 				<div class="alert alert-info">
 					{{Suivi distant via ssh des logs de JeedouinoExt - RefreshAuto 5s}}
+					<a class="btn btn-danger pull-right" id="bt_vider" logfile=""><i class="fas fa-eraser"></i> {{Effacer}}</a>
 					<a class="btn btn-warning pull-right" id="bt_pause" logfile=""><i class="fas fa-pause"></i> {{Pause}}</a>
 					<a class="btn btn-success pull-right" target="_blank" download href="/../../plugins/jeedouino/ressources/jeedouino_ext.logg"><i class="fas fa-download"></i> {{Télécharger}}</a>
 					<br><br>
 				</div>
-				<pre id="modal_log" style='overflow: auto; height: 80%; width:100%;'></pre>
+				<pre id="modal_log" style='overflow: auto; height: 100%; width:100%;'></pre>
 			</div>
 		</div>
 	</div>
@@ -265,6 +266,7 @@ $ip = jeedouino::GetJeedomIP();
 			$('#modal_log').empty();
 			$('.nav-tabs a[href="#jeedouinoExtLogs"]').tab('show');
 			$('#bt_pause').attr('logfile', $(this).attr('log'));
+			$('#bt_vider').attr('logfile', $(this).attr('log'));
 			autoupdate({
 				logfile : $(this).attr('log'),
 				display : $('#modal_log'),
@@ -313,6 +315,34 @@ $ip = jeedouino::GetJeedomIP();
 				});
 		}
 	});
+	///
+	$('#bt_vider').off('click').on('click', function () {
+	if ( confirm('Etês-vous sûr de vouloir vider ce fichier distant ?' ) )
+	{
+		logf = $(this).attr('logfile');
+		var jeedouino_ext = $('.jeedouinoExt').getValues('.jeedouinoExtAttr')[0];
+		$('#div_jeedouinoExtAlert').showAlert({message: '<i class="fa fa-spinner fa-spin fa-fw"></i> Purge du fichier de log ' + logf + ' en cours.', level: 'success'});
+		$.ajax({
+			type: "POST",
+			url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php",
+			data: {
+				action: "delExtLog",
+				logfile : logf,
+				jeedouino_ext: json_encode(jeedouino_ext)
+			},
+			dataType: 'json',
+			success: function (data) {
+				if (data.state != 'ok') {
+					$('#div_jeedouinoExtAlert').showAlert({message: data.result, level: 'danger'});
+					return;
+				}
+				setTimeout(function(){ $('#div_jeedouinoExtAlert').hide(); }, 3000);
+			}
+		});
+	};
+});
+
+	///
 	autoupdate = function (prm)
 	{
 		if (pause == 1) return;

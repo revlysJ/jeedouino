@@ -91,7 +91,7 @@ try {
         $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
         if (!jeedouino::SendJeedouinoExt($JeedouinoExtSend))
         {
-            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JedouinoExt. ', __FILE__));
+            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JeedouinoExt. ', __FILE__));
         }
 		ajax::success();
 	}
@@ -100,7 +100,7 @@ try {
         $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
         if (!jeedouino::SendJeedouinoExt($JeedouinoExtSend, true))
         {
-            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JedouinoExt. ', __FILE__));
+            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JeedouinoExt. ', __FILE__));
         }
 		ajax::success();
 	}
@@ -111,9 +111,20 @@ try {
         $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg'; //jeedouino::getPathToLog('jeedouino_ext');
         if (!jeedouino::SshGetJeedouinoExt($JeedouinoExtGet, $_log, init('logfile')))
         {
-            ajax::error(__('Erreur, Impossible de récupérer le fichier de log de JedouinoExt. ', __FILE__));
+            ajax::error(__('Erreur, Impossible de récupérer le fichier de log de JeedouinoExt. ', __FILE__));
         }
-		ajax::success(jeedouino::getExtLog($_log));
+		    ajax::success(jeedouino::getExtLog($_log));
+    }
+    if (init('action') == 'delExtLog')
+    {
+        $JeedouinoExtGet = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+        if ($JeedouinoExtGet == '') ajax::error('DarkMatterIsUndetectable...');
+        $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg';
+        if (!jeedouino::SshDelJeedouinoExt($JeedouinoExtGet, $_log, init('logfile')))
+        {
+            ajax::error(__('Erreur, Impossible d\'éffacer le fichier distant de log de JeedouinoExt. ', __FILE__));
+        }
+		    ajax::success(jeedouino::getExtLog($_log));
     }
     ////
 

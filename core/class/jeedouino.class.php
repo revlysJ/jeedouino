@@ -160,7 +160,7 @@ class jeedouino extends eqLogic {
 	{
 		config::save('CronStep', 0, 'jeedouino');
 		$BootTime = config::byKey('BootTime', 'jeedouino', 4);
-		jeedouino::log( 'debug', __('Suite (re)boot Jeedom, démarrage des démons dans ', __FILE__) . $BootTime . ' min(s).');
+		jeedouino::log( 'debug', __('Suite (re)boot Jeedom, démarrage du/des démon(s) dans ', __FILE__) . $BootTime . ' min(s).');
 	}
 	// Fonction exécutée automatiquement toutes les minutes par Jeedom
 	public static function cron()
@@ -370,7 +370,7 @@ class jeedouino extends eqLogic {
 		if (!is_array($EqIDarr))
 		{
 			$EqLogics = eqLogic::byType('jeedouino');
-			jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage des démons.', __FILE__));
+			jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage du/des démon(s).', __FILE__));
 		}
 		else
 		{
@@ -378,7 +378,9 @@ class jeedouino extends eqLogic {
 			$CronStep = config::byKey('CronStep', 'jeedouino', 0);
 			if ($CronStep <= $BootTime) return;
 			foreach ($EqIDarr as $id) $EqLogics[] = eqLogic::byId($id);
-			jeedouino::log( 'debug', __('Suite reboot JeedouinoExt, démarrage des démons.', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr));
+			$ipx = $EqLogics[0]->getConfiguration('iparduino2');
+			$JExtname = trim(config::byKey('JExtname-' . $ipx, 'jeedouino', 'JeedouinoExt')) . ' (' . $ipx . ')';
+			jeedouino::log( 'debug', __('Suite reboot ', __FILE__) . $JExtname . __(', démarrage du/des démon(s).', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr));
 		}
 		config::save('StartDemons', 1, 'jeedouino');
 		foreach ($EqLogics as $eqLogic)
@@ -402,7 +404,7 @@ class jeedouino extends eqLogic {
 			jeedouino::StartBoardDemon($arduino_id, 0, $board);
 			sleep(2);
 		}
-		jeedouino::log( 'debug', '-=-= ' . __('Fin du démarrage des démons', __FILE__) . ' =-=-');
+		jeedouino::log( 'debug', '-=-= ' . __('Fin du démarrage du/des démon(s)', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr) . ' =-=-');
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 
@@ -1446,6 +1448,32 @@ class jeedouino extends eqLogic {
 			return false;
 		}
 		if ($output != '') jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);
+		return true;
+	}
+	public function SshDelJeedouinoExt($jeedouino_ext, $local, $distant)
+	{
+		jeedouino::log( 'debug', __('Effacement via SSH d\'un fichier de JeedouinoExt sur l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
+		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
+		{
+			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
+			return false;
+		}
+		else
+		{
+			if (!ssh2_auth_password($connection, $jeedouino_ext['sshID'], $jeedouino_ext['sshPW']))
+			{
+				jeedouino::log( 'error', __('Authentification SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
+				return false;
+			}
+			else
+			{
+				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
+				file_put_contents($local, date("Y-m-d H:i:s") . ' [ Fichier purgé depuis Jeedouino par l\'utilisateur. ] '."\r\n");
+				$result = ssh2_scp_send($connection, $local, $distant, 0777);
+				$res= jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'exit');
+				return $result;
+			}
+		}
 		return true;
 	}
 	public function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)

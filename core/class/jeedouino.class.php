@@ -160,7 +160,7 @@ class jeedouino extends eqLogic {
 	{
 		config::save('CronStep', 0, 'jeedouino');
 		$BootTime = config::byKey('BootTime', 'jeedouino', 4);
-		jeedouino::log( 'debug', __('Suite (re)boot Jeedom, démarrage des démons dans ', __FILE__) . $BootTime . ' min(s).');
+		jeedouino::log( 'debug', __('Suite (re)boot Jeedom, démarrage du/des démon(s) dans ', __FILE__) . $BootTime . ' min(s).');
 	}
 	// Fonction exécutée automatiquement toutes les minutes par Jeedom
 	public static function cron()
@@ -370,7 +370,7 @@ class jeedouino extends eqLogic {
 		if (!is_array($EqIDarr))
 		{
 			$EqLogics = eqLogic::byType('jeedouino');
-			jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage des démons.', __FILE__));
+			jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage du/des démon(s).', __FILE__));
 		}
 		else
 		{
@@ -378,7 +378,9 @@ class jeedouino extends eqLogic {
 			$CronStep = config::byKey('CronStep', 'jeedouino', 0);
 			if ($CronStep <= $BootTime) return;
 			foreach ($EqIDarr as $id) $EqLogics[] = eqLogic::byId($id);
-			jeedouino::log( 'debug', __('Suite reboot JeedouinoExt, démarrage des démons.', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr));
+			$ipx = $EqLogics[0]->getConfiguration('iparduino2');
+			$JExtname = trim(config::byKey('JExtname-' . $ipx, 'jeedouino', 'JeedouinoExt')) . ' (' . $ipx . ')';
+			jeedouino::log( 'debug', __('Suite reboot ', __FILE__) . $JExtname . __(', démarrage du/des démon(s).', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr));
 		}
 		config::save('StartDemons', 1, 'jeedouino');
 		foreach ($EqLogics as $eqLogic)
@@ -402,7 +404,7 @@ class jeedouino extends eqLogic {
 			jeedouino::StartBoardDemon($arduino_id, 0, $board);
 			sleep(2);
 		}
-		jeedouino::log( 'debug', '-=-= ' . __('Fin du démarrage des démons', __FILE__) . ' =-=-');
+		jeedouino::log( 'debug', '-=-= ' . __('Fin du démarrage du/des démon(s)', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr) . ' =-=-');
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 
@@ -954,7 +956,10 @@ class jeedouino extends eqLogic {
 					{
 						jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée.', __FILE__));
 						if (substr($my_arduino->getConfiguration('arduino_board'), 0, 1) != 'a')
+						{
 							jeedouino::log('error', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées.', __FILE__));
+							jeedouino::log('error', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée.', __FILE__));
+						}
 					}
 					return 'NOK';
 				}
@@ -1445,6 +1450,32 @@ class jeedouino extends eqLogic {
 		if ($output != '') jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);
 		return true;
 	}
+	public function SshDelJeedouinoExt($jeedouino_ext, $local, $distant)
+	{
+		jeedouino::log( 'debug', __('Effacement via SSH d\'un fichier de JeedouinoExt sur l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
+		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
+		{
+			jeedouino::log( 'error', __('Connection SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
+			return false;
+		}
+		else
+		{
+			if (!ssh2_auth_password($connection, $jeedouino_ext['sshID'], $jeedouino_ext['sshPW']))
+			{
+				jeedouino::log( 'error', __('Authentification SSH impossible sur ', __FILE__) . $jeedouino_ext['IP']);
+				return false;
+			}
+			else
+			{
+				$preCmd = "echo '" . $jeedouino_ext['sshPW'] . "' | sudo -S ";
+				file_put_contents($local, date("Y-m-d H:i:s") . ' [ Fichier purgé depuis Jeedouino par l\'utilisateur. ] '."\r\n");
+				$result = ssh2_scp_send($connection, $local, $distant, 0777);
+				$res= jeedouino::SshCmdJeedouinoExt($connection, $preCmd, 'exit');
+				return $result;
+			}
+		}
+		return true;
+	}
 	public function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)
 	{
 		jeedouino::log( 'debug', __('Téléchargement via SSH d\'un fichier de JeedouinoExt depuis l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
@@ -1590,7 +1621,10 @@ class jeedouino extends eqLogic {
 				{
 					jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée.', __FILE__));
 					if (substr($my_Board->getConfiguration('arduino_board'), 0, 1) != 'a')
+					{
 						jeedouino::log('error', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées.', __FILE__));
+						jeedouino::log('error', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée.', __FILE__));
+					}
 				}
 				return $reponse;
 			}
@@ -1777,6 +1811,17 @@ class jeedouino extends eqLogic {
 				$PinMode = jeedouino::GetPinMode($board_id);
 				if ($DemonTypeF == 'PiGpio' and strlen($PinMode) < 39) $PinMode .= '..............';
 				$MasterFile = str_replace('Status_pins = {}' , "Status_pins = '" . $PinMode . "'", $MasterFile);
+
+				$bounceDelay = 'bounceDelay = ' . config::byKey($board_id . '_bounceDelay', 'jeedouino', '200');
+				$MasterFile = str_replace('bounceDelay = 222' , $bounceDelay , $MasterFile);
+
+				$CptDelay = 'ReArmDelay = ' . config::byKey($board_id . '_CptDelay', 'jeedouino', 3600);
+				$MasterFile = str_replace('ReArmDelay = 3600' , $CptDelay , $MasterFile);
+			}
+			if ($DemonTypeF == 'PiFace')
+			{
+				$bounceDelay = 'bounceDelay = ' . config::byKey($board_id . '_bounceDelay', 'jeedouino', '200');
+				$MasterFile = str_replace('bounceDelay = 222' , $bounceDelay , $MasterFile);
 			}
 			// save
 			$result = file_put_contents($filename, $MasterFile);
@@ -2386,6 +2431,7 @@ class jeedouino extends eqLogic {
 			$setprm = $ipPort . ' ' . $arduino_id . ' ' . $JeedomIP . ' ' . $PiBoardID . ' ' . $JeedomPort . ' ' . $JeedomCPL;
 			$ToSend = true;
 		}
+		$setprm .= ' Jeedouino' . $DemonName . '_' . $arduino_id . '.log';
 		if ($ToSend)
 		{
 			$Fallback = [];
@@ -2393,6 +2439,9 @@ class jeedouino extends eqLogic {
 			$PinMode = jeedouino::GetPinMode($arduino_id);
 			if ($DemonName == 'PiGpio' and strlen($PinMode) < 39) $PinMode .= '..............';
 			if ($PinMode != 'none') $Fallback['PinMode'] = $PinMode;
+			$Fallback['EqName'] = $eqLogic->getName();
+			$Fallback['bounceDelay'] = config::byKey($arduino_id . '_bounceDelay', 'jeedouino', '222');
+			if ($board == 'gpio') $Fallback['ReArmDelay'] = config::byKey($arduino_id . '_CptDelay', 'jeedouino', 3600);
 			$prm = json_encode(array('board_id' => $arduino_id, 'DemonName' => $DemonName, 'prm' => $setprm, 'Fallback' => $Fallback));
 			$reponse = jeedouino::CallJeedouinoExt($arduino_id, 'SetPRM', $prm, $wwwPort ); // EqLogic, Cmd, Array Params, default port www
 			if ($reponse != 'OK') jeedouino::log( 'error', __('Problème d\'envoi de SetPRM sur JeedouinoExt, démon : ', __FILE__) . ' Jeedouino' . $DemonName . '.py ( eqID ' . $arduino_id . ' ) - Réponse :' . $reponse);
@@ -3594,6 +3643,7 @@ class jeedouino extends eqLogic {
 	{
 		$bounceDelay = round($bounceDelay);
 		if ($bounceDelay < 1) $bounceDelay = 1;
+		if ($bounceDelay > 10000) $bounceDelay = 10000;
 		$oldValue = config::byKey($arduino_id . '_bounceDelay', 'jeedouino', 200);
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		$mm = __('anti-rebonds', __FILE__);
@@ -3602,7 +3652,7 @@ class jeedouino extends eqLogic {
 		switch ($board)
 		{
 			case 'gpio':
-				if ($bounceDelay < 50 or $bounceDelay > 10000) $bounceDelay = 200;
+				//if ($bounceDelay < 50 or $bounceDelay > 10000) $bounceDelay = 200;
 			case 'piface':
 			case 'piplus':
 				jeedouino::log( 'debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('ms vers la nouvelle : ', __FILE__) . $bounceDelay . 'ms ');

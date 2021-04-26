@@ -55,7 +55,7 @@ gpio2pin = [0,0,3,5,7,29,31,26,24,21,19,23,32,33,8,10,36,11,12,35,38,40,15,16,18
 # compteurs:
 ReArmDelay = 3600 # secondes
 CptNextReArm = time.time() + ReArmDelay
-bounceDelay = 200 # millisecondes
+bounceDelay = 222 # millisecondes
 
 
 # s-Fallback
@@ -226,12 +226,12 @@ class myThread1 (threading.Thread):
 						elif Status_pins[i] == 'i':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
 							GPIOStr +='&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'p':
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_UP)
 							GPIO.remove_event_detect(j)
-							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
+							GPIO.add_event_detect(j, GPIO.BOTH, callback = toggle_inputs)
 							GPIOStr += '&IN_' + str(i + 1) + '=' + str(GPIO.input(j))
 						elif Status_pins[i] == 'd' or Status_pins[i] == 'f': # Sondes DHT(11,22)
 							GPIO.setup(j, GPIO.IN,  pull_up_down = GPIO.PUD_DOWN)
@@ -533,11 +533,11 @@ def toggle_cpts3(u):
 
 def toggle_inputs(u):
 	global Status_pins, GPIO, NextRefresh, ProbeDelay, PinNextSend
-	GPIO.remove_event_detect(u)
+	#GPIO.remove_event_detect(u)
 	uu = gpio2pin[u]
 	BPvalue = 1
 	if Status_pins[uu - 1] == 'n' or Status_pins[uu - 1] == 'q':
-		#GPIO.remove_event_detect(u)
+		GPIO.remove_event_detect(u)
 
 		NewNextRefresh = time.time() + (60 * ProbeDelay) 			# Decale la lecture des sondes pour eviter un conflit
 		if NextRefresh < NewNextRefresh:
@@ -568,7 +568,7 @@ def toggle_inputs(u):
 		pinStr = '&' + str(uu) + '=' + str(v)
 		SimpleSend(pinStr)
 		PinNextSend[uu] = time.time() + 2 # renvoie la valeur du gpio si non detectée car changement trop rapide
-		GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
+		#GPIO.add_event_detect(u, GPIO.BOTH, callback = toggle_inputs, bouncetime = bounceDelay)
 
 class myThread2 (threading.Thread):
 	def __init__(self, threadID, name):
@@ -855,6 +855,9 @@ if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		port = int(sys.argv[1])
 
+	log('info', "---------")
+	log('info', "Jeedouino - Demarrage du daemon piGPIO (eqID: " + str(eqLogic) + "). ")
+	log('info', "---------")
 	# On va demander la valeur des compteurs avec un peu de retard expres
 	timeCPT = time.time() + 4
 	NextRefresh = time.time() + 7

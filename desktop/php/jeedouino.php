@@ -237,7 +237,7 @@ else $ShowSideBar = "col-xs-12";
 					<?php if (config::byKey('ActiveExt', 'jeedouino', false))
 					{
 					?>
-					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI sans Jeedom*}}</label>
+					<label class="checkbox-inline ActiveExt"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="alone"/>{{RPI JeedouinoExt}} <i class="fas fa-question-circle tooltips" title="{{Jeedouino sur un RPI distant sans jeedom}}"></i></label>
 					<?php }  ?>
 					</div>
                 </div>
@@ -368,7 +368,7 @@ else $ShowSideBar = "col-xs-12";
 			if (!$plugin_jeedouino_deporte)
 			{
 				?>
-				<legend class="col-lg-6 btn btn-warning btn-sm">{{Aucun plugin Jeedouino déporté ( Jeedom esclave ) trouvé.}}</legend>
+				<legend class="col-lg-6 btn btn-warning btn-sm">{{Aucun plugin Jeedouino déporté ( Jeedom distant ) trouvé.}}</legend>
 				<?php
 			}
 	//	}
@@ -398,7 +398,7 @@ else $ShowSideBar = "col-xs-12";
 		{
             echo '<optgroup label="JeedouinoExt sur ' . $ip . '">';
             $JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', 'JeedouinoExt'));
-			echo '<option value="' . $ip . '">' . $JExtname . '</option>';
+			echo '<option value="' . $ip . '">' . $JExtname . ' - ' . $ip . '</option>';
             echo '</optgroup>';
 		}
 	}

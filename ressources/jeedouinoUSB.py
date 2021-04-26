@@ -276,6 +276,9 @@ if __name__  ==  "__main__":
 	if len(sys.argv) > 1:
 		port = int(sys.argv[1])
 
+	log('info', "---------")
+	log('info', "Jeedouino - Demarrage du daemon USB (eqID: " + str(eqLogic) + "). ")
+	log('info', "---------")
 	# set Serial port for Arduino USB if possible
 	try:
 		USBArduino = serial.Serial(portusb, baudrate, timeout = 1, rtscts = 1)

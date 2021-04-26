@@ -238,7 +238,7 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
 		<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
-				<th>{{Jeedom}}</th>
+				<th>{{Hôte}}</th>
 				<th>{{Emplacement}}</th>
 				<th>{{Equipement}}</th>
 				<th>{{Statut}}</th>
@@ -366,28 +366,28 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
 
 				$html .= '<tr><td>';
 
-				if ($localDemon) $html .= '{{Jeedom maître}}';
+				if ($localDemon) $html .= '{{Jeedouino}}';
 				else
 				{
-					if ($board_ip!='')  $html .=  '{{JeedouinoExt}}';
+					if ($board_ip != '')  $html .= trim(config::byKey('JExtname-' . $board_ip, 'jeedouino', 'JeedouinoExt'));
 					else $html .=  '{{Equipement mal configuré}}';
 				}
 				$html .= '</td><td>';
 				if ($localDemon) $html .= '{{Local}}';
 				else
 				{
-					if ($board_ip!='')
-                    {
-                        $_path = trim(config::byKey('path-'.$board_ip, 'jeedouino', ''));
-    					if ($_path == '') $_path = '/';
-    					$_port = trim(config::byKey('PORT-'.$board_ip, 'jeedouino', ''));
-    					if ($_port == '') $_port = '80';
-                        $html .= '<a href="http://' . $board_ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fas fa-home"></i> {{ sur ' . $board_ip . '}}</a>';
-                    }
+					if ($board_ip != '')
+          {
+            $_path = trim(config::byKey('path-'.$board_ip, 'jeedouino', ''));
+            if ($_path == '') $_path = '/';
+            $_port = trim(config::byKey('PORT-'.$board_ip, 'jeedouino', ''));
+            if ($_port == '') $_port = '80';
+            $html .= '<a href="http://' . $board_ip . ':' . $_port . $_path . 'JeedouinoExt.php" target="_blank"><i class="fas fa-home"></i> {{ sur ' . $board_ip . '}}</a>';
+          }
 					else $html .=  '{{EqID'.$board_id.'}}';
 				}
 				$html .= '</td><td>';
-				$html .= '<div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank"><i class="fas fa-sitemap"></i> '.$name.'</a></div>';
+				$html .= '<div class="col-lg-7"><a class="btn btn-default " title="EqID : ' . $board_id . '" href=" index.php?&v=d&p=jeedouino&m=jeedouino&id=' . $board_id . '" target="_blank"><i class="fas fa-sitemap"></i> '.$name.'</a></div>';
 				$html .= '</td><td class="deamonState">';
 
 				if ($StatusDemon) $html .= '<span class="btn btn-success" >OK</span>';

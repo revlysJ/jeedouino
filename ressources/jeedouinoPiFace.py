@@ -36,7 +36,7 @@ JeedomPort = 80
 JeedomCPL = ''
 
 # compteurs:
-bounceDelay = 200 # millisecondes
+bounceDelay = 222 # millisecondes
 
 # Tests Threads alives
 thread_1 = 0
@@ -278,8 +278,6 @@ class myThread1 (threading.Thread):
 				if 'bounceDelay' in query:
 					q = query.index("bounceDelay")
 					bounceDelay = int(query[q + 1])
-					if bounceDelay < 20 or bounceDelay > 300:
-						bounceDelay = 200
 					reponse = 'SCOK'
 
 				if 'PING' in query:
@@ -456,6 +454,9 @@ if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		port = int(sys.argv[1])
 
+	log('info', "---------")
+	log('info', "Jeedouino - Demarrage du daemon piFACE (eqID: " + str(eqLogic) + "). ")
+	log('info', "---------")
 	# On va demander la valeur des compteurs avec un peu de retard expres
 	timeCPT=time.time()+11
 	NextRefresh=time.time()+40

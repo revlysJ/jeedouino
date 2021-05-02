@@ -614,6 +614,7 @@ class jeedouino extends eqLogic {
 					$PinMode .= 'w';
 					break;
 				case 'pwm_output':
+				case 'pwm_outputPI':
 					$PinMode .= 'm';
 					break;
 				default:		// case 'not_used':
@@ -760,6 +761,7 @@ class jeedouino extends eqLogic {
 					case 'compteur_pullup':
 					case 'compteur_pulldown':
 					case 'pwm_output':
+					case 'pwm_outputPI':
 					case 'switch':
 					case 'servo':
 						$message.='.';
@@ -886,6 +888,12 @@ class jeedouino extends eqLogic {
 						$value = '1';
 						$PinValue = 'SetPinHIGH=' . $pins_id;
 					}
+				break;
+				case 'pwm_outputPI':
+					$PinValue = 'SetPWM=' . $pins_id;
+					// map value 0 - 255 to 0 - 100
+					//$value = round(100 * $value / 255, 1);
+					$PinValue .= '&PWMduty=' . $value;
 				break;
 			}
 		}
@@ -2906,11 +2914,12 @@ class jeedouino extends eqLogic {
 						case 'servo':
 							$servo = 1;			// Pour génération sketch
 						case 'pwm_output':
+						case 'pwm_outputPI':
 							$myType='action';
 							$mySubType='slider';
 							$myinvertBinary='0';
 							$tempo='0';
-							$value='127';
+							$value='49';
 						break;
 						case 'double_pulse_low':
 							$myType = 'action';
@@ -3315,7 +3324,9 @@ class jeedouino extends eqLogic {
 						break;
 					case 'pwm_output':
 						$mxv = 255;
+					case 'pwm_outputPI':
 					case 'servo':
+						if ($cmd_info['modePIN'] == "pwm_outputPI") $mxv = 100;
 						$cmd->setConfiguration('minValue',0);
 						$cmd->setConfiguration('maxValue', $mxv);
 						$cmd->setTemplate('dashboard', 'default');
@@ -4236,11 +4247,20 @@ class jeedouinoCmd extends cmd {
 						jeedouino::ResetCPT($this->getEqLogic_id(), $RSTvalue, $this->getConfiguration('cmdID'));
 						return true;
 					}
+					elseif ($modePIN == 'pwm_outputPI') // RPi seulement / pour arduino pwm voir else suivant
+					{
+						$value = round($_options['slider']);
+						$this->setConfiguration('value', $value);
+						$this->setConfiguration('minValue', 0);
+						$this->setConfiguration('maxValue', 100);
+						$this->save();
+						if (jeedouino::ConfigurePinValue($pins_id, sprintf("%03s", $value), $this->getEqLogic_id())) return true;
+					}
 					else
 					{
 						//jeedouino::log( 'debug','Liste $_options = '. json_encode($_options));
 						$value = round($_options['slider']);
-						$this->setConfiguration('value',$value);
+						$this->setConfiguration('value', $value);
 						$this->setConfiguration('minValue', 0);
 						$this->setConfiguration('maxValue', 255);
 						$this->save();

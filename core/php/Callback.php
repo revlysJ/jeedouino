@@ -408,42 +408,48 @@ if (isset($_GET['BoardEQ']))
 							$eqLogic->refreshWidget();
 
 							$probeMSG = '';
-							$modepin = str_replace('80B', '80', strtoupper($cmd->getConfiguration('modePIN')));
+							$modepin = str_replace('80b', '80', $cmd->getConfiguration('modePIN'));
+							$i2c = ' (i2c x76) ';
+							if ($modepin != $cmd->getConfiguration('modePIN')) $i2c = ' (i2c x77) ';
+							$modepin = strtoupper($modepin);
 							switch($cmd->getConfiguration('modePIN'))
 							{
 								case 'dht11':
 								case 'dht21':
 								case 'dht22':
 								case 'bmp180':
+									$i2c = '';
 								case 'bmp280':
 								case 'bmp280b':
 								case 'bme280':
 								case 'bme280b':
 								case 'bme680':
 								case 'bme680b':
-									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Température) ', __FILE__);
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . $i2c . __(' (Température) ', __FILE__);
 									break;
 								case 'dht11_h':
 								case 'dht21_h':
 								case 'dht22_h':
+									$i2c = '';
 								case 'bme280_h':
 								case 'bme280b_h':
 								case 'bme680_h':
 								case 'bme680b_h':
-									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Humidité) ', __FILE__);
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . $i2c . __(' (Humidité) ', __FILE__);
 									break;
 								case 'bmp180_p':
+									$i2c = '';
 								case 'bmp280_p':
 								case 'bmp280b_p':
 								case 'bme280_p':
 								case 'bme280b_p':
 								case 'bme680_p':
 								case 'bme680b_p':
-									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Pression) ', __FILE__);
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . $i2c . __(' (Pression) ', __FILE__);
 									break;
 								case 'bme680_g':
 								case 'bme680b_g':
-									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . __(' (Gas) ', __FILE__);
+									$probeMSG = __('Lecture Sonde ', __FILE__) . $modepin . $i2c . __(' (Gas) ', __FILE__);
 									break;
 							}
 							jeedouino::log('debug', $CALLBACK . $probeMSG . 'Pin n° ' . $pins_id . ' = ' . $recu);

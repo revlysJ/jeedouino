@@ -133,7 +133,7 @@ if (isset($_GET['id']))
 			<li role="presentation"><a href="#userpinstab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-code"></i> {{Pins Utilisateur}}</a></li>
 				<?php
 				}
-        if (substr($ModeleArduino, 0, 2) == 'pi')
+      if (substr($ModeleArduino, 0, 2) == 'pi')
         {
 				?>
         <li role="presentation"><a href="https://fr.pinout.xyz/" target="_blank" aria-controls="profile" role="tab" ><img src="plugins/jeedouino/icons/pinout.jpg" style="width:20px; height: 20px;"/></a></li>
@@ -432,6 +432,7 @@ if (isset($_GET['id']))
 								elseif (substr($mode_name,0,1)=='o') $ActionPins[] = '<option value="'.$mode_value.'">{{'.substr($mode_name,1).'}}</option>';
 								else $OtherPins[] = '<option value="'.$mode_value.'">{{'.$mode_name.'}}</option>';
 							}
+              if (strpos($pin_datas['option'], 'PWM') !== false) $ActionPins[] = '<option value="pwm_outputPI">{{Sortie PWM software}}</option>';
 						}
 						else if ($ModeleArduino == 'piPlus')
 						{
@@ -480,7 +481,7 @@ if (isset($_GET['id']))
 								$OtherPins[] = '<option value="analog_input">{{Entrée Analogique}}</option>';
 							}
 						}
-                        else if ($ModeleArduino == 'espsonoffpow')
+            else if ($ModeleArduino == 'espsonoffpow')
 						{
 							if ($pin_datas['option'] != 'HLW8012')
 							{
@@ -512,7 +513,7 @@ if (isset($_GET['id']))
 								$OtherPins[] = '<option value="input_numeric">{{Entrée Numérique}}</option>';
 							}
 						}
-                        else if ($ModeleArduino == 'espsonoff4ch' or $ModeleArduino == 'espElectroDragonSPDT')
+            else if ($ModeleArduino == 'espsonoff4ch' or $ModeleArduino == 'espElectroDragonSPDT')
 						{
 							foreach ($Sonoff4ch as $mode_value => $mode_name)
                             {

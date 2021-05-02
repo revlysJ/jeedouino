@@ -431,7 +431,7 @@ $PiGPIO40pins = array(
     '9' 	=> array('Nom_pin' => 'G N D', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
     '10' 	=> array('Nom_pin' => 'GPIO15 UART','disable' => 1, 'ethernet' => 0, 'option' => ''),
     '11' 	=> array('Nom_pin' => 'GPIO17', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 11'),
-    '12' 	=> array('Nom_pin' => 'GPIO18', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 12'),
+    '12' 	=> array('Nom_pin' => 'GPIO18', 	'disable' => 0, 'ethernet' => 0, 'option' => 'PWM Pin 12'),
     '13' 	=> array('Nom_pin' => 'GPIO27', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 13'),
     '14' 	=> array('Nom_pin' => 'G N D', 	    'disable' => 1, 'ethernet' => 0, 'option' => ''),
     '15' 	=> array('Nom_pin' => 'GPIO22', 	'disable' => 0, 'ethernet' => 0, 'option' => 'Pin 15'),

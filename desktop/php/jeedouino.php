@@ -142,7 +142,7 @@ else $ShowSideBar = "col-xs-12";
 
             if ($eqLogicsEXT != '')
             {
-                echo '<legend><i class="fas fa-table"></i> {{Mes équipements sur JeedouinoEXT}}</legend>';
+                echo '<legend><i class="fas fa-table"></i> {{Mes équipements distants sur R.Pi JeedouinoEXT}}</legend>';
                 echo '<div class="eqLogicThumbnailContainer">';
                 echo $eqLogicsEXT;
                 echo '</div>';

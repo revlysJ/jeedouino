@@ -117,7 +117,7 @@ class myThread1 (threading.Thread):
 
 	def run(self):
 		log('info', "Starting " + self.name)
-		global eqLogic,JeedomIP,PinNextSend,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_2,thread_tries1,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay,bounceDelay
+		global pwm,eqLogic,JeedomIP,PinNextSend,TempoPinLOW,TempoPinHIGH,exit,Status_pins,swtch,GPIO,SetAllLOW,SetAllHIGH,CounterPinValue,s,BootMode,SetAllSWITCH,SetAllPulseLOW,SetAllPulseHIGH,ProbeDelay,thread_1,thread_2,thread_tries1,bmp180,bmp280,bme280,bme680,bmp280b,bme280b,bme680b,gpioSET,sendPINMODE,busio,CptNextReArm,ReArmDelay,bounceDelay
 		s = socket.socket()		 		# Create a socket object
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		#host = socket.gethostname() 	# Get local machine name
@@ -187,6 +187,10 @@ class myThread1 (threading.Thread):
 							GPIO.output(j, BootMode)
 							swtch[i + 1] = BootMode
 							GPIOStr += '&' + str(i + 1) + '=' + str(BootMode)
+						elif Status_pins[i] == 'm':
+							GPIO.setup(j, GPIO.OUT)
+							pwm = GPIO.PWM(j, 0.5)
+							pwm.start(0)
 						elif Status_pins[i] == 'c':
 							PinNextSend[i + 1] = time.time() + 30  #30s environ
 							k = i % 4
@@ -472,6 +476,22 @@ class myThread1 (threading.Thread):
 					ProbeDelay = int(query[q + 1])
 					reponse = 'SOK'
 
+				if 'SetPWM' in query:
+					q = query.index("SetPWM")
+					u = int(query[q + 1])
+					q = query.index("PWMduty")
+					v = int(query[q + 1])
+					try:
+						pwm.ChangeDutyCycle(v)
+					except Exception as e:
+						log('Error' , 'pwm de merde : ' + str(e))
+						GPIO.setup(u, GPIO.OUT)
+						pwm = GPIO.PWM(u, 0.5)
+						pwm.start(v)
+					pinStr = '&' + str(u) + '=' + str(v)
+					SimpleSend(pinStr)
+					reponse = 'SOK'
+
 				if 'PING' in query:
 					if thread_2 == 1:
 						reponse = 'PINGOK'
@@ -498,6 +518,7 @@ class myThread1 (threading.Thread):
 		if exit == 1:
 			try:
 				GPIO.cleanup()
+				pwm.stop()
 			except:
 				pass
 			sys.exit()
@@ -787,6 +808,7 @@ class myThread2 (threading.Thread):
 		s.close()
 		try:
 			GPIO.cleanup()
+			pwm.stop()
 		except:
 			pass
 		sys.exit()
@@ -896,19 +918,21 @@ if __name__ == "__main__":
 		TimeValue[i] = 0
 		j = pin2gpio[i - 1]
 		try:
+			GPIO.remove_event_detect(j)
 			if Status_pins[i - 1] == 'o' or Status_pins[i - 1] == 'y' or Status_pins[i - 1] == 's' or Status_pins[i - 1] == 'l' or Status_pins[i - 1] == 'h' or Status_pins[i - 1] == 'u' or Status_pins[i - 1] == 'v' or Status_pins[i - 1] == 'w':
 				GPIO.setup(j, GPIO.OUT)
-				GPIO.remove_event_detect(j)
 				GPIO.output(j, BootMode)
 				swtch[i] = BootMode
 				pinStr += '&' + str(i) + '=' + str(BootMode)
+			elif Status_pins[i - 1] == 'm':
+				GPIO.setup(j, GPIO.OUT)
+				pwm = GPIO.PWM(j, 0.5)
+				pwm.start(0)
 			elif Status_pins[i - 1] == 'p':
 				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-				GPIO.remove_event_detect(j)
 				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
 			elif Status_pins[i - 1] == 'i':
 				GPIO.setup(j, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-				GPIO.remove_event_detect(j)
 				pinStr +='&IN_' + str(i) + '=' + str(GPIO.input(j))
 			etat_pins[i - 1] = Status_pins[i - 1]
 		except:
@@ -998,6 +1022,7 @@ if __name__ == "__main__":
 
 	try:
 		GPIO.cleanup()
+		pwm.stop()
 	except:
 		pass
 	s.close()

@@ -294,7 +294,7 @@ if __name__  ==  "__main__":
 	exit = 0
 	Arduino_message = ''
 	timeout = 1
-	cmd_list = ['COK', 'PINGOK', 'EOK', 'IPOK', 'SOK', 'SCOK', 'SFOK', 'BMOK', 'NOK']
+	cmd_list = ['COK', 'PINGOK', 'EOK', 'IPOK', 'SOK', 'SCOK', 'SFOK', 'BMOK', 'NOK', 'SMOK']
 
 	threadLock = threading.Lock()
 	threads = []

@@ -1507,6 +1507,7 @@ void Load_EEPROM(int k)
 				pinMode(i, INPUT);
 				break;
 			case 'p':		 // input_pullup
+				pinMode(i, INPUT_PULLUP);
 				OLDPinValue[i] = 2;				//@cpaillet
 				PinNextSend[i] = millis();
 				break;

@@ -865,7 +865,7 @@ void loop()
 				AnalogPinValue = analogRead(i);
 				if (AnalogPinValue!=OLDAnalogPinValue[i] && (PinNextSend[i]<millis() || NextRefresh<millis()))
 				{
-					if (abs(AnalogPinValue-OLDAnalogPinValue[i])>20)		// delta correctif pour eviter les changements negligeables
+					if (abs(int(AnalogPinValue - OLDAnalogPinValue[i])) > 20)	// delta correctif pour eviter les changements negligeables
 					{
 						int j=i;
 						if (i<54) j=i+40;	 // petit correctif car dans Jeedom toutes les pins Analog commencent a l'id 54+
@@ -1507,6 +1507,7 @@ void Load_EEPROM(int k)
 				pinMode(i, INPUT);
 				break;
 			case 'p':		 // input_pullup
+				pinMode(i, INPUT_PULLUP);
 				OLDPinValue[i] = 2;				//@cpaillet
 				PinNextSend[i] = millis();
 				break;

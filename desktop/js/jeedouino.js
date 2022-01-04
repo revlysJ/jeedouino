@@ -401,8 +401,9 @@ function addCmdToTable(_cmd) {
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" >';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
     				break;
-    			case 'pwm_output':
-    			case 'servo':
+          case 'pwm_output':
+          case 'pwm_outputPI':
+          case 'servo':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" >';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
     				break;

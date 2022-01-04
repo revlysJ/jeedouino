@@ -17,21 +17,44 @@ import threading
 import os, time
 import sys
 
+os.environ['TZ'] = 'Europe/Paris'
+time.tzset()
+
+nodep = 0
+errdep = ''
 try:
 	import http.client as httplib
 except:
 	import httplib
-import RPi.GPIO as GPIO
-import Adafruit_DHT
-import Adafruit_BMP.BMP085 as BMP085
-os.environ['TZ'] = 'Europe/Paris'
-time.tzset()
-import DS18B20 as DS
+
+try:
+	import RPi.GPIO as GPIO
+except Exception as e:
+	errdep += str(e) + ','
+	nodep = 1
+
+try:
+	import Adafruit_DHT
+except Exception as e:
+	errdep += str(e) + ','
+	nodep = 1
+
+try:
+	import Adafruit_BMP.BMP085 as BMP085
+except Exception as e:
+	errdep += str(e) + ','
+	nodep = 1
+
+try:
+	import DS18B20 as DS
+except Exception as e:
+	errdep += str(e) + ','
+	nodep = 1
+
 try:
 	import board, busio, adafruit_bmp280, adafruit_bme280, adafruit_bme680
-	nodep = 0
 except Exception as e:
-	errdep = e
+	errdep += str(e)
 	nodep = 1
 
 bme280 = None

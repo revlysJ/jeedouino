@@ -910,71 +910,71 @@ void loop()
 			case 'g': // input_variable suivant tempo
 				PinValue = digitalRead(i);
 				// Calcul
-				if (PinNextSend[i]>millis()) // bouton laché avant les 10s
+				if (PinNextSend[i] > millis()) // bouton laché avant les 10s
 				{
-					pinTempo=255-((PinNextSend[i]-millis())*255/10000); // pas de 25.5 par seconde
+					pinTempo = 255 - ((PinNextSend[i] - millis()) * 255 / 10000); // pas de 25.5 par seconde
 				}
-				else pinTempo=255;	// si bouton laché après les 10s, on bloque la valeur a 255
+				else pinTempo = 255;	// si bouton laché après les 10s, on bloque la valeur a 255
 
-				if (PinValue!=OLDPinValue[i]) // changement état entrée = bouton appuyé ou bouton relaché
+				if (PinValue != OLDPinValue[i]) // changement état entrée = bouton appuyé ou bouton relaché
 				{
-					OLDPinValue[i]=PinValue;
-					if (swtch[i]==1)	// on vient de lacher le bouton.
+					OLDPinValue[i] = PinValue;
+					if (swtch[i] == 1)	// on vient de lacher le bouton.
 					{
-						swtch[i]=0; // on enregistre le laché.
+						swtch[i] = 0; // on enregistre le laché.
 						jeedom += '&';
 						jeedom += i;
 						jeedom += '=';
 						jeedom += pinTempo;
-						PinNextSend[i]=millis();
+						PinNextSend[i] = millis();
 					}
 					else
 					{
-						swtch[i]=1; // on vient d'appuyer sur le bouton, on enregistre.
-						PinNextSend[i]=millis()+10000; // Delai pour la tempo de maintient du bouton.
-						CounterPinValue[i]==millis(); // reutilisation pour economie de ram
-						ProbeNextSend=millis()+15000; // decale la lecture des sondes pour eviter un conflit
+						swtch[i] = 1; // on vient d'appuyer sur le bouton, on enregistre.
+						PinNextSend[i] = millis() + 10000; // Delai pour la tempo de maintient du bouton.
+						CounterPinValue[i] == millis(); // reutilisation pour economie de ram
+						ProbeNextSend = millis() + 15000; // decale la lecture des sondes pour eviter un conflit
 					}
 				}
 				else
 				{
-					if (swtch[i]==1 && CounterPinValue[i]<millis())
+					if (swtch[i] == 1 && CounterPinValue[i] < millis())
 					{
 						jeedom += '&';
 						jeedom += i;
 						jeedom += '=';
 						jeedom += pinTempo;
-						CounterPinValue[i]==millis()+1000; // reactualisation toutes les secondes pour ne pas trop charger Jeedom
+						CounterPinValue[i] == millis() + 1000; // reactualisation toutes les secondes pour ne pas trop charger Jeedom
 					}
 				}
 				break;
 			#endif
 			case 'a':		// analog_input
 				AnalogPinValue = analogRead(i);
-				if (AnalogPinValue!=OLDAnalogPinValue[i] && (PinNextSend[i]<millis() || NextRefresh<millis()))
+				if (AnalogPinValue != OLDAnalogPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
 				{
-					if (abs(AnalogPinValue-OLDAnalogPinValue[i])>20)		// delta correctif pour eviter les changements negligeables
+					if (abs((int)(AnalogPinValue - OLDAnalogPinValue[i])) > 20)		// delta correctif pour eviter les changements negligeables
 					{
-						int j=i;
-						if (i<54) j=i+40;			// petit correctif car	dans Jeedom toutes les pins Analog commencent a l'id 54+
-						OLDAnalogPinValue[i]=AnalogPinValue;
+						int j = i;
+						if (i < 54) j = i + 40;			// petit correctif car	dans Jeedom toutes les pins Analog commencent a l'id 54+
+						OLDAnalogPinValue[i] = AnalogPinValue;
 						//jeedom += '&' + j + '=' + AnalogPinValue;
 						jeedom += '&';
 						jeedom += j;
 						jeedom += '=';
 						jeedom += AnalogPinValue;
-						PinNextSend[i]=millis()+5000;		// Delai pour eviter trop d'envois
+						PinNextSend[i] = millis() + 5000;		// Delai pour eviter trop d'envois
 					}
 				}
 				break;
 			case 'c':		// compteur_pullup CounterPinValue
 				PinValue = digitalRead(i);
-				if (PinValue!=OLDPinValue[i])
+				if (PinValue != OLDPinValue[i])
 				{
-					OLDPinValue[i]=PinValue;
-					CounterPinValue[i]+=PinValue;
+					OLDPinValue[i] = PinValue;
+					CounterPinValue[i] += PinValue;
 				}
-				if (NextRefresh<millis() || PinNextSend[i]<millis())
+				if (NextRefresh < millis() || PinNextSend[i] < millis())
 				{
 					jeedom += '&';
 					jeedom += i;
@@ -1528,19 +1528,19 @@ void Load_EEPROM(int k)
 		Serial.println();
 	#endif
 	// au cas ou l'arduino n'ai pas encore recu la conf. des pins.
-	for (int i = 2; i < NB_TOTALPIN; i++)
-	{
-		byte e = EEPROM.read(30 + i);
-		if (e < ' ' || e > 'z')
-		{
-			jeedom += F("&PINMODE=1");
-			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Demande la Conf. Pins."));
-				Serial.println();
-			#endif
-			break;
-		}
-	}
+	// for (int i = 2; i < NB_TOTALPIN; i++)
+	// {
+	// 	byte e = EEPROM.read(30 + i);
+	// 	if (e < ' ' || e > 'z')
+	// 	{
+	// 		jeedom += F("&PINMODE=1");
+	// 		#if (DEBUGtoSERIAL == 1)
+	// 			Serial.println(F("Demande la Conf. Pins."));
+	// 			Serial.println();
+	// 		#endif
+	// 		break;
+	// 	}
+	// }
 	for (int i = 0; i < NB_TOTALPIN; i++)
 	{
 		Status_pins[i] = EEPROM.read(30 + i); // Etats des pins
@@ -1790,19 +1790,20 @@ int read_DSx(int pinD)
 			#if (DEBUGtoSERIAL == 1)
 				Serial.println(F("CRC invalide..."));
 			#endif
-			return 99999;
+			return;
 		}
 		if (addr[0] != 0x28)
 		{
 			#if (DEBUGtoSERIAL == 1)
 				Serial.println(F("Device is not a DS18B20."));
 			#endif
-			return 99999;
+			return;
 		}
 		ds.reset();
 		ds.select(addr);
 		ds.write(0x44, 1);
 		nb_ds18++;
+		delay(250);
 	}
 	if (nb_ds18 == 0)
 	{
@@ -1810,8 +1811,7 @@ int read_DSx(int pinD)
 		#if (DEBUGtoSERIAL == 1)
 			Serial.println(F("ds not found..."));
 		#endif
-		delay(250);
-		return 99999;
+		return;
 	}
 	nb_ds18 = 0;
 	delay(800);

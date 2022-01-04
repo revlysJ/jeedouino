@@ -40,7 +40,6 @@ echo "Installation dependance  python-pip"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install python3-pip python3-setuptools
 sudo pip3 install --upgrade setuptools pip
-#sudo pip install wheel
 sudo pip3 install wheel
 
 echo 30 > ${PROGRESS_FILE}
@@ -49,7 +48,6 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Installation dependance  python-serial"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install python-serial
-#sudo pip3 uninstall serial
 sudo pip3 install pyserial
 
 echo 40 > ${PROGRESS_FILE}
@@ -79,10 +77,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/Adafruit_Python_DHT
 	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
-	cd /tmp/Adafruit_Python_DHT
-	#sudo python setup.py install
-	sudo python3 setup.py install
-	cd /tmp
+	sudo pip3 install /tmp/Adafruit_Python_DHT
 
 	echo 65 > ${PROGRESS_FILE}
 	echo "-"
@@ -90,7 +85,6 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "Installation dependance RPi.GPIO"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	sudo pip3 install RPi.GPIO
-	cd /tmp
 
 	echo 70 > ${PROGRESS_FILE}
 	echo "-"
@@ -99,10 +93,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/ABElectronics_Python_Libraries
 	git clone https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
-	cd /tmp/ABElectronics_Python_Libraries
-	#sudo python setup.py install
-	sudo python3 setup.py install
-	cd /tmp
+	sudo pip3 install /tmp/ABElectronics_Python_Libraries
 
 	echo 75 > ${PROGRESS_FILE}
 	echo "-"
@@ -111,10 +102,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/Adafruit_Python_BMP
 	git clone https://github.com/adafruit/Adafruit_Python_BMP.git
-	cd /tmp/Adafruit_Python_BMP
-	#sudo python setup.py install
-	sudo python3 setup.py install
-	cd /tmp
+	sudo pip3 install /tmp/Adafruit_Python_BMP
 
 	echo 80 > ${PROGRESS_FILE}
 	echo "-"
@@ -145,10 +133,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/BitBangingDS18B20
 	git clone https://github.com/danjperron/BitBangingDS18B20.git
-	cd /tmp/BitBangingDS18B20/python
-	#sudo python setup.py install
-	sudo python3 setup.py install
-	cd /tmp
+	sudo pip3 install /tmp/BitBangingDS18B20/python
 fi
 
 echo 100 > ${PROGRESS_FILE}

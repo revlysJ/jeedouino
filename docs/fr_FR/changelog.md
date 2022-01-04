@@ -1,5 +1,11 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+04/01/2021 v1.07e
+---
+
+- Corrections diverses.
+- Compatibilité Jeedom v4.2
+
 14/04/2021 v1.07d
 ---
 

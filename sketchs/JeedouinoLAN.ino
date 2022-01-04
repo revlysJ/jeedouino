@@ -1433,19 +1433,19 @@ void Load_EEPROM(int k)
 		Serial.println();
 	#endif
 	// au cas ou l'arduino n'ai pas encore recu la conf. des pins.
-	for (int i = 2; i < NB_TOTALPIN; i++)
-	{
-		byte e = EEPROM.read(30 + i);
-		if (e < ' ' || e > 'z')
-		{
-			jeedom += F("&PINMODE=1");
-			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Demande la Conf. Pins."));
-				Serial.println();
-			#endif
-			break;
-		}
-	}
+	// for (int i = 2; i < NB_TOTALPIN; i++)
+	// {
+	// 	byte e = EEPROM.read(30 + i);
+	// 	if (e < ' ' || e > 'z')
+	// 	{
+	// 		jeedom += F("&PINMODE=1");
+	// 		#if (DEBUGtoSERIAL == 1)
+	// 			Serial.println(F("Demande la Conf. Pins."));
+	// 			Serial.println();
+	// 		#endif
+	// 		break;
+	// 	}
+	// }
 
 	for (int i = 2; i < NB_TOTALPIN; i++)
 	{
@@ -1683,19 +1683,20 @@ int read_DSx(int pinD)
 			#if (DEBUGtoSERIAL == 1)
 				Serial.println(F("CRC invalide..."));
 			#endif
-			return 99999;
+			return;
 		}
 		if (addr[0] != 0x28)
 		{
 			#if (DEBUGtoSERIAL == 1)
 				Serial.println(F("Device is not a DS18B20."));
 			#endif
-			return 99999;
+			return;
 		}
 		ds.reset();
 		ds.select(addr);
 		ds.write(0x44, 1);
 		nb_ds18++;
+		delay(250);
 	}
 	if (nb_ds18 == 0)
 	{
@@ -1703,8 +1704,7 @@ int read_DSx(int pinD)
 		#if (DEBUGtoSERIAL == 1)
 			Serial.println(F("ds not found..."));
 		#endif
-		delay(250);
-		return 99999;
+		return;
 	}
 	nb_ds18 = 0;
 	delay(800);

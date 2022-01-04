@@ -800,7 +800,7 @@ class jeedouino extends eqLogic {
 
 	}
 
-	public function ConfigurePinValue($pins_id, $value, $arduino_id)
+	public static function ConfigurePinValue($pins_id, $value, $arduino_id)
 	{
 		$my_arduino = eqLogic::byid($arduino_id);
 		$ModeleArduino = $my_arduino->getConfiguration('arduino_board');
@@ -1545,7 +1545,7 @@ class jeedouino extends eqLogic {
 	//
 	//////
 
-	public function FilterDemon($DemonType)
+	public static function FilterDemon($DemonType)
 	{
 		$DemonType = trim(strtolower($DemonType));
 		switch ($DemonType)
@@ -1580,7 +1580,7 @@ class jeedouino extends eqLogic {
 		return null;
 	}
 
-	public function SendToBoardDemon($board_id, $message, $DemonType)	// Envoi de message au Démon
+	public static function SendToBoardDemon($board_id, $message, $DemonType)	// Envoi de message au Démon
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return;
@@ -1943,7 +1943,7 @@ class jeedouino extends eqLogic {
 			jeedouino::log( 'debug', __('StopBoardDemonCMD - Arrêt forcé du démon ', __FILE__) . $DemonTypeF . ' sur  '.self::GetJeedomIP().' - '.$DemonFileName.' : Kill process : '.json_encode($processus));
 		}
 	}
-	public function StatusBoardDemon($_board_id, $forceCache = 0, $DemonType)	 // Démon en marche ???
+	public static function StatusBoardDemon($_board_id, $forceCache = 0, $DemonType)	 // Démon en marche ???
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return false;
@@ -3715,7 +3715,7 @@ class jeedouino extends eqLogic {
 		}
 	}
 
-	public function GetJeedomIP() // on recupere l'adresse IP du maitre si dispo
+	public static function GetJeedomIP() // on recupere l'adresse IP du maitre si dispo
 	{
 		if (config::byKey('ActiveJLAN', 'jeedouino', false))
 		{

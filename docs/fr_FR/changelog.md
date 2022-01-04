@@ -1,6 +1,6 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
-04/01/2021 v1.07e
+04/01/2022 v1.07e
 ---
 
 - Corrections diverses.

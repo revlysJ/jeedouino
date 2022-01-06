@@ -1542,14 +1542,14 @@ int read_DSx(int pinD)
 			#if (DEBUGtoSERIAL == 1)
 				DebugSerial.println(F("CRC invalide..."));
 			#endif
-			return;
+			return 9999;
 		}
 		if (addr[0] != 0x28)
 		{
 			#if (DEBUGtoSERIAL == 1)
 				DebugSerial.println(F("Device is not a DS18B20."));
 			#endif
-			return;
+			return 9999;
 		}
 		ds.reset();
 		ds.select(addr);
@@ -1563,7 +1563,7 @@ int read_DSx(int pinD)
 		#if (DEBUGtoSERIAL == 1)
 			DebugSerial.println(F("ds not found..."));
 		#endif
-		return;
+		return 9999;
 	}
 	nb_ds18 = 0;
 	delay(800);

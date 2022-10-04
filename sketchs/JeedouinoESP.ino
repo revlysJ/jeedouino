@@ -1572,14 +1572,17 @@ void Load_EEPROM(int k)
 		#if (UseDHT == 1)
 			case 'd': // DHT11
 				myDHT[i] = new DHT(i, 11);	// DHT11
+				myDHT[i]->begin();
 				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			case 'e': // DHT21
 				myDHT[i] = new DHT(i, 21);	// DHT21
+				myDHT[i]->begin();
 				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 			case 'f': // DHT 22
 				myDHT[i] = new DHT(i, 22);	// DHT22
+				myDHT[i]->begin();
 				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
 		#endif

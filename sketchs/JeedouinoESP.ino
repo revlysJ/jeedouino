@@ -1755,7 +1755,7 @@ void Init_EEPROM()
 	EEPROM.write(15,	0);
 	for (int i = 30; i < 200; i++)
 	{
-		EEPROM.write(i, 1);	// Valeur des pins OUT au 1er demarrage ( mes relais sont actis a 0, donc je met 1 pour eviter de les actionner au 1er boot)
+		EEPROM.write(i, 1);	// Valeur des pins OUT au 1er demarrage ( mes relais sont actifs a 0, donc je met 1 pour eviter de les actionner au 1er boot)
 	}
 	EEPROM.write(26, IP_JEEDOM[0]);				// Sauvegarde de l' IP
 	EEPROM.write(27, IP_JEEDOM[1]);

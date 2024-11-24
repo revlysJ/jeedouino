@@ -1516,10 +1516,20 @@ void Init_EEPROM()
 	BootMode=2;
 
 	// Initialisation par default
-	EEPROM.update(15,	0);
-	for (int i = 16; i < 200; i++)
+	for (int i = 30; i < 200; i++)
 	{
-		EEPROM.update(i, 1);  // Valeur des pins OUT au 1er demarrage ( mes relais sont actis a 0, donc je met 1 pour eviter de les actionner au 1er boot)
+		EEPROM.update(i, 1);	// Valeur des pins OUT au 1er demarrage ( mes relais sont actifs a 0, donc je met 1 pour eviter de les actionner au 1er boot)
+	}
+	EEPROM.update(26, IP_JEEDOM[0]);				// Sauvegarde de l' IP
+	EEPROM.update(27, IP_JEEDOM[1]);
+	EEPROM.update(28, IP_JEEDOM[2]);
+	EEPROM.update(29, IP_JEEDOM[3]);
+
+	eqLogic = F("IDeqLogic");						// Sauvegarde de eqLogic pour 1er boot apres 1er flashage
+	EEPROM.update(15, eqLogicLength);				// Sauvegarde de la longueur du eqLogic
+	for (int i = 1; i < eqLogicLength; i++)
+	{
+		EEPROM.update(15+i, eqLogic[i-1]-'0'); 		// Sauvegarde de l' eqLogic
 	}
 	// fin initialisation
 }

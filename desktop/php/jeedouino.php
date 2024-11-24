@@ -151,7 +151,7 @@ else $ShowSideBar = "col-xs-12";
 	</div>
     <!-- Affichage de l'eqLogic sélectionné -->
     <div class="<?php echo $ShowSideBar;?> eqLogic eqLogic_active" data-eqLogic_id = "" style="display: none;">
-		<div style="padding-bottom:40px;">
+		<div style="padding-bottom:10px;">
 			<a class="btn btn-success eqLogicAction pull-right" data-action="save"  title="{{Sauver et/ou Générer les commandes automatiquement}}"><i class="fas fa-check-circle"></i> {{Sauver / Générer}}</a>
 			<a class="btn btn-danger eqLogicAction pull-right" data-action="remove" title="{{Supprimer l'équipement}}"><i class="fas fa-minus-circle"></i> </a>
 			<a class="btn btn-warning eqLogicAction pull-right" data-action="copy" title="{{Dupliquer cet équipement}}"><i class="fas fa-copy"></i> </a>

@@ -252,7 +252,7 @@ $(".li_eqLogic2").on('click', function () {
     $('.eqLogicDisplayCard[data-eqLogic_id="' + $(this).attr('data-eqLogic_id') + '"]').click();
 });
 
-function prePrintEqLogic(id)
+/*function prePrintEqLogic(id)
 {
     $('.eqLogic_active').attr('data-eqLogic_id', id);
     if($('.li_eqLogic2[data-eqLogic_id=' + id + ']').html() != undefined)
@@ -260,7 +260,7 @@ function prePrintEqLogic(id)
         $('.li_eqLogic2').removeClass('active');
         $('.li_eqLogic2[data-eqLogic_id=' + id + ']').addClass('active');
     }
-}
+}*/
 function printEqLogic(_data)
 {
     var control = init(_data.logicalId);

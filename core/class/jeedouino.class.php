@@ -1871,7 +1871,7 @@ class jeedouino extends eqLogic {
 				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$PiPlusBoardID.' '.$JeedomPort.' '.$JeedomCPL;
 				break;
 		}
-		$cmd = "sudo nice -n 19 /usr/bin/python3 " . $filename . ' ' . $cmd;
+		$cmd = "sudo nice -n 19 " . system::getCmdPython3(__CLASS__) . " " . $filename . ' ' . $cmd;
 		$_log = jeedouino::getPathToLog('jeedouino_' . strtolower($DemonTypeF));
 		$cmd .= ' ' . $_log;
 		jeedouino::log( 'debug', __('Cmd Appel démon : ', __FILE__) . $cmd);
@@ -4042,6 +4042,8 @@ class jeedouino extends eqLogic {
 
 				$JeedomIP = str_replace('.' , ', ' , $JeedomIP);	// 192.168.0.44 -> 192, 168, 0, 44
 				$MasterFile =  str_replace('192, 168, 0, 44' , $JeedomIP , $MasterFile);
+				$MasterFile =  str_replace('IDeqLogic', $board_id, $MasterFile);
+				$MasterFile =  str_replace('eqLogicLength', strlen($board_id) + 1, $MasterFile);
 
 				$result = file_put_contents($SketchFileName , $MasterFile);																		// On sauve le sketch modifié
 				if ($result === false) jeedouino::log( 'error', 'Impossible de sauver le Sketch Arduino USB généré pour l\'équipement eqID : ' . $board_id);

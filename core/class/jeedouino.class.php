@@ -24,10 +24,13 @@ class jeedouino extends eqLogic {
 	/******************************* Attributs *******************************/
 	/* Ajouter ici toutes vos variables propre à votre classe */
 
+	const PYTHON_PATH = __DIR__ . '/../../resources/venv/bin/python3';
+
 	/***************************** Methode static ****************************/
 	public static function Networkmode() {
 		return 'master';
 	}
+
 
 	// Fonction adaptée depuis https://github.com/jeedom/core/blob/master/core/class/jeedom.class.php
 	public static function LsDevTty($search = 'ttyUSB*') {
@@ -192,9 +195,15 @@ class jeedouino extends eqLogic {
 		$return['log'] = 'jeedouino_update';
 		$return['progress_file'] = '/tmp/dependances_jeedouino_en_cours';
 		$return['state'] = 'ok';
-		if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) $return['state'] = 'nok';
-		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "setuptools" | wc -l') == 0) $return['state'] = 'nok';
-		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "pyserial" | wc -l') == 0) $return['state'] = 'nok';
+		if (file_exists('/tmp/dependances_jeedouino_en_cours')) {
+			$return['state'] = 'in_progress';
+		} elseif (!file_exists(self::PYTHON_PATH)) {
+			$return['state'] = 'nok';
+		} elseif (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) {
+			$return['state'] = 'nok';
+		} elseif (exec(system::getCmdSudo() . ' ' . self::PYTHON_PATH . ' -m pip list | grep -E "pyserial" | wc -l') == 0) {
+			$return['state'] = 'nok';
+		}
 		if ($return['state'] == 'nok') message::add('jeedouino', __('Si les dépendances sont/restent NOK, veuillez mettre à jour votre système linux, puis relancer l\'installation des dépendances générales. Merci', __FILE__));
 		return $return;
 	}
@@ -202,7 +211,7 @@ class jeedouino extends eqLogic {
 		log::remove(__CLASS__ . '_update');
 		jeedouino::log('info', __('L\'installation des dépendances générales va débuter.', __FILE__));
 		jeedouino::log('info', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
-		return array('script' => dirname(__FILE__) . '/../../ressources/Jeedouino.sh /tmp/dependances_jeedouino_en_cours', 'log' => log::getPathToLog(__CLASS__ . '_update'));
+		return array('script' => __DIR__ . '/../../ressources/Jeedouino.sh /tmp/dependances_jeedouino_en_cours', 'log' => log::getPathToLog(__CLASS__ . '_update'));
 	}
 	public static function health() {
 		$return = array();
@@ -1657,7 +1666,7 @@ class jeedouino extends eqLogic {
 				$cmd = $ipPort . ' ' . $board_id . ' ' . $jeedomIP . ' ' . $PiPlusBoardID . ' ' . $JeedomPort . ' ' . $JeedomCPL;
 				break;
 		}
-		$cmd = "sudo nice -n 19 " . system::getCmdPython3(__CLASS__) . " " . $filename . ' ' . $cmd;
+		$cmd = "sudo nice -n 19 " . self::PYTHON_PATH . " " . $filename . ' ' . $cmd;
 		$_log = jeedouino::getPathToLog('jeedouino_' . strtolower($DemonTypeF));
 		$cmd .= ' ' . $_log;
 		jeedouino::log('debug', __('Cmd Appel démon : ', __FILE__) . $cmd);

@@ -194,7 +194,7 @@ $ip = jeedouino::GetJeedomIP();
 										//jeedouino::log( 'debug','>>>> IP ' . $ip . " ID $id");
 										echo '<tr class="jeedouinoExtEqTR" data-jextid="' . $id . '">';
 										echo '<td><div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id=' . $eqLogic->getId() . '" target="_blank"><i class="fas fa-sitemap"></i> ' . $eqLogic->getName(true) . '</a></div></td>';
-										$StatusDemon = jeedouino::StatusBoardDemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
+										$StatusDemon = jeedouino::StatusBoardDaemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
 										if ($StatusDemon) echo '<td><span class="btn btn-success" >OK</span></td>';
 										else {
 											if (is_array($CronStepArr) and (in_array($eqLogic->getId(), $CronStepArr))) echo '<td><span class="btn btn-warning " ><i class="fas fa-spinner"></i> 4min</span></td>';

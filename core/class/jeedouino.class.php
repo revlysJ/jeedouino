@@ -153,7 +153,7 @@ class jeedouino extends eqLogic {
 		$CronStep = config::byKey('CronStep', 'jeedouino', 0);
 		//jeedouino::log( 'debug', '$CronStep = ' . $CronStep);
 		if ($CronStep > $BootTime + 42) return;
-		if ($CronStep == $BootTime) jeedouino::StartAllDemons();
+		if ($CronStep == $BootTime) jeedouino::StartAllDaemons();
 		$CronStep++;
 		config::save('CronStep', $CronStep, 'jeedouino');
 	}
@@ -170,7 +170,7 @@ class jeedouino extends eqLogic {
 			if (config::byKey($board_id . '_HasDemon', 'jeedouino', 0) and config::byKey('Auto_' . $board_id, 'jeedouino', 0)) {
 				jeedouino::log('debug', __('Vérification automatique du démon (option AutoReStart) toutes les 5 minutes pour ', __FILE__) . $eqLogic->getName(true) . ' (' . $board_id . ')');
 				$ModeleArduino = $eqLogic->getConfiguration('arduino_board');
-				if (!jeedouino::StatusBoardDemon($board_id, 0, $ModeleArduino)) jeedouino::StartBoardDemon($board_id, 0, $ModeleArduino);
+				if (!jeedouino::StatusBoardDaemon($board_id, 0, $ModeleArduino)) jeedouino::StartBoardDaemon($board_id, 0, $ModeleArduino);
 			}
 		}
 	}
@@ -271,7 +271,7 @@ class jeedouino extends eqLogic {
 			if (config::byKey($board_id . '_HasDemon', 'jeedouino', 0)) {
 				jeedouino::log('debug', __('-=-= ' . $board_id . ' =-=-', __FILE__));
 				list(, $board, $usb) = self::GetPinsByBoard($board_id);
-				self::StartBoardDemon($board_id, 0, $board);
+				self::StartBoardDaemon($board_id, 0, $board);
 				sleep(2);
 			}
 		}
@@ -285,7 +285,7 @@ class jeedouino extends eqLogic {
 			if (config::byKey($board_id . '_HasDemon', 'jeedouino', 0)) {
 				jeedouino::log('debug', __('-=-= ' . $board_id . ' =-=-', __FILE__));
 				list(, $board, $usb) = self::GetPinsByBoard($board_id);
-				self::StopBoardDemon($board_id, 0, $board);
+				self::StopBoardDaemon($board_id, 0, $board);
 				sleep(2);
 			}
 		}
@@ -326,7 +326,7 @@ class jeedouino extends eqLogic {
 	}
 	/*************************** Méthodes d'instance **************************/
 
-	public function StartAllDemons($EqIDarr = '') {
+	public static function StartAllDaemons($EqIDarr = '') {
 		$EqLogics = [];
 		if (!is_array($EqIDarr)) {
 			$EqLogics = eqLogic::byType('jeedouino');
@@ -356,14 +356,14 @@ class jeedouino extends eqLogic {
 			if (($board == 'arduino' and !$usb) or ($board == 'esp')) continue;
 
 			jeedouino::log('debug', '-=-= ' . __('Démarrage de ', __FILE__) . $eqLogic->getName() . ' ID ' . $arduino_id . ' =-=-');
-			jeedouino::StartBoardDemon($arduino_id, 0, $board);
+			jeedouino::StartBoardDaemon($arduino_id, 0, $board);
 			sleep(2);
 		}
 		jeedouino::log('debug', '-=-= ' . __('Fin du démarrage du/des démon(s)', __FILE__) . ' ID(s) : ' . json_encode($EqIDarr) . ' =-=-');
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 
-	public function GetPinsByBoard($arduino_id)	// Renvoie la liste des pins suivant le type de carte
+	public static function GetPinsByBoard($arduino_id)	// Renvoie la liste des pins suivant le type de carte
 	{
 		global $ArduinoMODEpins, $Arduino328pins, $ArduinoMEGApins, $ArduinoESPanalogPins;
 		global $PifaceMODEpinsIN, $PifaceMODEpinsOUT, $Pifacepins;
@@ -455,7 +455,7 @@ class jeedouino extends eqLogic {
 		return array($Arduino_pins, $board, $usb);
 	}
 
-	public function GetPinMode($arduino_id) {
+	public static function GetPinMode($arduino_id) {
 		list($Arduino_pins, $board, $usb) = self::GetPinsByBoard($arduino_id);
 		$PinMode = '';
 		foreach ($Arduino_pins as $pins_id => $pin_datas) {
@@ -615,7 +615,7 @@ class jeedouino extends eqLogic {
 					case 'piplus':
 					case 'gpio':
 						if ($ForceStart or $ForceStart == '1') {
-							self::StartBoardDemon($arduino_id, 0, $ModeleArduino);   // on démarre le démon si nécéssaire.
+							self::StartBoardDaemon($arduino_id, 0, $ModeleArduino);   // on démarre le démon si nécéssaire.
 							sleep(2);
 						}
 				}
@@ -625,7 +625,7 @@ class jeedouino extends eqLogic {
 					case 'piGPIO40':
 						$BootMode = 'BootMode=' . config::byKey($arduino_id . '_piGPIO_boot', 'jeedouino', '0');
 						jeedouino::log('debug', __('Envoi de la configuration BootMode eqID ( ', __FILE__) . $arduino_id . ' ) ' . "BootMode : " . $BootMode);
-						$reponse = self::SendToBoardDemon($arduino_id, $BootMode, $ModeleArduino);
+						$reponse = self::SendToBoardDaemon($arduino_id, $BootMode, $ModeleArduino);
 						if ($reponse != 'BMOK') {
 							jeedouino::log('debug', ucfirst($ModeleArduino) . __(' - ERREUR ENVOI CONFIGURATION BootMode (eqID: ', __FILE__) . $arduino_id . ' ) - Réponse: ' . $reponse);
 							config::save($arduino_id . '_StatusDemon', false, 'jeedouino');
@@ -636,7 +636,7 @@ class jeedouino extends eqLogic {
 						$PinMode = 'ConfigurePins=' . $PinMode;
 						config::save($arduino_id . '_PinMode', $PinMode, 'jeedouino');
 						jeedouino::log('debug', __('Envoi de la nouvelle configuration des pins eqID ( ', __FILE__) . $arduino_id . ' ) ' . "PinMode : " . $PinMode);
-						$reponse = self::SendToBoardDemon($arduino_id, $PinMode, $ModeleArduino);
+						$reponse = self::SendToBoardDaemon($arduino_id, $PinMode, $ModeleArduino);
 						if ($reponse != 'COK') {
 							jeedouino::log('debug', ucfirst($ModeleArduino) . __(' - ERREUR ENVOI CONFIGURATION PinMode (eqID: ', __FILE__) . $arduino_id . ' ) - Réponse: ' . $reponse);
 							config::save($arduino_id . '_StatusDemon', false, 'jeedouino');
@@ -658,7 +658,7 @@ class jeedouino extends eqLogic {
 		}
 		//jeedouino::log( 'debug', __('Fin de ConfigurePinMode()', __FILE__));
 	}
-	public function SendToArduino($arduino_id, $message, $keyword, $waitfor) {
+	public static function SendToArduino($arduino_id, $message, $keyword, $waitfor) {
 		$my_arduino = eqLogic::byid($arduino_id);
 		$name = $my_arduino->getName();
 		$IPArduino = $my_arduino->getConfiguration('iparduino');
@@ -830,7 +830,7 @@ class jeedouino extends eqLogic {
 
 		if ($ModeleArduino == 'piface' or $ModeleArduino == 'piGPIO26' or $ModeleArduino == 'piGPIO40' or $ModeleArduino == 'piPlus') {
 			jeedouino::log('debug', __('Envoi vers ', __FILE__) . strtoupper($my_arduino->getName()) . ' ( ' . $ModeleArduino . ' - eqID: ' . $arduino_id . __(' ) de la commande : ', __FILE__) . $PinValue);
-			if ($PinValue != '')  $reponse = self::SendToBoardDemon($arduino_id, $PinValue, $ModeleArduino);
+			if ($PinValue != '')  $reponse = self::SendToBoardDaemon($arduino_id, $PinValue, $ModeleArduino);
 		} else // Arduinos
 		{
 			if ($pins_id == '990') 	$PinValue = 'S2L';	// Set To LOW all Output pins
@@ -866,7 +866,7 @@ class jeedouino extends eqLogic {
 		return true;
 	}
 
-	public function SendToBoard($arduino_id, $message) {
+	public static function SendToBoard($arduino_id, $message) {
 		$my_arduino = eqLogic::byid($arduino_id);
 		$PortArduino = $my_arduino->getConfiguration('datasource');
 		$IPArduino = $my_arduino->getConfiguration('iparduino');
@@ -915,7 +915,7 @@ class jeedouino extends eqLogic {
 			return $reponse;
 		} else			// envoi sur usb
 		{
-			return self::SendToBoardDemon($arduino_id, 'USB=' . $message, 'USB');
+			return self::SendToBoardDaemon($arduino_id, 'USB=' . $message, 'USB');
 		}
 		return 'NOK';
 	}
@@ -1095,7 +1095,7 @@ class jeedouino extends eqLogic {
 		$Control->refreshWidget();
 	}
 
-	public function updateControlCmd($eqLogic_id, $StatusDemon) {
+	public static function updateControlCmd($eqLogic_id, $StatusDemon) {
 		config::save($eqLogic_id . '_StatusDemon', $StatusDemon, 'jeedouino');
 		$Control = jeedouino::byLogicalId('JeedouinoControl', 'jeedouino');
 		if (is_object($Control)) {
@@ -1117,7 +1117,7 @@ class jeedouino extends eqLogic {
 			$StatusDemon = false;
 			if (($eqLogic->getConfiguration('datasource') == 'usbarduino' and substr($ModeleArduino, 0, 1) == 'a') or $ModeleArduino == 'piface' or $ModeleArduino == 'piGPIO26' or $ModeleArduino == 'piGPIO40' or $ModeleArduino == 'piPlus') {
 				config::save($eqLogic->getId() . '_HasDemon', 1, 'jeedouino');
-				$StatusDemon = jeedouino::StatusBoardDemon($eqLogic->getId(), 0, $ModeleArduino);
+				$StatusDemon = jeedouino::StatusBoardDaemon($eqLogic->getId(), 0, $ModeleArduino);
 			} else config::save($eqLogic->getId() . '_HasDemon', 0, 'jeedouino');
 
 			config::save($eqLogic->getId() . '_StatusDemon', $StatusDemon, 'jeedouino');
@@ -1288,7 +1288,7 @@ class jeedouino extends eqLogic {
 			foreach (eqLogic::byType('jeedouino') as $eqLogic) {
 				if ($eqLogic->getConfiguration('iparduino') == $jeedouino_ext['IP']) {
 					jeedouino::SendPRM($eqLogic); // on renvoie la config
-					jeedouino::ReStartBoardDemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
+					jeedouino::ReStartBoardDaemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
 				}
 			}
 		}
@@ -1375,7 +1375,7 @@ class jeedouino extends eqLogic {
 	//
 	//////
 
-	public static function FilterDemon($DemonType) {
+	public static function FilterDaemon($DemonType) {
 		$DemonType = trim(strtolower($DemonType));
 		switch ($DemonType) {
 			case 'usb':
@@ -1408,9 +1408,9 @@ class jeedouino extends eqLogic {
 		return null;
 	}
 
-	public static function SendToBoardDemon($board_id, $message, $DemonType)	// Envoi de message au Démon
+	public static function SendToBoardDaemon($board_id, $message, $DemonType)	// Envoi de message au Démon
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return;
 
 		$my_Board = eqLogic::byid($board_id);
@@ -1476,9 +1476,9 @@ class jeedouino extends eqLogic {
 		jeedouino::log('debug', 'Réponse du Démon ' . $DemonTypeF . ' :' . $reponse);
 		return $reponse;
 	}
-	public static function StartBoardDemon($board_id, $useless = 0, $DemonType)	// Démarre le Démon
+	public static function StartBoardDaemon($board_id, $useless = 0, $DemonType)	// Démarre le Démon
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return false;
 
 		$my_Board = eqLogic::byid($board_id);
@@ -1542,7 +1542,7 @@ class jeedouino extends eqLogic {
 				sleep(2);
 				$BootMode = 'BootMode=' . config::byKey($board_id . '_' . $DemonTypeF . '_boot', 'jeedouino', '0');
 				jeedouino::log('debug', __('Envoi de la dernière configuration connue du BootMode eqID ( ', __FILE__) . $board_id . ' ) ' . "BootMode : " . $BootMode);
-				$reponse = self::SendToBoardDemon($board_id, $BootMode, $DemonType);
+				$reponse = self::SendToBoardDaemon($board_id, $BootMode, $DemonType);
 				if ($reponse != 'BMOK') {
 					jeedouino::log('debug', __('Erreur d\'envoi de la configuration du BootMode sur l\'équipement ', __FILE__) . $board_id . ' ( ' . $name . ' ) - Réponse :' . $reponse);
 					config::save($board_id . '_StatusDemon', false, 'jeedouino');
@@ -1568,7 +1568,7 @@ class jeedouino extends eqLogic {
 				$_try++;
 
 				jeedouino::log('debug', __('Essai ', __FILE__) . $_try . __(' - Envoi de la dernière configuration connue des pins eqID ( ', __FILE__) . $board_id . ' ) ' . "PinMode : " . $PinMode);
-				$reponse = self::SendToBoardDemon($board_id, $PinMode, $DemonType);
+				$reponse = self::SendToBoardDaemon($board_id, $PinMode, $DemonType);
 				if (in_array($reponse, $waitforArr)) {
 					jeedouino::log('debug', __('Réponse différée reçue de l\'équipement ', __FILE__) . $board_id . ' ( ' . $name . ' ) - Réponse :' . $reponse);
 					config::save($board_id . '_StatusDemon', true, 'jeedouino');
@@ -1594,9 +1594,9 @@ class jeedouino extends eqLogic {
 		}
 		return true;
 	}
-	public function StartBoardDemonCMD($board_id = '', $DemonType, $ipPort, $jeedomIP, $JeedomPort, $JeedomCPL, $PiPlusBoardID, $PiFaceBoardID, $PortDemon, $_portUSB)	// Démarre le Démon
+	public static function StartBoardDemonCMD($board_id = '', $DemonType, $ipPort, $jeedomIP, $JeedomPort, $JeedomCPL, $PiPlusBoardID, $PiFaceBoardID, $PortDemon, $_portUSB)	// Démarre le Démon
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return false;
 
 		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../ressources');
@@ -1679,13 +1679,13 @@ class jeedouino extends eqLogic {
 		config::save($board_id . '_StatusDemon', true, 'jeedouino');
 		return true;
 	}
-	public static function StopBoardDemon($board_id, $useless = 0, $DemonType)	// Stoppe le Démon
+	public static function StopBoardDaemon($board_id, $useless = 0, $DemonType)	// Stoppe le Démon
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return;
 		// Arrét soft
 		jeedouino::log('debug',  __('Demande d\'arrêt au démon ', __FILE__) . $DemonTypeF .  __(' de l\'équipement : ', __FILE__) . eqLogic::byid($board_id)->getName() . ' ( eqID ' . $board_id . ' )');
-		$reponse = self::SendToBoardDemon($board_id, 'EXIT=1', $DemonType);
+		$reponse = self::SendToBoardDaemon($board_id, 'EXIT=1', $DemonType);
 		if ($reponse != 'EXITOK') jeedouino::log('error',  __('Le démon ', __FILE__) . $DemonTypeF . ' (eqID: ' . $board_id . __(') ne réponds pas correctement. - Réponse : ', __FILE__) . $reponse);
 		else {
 			usleep(1000000);  // 1s , petite pause pour laisser au script python le temps de stopper
@@ -1696,9 +1696,9 @@ class jeedouino extends eqLogic {
 		self::ForceStopBoardDemon($board_id, 0, $DemonType);
 		config::save($board_id . '_StatusDemon', false, 'jeedouino');
 	}
-	public function ForceStopBoardDemon($board_id, $useless = 0, $DemonType)	// Stoppe le(s) processus du Démon local ou déporté
+	public static function ForceStopBoardDemon($board_id, $useless = 0, $DemonType)	// Stoppe le(s) processus du Démon local ou déporté
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return;
 
 		$my_Board = eqLogic::byid($board_id);
@@ -1714,9 +1714,9 @@ class jeedouino extends eqLogic {
 			));
 		}
 	}
-	public function StopBoardDemonCMD($board_id = '', $DemonType)	// Stoppe le(s) processus du Démon local
+	public static function StopBoardDemonCMD($board_id = '', $DemonType)	// Stoppe le(s) processus du Démon local
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return;
 
 		$DemonFileName = 'jeedouino' . $DemonTypeF . '_' . $board_id . '.py';
@@ -1734,9 +1734,9 @@ class jeedouino extends eqLogic {
 			jeedouino::log('debug', __('StopBoardDemonCMD - Arrêt forcé du démon ', __FILE__) . $DemonTypeF . ' sur  ' . self::GetJeedomIP() . ' - ' . $DemonFileName . ' : Kill process : ' . json_encode($processus));
 		}
 	}
-	public static function StatusBoardDemon($_board_id = 0, $forceCache = 0, $DemonType)	 // Démon en marche ???
+	public static function StatusBoardDaemon($_board_id = 0, $forceCache = 0, $DemonType)	 // Démon en marche ???
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return false;
 		if ($_board_id == 0) return false;
 		$my_Board = eqLogic::byid($_board_id);
@@ -1752,14 +1752,14 @@ class jeedouino extends eqLogic {
 		config::save($_board_id . '_' . $DemonTypeF . 'LastPING', $Time, 'jeedouino');
 
 		jeedouino::log('debug', 'PING ' . $id_type . __(' en marche ??? Envoi d\'un PING...', __FILE__));
-		$reponse = self::SendToBoardDemon($_board_id, 'PING=1', $DemonType); // On le PINGue
+		$reponse = self::SendToBoardDaemon($_board_id, 'PING=1', $DemonType); // On le PINGue
 
 		config::save($_board_id . '_StatusDemon', false, 'jeedouino');
 		if (strpos($reponse, '111') !== false) return false; // Connection refused
 		if ($reponse != 'PINGOK') {
 			sleep(1);
 			jeedouino::log('debug', 'RePING ' . $id_type . __(' Encore un essai...', __FILE__));
-			$reponse = self::SendToBoardDemon($_board_id, 'PING=2', $DemonType); // On rePINGue
+			$reponse = self::SendToBoardDaemon($_board_id, 'PING=2', $DemonType); // On rePINGue
 			if ($reponse == 'PINGOK') {
 				config::save('NODEP_' . $_board_id, '', 'jeedouino');
 				config::save($_board_id . '_' . $DemonTypeF . 'CountBadPING', 0, 'jeedouino');	// RAZ
@@ -1802,29 +1802,29 @@ class jeedouino extends eqLogic {
 	}
 	public function StatusBoardDemonCMD($board_id = '', $DemonType)	// Processus du Démon en marche ??? (si ping ne réponds pas)
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return;
 
 		$DemonFileName = 'jeedouino' . $DemonTypeF . '_' . $board_id . '.py';
 		exec("pgrep --full " . $DemonFileName, $processus);
 		return isset($processus[0]);
 	}
-	public static function ReStartBoardDemon($board_id, $useless = 0, $DemonType)	// Redémarre le Démon
+	public static function ReStartBoardDaemon($board_id, $useless = 0, $DemonType)	// Redémarre le Démon
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return;
 
 		config::save('StartDemons', 1, 'jeedouino');
-		if (self::StatusBoardDemon($board_id, 1, $DemonType)) {
-			self::StopBoardDemon($board_id, 0, $DemonType);
+		if (self::StatusBoardDaemon($board_id, 1, $DemonType)) {
+			self::StopBoardDaemon($board_id, 0, $DemonType);
 		}
 		usleep(1500000); // 1.5 secondes
-		self::StartBoardDemon($board_id, 0, $DemonType);
+		self::StartBoardDaemon($board_id, 0, $DemonType);
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 	public static function EraseBoardDemonFile($board_id, $useless = 0, $DemonType)	// Cherche le Démon pour effacer son fichier jeedouinoUSB_*.py
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null) return;
 
 		$my_Board = eqLogic::byid($board_id);
@@ -1840,9 +1840,9 @@ class jeedouino extends eqLogic {
 			));
 		}
 	}
-	public function EraseBoardDemonFileCMD($board_id = '', $DemonType)	// Efface le fichier python généré pour le Démon
+	public static function EraseBoardDemonFileCMD($board_id = '', $DemonType)	// Efface le fichier python généré pour le Démon
 	{
-		$DemonTypeF = self::FilterDemon($DemonType);
+		$DemonTypeF = self::FilterDaemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return;
 
 		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../ressources');
@@ -2096,7 +2096,7 @@ class jeedouino extends eqLogic {
 		return $user_pins;
 	}
 
-	public function SendPRM($eqLogic) {
+	public static function SendPRM($eqLogic) {
 		$arduino_id = $eqLogic->getId();
 		list(, $board, $usb) = jeedouino::GetPinsByBoard($arduino_id);
 		// cas spécial de l'arduino en usb déporté car faut lui trouver l'ip de son rpi hôte
@@ -2202,13 +2202,13 @@ class jeedouino extends eqLogic {
 				switch ($board) {
 					case 'arduino':
 						if ($usb) {
-							self::StopBoardDemon($arduino_id, 0, $board);
+							self::StopBoardDaemon($arduino_id, 0, $board);
 						}
 						break;
 					case 'piface':
 					case 'piplus':
 					case 'gpio':
-						self::StopBoardDemon($arduino_id, 0, $board);
+						self::StopBoardDaemon($arduino_id, 0, $board);
 						break;
 				}
 				config::save($arduino_id . '_AlreadyKilled', true, 'jeedouino');
@@ -3282,7 +3282,7 @@ class jeedouino extends eqLogic {
 			case 'piplus':
 				jeedouino::log('debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('min vers la nouvelle : ', __FILE__) . $ProbeDelay . 'min(s) ');
 				$message  = 'ProbeDelay=' . $ProbeDelay;
-				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				$reponse = jeedouino::SendToBoardDaemon($arduino_id, $message, $board);
 				if ($reponse != 'SOK') jeedouino::log('error', __('ERREUR ENVOI de MàJ du délai de relève des sondes - Réponse : ', __FILE__) . $reponse);
 				break;
 		}
@@ -3302,7 +3302,7 @@ class jeedouino extends eqLogic {
 			case 'piplus':
 				jeedouino::log('debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('s vers la nouvelle : ', __FILE__) . $CptDelay . 's ');
 				$message  = 'CptDelay=' . $CptDelay;
-				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				$reponse = jeedouino::SendToBoardDaemon($arduino_id, $message, $board);
 				if ($reponse != 'SCOK') jeedouino::log('error', __('ERREUR ENVOI de MàJ du délai de RéArm Event - Réponse : ', __FILE__) . $reponse);
 				break;
 		}
@@ -3325,7 +3325,7 @@ class jeedouino extends eqLogic {
 			case 'piplus':
 				jeedouino::log('debug', __('MàJ de l\'ancienne valeur : ', __FILE__) . $oldValue . __('ms vers la nouvelle : ', __FILE__) . $bounceDelay . 'ms ');
 				$message  = 'bounceDelay=' . $bounceDelay;
-				$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+				$reponse = jeedouino::SendToBoardDaemon($arduino_id, $message, $board);
 				if ($reponse != 'SCOK') jeedouino::log('error', __('ERREUR ENVOI de MàJ du délai ', __FILE__) .  $mm . __(' - Réponse : ', __FILE__) . $reponse);
 				break;
 		}
@@ -3361,7 +3361,7 @@ class jeedouino extends eqLogic {
 				case 'piplus':
 					$message  = 'RazCPT=' . $pins_id;
 					$message .= '&ValCPT=' . $RSTvalue;
-					$reponse = jeedouino::SendToBoardDemon($arduino_id, $message, $board);
+					$reponse = jeedouino::SendToBoardDaemon($arduino_id, $message, $board);
 					if ($reponse != 'SCOK') jeedouino::log('error', __('ERREUR ENVOI ResetCompteur - Réponse : ', __FILE__) . $reponse);
 					break;
 			}
@@ -3403,7 +3403,7 @@ class jeedouino extends eqLogic {
 		return $cmpl;
 	}
 
-	public function GetJeedomPort() // on récupère  le port de l'adresse du maître si dispo
+	public static function GetJeedomPort() // on récupère  le port de l'adresse du maître si dispo
 	{
 		if (config::byKey('ActiveJLAN', 'jeedouino', false)) {
 			$port = trim(config::byKey('PORTJLAN', 'jeedouino', ''));
@@ -3694,7 +3694,7 @@ class jeedouino extends eqLogic {
 			case 'arduino':
 				$USBLAN = 'LAN';
 				if ($usb) {
-					self::StopBoardDemon($arduino_id, 0, $board);
+					self::StopBoardDaemon($arduino_id, 0, $board);
 					self::EraseBoardDemonFile($arduino_id, 0, $board);
 					$USBLAN = 'USB';
 				}
@@ -3720,7 +3720,7 @@ class jeedouino extends eqLogic {
 			case 'piface':
 			case 'piplus':
 			case 'gpio':
-				self::StopBoardDemon($arduino_id, 0, $board);
+				self::StopBoardDaemon($arduino_id, 0, $board);
 				self::EraseBoardDemonFile($arduino_id, 0, $board);
 				break;
 		}
@@ -3785,13 +3785,13 @@ class jeedouinoCmd extends cmd {
 			return;
 		} elseif (strpos($this->getLogicalId(), 'StartDaemon') !== false) {
 			//jeedouino::log( 'debug', 'CMD StartDaemon $this->getConfiguration(demontype) = ' . $this->getConfiguration('demontype'));
-			jeedouino::StartBoardDemon($this->getConfiguration('boardid'), 0, $this->getConfiguration('demontype'));
+			jeedouino::StartBoardDaemon($this->getConfiguration('boardid'), 0, $this->getConfiguration('demontype'));
 			//sleep(3);
 			jeedouino::updateDemons();
 			return;
 		} elseif (strpos($this->getLogicalId(), 'StopDaemon') !== false) {
 			//jeedouino::log( 'debug', 'CMD StartDaemon $this->getConfiguration(demontype) = ' . $this->getConfiguration('demontype'));
-			jeedouino::StopBoardDemon($this->getConfiguration('boardid'), 0, $this->getConfiguration('demontype'));
+			jeedouino::StopBoardDaemon($this->getConfiguration('boardid'), 0, $this->getConfiguration('demontype'));
 			//sleep(3);
 			jeedouino::updateDemons();
 			return;

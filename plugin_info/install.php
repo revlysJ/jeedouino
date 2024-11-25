@@ -19,49 +19,42 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function jeedouino_install() {
-    message::add('jeedouino', __('Suite à l\'installation de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
-    message::add('jeedouino', __('Pensez à installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
+	message::add('jeedouino', __('Suite à l\'installation de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
+	message::add('jeedouino', __('Pensez à installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
 }
 
-function jeedouino_update()
-{
-    // update JeedouinoExt
-    $ListExtIP = jeedouino::CleanIPJeedouinoExt();
-    $IPsToNames = [];
-    $eqLogics = eqLogic::byType('jeedouino');
-    foreach ($eqLogics as $eqLogic)
-    {
-        $ip = trim($eqLogic->getConfiguration('iparduino'));
-        $IPsToNames[$ip] = $eqLogic->getName();
-        if ($eqLogic->getConfiguration('alone') == '1')
-        {
-            if ($ip != '' and filter_var($ip , FILTER_VALIDATE_IP))
-            {
-                $eqLogic->setConfiguration('iparduino2', $ip);
-                $eqLogic->save(true);
-            }
-        }
-    }
-    foreach ($ListExtIP as $ip)
-    {
-        $id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
-        $JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', ''));
-		if ($id == '' and $JExtname == '')
-        {
-            $id = jeedouino::AddIDJeedouinoExt($ip);
-            if (isset($IPsToNames[$ip])) config::save('JExtname-' . $ip, $IPsToNames[$ip], 'jeedouino');
-            else config::save('JExtname-' . $ip, 'JeedouinoExt', 'jeedouino');
-        }
-    }
-    //
+function jeedouino_update() {
+	// update JeedouinoExt
+	$ListExtIP = jeedouino::CleanIPJeedouinoExt();
+	$IPsToNames = [];
+	$eqLogics = eqLogic::byType('jeedouino');
+	foreach ($eqLogics as $eqLogic) {
+		$ip = trim($eqLogic->getConfiguration('iparduino'));
+		$IPsToNames[$ip] = $eqLogic->getName();
+		if ($eqLogic->getConfiguration('alone') == '1') {
+			if ($ip != '' and filter_var($ip, FILTER_VALIDATE_IP)) {
+				$eqLogic->setConfiguration('iparduino2', $ip);
+				$eqLogic->save(true);
+			}
+		}
+	}
+	foreach ($ListExtIP as $ip) {
+		$id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
+		$JExtname = trim(config::byKey('JExtname-' . $ip, 'jeedouino', ''));
+		if ($id == '' and $JExtname == '') {
+			$id = jeedouino::AddIDJeedouinoExt($ip);
+			if (isset($IPsToNames[$ip])) config::save('JExtname-' . $ip, $IPsToNames[$ip], 'jeedouino');
+			else config::save('JExtname-' . $ip, 'JeedouinoExt', 'jeedouino');
+		}
+	}
+	//
 	// correction droits fichier DS18B20Scan
 	//exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
 	//
 	//$eqLogics = eqLogic::byType('jeedouino');
 	$IPJeedom = jeedouino::GetJeedomIP();
-	jeedouino::log( 'debug', __('-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-', __FILE__));
-	foreach ($eqLogics as $eqLogic)
-	{
+	jeedouino::log('debug', __('-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-', __FILE__));
+	foreach ($eqLogics as $eqLogic) {
 		$arduino_id = $eqLogic->getId();
 
 		// On verifie si l'equipement est local
@@ -70,31 +63,27 @@ function jeedouino_update()
 
 		// On verifie si l'equipement a un tag "Original_ID"
 		$Original_ID = $eqLogic->getConfiguration('Original_ID');
-		if ($Original_ID == '')
-		{
-			$eqLogic->setConfiguration('Original_ID' , $arduino_id);
+		if ($Original_ID == '') {
+			$eqLogic->setConfiguration('Original_ID', $arduino_id);
 			$eqLogic->save(true);
 		}
 		if ($eqLogic->getIsEnable() == 0) continue;
 
-		list(,$board,$usb) = jeedouino::GetPinsByBoard($arduino_id);
-		jeedouino::log( 'debug','-=-= '.$board.'  ( '.$arduino_id.' ) =-=-');
-		switch ($board)
-		{
+		list(, $board, $usb) = jeedouino::GetPinsByBoard($arduino_id);
+		jeedouino::log('debug', '-=-= ' . $board . '  ( ' . $arduino_id . ' ) =-=-');
+		switch ($board) {
 			case 'arduino':
-				if ($usb)
-				{
+				if ($usb) {
 					jeedouino::GenerateUSBArduinoSketchFile($arduino_id);
-					jeedouino::StartBoardDemon($arduino_id, 0, $board);
-				}
-				else jeedouino::GenerateLanArduinoSketchFile($arduino_id);
+					jeedouino::StartBoardDaemon($arduino_id, 0, $board);
+				} else jeedouino::GenerateLanArduinoSketchFile($arduino_id);
 				break;
 			case 'gpio':
-				$oldKey = config::byKey($arduino_id.'_piGPIO_boot', 'jeedouino', 'none');
-				if (($oldKey != 'none') and (config::byKey($arduino_id.'_PiGpio_boot', 'jeedouino', 'none') == 'none')) config::save($arduino_id.'_PiGpio_boot', $oldKey, 'jeedouino');
+				$oldKey = config::byKey($arduino_id . '_piGPIO_boot', 'jeedouino', 'none');
+				if (($oldKey != 'none') and (config::byKey($arduino_id . '_PiGpio_boot', 'jeedouino', 'none') == 'none')) config::save($arduino_id . '_PiGpio_boot', $oldKey, 'jeedouino');
 			case 'piplus':
 			case 'piface':
-				jeedouino::StartBoardDemon($arduino_id, 0, $board);
+				jeedouino::StartBoardDaemon($arduino_id, 0, $board);
 				break;
 			case 'esp':
 				if (!$usb) jeedouino::GenerateESP8266SketchFile($arduino_id);
@@ -102,14 +91,12 @@ function jeedouino_update()
 		}
 		sleep(2);
 	}
-  jeedouino::log( 'debug', __('-=-= Fin du démarrage des démons et de la re-génération des sketchs =-=-', __FILE__));
-  message::add('jeedouino', __('Suite mise à jour de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
-  message::add('jeedouino', __('Pensez à ré-installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
+	jeedouino::log('debug', __('-=-= Fin du démarrage des démons et de la re-génération des sketchs =-=-', __FILE__));
+	message::add('jeedouino', __('Suite mise à jour de ce plugin, veuillez en consulter la documentation et les changelogs avant toute utilisation. Merci.', __FILE__));
+	message::add('jeedouino', __('Pensez à ré-installer les dépendances générales du plugin, ainsi que les dépendances spécifiques dont vous avez besoin. Merci', __FILE__));
 }
 
-function jeedouino_remove()
-{
-  jeedouino::log( 'info', __('-=-= Suppression du plugin. =-=-', __FILE__));
-  jeedouino::log( 'info', __('Bye.', __FILE__));
+function jeedouino_remove() {
+	jeedouino::log('info', __('-=-= Suppression du plugin. =-=-', __FILE__));
+	jeedouino::log('info', __('Bye.', __FILE__));
 }
-?>

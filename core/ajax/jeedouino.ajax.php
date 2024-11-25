@@ -136,15 +136,15 @@ try {
 
   // Actions pour la gestion des démons  / Jeedouino
   if (init('action') == 'StartBoardDemon') {
-    jeedouino::StartBoardDemon(init('boardid'), init('id'), init('DemonType'));
+    jeedouino::StartBoardDaemon(init('boardid'), init('id'), init('DemonType'));
     ajax::success();
   }
   if (init('action') == 'ReStartBoardDemon') {
-    jeedouino::ReStartBoardDemon(init('boardid'), init('id'), init('DemonType'));
+    jeedouino::ReStartBoardDaemon(init('boardid'), init('id'), init('DemonType'));
     ajax::success();
   }
   if (init('action') == 'StopBoardDemon') {
-    jeedouino::StopBoardDemon(init('boardid'), init('id'), init('DemonType'));
+    jeedouino::StopBoardDaemon(init('boardid'), init('id'), init('DemonType'));
     ajax::success();
   }
 

@@ -32,7 +32,7 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 		//$('.esp8266').hide();
 		if ($(this).value()=='usbarduino')
 		{
-			$('.sketchUSB' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+			$('.sketchUSB' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).show();
 			//$('.sketchUSB').show();
 			$('.ActiveExt').show();
 		}
@@ -43,12 +43,12 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value().substr(0, 1)=='e')
 			{
 				$('.ActiveExt').hide();
-				$('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+				$('.sketchESP' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).show();
 			}
 			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value().substr(0, 1)=='a')
 			{
 				$('.ActiveExt').hide();
-				$('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+				$('.sketchLAN' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).show();
 			}
 		}
 	 }
@@ -93,9 +93,9 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 		$('.esp8266').hide();
 		$('.sketchstab').hide();
 		$('.ActiveExt').hide();
-        $('.Alone').hide();
-        $('.NotAlone').hide();
-        $('.UsbLan').hide();
+    $('.Alone').hide();
+    $('.NotAlone').hide();
+    $('.UsbLan').hide();
 	}
 	else if ($(this).value().substr(0, 1)=='p')
 	{
@@ -136,8 +136,8 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
     $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').attr('disabled','disabled');
     $('.sketchs').hide();
     $('.sketchUSB').hide();
-    $('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).hide();
-    $('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+    $('.sketchLAN' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).hide();
+    $('.sketchESP' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).show();
     $('.sketchsLib').show();
     $('.esp8266').show();
     $('.sketchstab').show();
@@ -166,19 +166,19 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
         $('.UsbLan').show();
 		$('.sketchs').hide();
 		$('.sketchUSB').hide();
-		if ($('.eqLogic_active').attr('data-eqLogic_id') != undefined)
+		if ($('.eqLogic_active').attr('V4_data-eqLogic_id') != undefined)
 		{
 			$('.sketchsLib').show();
 
-			$('.sketchESP' + $('.eqLogic_active').attr('data-eqLogic_id')).hide();
+			$('.sketchESP' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).hide();
 			 if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value() != 'usbarduino')
 			 {
-				$('.sketchLAN' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+				$('.sketchLAN' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).show();
 				$('.ActiveExt').hide();
 			 }
 			 else
 			 {
-				 $('.sketchUSB' + $('.eqLogic_active').attr('data-eqLogic_id')).show();
+				 $('.sketchUSB' + $('.eqLogic_active').attr('V4_data-eqLogic_id')).show();
 				//$('.sketchUSB').show();
 				$('.ActiveExt').show();
 			 }
@@ -252,15 +252,15 @@ $(".li_eqLogic2").on('click', function () {
     $('.eqLogicDisplayCard[data-eqLogic_id="' + $(this).attr('data-eqLogic_id') + '"]').click();
 });
 
-/*function prePrintEqLogic(id)
+function prePrintEqLogic(id)
 {
-    $('.eqLogic_active').attr('data-eqLogic_id', id);
-    if($('.li_eqLogic2[data-eqLogic_id=' + id + ']').html() != undefined)
-    {
-        $('.li_eqLogic2').removeClass('active');
-        $('.li_eqLogic2[data-eqLogic_id=' + id + ']').addClass('active');
-    }
-}*/
+  $('.eqLogic_active').attr('V4_data-eqLogic_id', id);
+  if($('.li_eqLogic2[data-eqLogic_id=' + id + ']').html() != undefined)
+  {
+      $('.li_eqLogic2').removeClass('active');
+      $('.li_eqLogic2[data-eqLogic_id=' + id + ']').addClass('active');
+  }
+}
 function printEqLogic(_data)
 {
     var control = init(_data.logicalId);
@@ -480,7 +480,7 @@ $('body').undelegate('.cmd .cmdAction[data-action=ResetCPT]', 'click').delegate(
 		url: "plugins/jeedouino/core/ajax/jeedouino.ajax.php", // url du fichier php
 		data: {
 			action: "ResetCPT",
-			boardid : $('.eqLogic_active').attr('data-eqLogic_id'),
+			boardid : $('.eqLogic_active').attr('V4_data-eqLogic_id'),
 			RSTvalue : $(this).closest('.cmd').find('.cmdAttr[data-l1key=configuration][data-l2key=RSTvalue]').value(),
 			CMDid : $(this).closest('.cmd').attr('data-cmd_id')
 		},

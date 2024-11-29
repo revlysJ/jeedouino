@@ -149,6 +149,7 @@ else $ShowSideBar = "col-xs-12";
             }
         ?>
 	</div>
+  <div class="eqLogic eqLogic-widget" style="display: none;"></div>
     <!-- Affichage de l'eqLogic sélectionné -->
     <div class="<?php echo $ShowSideBar;?> eqLogic eqLogic_active" data-eqLogic_id = "" style="display: none;">
 		<div style="padding-bottom:10px;">

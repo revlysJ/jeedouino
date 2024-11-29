@@ -54,7 +54,7 @@ foreach ($eqLogics as $eqLogic)
     $HTML .= "</center>";
     $HTML .= '<span class="name" style="color:#00979C"><br><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
     $HTML .= '</div>';
-    if ($eqLogic->getConfiguration('alone') == '1') $eqLogicsEXT .= $HTML;
+    if (($eqLogic->getConfiguration('alone') == '1') and (config::byKey('ActiveExt', 'jeedouino', false))) $eqLogicsEXT .= $HTML;
     else $eqLogicsHTML .= $HTML;
 }
 if (config::byKey('ShowSideBar', 'jeedouino', false)) $ShowSideBar = "col-lg-10 col-md-9 col-sm-8";

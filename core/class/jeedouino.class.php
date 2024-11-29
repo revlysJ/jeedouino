@@ -2108,8 +2108,13 @@ class jeedouino extends eqLogic {
 	/* fonction appelé avant le début de la séquence de sauvegarde */
 	public function preSave()
 	{
-		if ($this->getLogicalId() == 'JeedouinoControl') return;
+		if ($this->getLogicalId() == 'JeedouinoControl')
+		{
+			$this->setConfiguration('alone', 0);
+			return;
+		}
 		//jeedouino::log( "debug",' >>>preSave');
+		if (!config::byKey('ActiveExt', 'jeedouino', false)) $this->setConfiguration('alone', 0);
 
 		if ($this->getIsEnable() == 0)
 		{
@@ -2129,14 +2134,14 @@ class jeedouino extends eqLogic {
 		}
 
 		// On va essayer de détecter un changement dans les paramêtres de la carte (réseau/port/etc)
-		$arduino_id=$this->getId();
+		$arduino_id = $this->getId();
 		$BoardEQ = eqLogic::byid($arduino_id);
 
 		config::save($arduino_id . '-ForceStart', '0', 'jeedouino');
 		config::save($arduino_id . '-ForceSuppr', '0', 'jeedouino');
 
 		// liste des paramêtres a surveiller
-		$config_list=array('ipPort', 'iparduino', 'arduino_board', 'PortI2C', 'datasource', 'PortID', 'arduinoport', 'portusbdeporte', 'PortDemon', 'portusblocal', 'alone');
+		$config_list = array('ipPort', 'iparduino', 'arduino_board', 'PortI2C', 'datasource', 'PortID', 'arduinoport', 'portusbdeporte', 'PortDemon', 'portusblocal', 'alone');
 
 		if ($BoardEQ !== false and $BoardEQ !== null)	// Si création équipement, il n'y a pas de eqLogic pour comparer
 		{

@@ -38,8 +38,8 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').on('change',f
 		}
 		else
 		{
-            $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
-            RPIlocal();
+      $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+      RPIlocal();
 			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').value().substr(0, 1)=='e')
 			{
 				$('.ActiveExt').hide();
@@ -72,16 +72,17 @@ RPIalone = function()
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').on('change',function(){
 	if ($(this).value() == 0)
 	{
-        RPIlocal();
-    }
-    else
-    {
-        RPIalone();
-    }
+      RPIlocal();
+  }
+  else
+  {
+      RPIalone();
+  }
 });
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change',function(){
-	if ($(this).value()=='')
+	if ($(this).value() == '')
 	{
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop("checked", false );
 		$('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').removeAttr('disabled');
 		$('.config_pin').hide();
 		$('.datasource').hide();
@@ -97,18 +98,18 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
     $('.NotAlone').hide();
     $('.UsbLan').hide();
 	}
-	else if ($(this).value().substr(0, 1)=='p')
+	else if ($(this).value().substr(0, 1) == 'p')
 	{
-        if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
-        {
-            RPIlocal();
-        }
-        else
-        {
-            RPIalone();
-        }
-        $('.control').show();
-        $('.UsbLan').show();
+    if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
+    {
+        RPIlocal();
+    }
+    else
+    {
+        RPIalone();
+    }
+    $('.control').show();
+    $('.UsbLan').show();
 		$('.config_pin').show();
 		if ($(this).value()=='piface') $('.piFacePortID').show();
 		else $('.piFacePortID').hide();
@@ -123,10 +124,10 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 		$('.sketchstab').hide();
 		$('.ActiveExt').show();
 	}
-	else if ($(this).value().substr(0, 1)=='e')
+	else if ($(this).value().substr(0, 1) == 'e')
 	{
     RPIlocal();
-    $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop("checked", false );
     $('.control').show();
     $('.UsbLan').show();
     $('.config_pin').show();
@@ -143,27 +144,27 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
     $('.sketchstab').show();
     $('.ActiveExt').hide();
 	}
-	else if ($(this).value().substr(0, 1)=='a')
+	else if ($(this).value().substr(0, 1) == 'a')
 	{
-        if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value() == 'usbarduino')
+    if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').value() == 'usbarduino')
+    {
+        if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
         {
-            if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
-            {
-                RPIlocal();
-            }
-            else
-            {
-                RPIalone();
-            }
+            RPIlocal();
         }
         else
         {
-            $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
-            RPIlocal();
+            RPIalone();
         }
+    }
+    else
+    {
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+        RPIlocal();
+    }
 
-        $('.control').show();
-        $('.UsbLan').show();
+    $('.control').show();
+    $('.UsbLan').show();
 		$('.sketchs').hide();
 		$('.sketchUSB').hide();
 		if ($('.eqLogic_active').attr('V4_data-eqLogic_id') != undefined)
@@ -193,8 +194,9 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	}
 	else
 	{
-        $('.control').show();
-        $('.UsbLan').show();
+    $('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').prop( "checked", false );
+    $('.control').show();
+    $('.UsbLan').show();
 		$('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').removeAttr('disabled');
 		$('.config_pin').show();
 		$('.piFacePortID').hide();

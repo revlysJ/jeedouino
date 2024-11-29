@@ -1,6 +1,7 @@
 ##
 # Jeedouino Install dependancies
 # v0.4 alpha
+# Mips2648 - try fix dependencies for deb12 (use venv)
 ##
 
 PROGRESS_FILE=/tmp/dependances_jeedouino_en_cours
@@ -14,6 +15,8 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Jeedouino - Debut de l'installation des dependances ..."
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 cd /tmp
+BASE_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+VENV_DIR=${BASE_DIR}/venv
 # mises a jours
 #echo "-"
 #echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -36,24 +39,25 @@ sudo apt -y autoremove
 echo 20 > ${PROGRESS_FILE}
 echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance  python-pip"
+echo "Installation dependance python3-pip & python3-venv"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo apt-get -y install python3-pip python3-setuptools
-sudo pip3 install --upgrade setuptools pip
-sudo pip3 install wheel
+sudo apt-get -y install python3 python3-pip python3-dev python3-venv python3-setuptools
+sudo python3 -m venv --upgrade-deps ${VENV_DIR}
+sudo ${VENV_DIR}/bin/python3 -m pip install --upgrade setuptools pip wheel
+
 
 echo 30 > ${PROGRESS_FILE}
 echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance  python-serial"
+echo "Installation dependance  python3-serial"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-sudo apt-get -y install python-serial
-sudo pip3 install pyserial
+sudo apt-get -y install python3-serial
+sudo ${VENV_DIR}/bin/python3 -m pip install pyserial
 
 echo 40 > ${PROGRESS_FILE}
 echo "-"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Installation dependance python-dev-openssl"
+echo "Installation dependance python3-dev-openssl"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install build-essential python3-dev python3-openssl
 
@@ -77,14 +81,14 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/Adafruit_Python_DHT
 	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
-	sudo pip3 install /tmp/Adafruit_Python_DHT
+	sudo ${VENV_DIR}/bin/python3 -m pip install /tmp/Adafruit_Python_DHT
 
 	echo 65 > ${PROGRESS_FILE}
 	echo "-"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	echo "Installation dependance RPi.GPIO"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-	sudo pip3 install RPi.GPIO
+	sudo ${VENV_DIR}/bin/python3 -m pip install RPi.GPIO
 
 	echo 70 > ${PROGRESS_FILE}
 	echo "-"
@@ -93,7 +97,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/ABElectronics_Python_Libraries
 	git clone https://github.com/abelectronicsuk/ABElectronics_Python_Libraries.git
-	sudo pip3 install /tmp/ABElectronics_Python_Libraries
+	sudo ${VENV_DIR}/bin/python3 -m pip install /tmp/ABElectronics_Python_Libraries
 
 	echo 75 > ${PROGRESS_FILE}
 	echo "-"
@@ -102,29 +106,29 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/Adafruit_Python_BMP
 	git clone https://github.com/adafruit/Adafruit_Python_BMP.git
-	sudo pip3 install /tmp/Adafruit_Python_BMP
+	sudo ${VENV_DIR}/bin/python3 -m pip install /tmp/Adafruit_Python_BMP
 
 	echo 80 > ${PROGRESS_FILE}
 	echo "-"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	echo "Installation dependance Adafruit_circuitpython"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-	sudo pip3 install adafruit-circuitpython-lis3dh
+	sudo ${VENV_DIR}/bin/python3 -m pip install adafruit-circuitpython-lis3dh
 
 	echo 85 > ${PROGRESS_FILE}
 	echo "-"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	echo "Installation dependance Adafruit_Python_BME280"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-	sudo pip3 install adafruit-circuitpython-bme280
-	sudo pip3 install adafruit-circuitpython-bmp280
+	sudo ${VENV_DIR}/bin/python3 -m pip install adafruit-circuitpython-bme280
+	sudo ${VENV_DIR}/bin/python3 -m pip install adafruit-circuitpython-bmp280
 
 	echo 90 > ${PROGRESS_FILE}
 	echo "-"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	echo "Installation dependance Adafruit_Python_BME680"
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-	sudo pip3 install adafruit-circuitpython-bme680
+	sudo ${VENV_DIR}/bin/python3 -m pip install adafruit-circuitpython-bme680
 
 	echo 95 > ${PROGRESS_FILE}
 	echo "-"
@@ -133,7 +137,7 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/BitBangingDS18B20
 	git clone https://github.com/danjperron/BitBangingDS18B20.git
-	sudo pip3 install /tmp/BitBangingDS18B20/python
+	sudo ${VENV_DIR}/bin/python3 -m pip install /tmp/BitBangingDS18B20/python
 fi
 
 echo 100 > ${PROGRESS_FILE}

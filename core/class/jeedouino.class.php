@@ -23,6 +23,7 @@ include_file('core', 'jeedouino', 'config', 'jeedouino');
 class jeedouino extends eqLogic {
 	/******************************* Attributs *******************************/
 	/* Ajouter ici toutes vos variables propre à votre classe */
+	const PYTHON_PATH = __DIR__ . '/../../resources/venv/bin/python3'; // cf. @Mips2648
 
 	/***************************** Methode static ****************************/
 	public static function Networkmode()
@@ -218,9 +219,14 @@ class jeedouino extends eqLogic {
 		$return['log'] = 'jeedouino_update';
 		$return['progress_file'] = '/tmp/dependances_jeedouino_en_cours';
 		$return['state'] = 'ok';
-		if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) $return['state'] = 'nok';
-		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "setuptools" | wc -l') == 0) $return['state'] = 'nok';
-		if (exec(system::getCmdSudo() . 'pip3 list | grep -E "pyserial" | wc -l') == 0) $return['state'] = 'nok';
+		//if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) $return['state'] = 'nok';
+		//if (exec(system::getCmdSudo() . 'pip3 list | grep -E "setuptools" | wc -l') == 0) $return['state'] = 'nok';
+		//if (exec(system::getCmdSudo() . 'pip3 list | grep -E "pyserial" | wc -l') == 0) $return['state'] = 'nok';
+		// cf. @Mips2648
+		if (file_exists('/tmp/dependances_jeedouino_en_cours')) $return['state'] = 'in_progress';
+		elseif (!file_exists(self::PYTHON_PATH)) $return['state'] = 'nok';
+ 		elseif (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-setuptools" | wc -l') == 0) $return['state'] = 'nok';
+		elseif (exec(system::getCmdSudo() . ' ' . self::PYTHON_PATH . ' -m pip list | grep -E "pyserial" | wc -l') == 0) $return['state'] = 'nok';
 		if ($return['state'] == 'nok') message::add('jeedouino', __('Si les dépendances sont/restent NOK, veuillez mettre à jour votre système linux, puis relancer l\'installation des dépendances générales. Merci', __FILE__));
 		return $return;
 	}
@@ -229,7 +235,8 @@ class jeedouino extends eqLogic {
 		log::remove(__CLASS__ . '_update');
 		jeedouino::log('info', __('L\'installation des dépendances générales va débuter.', __FILE__));
 		jeedouino::log('info', __('Veuillez utiliser les boutons de la page Configuration du plugin pour les dépendances spécifiques. Merci', __FILE__));
-		return array('script' => dirname(__FILE__) . '/../../ressources/Jeedouino.sh /tmp/dependances_jeedouino_en_cours', 'log' => log::getPathToLog(__CLASS__ . '_update'));
+		// cf. @Mips2648
+		return array('script' => __DIR__ . '/../../ressources/Jeedouino.sh /tmp/dependances_jeedouino_en_cours', 'log' => log::getPathToLog(__CLASS__ . '_update'));
 	}
 	public static function health()
 	{
@@ -364,7 +371,7 @@ class jeedouino extends eqLogic {
 	}
 	/*************************** Méthodes d'instance **************************/
 
-	public function StartAllDemons($EqIDarr = '')
+	public static function StartAllDemons($EqIDarr = '')
 	{
 		$EqLogics = [];
 		if (!is_array($EqIDarr))
@@ -408,7 +415,7 @@ class jeedouino extends eqLogic {
 		config::save('StartDemons', 0, 'jeedouino');
 	}
 
-	public function GetPinsByBoard($arduino_id)	// Renvoie la liste des pins suivant le type de carte
+	public static function GetPinsByBoard($arduino_id)	// Renvoie la liste des pins suivant le type de carte
 	{
 		global $ArduinoMODEpins, $Arduino328pins, $ArduinoMEGApins, $ArduinoESPanalogPins;
 		global $PifaceMODEpinsIN, $PifaceMODEpinsOUT, $Pifacepins;
@@ -502,7 +509,7 @@ class jeedouino extends eqLogic {
 		return array($Arduino_pins, $board, $usb);
 	}
 
-	public function GetPinMode($arduino_id)
+	public static function GetPinMode($arduino_id)
 	{
 		list($Arduino_pins, $board, $usb) = self::GetPinsByBoard($arduino_id);
 		$PinMode = '';
@@ -717,7 +724,7 @@ class jeedouino extends eqLogic {
 		}
 		 //jeedouino::log( 'debug', __('Fin de ConfigurePinMode()', __FILE__));
 	}
-	public function SendToArduino($arduino_id, $message, $keyword, $waitfor)
+	public static function SendToArduino($arduino_id, $message, $keyword, $waitfor)
 	{
 		$my_arduino = eqLogic::byid($arduino_id);
 		$name = $my_arduino->getName();
@@ -942,7 +949,7 @@ class jeedouino extends eqLogic {
 		return true;
 	}
 
-	public function SendToBoard($arduino_id, $message)
+	public static function SendToBoard($arduino_id, $message)
 	{
 		$my_arduino = eqLogic::byid($arduino_id);
 		$PortArduino = $my_arduino->getConfiguration('datasource');
@@ -1005,7 +1012,7 @@ class jeedouino extends eqLogic {
 
 	// Permet de proposer un port libre lors d'un nouvel équipement.
 
-	public function GiveMeFreePort($TypePort = '')
+	public static function GiveMeFreePort($TypePort = '')
 	{
 		$ipPortArr = array();
 		$PortDemonArr = array();
@@ -1200,7 +1207,7 @@ class jeedouino extends eqLogic {
 		$Control->refreshWidget();
 	}
 
-	public function updateControlCmd($eqLogic_id, $StatusDemon)
+	public static function updateControlCmd($eqLogic_id, $StatusDemon)
 	{
 		config::save($eqLogic_id . '_StatusDemon', $StatusDemon, 'jeedouino');
 		$Control = jeedouino::byLogicalId('JeedouinoControl', 'jeedouino');
@@ -1215,7 +1222,7 @@ class jeedouino extends eqLogic {
 			//$Control->refreshWidget();
 		}
 	}
-	public function updateDemons()
+	public static function updateDemons()
 	{
 		$eqLogics = eqLogic::byType('jeedouino');
  		jeedouino::CreateJeedouinoControl();
@@ -1251,7 +1258,7 @@ class jeedouino extends eqLogic {
 	//////
 	// Gestion JeedouinoExt
 
-	public function AddIPJeedouinoExt($ip)
+	public static function AddIPJeedouinoExt($ip)
 	{
 		// On a reçu une nouvelle ip ? Si oui on l'ajoute à la liste
 		$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
@@ -1265,7 +1272,7 @@ class jeedouino extends eqLogic {
 		}
 		config::save('ListExtIP', $ListExtIP, 'jeedouino');
 	}
-	public function AddIDJeedouinoExt($ip)
+	public static function AddIDJeedouinoExt($ip)
 	{
 		// On a reçu une nouvelle ip ? Si oui on ajoute un ID à la liste
 		$id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
@@ -1276,14 +1283,14 @@ class jeedouino extends eqLogic {
 		config::save('ID-' . $ip, $id, 'jeedouino');
 		return $id;
 	}
-	public function IPfromIDJeedouinoExt($id)
+	public static function IPfromIDJeedouinoExt($id)
 	{
 		//jeedouino::log('debug', 'long2ip (id : ' . $id . ')');
 		if (is_numeric($id)) return long2ip($id);
 		jeedouino::log('debug', 'long2ip (id : ' . $id . ') n\'est pas un entier long.');
 		return "Undefined";
 	}
-	public function SaveIPJeedouinoExt($jeedouino_ext)
+	public static function SaveIPJeedouinoExt($jeedouino_ext)
 	{
 		$ip = $jeedouino_ext['IP'];
 		jeedouino::AddIPJeedouinoExt($ip);
@@ -1296,7 +1303,7 @@ class jeedouino extends eqLogic {
 		config::save('JExtPortSSH-'.$ip, $jeedouino_ext['sshPort'], 'jeedouino');
 		return $id;
 	}
-	public function GetJeedouinoExt($ip)
+	public static function GetJeedouinoExt($ip)
 	{
 		$id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
 		if ($id == '') $id = jeedouino::AddIDJeedouinoExt($ip);
@@ -1322,7 +1329,7 @@ class jeedouino extends eqLogic {
 				'usbMap' 	=> $UsbMap];
 	}
 
-	public function CleanIPJeedouinoExt()
+	public static function CleanIPJeedouinoExt()
 	{
 		$ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
 		if ($ListExtIP != '')
@@ -1340,7 +1347,7 @@ class jeedouino extends eqLogic {
 		return $ListExtIP;
 	}
 
-	public function allJeedouinoExt()
+	public static function allJeedouinoExt()
 	{
 		$ListExtIP = jeedouino::CleanIPJeedouinoExt();
 		$all = [];
@@ -1351,7 +1358,7 @@ class jeedouino extends eqLogic {
 		return $all;
 	}
 
-	public function RemoveJeedouinoExt($ip)
+	public static function RemoveJeedouinoExt($ip)
 	{
 		if (filter_var($ip, FILTER_VALIDATE_IP) !== false)
 		{
@@ -1387,7 +1394,7 @@ class jeedouino extends eqLogic {
 		return false;
 	}
 
-	public function SendJeedouinoExt($jeedouino_ext, $Noinstall = false)
+	public static function SendJeedouinoExt($jeedouino_ext, $Noinstall = false)
 	{
 		jeedouino::log( 'debug', __('Envoi des fichiers JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
 		$file_path = dirname(__FILE__) . '/../../ressources/JeedouinoExt.zip';
@@ -1440,7 +1447,7 @@ class jeedouino extends eqLogic {
 		return true;
 	}
 
-	public function SshCmdJeedouinoExt($connection, $preCmd, $cmd)
+	public static function SshCmdJeedouinoExt($connection, $preCmd, $cmd)
 	{
 		$stream = ssh2_exec($connection, $preCmd . $cmd);
 		$error = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
@@ -1458,7 +1465,7 @@ class jeedouino extends eqLogic {
 		if ($output != '') jeedouino::log( 'debug', __('Réponse via SSH de la commande : ', __FILE__) . $cmd . ' : ' . $output);
 		return true;
 	}
-	public function SshDelJeedouinoExt($jeedouino_ext, $local, $distant)
+	public static function SshDelJeedouinoExt($jeedouino_ext, $local, $distant)
 	{
 		jeedouino::log( 'debug', __('Effacement via SSH d\'un fichier de JeedouinoExt sur l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
@@ -1484,7 +1491,7 @@ class jeedouino extends eqLogic {
 		}
 		return true;
 	}
-	public function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)
+	public static function SshGetJeedouinoExt($jeedouino_ext, $local, $distant)
 	{
 		jeedouino::log( 'debug', __('Téléchargement via SSH d\'un fichier de JeedouinoExt depuis l\'IP: ', __FILE__) . $jeedouino_ext['IP']);
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
@@ -1509,13 +1516,13 @@ class jeedouino extends eqLogic {
 		}
 		return true;
 	}
-	public function getExtLog($_log)
+	public static function getExtLog($_log)
 	{
 		$log = file($_log);
 		if ($log !== false) return $log;
 		else return [];
 	}
-	public function SendSSHCmdsJeedouinoExt($jeedouino_ext, $cmds)
+	public static function SendSSHCmdsJeedouinoExt($jeedouino_ext, $cmds)
 	{
 		jeedouino::log( 'debug', __('Envoi de commandes SSH pour JeedouinoExt sur ', __FILE__) . $jeedouino_ext['IP']);
 		if (!$connection = ssh2_connect($jeedouino_ext['IP'], $jeedouino_ext['sshPort']))
@@ -1657,7 +1664,7 @@ class jeedouino extends eqLogic {
 		jeedouino::log('debug', 'Réponse du Démon ' . $DemonTypeF . ' :'. $reponse);
 		return $reponse;
 	}
-	public function StartBoardDemon($board_id, $useless=0, $DemonType)	// Démarre le Démon
+	public static function StartBoardDemon($board_id, $useless=0, $DemonType)	// Démarre le Démon
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return false;
@@ -1793,7 +1800,7 @@ class jeedouino extends eqLogic {
 		}
 		return true;
 	}
-	public function StartBoardDemonCMD($board_id = '', $DemonType, $ipPort, $jeedomIP, $JeedomPort, $JeedomCPL, $PiPlusBoardID, $PiFaceBoardID, $PortDemon, $_portUSB)	// Démarre le Démon
+	public static function StartBoardDemonCMD($board_id = '', $DemonType, $ipPort, $jeedomIP, $JeedomPort, $JeedomCPL, $PiPlusBoardID, $PiFaceBoardID, $PortDemon, $_portUSB)	// Démarre le Démon
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return false;
@@ -1871,7 +1878,7 @@ class jeedouino extends eqLogic {
 				$cmd = $ipPort.' '.$board_id.' '.$jeedomIP.' '.$PiPlusBoardID.' '.$JeedomPort.' '.$JeedomCPL;
 				break;
 		}
-		$cmd = "sudo nice -n 19 " . system::getCmdPython3(__CLASS__) . " " . $filename . ' ' . $cmd;
+		$cmd = "sudo nice -n 19 " . self::PYTHON_PATH . " " . $filename . ' ' . $cmd; // cf. @Mips2648
 		$_log = jeedouino::getPathToLog('jeedouino_' . strtolower($DemonTypeF));
 		$cmd .= ' ' . $_log;
 		jeedouino::log( 'debug', __('Cmd Appel démon : ', __FILE__) . $cmd);
@@ -1886,7 +1893,7 @@ class jeedouino extends eqLogic {
 		config::save($board_id . '_StatusDemon', true, 'jeedouino');
 		return true;
 	}
-	public function StopBoardDemon($board_id, $useless=0, $DemonType)	// Stoppe le Démon
+	public static function StopBoardDemon($board_id, $useless=0, $DemonType)	// Stoppe le Démon
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return;
@@ -1904,7 +1911,7 @@ class jeedouino extends eqLogic {
 		self::ForceStopBoardDemon($board_id, 0, $DemonType);
 		config::save($board_id . '_StatusDemon', false, 'jeedouino');
 	}
-	public function ForceStopBoardDemon($board_id, $useless=0, $DemonType)	// Stoppe le(s) processus du Démon local ou déporté
+	public static function ForceStopBoardDemon($board_id, $useless=0, $DemonType)	// Stoppe le(s) processus du Démon local ou déporté
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return;
@@ -1921,7 +1928,7 @@ class jeedouino extends eqLogic {
 														'DemonType' => $DemonType));
 		}
 	}
-	public function StopBoardDemonCMD($board_id = '', $DemonType)	// Stoppe le(s) processus du Démon local
+	public static function StopBoardDemonCMD($board_id = '', $DemonType)	// Stoppe le(s) processus du Démon local
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return;
@@ -1947,7 +1954,7 @@ class jeedouino extends eqLogic {
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return false;
-		if ($_board_id == 0) $_board_id = $this->getEqLogic_id();
+		if ($_board_id == 0) return false;  // cf. @Mips2648
 		$my_Board = eqLogic::byid($_board_id);
 		$id_type = $my_Board->getConfiguration('iparduino') . ' ( ' . $my_Board->getName() . ' - EqID: ' . $_board_id . ' ) Démon ' . $DemonTypeF;
 
@@ -2025,7 +2032,7 @@ class jeedouino extends eqLogic {
 		exec("pgrep --full ".$DemonFileName, $processus);
 		return isset($processus[0]);
 	}
-	public function ReStartBoardDemon($board_id, $useless=0, $DemonType)	// Redémarre le Démon
+	public static function ReStartBoardDemon($board_id, $useless=0, $DemonType)	// Redémarre le Démon
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return;
@@ -2039,7 +2046,7 @@ class jeedouino extends eqLogic {
 		self::StartBoardDemon($board_id, 0, $DemonType);
 		config::save('StartDemons', 0, 'jeedouino');
 	}
-	public function EraseBoardDemonFile($board_id, $useless=0, $DemonType)	// Cherche le Démon pour effacer son fichier jeedouinoUSB_*.py
+	public static function EraseBoardDemonFile($board_id, $useless=0, $DemonType)	// Cherche le Démon pour effacer son fichier jeedouinoUSB_*.py
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null) return;
@@ -2056,7 +2063,7 @@ class jeedouino extends eqLogic {
 																'DemonType' => $DemonType));
 		}
 	}
-	public function EraseBoardDemonFileCMD($board_id = '', $DemonType)	// Efface le fichier python généré pour le Démon
+	public static function EraseBoardDemonFileCMD($board_id = '', $DemonType)	// Efface le fichier python généré pour le Démon
 	{
 		$DemonTypeF = self::FilterDemon($DemonType);
 		if ($DemonTypeF == null or $board_id == '') return;
@@ -2095,7 +2102,7 @@ class jeedouino extends eqLogic {
 		nodejs::pushUpdate('jeedouino::stackDataEqLogic', $paramsArray);
 	}
 
-	public function saveStack($params) {
+	public static function saveStack($params) {
 	}
 
 	/* fonction appelé avant le début de la séquence de sauvegarde */
@@ -2359,7 +2366,7 @@ class jeedouino extends eqLogic {
 		return $user_pins;
 	}
 
-	public function SendPRM($eqLogic)
+	public static function SendPRM($eqLogic)
 	{
 		$arduino_id = $eqLogic->getId();
 		list( , $board, $usb) = jeedouino::GetPinsByBoard($arduino_id);
@@ -3751,7 +3758,7 @@ class jeedouino extends eqLogic {
 		return $cmpl;
 	}
 
-	public function GetJeedomPort() // on récupère  le port de l'adresse du maître si dispo
+	public static function GetJeedomPort() // on récupère  le port de l'adresse du maître si dispo
 	{
 		if (config::byKey('ActiveJLAN', 'jeedouino', false))
 		{

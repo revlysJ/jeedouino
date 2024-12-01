@@ -955,6 +955,7 @@ class jeedouino extends eqLogic {
 		$PortArduino = $my_arduino->getConfiguration('datasource');
 		$IPArduino = $my_arduino->getConfiguration('iparduino');
 		$ipPort = $my_arduino->getConfiguration('ipPort');
+		$name = $my_arduino->getName();
 
 		if ($PortArduino == 'rj45arduino')		// envoi sur reseau local
 		{
@@ -966,15 +967,11 @@ class jeedouino extends eqLogic {
 				if ($oldport != '') $fp = @fsockopen($IPArduino, $oldport, $errno, $errstr, 3);
 				if ($fp === false)
 				{
-					jeedouino::log('error', __('ERREUR DE CONNECTION  (', __FILE__) . $IPArduino . ':' . $ipPort . ') : ' . $errno . ' - ' . $errstr);
-					if ($errno == '111')
+					$matos = ' [ ' . $name . ' - EqID ' . $arduino_id . ' (' . $IPArduino . ':' . $ipPort . ') : ' . $errno . ' - ' . $errstr . ' ] ';
+					jeedouino::log('error', __('Erreur de connection  ', __FILE__)  . $matos);
+					if ($errno == '111' or $errno == '110')
 					{
-						jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée.', __FILE__));
-						if (substr($my_arduino->getConfiguration('arduino_board'), 0, 1) != 'a')
-						{
-							jeedouino::log('error', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées.', __FILE__));
-							jeedouino::log('error', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée.', __FILE__));
-						}
+						jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée. ', __FILE__) . $matos);
 					}
 					return 'NOK';
 				}
@@ -1630,15 +1627,16 @@ class jeedouino extends eqLogic {
 			if ($fp === false)
 			{
 				$reponse = $errno.' - '.$errstr;
+				$matos = ' [ ' . $DemonTypeF . ' ( ' . $name . ' - EqID ' . $board_id . ' ) ' . $IPBoard . ':' . $ipPort . ' ] ';
 				if (!config::byKey('StartDemons', 'jeedouino', 0))
-					jeedouino::log( 'error', __('(Normal si Re/Start/Stop demandé) Erreur de connection au démon ', __FILE__) . $DemonTypeF . ' ( ' . $name . ' - EqID ' . $board_id . ' ) ' . $IPBoard . ':' . $ipPort . __(' - Réponse : ', __FILE__) . $reponse);
-				if ($errno == '111')
+					jeedouino::log( 'error', __('(Normal si Re/Start/Stop demandé) Erreur de connection au démon ', __FILE__) . $matos . __(' - Réponse : ', __FILE__) . $reponse);
+				if ($errno == '111' or $errno == '110')
 				{
-					jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée.', __FILE__));
+					jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée. ', __FILE__) . $matos);
 					if (substr($my_Board->getConfiguration('arduino_board'), 0, 1) != 'a')
 					{
-						jeedouino::log('error', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées.', __FILE__));
-						jeedouino::log('error', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée.', __FILE__));
+						jeedouino::log('error', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées. ', __FILE__) . $matos);
+						jeedouino::log('error', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée. ', __FILE__) . $matos);
 					}
 				}
 				return $reponse;
@@ -3821,7 +3819,7 @@ class jeedouino extends eqLogic {
 				if ($TeleInfoRX)
 				{
 					$MasterFile = str_replace('#define UseTeleInfo 0' , '#define UseTeleInfo 1' , $MasterFile);	// Sketch ligne 10
-					$MasterFile = str_replace('SoftwareSerial teleinfo(6,7);' , 'SoftwareSerial teleinfo(' . $TeleInfoRX . ',' . $TeleInfoRX . ');' , $MasterFile);	// Sketch ligne 113
+					$MasterFile = str_replace('SoftwareSerial teleinfo(6,7);' , 'SoftwareSerial teleinfo(' . $TeleInfoRX . ',' . $TeleInfoTX . ');' , $MasterFile);	// Sketch ligne 113
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
@@ -3936,7 +3934,7 @@ class jeedouino extends eqLogic {
 				if ($TeleInfoRX)
 				{
 					$MasterFile = str_replace('#define UseTeleInfo 0' , '#define UseTeleInfo 1' , $MasterFile);	// Sketch ligne 10
-					$MasterFile = str_replace('SoftwareSerial teleinfo(6,7);' , 'SoftwareSerial teleinfo(' . $TeleInfoRX . ',' . $TeleInfoRX . ');' , $MasterFile);	// Sketch ligne 113
+					$MasterFile = str_replace('SoftwareSerial teleinfo(6,7);' , 'SoftwareSerial teleinfo(' . $TeleInfoRX . ',' . $TeleInfoTX . ');' , $MasterFile);	// Sketch ligne 113
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);	// Sketch ligne 11
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);	// Sketch ligne 16
@@ -4029,7 +4027,7 @@ class jeedouino extends eqLogic {
 				if ($TeleInfoRX)
 				{
 					$MasterFile = str_replace('#define UseTeleInfo 0' , '#define UseTeleInfo 1' , $MasterFile);
-					$MasterFile = str_replace('SoftwareSerial teleinfo(6,7);' , 'SoftwareSerial teleinfo(' . $TeleInfoRX . ',' . $TeleInfoRX . ');' , $MasterFile);
+					$MasterFile = str_replace('SoftwareSerial teleinfo(6,7);' , 'SoftwareSerial teleinfo(' . $TeleInfoRX . ',' . $TeleInfoTX . ');' , $MasterFile);
 				}
 				if ($Send2LCD) $MasterFile = str_replace('#define UseLCD16x2 0' , '#define UseLCD16x2 1' , $MasterFile);
 				if ($UserSketch) $MasterFile = str_replace('#define UserSketch 0' , '#define UserSketch 1' , $MasterFile);

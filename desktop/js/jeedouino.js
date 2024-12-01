@@ -102,11 +102,11 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]').on('change
 	{
     if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value() == 0)
     {
-        RPIlocal();
+      RPIlocal();
     }
     else
     {
-        RPIalone();
+      RPIalone();
     }
     $('.control').show();
     $('.UsbLan').show();
@@ -293,36 +293,36 @@ function addCmdToTable(_cmd) {
 	if (!isset(_cmd.configuration)) {
 		_cmd.configuration = {};
 	}
-    var control = init(_cmd.configuration.control);
-    if (control == 'JeedouinoControl')
-    {
-        $('.control').hide();
-        $('.config_pin').hide();
-        $('.datasource').hide();
-        $('.piFacePortID').hide();
-        $('.piPlusPortI2C').hide();
-        $('.sketchs').hide();
-        $('.sketchsLib').hide();
-        $('.sketchUSB').hide();
-        $('.esp8266').hide();
-        $('.sketchstab').hide();
-        $('.ActiveExt').hide();
-        $('.nav-tabs a:not(.eqLogicAction)').first().click();
-    }
-    else
-    {
-        $('.control').show();
-    }
-    var ctype = init(_cmd.type);
-    var stype = init(_cmd.subType);
-    var mtype = init(_cmd.configuration.modePIN);
-    var gtype = init(_cmd.generic_type);
-    var pins_id = init(_cmd.configuration.pins_id);
-    if (pins_id>999) pins_id -= 1000;
-    if (pins_id>999) pins_id -= 1000;
-    if (pins_id>999) pins_id -= 1000;
-	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+  var control = init(_cmd.configuration.control);
+  if (control == 'JeedouinoControl')
+  {
+      $('.control').hide();
+      $('.config_pin').hide();
+      $('.datasource').hide();
+      $('.piFacePortID').hide();
+      $('.piPlusPortI2C').hide();
+      $('.sketchs').hide();
+      $('.sketchsLib').hide();
+      $('.sketchUSB').hide();
+      $('.esp8266').hide();
+      $('.sketchstab').hide();
+      $('.ActiveExt').hide();
+      $('.nav-tabs a:not(.eqLogicAction)').first().click();
+  }
+  else
+  {
+      $('.control').show();
+  }
+  var ctype = init(_cmd.type);
+  var stype = init(_cmd.subType);
+  var mtype = init(_cmd.configuration.modePIN);
+  var gtype = init(_cmd.generic_type);
+  var pins_id = init(_cmd.configuration.pins_id);
+  if (pins_id>999) pins_id -= 1000;
+  if (pins_id>999) pins_id -= 1000;
+  if (pins_id>999) pins_id -= 1000;
 
+	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 	tr += '<td>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}}">';
@@ -337,24 +337,22 @@ function addCmdToTable(_cmd) {
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="pins_id" disabled style="display : none;">';
 	if (control != 'JeedouinoControl') tr +=  '<span class="label label-info" title="Pin mode : ' + mtype + '"><i class="fas fa-question-circle tooltips"></i> PIN No : ' + pins_id + '</span>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="modePIN" disabled style="display : none;">';
-
 	tr += '</td>';
-
 	tr += '<td>';
 	tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="' + ctype + '" disabled style="display : none;" />';
 	tr += '<input class="cmdAttr form-control  input-sm" data-l1key="subType" value="' + stype + '" disabled style="display : none;" />';
-	if ( ctype == 'action') {
+	if (ctype == 'action')
+  {
 		tr += '<div class="label label-warning" style="text-transform: uppercase;">' + ctype + ' ( ' + stype + ' ) </div></br>';
 		} else {
 		tr += '<div class="label label-success" style="text-transform: uppercase;">' + ctype + ' ( ' + stype + ' ) </div></br>';
 	}
-    tr += '<div class="label label-primary" >' + gtype + '</div>';
+  tr += '<div class="label label-primary" >' + gtype + '</div>';
 	tr += '</td>';
-
 	tr += '<td>';
     if (control != 'JeedouinoControl')
     {
-    	if ( ctype == 'action') {
+    	if (ctype == 'action') {
     		switch(mtype)
     		{
     			case 'output_other':
@@ -369,22 +367,23 @@ function addCmdToTable(_cmd) {
     				break;
                 case 'high_pulse_slide':
     			case 'low_pulse_slide':
-                    tr += '<div class="label label-warning">{{Durée en dixième de secondes. 5 Chiffres max.}}</div><br>';
+            tr += '<div class="label label-warning">{{Durée en dixième de secondes. 5 Chiffres max.}}</div><br>';
           case 'resetcpt':
-                    tr += '<span class="label label-success">{{Valeur affectée via scénario}}</span>';
-    			case 'switch':
-    			case 'none':
-                case 'low_pin_all':
-                case 'high_pin_all':
+              tr += '<span class="label label-success">{{Valeur affectée via scénario}}</span>';
+          case 'switch':
+          case 'none':
+          case 'low_pin_all':
+          case 'high_pin_all':
+          case 'teleinfoTX':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" style="display : none;">';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
     				break;
-    			case 'high_relais':
-    			case 'low_relais':
-    			case 'teleinfoTX':
-    			case 'output_slider':
-    			case 'WSmode':
-    			case 'WS2811':
+          case 'high_relais':
+          case 'low_relais':
+          case 'teleinfoRX':
+          case 'output_slider':
+          case 'WSmode':
+          case 'WS2811':
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" style="display : none;">';
     				break;
@@ -421,51 +420,55 @@ function addCmdToTable(_cmd) {
     				tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="tempo" >';
     		}
     	}
-    	else if ( ctype == 'info')
+    	else if (ctype == 'info')
     	{
-    		if ( mtype == 'compteur_pullup' || mtype == 'compteur_pulldown')
+    		if (mtype == 'compteur_pullup' || mtype == 'compteur_pulldown')
     		{
           tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" disabled>';
           tr += '<a class="btn btn-warning btn-xs cmdAction" data-action="ResetCPT"><i class="fas fa-rss"></i> {{MàJ compteur avec valeur ci-dessous:}}</a>';
           tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="RSTvalue" >';
     		}
-        else if ( mtype == 'ds18b20')
+        else if (mtype == 'ds18b20')
         {
             var ds18b20 = init(_cmd.configuration.ds18id);
-            if ( ds18b20 != '') tr += '<div class="label label-info" ><i class="fas fa-fingerprint"></i> ID: ' + ds18b20 + '</div>';
+            if (ds18b20 != '') tr += '<div class="label label-info" ><i class="fas fa-fingerprint"></i> ID: ' + ds18b20 + '</div>';
         }
     	}
     }
 	tr += '</td>';
-
 	tr += '<td>';
 	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isVisible" data-size="mini" checked />{{Afficher}}</label></span><br> ';
-  if ( ctype == 'info') {
+  if (ctype == 'info') {
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr " data-l1key="isHistorized" data-size="mini" />{{Historiser}}</label></span><br> ';
 	}
   //if ( mtype != 'ds18b20' && mtype.substr(0, 3) != 'dht' && mtype.substr(0, 3) != 'bmp' && mtype.substr(0, 3) != 'bme' )
-  if ( ctype == 'info' && stype == 'binary' && control != 'JeedouinoControl')
+  if (ctype == 'info' && stype == 'binary' && control != 'JeedouinoControl')
   {
 	   tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary" data-size="mini" />{{Inverser}}</label></span><br> ';
   }
 	tr += '</td>';
-
 	tr += '<td>';
-	if ( ctype == 'info' && stype == 'binary' && control != 'JeedouinoControl') {
+	if (ctype == 'info' && stype == 'binary' && control != 'JeedouinoControl')
+  {
 		tr += '<span ><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinare" data-size="mini" />{{Inverser}}</label></span> ';
 	}
-  tr += '<input class="cmdAttr form-control tooltips input-sm" data-l1key="unite" style="width : 100px;" placeholder="Unité" title="{{Unité}}">';
+  if (mtype != 'teleinfoRX')
+  {
+    tr += '<input class="cmdAttr form-control tooltips input-sm" data-l1key="unite" style="width : 100px;" placeholder="Unité" title="{{Unité}}">';
+  }
 	tr += '</td>';
-
 	tr += '<td>';
 	tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
-	tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+  if (mtype != 'teleinfoTX')
+  {
+	   tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+  }
 //    tr += '<a class="cmdAction btn btn-default btn-xs" data-l1key="chooseIcon"><i class="fas fa-flag"></i> {{Icône}}</a>';
 //    tr += '<span class="cmdAttr" data-l1key="display" data-l2key="icon" style="margin-left : 10px;"></span>';
 	if (control != 'JeedouinoControl') tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
 	tr += '</td>';
-
 	tr += '</tr>';
+
 	$('#table_cmd tbody').append(tr);
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	if (isset(_cmd.type)) {

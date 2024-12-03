@@ -1,7 +1,7 @@
 ##
 # Jeedouino Install dependancies
 # v0.4 alpha
-# Mips2648 - try fix dependencies for deb12 (use venv)
+# @Mips2648 - try fix dependencies for deb12 (use venv)
 ##
 
 PROGRESS_FILE=/tmp/dependances_jeedouino_en_cours

@@ -23,7 +23,7 @@ include_file('core', 'jeedouino', 'config', 'jeedouino');
 class jeedouino extends eqLogic {
 	/******************************* Attributs *******************************/
 	/* Ajouter ici toutes vos variables propre à votre classe */
-	const PYTHON_PATH = __DIR__ . '/../../resources/venv/bin/python3'; // cf. @Mips2648
+	const PYTHON_PATH = __DIR__ . '/../../ressources/venv/bin/python3'; // cf. @Mips2648
 
 	/***************************** Methode static ****************************/
 	public static function Networkmode()
@@ -1292,8 +1292,8 @@ class jeedouino extends eqLogic {
 		$ip = $jeedouino_ext['IP'];
 		jeedouino::AddIPJeedouinoExt($ip);
 		$id = jeedouino::AddIDJeedouinoExt($ip);
-		jeedouino::log('debug', 'IP => ' . $ip);
-		jeedouino::log('debug', 'ID => ' . $id);
+		//jeedouino::log('debug', 'IP => ' . $ip);
+		//jeedouino::log('debug', 'ID => ' . $id);
 		config::save('JExtname-'.$ip, $jeedouino_ext['name'], 'jeedouino');
 		config::save('JExtSSH-'.$ip, $jeedouino_ext['sshID'], 'jeedouino');
 		config::save('JExtPW-'.$ip, $jeedouino_ext['sshPW'], 'jeedouino');
@@ -2354,7 +2354,7 @@ class jeedouino extends eqLogic {
 		}
 
 	}
-	public function GiveMeUserPins($UserPinsMax, $UserPinsBase = 500)
+	public static function GiveMeUserPins($UserPinsMax, $UserPinsBase = 500)
 	{
 		$user_pins = array();
 		if (config::byKey('ActiveUserCmd', 'jeedouino', false))
@@ -3746,7 +3746,7 @@ class jeedouino extends eqLogic {
 		throw new Exception(__('L\'IP réelle du Jeedom Maître doit être renseignée dans Configuration -> Configuration réseaux -> Adresse IP. Merci. ', __FILE__));
 	}
 
-	public function GetJeedomComplement() // on récupère  le complément de l'adresse du maître si dispo
+	public static function GetJeedomComplement() // on récupère  le complément de l'adresse du maître si dispo
 	{
 		$cmpl = trim(config::byKey('internalComplement'));
 		if ($cmpl == '')  return $cmpl;
@@ -3777,7 +3777,7 @@ class jeedouino extends eqLogic {
 
 	public function GenerateLanArduinoSketchFile($board_id = '')	//  Génère le sketch pour l'arduino avec shield ethernet
 	{
-		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
+		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 		if ($board_id != '')
 		{
 			jeedouino::log( 'debug','Génération du sketch Arduino LAN...');
@@ -3880,7 +3880,7 @@ class jeedouino extends eqLogic {
 
 	public function GenerateESP8266SketchFile($board_id='')	//  Génère le sketch pour l'esp8266 wifi
 	{
-		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
+		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 		if ($board_id!='')
 		{
 			jeedouino::log( 'debug','Génération du sketch ESP...');
@@ -3990,7 +3990,7 @@ class jeedouino extends eqLogic {
 
 	public function GenerateUSBArduinoSketchFile($board_id = '')	//  Génère le sketch pour l'arduino avec shield ethernet
 	{
-		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
+		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 		if ($board_id != '')
 		{
 			jeedouino::log( 'debug','Génération du sketch Arduino USB...');
@@ -4084,7 +4084,7 @@ class jeedouino extends eqLogic {
 				}
 				// On efface le sketch
 
-				$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
+				$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 				$SketchFileName = $jeedouinoPATH . '/Jeedouino' . $USBLAN . '_' . $arduino_id . '.ino';
 				if (file_exists($SketchFileName))
 				{
@@ -4095,7 +4095,7 @@ class jeedouino extends eqLogic {
 				break;
 			case 'esp':
 				 // On efface le sketch
-				$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
+				$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 				$SketchFileName = $jeedouinoPATH . '/JeedouinoESP_' . $arduino_id . '.ino';
 				if (file_exists($SketchFileName))
 				{

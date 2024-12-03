@@ -185,53 +185,58 @@ $ip = jeedouino::GetJeedomIP();
                         		</thead>
                                 <tbody>
 <?php
-    $ListExtIP = jeedouino::CleanIPJeedouinoExt();
-    $CronStepArr = config::byKey('CronStepArr', 'jeedouino', '');
-    foreach ($eqLogics as $eqLogic)
-    {
-		if ($eqLogic->getIsEnable() == 0) continue;
-        $ip = $eqLogic->getConfiguration('iparduino');
-        if (!in_array($ip, $ListExtIP)) continue;
-        $id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
-        //jeedouino::log( 'debug','>>>> IP ' . $ip . " ID $id");
-		if ($id == '') $id = jeedouino::AddIDJeedouinoExt($ip);
-        //jeedouino::log( 'debug','>>>> IP ' . $ip . " ID $id");
-        echo '<tr class="jeedouinoExtEqTR" data-jextid="' . $id . '">';
-        echo '<td><div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id=' . $eqLogic->getId() . '" target="_blank"><i class="fas fa-sitemap"></i> ' . $eqLogic->getName(true) . '</a></div></td>';
-        $StatusDemon = jeedouino::StatusBoardDemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
-        if ($StatusDemon) echo '<td><span class="btn btn-success" >OK</span></td>';
-        else
-        {
-            if (($CronStepArr != '') and (in_array($eqLogic->getId(), $CronStepArr))) echo '<td><span class="btn btn-warning " ><i class="fas fa-spinner"></i> 4min</span></td>';
-            else echo '<td><span class="btn btn-danger" >NOK</span></td>';
-        }
-        switch ($eqLogic->getConfiguration('arduino_board'))
-        {
-            case 'piface':
-                $jsButton = 'PiFace';
-                break;
-            case 'piGPIO26':
-            case 'piGPIO40':
-                $jsButton = 'PiGpio';
-                break;
-            case 'piPlus':
-                $jsButton = 'PiPlus';
-                break;
-            default:
-                $jsButton = 'USB';
-        }
-        if ($StatusDemon) echo '<td><a class="btn btn-success bt_restartDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-sync"></i></a></td>';
-        else echo '<td><a class="btn btn-success bt_StartDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-play"></i></a></td>';
-        echo '<td>';
-        if ($StatusDemon) echo '<a class="btn btn-danger bt_stopDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-stop"></i></a>';
-        echo '</td>';
-        if (config::byKey('Auto_'. $eqLogic->getId(), 'jeedouino', 0)) echo '<td><a class="btn btn-success bt_AutoReStart" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-check"></i>  {{5min}}</a></td>';
-        else echo '<td><a class="btn btn-danger bt_AutoReStart" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-times"></i>  {{5min}}</a></td>';
+		$ListExtIP = jeedouino::CleanIPJeedouinoExt();
+		$CronStepArr = config::byKey('CronStepArr', 'jeedouino', '');
+		if (!is_array($ListExtIP)) $ListExtIP = array();
+		if (!is_array($CronStepArr)) $CronStepArr = array();
 
-        echo '<td>' . $jsButton . '</td>';
-		echo '<td><a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/Jeedouino' . $jsButton . '_' . $eqLogic->getId() . '.log"><i class="fas fa-file-alt"></i> </a></td>';
-        echo '</tr>';
-    }
+		foreach ($eqLogics as $eqLogic)
+		{
+			if ($eqLogic->getIsEnable() == 0) continue;
+
+			$ip = $eqLogic->getConfiguration('iparduino');
+			if (!in_array($ip, $ListExtIP)) continue;
+
+			$id = trim(config::byKey('ID-' . $ip, 'jeedouino', ''));
+			if ($id == '') $id = jeedouino::AddIDJeedouinoExt($ip);
+
+			echo '<tr class="jeedouinoExtEqTR" data-jextid="' . $id . '">';
+			echo '<td><div class="col-lg-7"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id=' . $eqLogic->getId() . '" target="_blank"><i class="fas fa-sitemap"></i> ' . $eqLogic->getName(true) . '</a></div></td>';
+
+			$StatusDemon = jeedouino::StatusBoardDemon($eqLogic->getId(), 0, $eqLogic->getConfiguration('arduino_board'));
+			if ($StatusDemon) echo '<td><span class="btn btn-success" >OK</span></td>';
+			else
+			{
+				if (($CronStepArr != '') and (in_array($eqLogic->getId(), $CronStepArr))) echo '<td><span class="btn btn-warning " ><i class="fas fa-spinner"></i> 4min</span></td>';
+				else echo '<td><span class="btn btn-danger" >NOK</span></td>';
+			}
+			switch ($eqLogic->getConfiguration('arduino_board'))
+			{
+				case 'piface':
+				    $jsButton = 'PiFace';
+				    break;
+				case 'piGPIO26':
+				case 'piGPIO40':
+				    $jsButton = 'PiGpio';
+				    break;
+				case 'piPlus':
+				    $jsButton = 'PiPlus';
+				    break;
+				default:
+				    $jsButton = 'USB';
+			}
+			if ($StatusDemon) echo '<td><a class="btn btn-success bt_restartDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-sync"></i></a></td>';
+			else echo '<td><a class="btn btn-success bt_StartDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-play"></i></a></td>';
+			echo '<td>';
+			if ($StatusDemon) echo '<a class="btn btn-danger bt_stopDemon" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-stop"></i></a>';
+			echo '</td>';
+			if (config::byKey('Auto_'. $eqLogic->getId(), 'jeedouino', 0)) echo '<td><a class="btn btn-success bt_AutoReStart" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-check"></i>  {{5min}}</a></td>';
+			else echo '<td><a class="btn btn-danger bt_AutoReStart" slaveID="0" boardID="' . $eqLogic->getId() . '" DemonType="' . $jsButton . '"><i class="fas fa-times"></i>  {{5min}}</a></td>';
+
+			echo '<td>' . $jsButton . '</td>';
+			echo '<td><a class="btn btn-success jeedouinoExtAction" data-action="getExtLog" log="/var/www/html/JeedouinoExt/Jeedouino' . $jsButton . '_' . $eqLogic->getId() . '.log"><i class="fas fa-file-alt"></i> </a></td>';
+			echo '</tr>';
+		}
 ?>
                                 </tbody>
                             </table>

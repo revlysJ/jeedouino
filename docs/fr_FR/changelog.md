@@ -1,5 +1,12 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 
+03/12/2024 v1.07f
+---
+
+- Corrections diverses.
+- Compatibilité Jeedom v4.4
+- Compatibilité Bookworm / php 8 (fix par @Mips).
+
 04/01/2022 v1.07e
 ---
 

@@ -564,7 +564,7 @@ else $ShowSideBar = "col-xs-12";
 			<div class="tab-pane" id="sketchstab">
 			<br><br><br>
 					<?php
-					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../sketchs/');
+					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 					$ArduinoEspTag = false;
 					foreach ($eqLogics as $eqLogic)
 					{
@@ -580,7 +580,7 @@ else $ShowSideBar = "col-xs-12";
 								echo '<div class="form-group sketchs sketchLAN'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-10">
-									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Réseau) pour cet équipement.}}</a>
+									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Réseau) pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 									<br>
 									<br><i>Note : Ce sketch est prévu pour les shields réseaux basés sur un chip W5100.</i>
@@ -593,7 +593,7 @@ else $ShowSideBar = "col-xs-12";
 								echo '<div class="form-group sketchs sketchUSB' . $board_id . ' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-10">
-									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Usb) pour cet équipement.}}</a>
+									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'arduino (Usb) pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 									<br>
 								</div></div>';
@@ -616,7 +616,7 @@ else $ShowSideBar = "col-xs-12";
 								echo '<div class="form-group sketchs sketchESP'.$board_id.' " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Sketch }}</label>
 								<div class="col-sm-6">
-									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'ESP8266 pour cet équipement.}}</a>
+									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch* à mettre dans l\'ESP8266 pour cet équipement.}}</a>
 									<br><i>/!\ Le sketch est spécifiquement généré pour cet équipement !</i>
 								</div></div>';
 							}
@@ -635,12 +635,12 @@ else $ShowSideBar = "col-xs-12";
 						echo '<br><br><div class="form-group sketchs sketchUSB " style="display : none;">
 						<label class="col-sm-2 control-label">{{ Sketch }}</label>
 						<div class="col-sm-6">
-							<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
+							<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoUSB.ino" class="btn btn-info" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger le Sketch à mettre dans l\'arduino (USB) pour cet équipement.}}</a>
 						</div></div>';
 						echo '<br><br><div class="form-group sketchsLib " style="display : none;">
 								<label class="col-sm-2 control-label">{{ Librairies pour vos Sketchs }}</label>
 								<div class="col-sm-6">
-									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
+									<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/ArduinoLibraries.zip" class="btn btn-warning" target="_blank" download><i class="fas fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
 								</div></div>';
 					}
 

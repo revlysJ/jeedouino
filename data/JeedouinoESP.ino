@@ -1,25 +1,25 @@
 ////////
 //
-// Sketch Arduino pour le Plugin JEEDOUINO v097+ de JEEDOM
-// Connection via Ethernet
+// Sketch ESP8266 pour le Plugin JEEDOUINO v097+ de JEEDOM
+// Connection via WiFi
 //
 // JeEdUiNoTaG
 ////////
-#define DEBUGtoSERIAL 0	// 0, ou 1 pour debug dans la console serie - attention sur nano au manque de mémoire.
+#define DEBUGtoSERIAL 0	// 0, ou 1 pour debug dans la console serie
 #define UseWatchdog 0
-#define NODHCP 1					// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
+#define NODHCP 0		// 0 pour IP via DHCP, 1 pour IP fixée dans le sketch.
 #define UseDHT 1
 #define UseDS18x20 1
 #define UseTeleInfo 0
 #define UseLCD16x2 0	// 0 = None(Aucun) / 1 = LCD Standard 6 pins / 2 = LCD via I2C
-#define UseEthernet 0 	// Choix de la lib suivant shield ethernet : 0 = W5100 / 1 = ENC28J60	/ 2 = W5500 - Voir note ci-dessous
 #define UseHCSR04 0
-#define UsePwm_input 0 // Code obsolete (sera supprimé) - Entrée Numérique Variable (0-255 sur 10s) en PULL-UP
+#define UsePwm_input 0 	// Code obsolete (sera supprimé) - Entrée Numérique Variable (0-255 sur 10s) en PULL-UP
+#define UseHLW8012 0	// pour SONOFF POW
 #define UseBMP180 0		// pour BMP085/180 Barometric Pressure & Temp Sensor
 #define UseBMP280 0		// pour BMP280 temperature, barometric pressure
 #define UseBME280 0		// pour BME280 temperature, barometric pressure and humidity
 #define UseBME680 0		// pour BME680 temperature, humidity, barometric pressure and VOC gas
-#define UseServo 0		// Pour controler la postion d'un servo.
+#define UseServo 0
 #define UseWS2811 0	// Pour gerer les led stips a base de WS2811/2 avec l'excellente lib Adafruit_NeoPixel
 
 // Concernant UseBMP280, UseBME280 et UseBME680
@@ -31,7 +31,7 @@
 // Il faut activer l'option dans la configuration du plugin.
 // Puis choisir le nombre de variables utilisateur sous l'onglet Pins/GPIO de votre équipement.
 #define UserSketch 0
-// Tags pour rechercher l'emplacement pour votre code :
+// Tags pour rechercher l'emplacement pour votre code (CTRL + F) :
 //UserVars
 //UserSetup
 //UserLoop
@@ -40,31 +40,44 @@
 	#include <avr/wdt.h>
 #endif
 
-#include <SPI.h>
-// Pour shield avec W5100
-#if (UseEthernet == 0)
-	#include <Ethernet.h>
+////////
+// Palliatif bug entre Arduino IDE 1.6.7 et Gestion ESP8266
+// https://github.com/arduino/arduino-builder/issues/68
+// Si des erreurs persistent, alors l'Arduino IDE 1.6.5 est recommandé.
+void setup();
+void UserSetup();
+void loop();
+void UserLoop();
+void UserAction();
+void SendToJeedom();
+void Set_OutputPin(int i);
+void Load_EEPROM(int k);
+void PinWriteHIGH(long p);
+void PinWriteLOW(long p);
+void Init_EEPROM();
+int read_DSx(int pinD);
+// Fin palliatif
+////////
+
+#if defined(ARDUINO_ARCH_ESP8266)
+	#include <ESP8266WiFi.h>
+#else
+	#include <WiFi.h>
 #endif
-// Pour shield avec W5500
-#if (UseEthernet == 2)
-	#include <Ethernet2.h>
+
+const char* ssid = "MonSSID";
+const char* password = "MonPassword";
+
+#if (NODHCP == 1)
+	byte GATEWAY[] = { 192, 168, 0, 1 };
+	byte SUBNET[] = { 255, 255, 255, 0 };
 #endif
-// Pour shield avec ENC28J60 - Note : il faut passer NODHCP à 1 ci-dessus.
-// Attention, problèmes de mémoire possibles sur arduino nano/uno/328 avec cette lib (v1.59)!
-// Pour la récupérer, et l'installer dans l'IDE, voir : https://github.com/ntruchsess/arduino_uip/tree/Arduino_1.5.x
-//
-// Il faudra modifier dans le fichier \arduino-IDE\libraries\arduino_uip-master\utility\uipethernet-conf
-// les lignes suivantes:
-//#define UIP_SOCKET_NUMPACKETS		3
-//#define UIP_CONF_MAX_CONNECTIONS 2
-//#define UIP_CONF_UDP						 0
-//
-#if (UseEthernet == 1)
-	#include <UIPEthernet.h>	// v1.59
-#endif
-// Traitement spécifique a cette librairie (pb de deconnection):
-int UIPEFailCount = 0;
-unsigned long UIPEFailTime = millis();
+byte IP_ARDUINO[] = { 192, 168, 0, 70 };
+byte IP_JEEDOM[] = { 192, 168, 0, 44 };
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+WiFiServer server(80);
+
+#include <EEPROM.h>
 
 ////////
 // DHT
@@ -80,23 +93,57 @@ unsigned long UIPEFailTime = millis();
 	#include <OneWire.h>
 #endif
 
-byte IP_ARDUINO[] = { 192, 168, 0, 70 };
-byte IP_JEEDOM[] = { 192, 168, 0, 44 };
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-EthernetServer server(80);
+////////
+// HLW8012 SONOFF POW
+// https://bitbucket.org/xoseperez/hlw8012
+#if (UseHLW8012 == 1)
+	#include "HLW8012.h"
+	// GPIOs
+	#define RELAY_PIN				12
+	#define SEL_PIN					5
+	#define CF1_PIN					13
+	#define CF_PIN					14
+	#define UPDATE_TIME				30000
+	unsigned long HLW8012Refresh = millis() + UPDATE_TIME;
+	// Set SEL_PIN to HIGH to sample current
+	// This is the case for Itead's Sonoff POW, where a
+	// the SEL_PIN drives a transistor that pulls down
+	// the SEL pin in the HLW8012 when closed
+	#define CURRENT_MODE			HIGH
 
-#include <EEPROM.h>
+	// These are the nominal values for the resistors in the circuit
+	#define CURRENT_RESISTOR			0.001
+	#define VOLTAGE_RESISTOR_UPSTREAM	( 5 * 470000 ) // Real: 2280k
+	#define VOLTAGE_RESISTOR_DOWNSTREAM	( 1000 ) // Real 1.009k
 
+	HLW8012 hlw8012;
+
+	// When using interrupts we have to call the library entry point
+	// whenever an interrupt is triggered
+	void ICACHE_RAM_ATTR hlw8012_cf1_interrupt()
+	{
+		hlw8012.cf1_interrupt();
+	}
+	void ICACHE_RAM_ATTR hlw8012_cf_interrupt()
+	{
+		hlw8012.cf_interrupt();
+	}
+
+	// Library expects an interrupt on both edges
+	void setInterrupts()
+	{
+		attachInterrupt(CF1_PIN, hlw8012_cf1_interrupt, CHANGE);
+		attachInterrupt(CF_PIN, hlw8012_cf_interrupt, CHANGE);
+	}
+#endif
+
+////////
 // CONFIGURATION VARIABLES
 
-#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-	#define NB_DIGITALPIN 54
-	#define NB_ANALOGPIN 16
-#else
-	#define NB_DIGITALPIN 14
-	#define NB_ANALOGPIN 6
-#endif
-#define NB_TOTALPIN ( NB_DIGITALPIN + NB_ANALOGPIN)
+#define NB_DIGITALPIN 17
+#define NB_ANALOGPIN 1
+
+#define NB_TOTALPIN ( NB_DIGITALPIN	+ NB_ANALOGPIN)
 
 // Etat des pins de l'arduino ( Mode )
 char Status_pins[NB_TOTALPIN];
@@ -128,9 +175,11 @@ unsigned long TempoPinHIGH[NB_TOTALPIN ]; // pour tempo pins sorties HIGH
 unsigned long TempoPinLOW[NB_TOTALPIN ]; // pour tempo pins sorties LOW
 unsigned long pinTempo = 0;
 unsigned long NextRefresh = 0;
+unsigned long ConnectRefresh = millis() + 60000;
 unsigned long ProbeNextSend = millis();
 unsigned long timeout = 0;
 unsigned long ProbePauseDelay = 60000;
+char myIpString[24];
 
 #if (UseDHT == 1)
 	DHT *myDHT[NB_TOTALPIN];
@@ -170,14 +219,14 @@ unsigned long ProbePauseDelay = 60000;
 	LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 #endif
 #if (UseLCD16x2 == 2)
-	// LiquidCrystal	i2c
+	// LiquidCrystal  i2c
 	#include <Wire.h>
 	#include <LiquidCrystal_I2C.h>
 	LiquidCrystal_I2C lcd(0x27,16,2);
 #endif
 #if (UseBMP180 == 1)
-	//	BMP085/180 Barometric Pressure & Temp Sensor
-	//	https://learn.adafruit.com/bmp085/downloads
+	//  BMP085/180 Barometric Pressure & Temp Sensor
+	//  https://learn.adafruit.com/bmp085/downloads
 	#include <Wire.h>
 	#include <Adafruit_BMP085.h>
 	Adafruit_BMP085 bmp;
@@ -215,7 +264,6 @@ unsigned long ProbePauseDelay = 60000;
 		Adafruit_BME680 bme680b; // I2C x77
 	#endif
 #endif
-
 #if (UserSketch == 1)
 	// UserVars
 	// Vos declarations de variables / includes etc....
@@ -226,53 +274,49 @@ unsigned long ProbePauseDelay = 60000;
 
 void setup()
 {
-	jeedom.reserve(256);
+	EEPROM.begin(512);
+	jeedom.reserve(512);
 	Message.reserve(16);
 	inString.reserve(4);
 	#if (DEBUGtoSERIAL == 1)
 		Serial.begin(115200); // Init du Port serie/USB
+		Serial.println();
+		Serial.println();
 		Serial.setTimeout(5); // Timeout 5ms
 		Serial.println(F("JEEDOUINO IS HERE."));
+		Serial.print(F("Connecting to "));
+		Serial.println(ssid);
 	#endif
-	if (EEPROM.read(13) != 'J')
-	{
-		Init_EEPROM();
-	#if (NODHCP == 0)
-		if (Ethernet.begin(mac) == 0) 	// 1er demarrage 1er flash Jeedouino, on essaye via dhcp
-		{
-			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Connection via DHCP failed."));
-			#endif
-			#if (UseWatchdog == 1)
-				wdt_enable(WDTO_15MS); // try reboot
-				while(1){}
-			#endif
-		}
-		IPAddress IP_ARDUINO = Ethernet.localIP();
-		jeedom = F("&ipwifi=");
-		jeedom += IP_ARDUINO[0];
-		jeedom += '.';
-		jeedom += IP_ARDUINO[1];
-		jeedom += '.';
-		jeedom += IP_ARDUINO[2];
-		jeedom += '.';
-		jeedom += IP_ARDUINO[3];
-		SendToJeedom();
-	#else
-		Ethernet.begin(mac, IP_ARDUINO);
-	#endif
-	}
-	else Ethernet.begin(mac, IP_ARDUINO);
+	if (EEPROM.read(13) != 'J') Init_EEPROM();
 
-	#if (DEBUGtoSERIAL == 1)
-		Serial.println(F("Connection to: LAN"));
+	#if (NODHCP == 1)
+		WiFi.config(IP_ARDUINO, GATEWAY, SUBNET);
 	#endif
+
+	WIFI_Connect();
+
 	server.begin();
 	Load_EEPROM(1);
 
 	#if (DEBUGtoSERIAL == 1)
 		Serial.print(F("\nEqLogic:"));
 		Serial.println(eqLogic);
+	#endif
+
+	IPAddress myIp = WiFi.localIP();
+	sprintf(myIpString, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
+	#if (DEBUGtoSERIAL == 1)
+		Serial.println();
+		Serial.println(F("WiFi connected"));
+		Serial.println(myIpString);
+	#endif
+	jeedom = F("&ipwifi=");
+	jeedom += myIpString;
+	delay(333);
+	SendToJeedom();
+
+	#if (UseTeleInfo == 1)
+		teleinfo.begin(1200);	 // vitesse par EDF
 	#endif
 
 	#if (UseLCD16x2 == 1)
@@ -285,6 +329,35 @@ void setup()
 		lcd.backlight();
 		lcd.home();
 		lcd.print(F("JEEDOUINO v097+"));
+	#endif
+
+	#if (UseHLW8012 == 1)
+		// Initialize HLW8012
+		// void begin(unsigned char cf_pin, unsigned char cf1_pin, unsigned char sel_pin, unsigned char currentWhen = HIGH, bool use_interrupts = false, unsigned long pulse_timeout = PULSE_TIMEOUT);
+		// * cf_pin, cf1_pin and sel_pin are GPIOs to the HLW8012 IC
+		// * currentWhen is the value in sel_pin to select current sampling
+		// * set use_interrupts to true to use interrupts to monitor pulse widths
+		// * leave pulse_timeout to the default value, recommended when using interrupts
+		hlw8012.begin(CF_PIN, CF1_PIN, SEL_PIN, CURRENT_MODE, true);
+
+		// * set use_interrupts to false, we will have to call handle() in the main loop to do the sampling
+		// * set pulse_timeout to 500ms for a fast response but losing precision (that's ~24W precision :( )
+		//hlw8012.begin(CF_PIN, CF1_PIN, SEL_PIN, CURRENT_MODE, false, 2000000);
+
+		// These values are used to calculate current, voltage and power factors as per datasheet formula
+		// These are the nominal values for the Sonoff POW resistors:
+		// * The CURRENT_RESISTOR is the 1milliOhm copper-manganese resistor in series with the main line
+		// * The VOLTAGE_RESISTOR_UPSTREAM are the 5 470kOhm resistors in the voltage divider that feeds the V2P pin in the HLW8012
+		// * The VOLTAGE_RESISTOR_DOWNSTREAM is the 1kOhm resistor in the voltage divider that feeds the V2P pin in the HLW8012
+		hlw8012.setResistors(CURRENT_RESISTOR, VOLTAGE_RESISTOR_UPSTREAM, VOLTAGE_RESISTOR_DOWNSTREAM);
+		#if (DEBUGtoSERIAL == 1)
+			// Show default (as per datasheet) multipliers
+			 Serial.print("[HLW] Default current multiplier : "); Serial.println(hlw8012.getCurrentMultiplier());
+			 Serial.print("[HLW] Default voltage multiplier : "); Serial.println(hlw8012.getVoltageMultiplier());
+			 Serial.print("[HLW] Default power multiplier   : "); Serial.println(hlw8012.getPowerMultiplier());
+			 Serial.println();
+		#endif
+		setInterrupts();
 	#endif
 
 	#if (UseBMP180 == 1)
@@ -336,34 +409,46 @@ void setup()
 
 void loop()
 {
-	// TRAITEMENT DES TEMPO SORTIES SI IL Y EN A
-	jeedom="";
-	for (int i = 2; i < NB_TOTALPIN; i++)
+	// Verification de la connectivite WiFi
+	if (ConnectRefresh < millis())
 	{
-		if (TempoPinHIGH[i]!=0 && TempoPinHIGH[i]<millis()) // depassement de la temporisation
+		ConnectRefresh = millis() + 60000; // test toutes les minutes env.
+		if (WiFi.status() != WL_CONNECTED)
 		{
-			TempoPinHIGH[i]=0; // Suppression de la temporisation
-			PinWriteHIGH(i);
-		}
-		else if (TempoPinLOW[i]!=0 && TempoPinLOW[i]<millis()) // depassement de la temporisation
-		{
-			TempoPinLOW[i]=0; // Suppression de la temporisation
-			PinWriteLOW(i);
+			#if (DEBUGtoSERIAL == 1)
+				Serial.println(F("\nConnection WiFi perdue. Essai de re-connection."));
+			#endif
+			WIFI_Connect();
 		}
 	}
+	// TRAITEMENT DES TEMPO SORTIES SI IL Y EN A
+	jeedom="";
+		for (int i = 2; i < NB_TOTALPIN; i++)
+		{
+				if (TempoPinHIGH[i]!=0 && TempoPinHIGH[i]<millis()) // depassement de la temporisation
+				{
+					TempoPinHIGH[i]=0; // Suppression de la temporisation
+					PinWriteHIGH(i);
+				}
+				else if (TempoPinLOW[i]!=0 && TempoPinLOW[i]<millis()) // depassement de la temporisation
+				{
+					TempoPinLOW[i]=0; // Suppression de la temporisation
+					PinWriteLOW(i);
+				}
+		}
 	// FIN TEMPO
 
 	// On ecoute le reseau
-	EthernetClient client = server.available();
+	WiFiClient client = server.available();
 
 	if (client)
 	{
 		// on regarde si on recois des donnees
-		n = 0;
+		n=0;
 		#if (DEBUGtoSERIAL == 1)
 			Serial.println(F("\nRECEIVING:"));
 		#endif
-		timeout = millis() + 30000;	// 30s
+		timeout = millis()+30000;	// 30s
 		while (client.connected() and timeout>millis())
 		{
 			if (client.available())
@@ -372,7 +457,7 @@ void loop()
 				if (c[n]=='\r') c[n]='\n';
 				if (c[n]=='\n')
 				{
-					while	(client.available()) c[n+1] = client.read();
+					while  (client.available()) c[n+1] = client.read();
 					break;
 				}
 				n++;
@@ -387,64 +472,67 @@ void loop()
 		{
 			n--;
 			// on les traites
-			if (c[0]=='C' && c[n]=='C')	 // Configuration de l'etat des pins
+			if (c[0]=='C' && c[n]=='C') 		// Configuration de l'etat des pins
 			{
 				// NB_TOTALPIN = NB_DIGITALPIN	+ NB_ANALOGPIN
 
-				if (n==(NB_TOTALPIN+1))				 // Petite securite
+				if (n==(NB_TOTALPIN+1))						// Petite securite
 				{
 					for (int i = 0; i < NB_TOTALPIN; i++)
 					{
-						EEPROM.update(30+i, c[i+1]);			// Sauvegarde mode des pins
+						EEPROM.write(30+i, c[i+1]);		 	// Sauvegarde mode des pins
 					}
-					Load_EEPROM(0);							// On met en place
-					client.print(F("COK"));							 // On reponds a JEEDOM
+					EEPROM.commit();
+					Load_EEPROM(0);							 // On met en place
+					client.print(F("COK"));								// On reponds a JEEDOM
 					jeedom+=F("&REP=COK");
 					ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
-			else if (c[0]=='E' && c[n]=='Q')	// Recuperation de l' eqLogic de Jeedom concernant cet arduino
+			else if (c[0]=='E' && c[n]=='Q') 	// Recuperation de l' eqLogic de Jeedom concernant cet arduino
 			{
 				eqLogic = "";
-				EEPROM.update(15, n);				 // Sauvegarde de la longueur du eqLogic
+				EEPROM.write(15, n);						// Sauvegarde de la longueur du eqLogic
 				for (int i = 1; i < n; i++)
 				{
-					EEPROM.update(15+i, c[i]-'0');			// Sauvegarde de l' eqLogic
+					EEPROM.write(15+i, c[i]-'0'); 			// Sauvegarde de l' eqLogic
 					eqLogic += (char)c[i];
 				}
-				client.print(F("EOK"));							 // On reponds a JEEDOM
+				EEPROM.commit();
+				client.print(F("EOK"));								// On reponds a JEEDOM
 				jeedom+=F("&REP=EOK");
 				ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 			}
-			else if (c[0]=='I' && c[n]=='P')	// Recuperation de l' IP de Jeedom ( I192.168.000.044P )
+			else if (c[0]=='I' && c[n]=='P') 	// Recuperation de l' IP de Jeedom ( I192.168.000.044P )
 			{
-				if (n<17)			 // Petite securite
+				if (n<17)					// Petite securite
 				{
 					int ip=0;
 					inString="";
-					for (int i = 1; i <= n; i++)	//jusqu'a n car il faut un caractere non digit pour finir
+					for (int i = 1; i <= n; i++) 	//jusqu'a n car il faut un caractere non digit pour finir
 					{
-					if (isDigit(c[i]))
-					{
-						inString += (char)c[i];
+						if (isDigit(c[i]))
+						{
+							inString += (char)c[i];
+						}
+						else
+						{
+							IP_JEEDOM[ip]=inString.toInt();
+							inString="";
+							ip++;
+						}
 					}
-					else
-					{
-						IP_JEEDOM[ip]=inString.toInt();
-						inString="";
-						ip++;
-					}
-					}
-					EEPROM.update(26, IP_JEEDOM[0]);					// Sauvegarde de l' IP
-					EEPROM.update(27, IP_JEEDOM[1]);
-					EEPROM.update(28, IP_JEEDOM[2]);
-					EEPROM.update(29, IP_JEEDOM[3]);
+					EEPROM.write(26, IP_JEEDOM[0]);					// Sauvegarde de l' IP
+					EEPROM.write(27, IP_JEEDOM[1]);
+					EEPROM.write(28, IP_JEEDOM[2]);
+					EEPROM.write(29, IP_JEEDOM[3]);
+					EEPROM.commit();
 					client.print(F("IPOK"));							// On reponds a JEEDOM
 					jeedom+=F("&REP=IPOK");
 					ProbeNextSend = millis() + ProbePauseDelay; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
-			else if (c[0]=='S' && c[n]=='S')	// Modifie la valeur d'une pin sortie
+			else if (c[0]=='S' && c[n]=='S') 	// Modifie la valeur d'une pin sortie
 			{
 				jeedom += F("&REP=SOK");
 				for (int i = 1; i < n; i++)
@@ -514,9 +602,8 @@ void loop()
 					}
 				}
 				ProbeNextSend = millis() + 10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
-				client.print(F("SOK"));
-			}
-			else if ((c[0]=='S' || c[0]=='R') && c[n]=='C')		 	// Reçoi la valeur SAUVEE d'une pin compteur (suite reboot)
+				client.print(F("SOK"));			}
+			else if ((c[0]=='S' || c[0]=='R') && c[n]=='C')		 	// Reçoie la valeur SAUVEE d'une pin compteur (suite reboot)
 			{																				// ou RESET suite sauvegarde equipement.
 					if (n>3)										// Petite securite
 					{
@@ -536,7 +623,7 @@ void loop()
 						}
 						PinNextSend[pin_id]=millis()+2000;
 						NextRefresh=millis()+2000;
-						ProbeNextSend = millis()+10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
+						ProbeNextSend=millis()+10000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 
 						client.print(F("SCOK"));												// On reponds a JEEDOM
 						jeedom+=F("&REP=SCOK");
@@ -565,25 +652,25 @@ void loop()
 					jeedom+=F("&REP=SOK");
 				}
 			}
-			else if (c[0]=='S' && c[n]=='F')	// Modifie la valeur de toutes les pins sortie (suite reboot )
+			else if (c[0]=='S' && c[n]=='F') 	// Modifie la valeur de toutes les pins sortie (suite reboot )
 			{
 				// NB_TOTALPIN = NB_DIGITALPIN	+ NB_ANALOGPIN
-				if (n==(NB_TOTALPIN+1))			 // Petite securite
+				if (n==(NB_TOTALPIN+1))					// Petite securite
 				{
 					jeedom+=F("&REP=SFOK");
-					for (int i = 2; i < NB_TOTALPIN; i++)
+					for (int i = 0; i < NB_TOTALPIN; i++)
 					{
 						switch (Status_pins[i])
 						{
-							case 'o': // output
-							case 's': // switch
-							case 'l': // low_relais
-							case 'h': // high_relais
-							case 'u': // output_pulse
-							case 'v': // low_pulse
-							case 'w': // high_pulse
+							case 'o':		//	output
+							case 's':	 //	switch
+							case 'l':		//	low_relais
+							case 'h':		//	high_relais
+							case 'u':		//	output_pulse
+							case 'v':		//	low_pulse
+							case 'w':		//	high_pulse
 							case 'y': // double_pulse
-								if (c[i+1]=='0')
+								 if (c[i+1]=='0')
 								{
 									PinWriteLOW(i);
 								}
@@ -591,17 +678,17 @@ void loop()
 								{
 									PinWriteHIGH(i);
 								}
-							break;
+								break;
 						}
 					}
-				RepByJeedom=0; // Demande repondue, pas la peine de redemander a la fin de loop()
+					RepByJeedom=0; // Demande repondue, pas la peine de redemander a la fin de loop()
 					client.print(F("SFOK"));							// On reponds a JEEDOM
-					ProbeNextSend = millis()+20000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
+					ProbeNextSend=millis()+20000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 				}
 			}
 			else if (c[0]=='S' && (c[n]=='L' || c[n]=='H' || c[n]=='A')) // Modifie la valeur de toutes les pins sortie a LOW / HIGH / SWITCH / PULSE
 			{
-				if (n==2 || n==7)			// Petite securite	: S2L / S2H / S2A / SP00007L /SP00007H
+				if (n==2 || n==7)			// Petite securite  : S2L / S2H / S2A / SP00007L /SP00007H
 				{
 					jeedom+=F("&REP=SOK");
 					for (int i = 1; i < n; i++)
@@ -642,17 +729,18 @@ void loop()
 						}
 					}
 					client.print(F("SOK"));							// On reponds a JEEDOM
-					ProbeNextSend = millis()+10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
+					ProbeNextSend=millis()+10000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
 				}
 			}
-			else if (c[0]=='B' && c[n]=='M')	// Choix du BootMode
+			else if (c[0]=='B' && c[n]=='M') 	// Choix du BootMode
 			{
 				BootMode=int(c[1]-'0');
-				EEPROM.update(14, BootMode);
+				EEPROM.write(14,	BootMode);
+				EEPROM.commit();
 
 				client.print(F("BMOK"));								// On reponds a JEEDOM
 				jeedom+=F("&REP=BMOK");
-				ProbeNextSend = millis()+3000; // Décalage pour laisser le temps au differents parametrages d'arriver de Jeedom
+				ProbeNextSend=millis()+3000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 			}
 		#if (UseHCSR04 == 1)
 			else if (c[0]=='T' && c[n]=='E') 	// Trigger pin + pin Echo pour le support du HC-SR04 (ex: T0203E)
@@ -661,7 +749,7 @@ void loop()
 				{
 					client.print(F("SOK"));								// On reponds a JEEDOM
 					jeedom+=F("&REP=SOK");
-					ProbeNextSend = millis()+10000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend=millis()+10000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 
 					for (int i = 1; i < n; i++)
 					{
@@ -688,7 +776,7 @@ void loop()
 			{
 					client.print(F("SMOK"));								// On reponds a JEEDOM
 					jeedom+=F("&REP=SMOK");
-					ProbeNextSend = millis()+10000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
+					ProbeNextSend=millis()+10000; // Décalage pour laisser le temps aux differents parametrages d'arriver de Jeedom
 
 					//pin_id=10*int(c[1]-'0')+int(c[2]-'0');
 					lcd.clear();
@@ -756,382 +844,380 @@ void loop()
 			}
 		#endif
 		#if (UserSketch == 1)
-			else if (c[0]=='U' && c[n]=='R')	// UseR Action
+			else if (c[0]=='U' && c[n]=='R')	// User Action
 			{
 				client.print(F("SOK"));	// On reponds a JEEDOM
 				UserAction();
 			}
 		#endif
-
 			else
 			{
-				client.print(F("NOK"));									 // On reponds a JEEDOM
+				client.print(F("NOK"));										// On reponds a JEEDOM
 				jeedom+=F("&REP=NOK");
 			}
+
 		}
 	}
 	client.stop();
 	// On ecoute les pins en entree
 	//jeedom="";
-	for (int i = 2; i < NB_TOTALPIN; i++)
+	for (int i = 0; i < NB_TOTALPIN; i++)
 	{
 		byte BPvalue = 0;
 		switch (Status_pins[i])
 		{
-		case 'i': // input
-		case 'p': // input_pullup
-			PinValue = digitalRead(i);
-			if (PinValue != OLDPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
-			{
-				OLDPinValue[i] = PinValue;
-				jeedom += '&';
-				jeedom += i;
-				jeedom += '=';
-				jeedom += PinValue;
-				PinNextSend[i] = millis() + 1000; // Delai pour eviter trop d'envois
-			}
-			break;
-		case 'n':		// BP_input_pulldown
-			BPvalue = 1;
-		case 'q':		// BP_input_pullup
-			PinValue = digitalRead(i);
-			if (PinValue != OLDPinValue[i])
-			{
-				PinNextSend[i] = millis() + 50;	 // Delai antirebond
-				OLDPinValue[i] = PinValue;
-				ProbeNextSend = millis() + 5000; // decale la lecture des sondes pour eviter un conflit
-			}
-			if (PinNextSend[i] < millis() && PinValue != swtch[i])
-			{
-				if (PinValue == BPvalue) CounterPinValue[i] += 1;
-				OLDAnalogPinValue[i] = millis() + 1200;	 // Delai Appui long
-				swtch[i] = PinValue;
-			}
-			if ((OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0) || (PinNextSend[i] < millis() && PinValue != OLDPinValue[i]))
-			{
-				if (PinValue == BPvalue) CounterPinValue[i] = 99; // Appui long
-				jeedom += '&';
-				jeedom += i;
-				jeedom += '=';
-				jeedom += CounterPinValue[i];
-				CounterPinValue[i] = 0;
-				OLDAnalogPinValue[i] = millis() + 1000;
-			}
-			break;
-		#if (UsePwm_input == 1)
-		case 'g': // input_variable suivant tempo
-			PinValue = digitalRead(i);
-			// Calcul
-			if (PinNextSend[i]>millis()) // bouton laché avant les 10s
-			{
-				pinTempo=255-((PinNextSend[i]-millis())*255/10000); // pas de 25.5 par seconde
-			}
-			else pinTempo=255;	// si bouton laché après les 10s, on bloque la valeur a 255
-
-			if (PinValue!=OLDPinValue[i]) // changement état entrée = bouton appuyé ou bouton relaché
-			{
-				OLDPinValue[i]=PinValue;
-				if (swtch[i]==1)	// on vient de lacher le bouton.
+			case 'i':		// input
+			case 'p':		// input_pullup
+				PinValue = digitalRead(i);
+				if (PinValue != OLDPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
 				{
-					swtch[i]=0; // on enregistre le laché.
+					OLDPinValue[i] = PinValue;
 					jeedom += '&';
 					jeedom += i;
 					jeedom += '=';
-					jeedom += pinTempo;
-					PinNextSend[i]=millis();
+					jeedom += PinValue;
+					PinNextSend[i] = millis() + 1000;		// Delai pour eviter trop d'envois
+				}
+				break;
+			case 'n':		// BP_input_pulldown
+				BPvalue = 1;
+			case 'q':		// BP_input_pullup
+				PinValue = digitalRead(i);
+				if (PinValue != OLDPinValue[i])
+				{
+					PinNextSend[i] = millis() + 50;   // Delai antirebond
+					OLDPinValue[i] = PinValue;
+					ProbeNextSend = millis() + 5000; // decale la lecture des sondes pour eviter un conflit
+				}
+				if (PinNextSend[i] < millis() && PinValue != swtch[i])
+				{
+					if (PinValue == BPvalue) CounterPinValue[i] += 1;
+					OLDAnalogPinValue[i] = millis() + 1200;   // Delai Appui long
+					swtch[i] = PinValue;
+				}
+				if ((OLDAnalogPinValue[i] < millis() && CounterPinValue[i] != 0) || (PinNextSend[i] < millis() && PinValue != OLDPinValue[i]))
+				{
+					if (PinValue == BPvalue) CounterPinValue[i] = 99; // Appui long
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += CounterPinValue[i];
+					CounterPinValue[i] = 0;
+					OLDAnalogPinValue[i] = millis() + 1000;
+				}
+				break;
+			#if (UsePwm_input == 1)
+			case 'g': // input_variable suivant tempo
+				PinValue = digitalRead(i);
+				// Calcul
+				if (PinNextSend[i] > millis()) // bouton laché avant les 10s
+				{
+					pinTempo = 255 - ((PinNextSend[i] - millis()) * 255 / 10000); // pas de 25.5 par seconde
+				}
+				else pinTempo = 255;	// si bouton laché après les 10s, on bloque la valeur a 255
+
+				if (PinValue != OLDPinValue[i]) // changement état entrée = bouton appuyé ou bouton relaché
+				{
+					OLDPinValue[i] = PinValue;
+					if (swtch[i] == 1)	// on vient de lacher le bouton.
+					{
+						swtch[i] = 0; // on enregistre le laché.
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += pinTempo;
+						PinNextSend[i] = millis();
+					}
+					else
+					{
+						swtch[i] = 1; // on vient d'appuyer sur le bouton, on enregistre.
+						PinNextSend[i] = millis() + 10000; // Delai pour la tempo de maintient du bouton.
+						CounterPinValue[i] == millis(); // reutilisation pour economie de ram
+						ProbeNextSend = millis() + 15000; // decale la lecture des sondes pour eviter un conflit
+					}
 				}
 				else
 				{
-					swtch[i]=1; // on vient d'appuyer sur le bouton, on enregistre.
-					PinNextSend[i]=millis()+10000; // Delai pour la tempo de maintient du bouton.
-					CounterPinValue[i]==millis(); // reutilisation pour economie de ram
-					ProbeNextSend = millis()+15000; // decale la lecture des sondes pour eviter un conflit
-				}
-			}
-			else
-			{
-				if (swtch[i]==1 && CounterPinValue[i]<millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += pinTempo;
-					CounterPinValue[i]==millis()+1000; // reactualisation toutes les secondes pour ne pas trop charger Jeedom
-				}
-			}
-			break;
-		#endif
-		case 'a': // analog_input
-				AnalogPinValue = analogRead(i);
-				if (AnalogPinValue!=OLDAnalogPinValue[i] && (PinNextSend[i]<millis() || NextRefresh<millis()))
-				{
-					if (abs(int(AnalogPinValue - OLDAnalogPinValue[i])) > 20)	// delta correctif pour eviter les changements negligeables
+					if (swtch[i] == 1 && CounterPinValue[i] < millis())
 					{
-						int j=i;
-						if (i<54) j=i+40;	 // petit correctif car dans Jeedom toutes les pins Analog commencent a l'id 54+
-						OLDAnalogPinValue[i]=AnalogPinValue;
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += pinTempo;
+						CounterPinValue[i] == millis() + 1000; // reactualisation toutes les secondes pour ne pas trop charger Jeedom
+					}
+				}
+				break;
+			#endif
+			case 'a':		// analog_input
+				AnalogPinValue = analogRead(i);
+				if (AnalogPinValue != OLDAnalogPinValue[i] && (PinNextSend[i] < millis() || NextRefresh < millis()))
+				{
+					if (abs(int(AnalogPinValue - OLDAnalogPinValue[i])) > 20)		// delta correctif pour eviter les changements negligeables
+					{
+						int j = i;
+						if (i < 54) j = i + 40;			// petit correctif car	dans Jeedom toutes les pins Analog commencent a l'id 54+
+						OLDAnalogPinValue[i] = AnalogPinValue;
 						//jeedom += '&' + j + '=' + AnalogPinValue;
 						jeedom += '&';
 						jeedom += j;
 						jeedom += '=';
 						jeedom += AnalogPinValue;
-						PinNextSend[i]=millis()+5000; // Delai pour eviter trop d'envois
+						PinNextSend[i] = millis() + 5000;		// Delai pour eviter trop d'envois
 					}
 				}
 				break;
-		case 'c': // compteur_pullup CounterPinValue
-			PinValue = digitalRead(i);
-			if (PinValue!=OLDPinValue[i])
-			{
-				OLDPinValue[i]=PinValue;
-				CounterPinValue[i]+=PinValue;
-			}
-			if (NextRefresh<millis() || PinNextSend[i]<millis())
-			{
-				jeedom += '&';
-				jeedom += i;
-				jeedom += '=';
-				jeedom += CounterPinValue[i];
-				PinNextSend[i]=millis()+10000;		// Delai 10s pour eviter trop d'envois
-			}
-			break;
-		#if (UseDHT == 1)
-		case 'd': // DHT11
-		case 'e': // DHT21
-		case 'f':	// DHT22
-			if (PinNextSend[i] < millis() and ProbeNextSend < millis())
-			{
-				jeedom += '&';
-				jeedom += i;
-				jeedom += '=';
-				jeedom += int (myDHT[i]->readTemperature() * 100);
-				jeedom += '&';
-				jeedom += i+1000;
-				jeedom += '=';
-				jeedom += int (myDHT[i]->readHumidity() * 100);
-				PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				ProbeNextSend = millis() + 5000; // Permet de decaler la lecture entre chaque sonde DHT sinon ne marche pas cf librairie (3000 mini)
-			}
-			break;
-		#endif
-		#if (UseDS18x20 == 1)
-		case 'b': // DS18x20
-			if (PinNextSend[i] < millis() and ProbeNextSend < millis())
-			{
-				float reponse = read_DSx(i); // DS18x20
-				jeedom += '&';
-				jeedom += i;
-				jeedom += '=';
-				jeedom += reponse;
-				PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				ProbeNextSend = millis() + 12000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
-			}
-			break;
-		#endif
-		#if (UseTeleInfo == 1)
-		case 'j': // teleinfoRX
-			if (PinNextSend[i]<millis() || NextRefresh<millis())
-			{
-				#if (DEBUGtoSERIAL == 1)
-					Serial.print(F("\nTeleinfoRX ("));
-					Serial.print(i);
-					Serial.print(F(") : "));
-				#endif
-				teleinfo.begin(1200);	 // vitesse par EDF
-				char recu = 0;
-				int cntChar=0;
-				timeout = millis()+2000;	// 2s
-				while (recu != 0x02 and timeout>millis())
+			case 'c':		// compteur_pullup CounterPinValue
+				PinValue = digitalRead(i);
+				if (PinValue != OLDPinValue[i])
 				{
-					if (teleinfo.available()) recu = teleinfo.read() & 0x7F;
-/* 					#if (DEBUGtoSERIAL == 1)
-						Serial.print(recu);
-					#endif	 */
+					OLDPinValue[i] = PinValue;
+					CounterPinValue[i] += PinValue;
 				}
-				jeedom += F("&ADCO=");
-				timeout = millis()+2000;	// 2s
-				while (timeout>millis())
+				if (NextRefresh < millis() || PinNextSend[i] < millis())
 				{
-					if (teleinfo.available())
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += CounterPinValue[i];
+					PinNextSend[i]=millis()+10000;		// Delai 10s pour eviter trop d'envois
+				}
+				break;
+			#if (UseDHT == 1)
+			case 'd': // DHT11
+			case 'e': // DHT21
+			case 'f':	// DHT22
+				if (PinNextSend[i]<millis() and ProbeNextSend<millis())
+				{
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += int (myDHT[i]->readTemperature()*100);
+					jeedom += '&';
+					jeedom += i + 1000;
+					jeedom += '=';
+					jeedom += int (myDHT[i]->readHumidity()*100);
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 5000; // Permet de decaler la lecture entre chaque sonde DHT sinon ne marche pas cf librairie (3000 mini)
+				}
+				break;
+			#endif
+			#if (UseDS18x20 == 1)
+			case 'b': // DS18x20
+				if (PinNextSend[i] < millis() and ProbeNextSend < millis())
+				{
+					float reponse = read_DSx(i); // DS18x20
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += reponse;
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					ProbeNextSend = millis() + 12000; // Permet de laisser du temps pour les commandes 'action', probabilite de blocage moins grande idem^^
+				}
+				break;
+			#endif
+			#if (UseTeleInfo == 1)
+			case 'j': // teleinfoRX
+				if (PinNextSend[i]<millis() || NextRefresh<millis())
+				{
+					#if (DEBUGtoSERIAL == 1)
+						Serial.print(F("\nTeleinfoRX ("));
+						Serial.print(i);
+						Serial.print(F(") : "));
+					#endif
+					char recu = 0;
+					int cntChar=0;
+					timeout = millis()+1000;
+					while (recu != 0x02 and timeout>millis())
 					{
-						recu = teleinfo.read() & 0x7F;
-/* 						#if (DEBUGtoSERIAL == 1)
+						if (teleinfo.available()) recu = teleinfo.read() & 0x7F;
+						#if (DEBUGtoSERIAL == 1)
 							Serial.print(recu);
-						#endif */
-						cntChar++;
-						if (cntChar > 280) break;
-						if (recu == 0) break;
-						if (recu == 0x04) break; // EOT
-						if (recu == 0x03) break; // permet d'eviter ce caractere dans la chaine envoyée (economise du code pour le traiter)
-						if (recu == 0x0A) continue; 			// Debut de groupe
-						if (recu == 0x0D)
-						{
-							jeedom += ';';	// Fin de groupe
-							continue;
-						}
-						if (recu<33)
-						{
-							jeedom += '_';
-						}
-						else jeedom += recu;
+						#endif
 					}
+					jeedom += F("&ADCO=");
+					timeout = millis()+1000;
+					while (timeout>millis())
+					{
+						if (teleinfo.available())
+						{
+							recu = teleinfo.read() & 0x7F;
+							#if (DEBUGtoSERIAL == 1)
+								Serial.print(recu);
+							#endif
+							cntChar++;
+							if (cntChar > 280) break;
+							if (recu == 0) break;
+							if (recu == 0x04) break; // EOT
+							if (recu == 0x03) break; // permet d'eviter ce caractere dans la chaine envoyée (economise du code pour le traiter)
+							if (recu == 0x0A) continue; 			// Debut de groupe
+							if (recu == 0x0D)
+							{
+								jeedom += ';';	// Fin de groupe
+								continue;
+							}
+							if (recu<33)
+							{
+								jeedom += '_';
+							}
+							else jeedom += recu;
+						}
+					}
+					#if (DEBUGtoSERIAL == 1)
+						Serial.println(F("/finRX"));
+					#endif
+					PinNextSend[i]=millis()+120000;	// Delai 120s entre chaque mesures pour eviter trop d'envois
 				}
-				teleinfo.end();
-				#if (DEBUGtoSERIAL == 1)
-					Serial.println(F("/finRX"));
+				break;
+			#endif
+			#if (UseBMP180 == 1)
+			case 'r': // BMP085/180
+				if (PinNextSend[i] < millis())
+				{
+					jeedom += '&';
+					jeedom += i;
+					jeedom += '=';
+					jeedom += bmp.readTemperature();
+					jeedom += '&';
+					jeedom += i + 1000;
+					jeedom += '=';
+					jeedom += bmp.readPressure();
+					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+				}
+				break;
+			#endif
+			#if (UseBME280 >= 1)
+				#if (UseBME280 != 2)
+				case 'A': // BME280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme280.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme280.readPressure();
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme280.readHumidity();
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
 				#endif
-				PinNextSend[i]=millis()+30000;	// Delai 30s entre chaque mesures pour eviter trop d'envois
-			}
-			break;
-		#endif
-		#if (UseBMP180 == 1)
-		case 'r': // BMP085/180
-			if (PinNextSend[i] < millis())
-			{
-				jeedom += '&';
-				jeedom += i;
-				jeedom += '=';
-				jeedom += bmp.readTemperature();
-				jeedom += '&';
-				jeedom += i + 1000;
-				jeedom += '=';
-				jeedom += bmp.readPressure();
-				PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-			}
-			break;
-		#endif
-		#if (UseBME280 >= 1)
-			#if (UseBME280 != 2)
-			case 'A': // BME280
-				if (PinNextSend[i] < millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bme280.readTemperature();
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bme280.readPressure();
-					jeedom += '&';
-					jeedom += i + 2000;
-					jeedom += '=';
-					jeedom += bme280.readHumidity();
-					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
+				#if (UseBME280 >= 2)
+				case 'D': // BME280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme280b.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme280b.readPressure();
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme280b.readHumidity();
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
 			#endif
-			#if (UseBME280 >= 2)
-			case 'D': // BME280
-				if (PinNextSend[i] < millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bme280b.readTemperature();
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bme280b.readPressure();
-					jeedom += '&';
-					jeedom += i + 2000;
-					jeedom += '=';
-					jeedom += bme280b.readHumidity();
-					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
+			#if (UseBME680 >= 1)
+				#if (UseBME680 != 2)
+				case 'B': // BME680
+					if (PinNextSend[i] < millis() and bme680.performReading())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme680.temperature;
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme680.pressure;
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme680.humidity;
+						jeedom += '&';
+						jeedom += i + 3000;
+						jeedom += '=';
+						jeedom += bme680.gas_resistance;
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
+				#if (UseBME680 >= 2)
+				case 'E': // BME680
+					if (PinNextSend[i] < millis() and bme680b.performReading())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bme680b.temperature;
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bme680b.pressure;
+						jeedom += '&';
+						jeedom += i + 2000;
+						jeedom += '=';
+						jeedom += bme680b.humidity;
+						jeedom += '&';
+						jeedom += i + 3000;
+						jeedom += '=';
+						jeedom += bme680b.gas_resistance;
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
 			#endif
-		#endif
-		#if (UseBME680 >= 1)
-			#if (UseBME680 != 2)
-			case 'B': // BME680
-				if (PinNextSend[i] < millis() and bme680.performReading())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bme680.temperature;
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bme680.pressure;
-					jeedom += '&';
-					jeedom += i + 2000;
-					jeedom += '=';
-					jeedom += bme680.humidity;
-					jeedom += '&';
-					jeedom += i + 3000;
-					jeedom += '=';
-					jeedom += bme680.gas_resistance;
-					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
+			#if (UseBMP280 >= 1)
+				#if (UseBMP280 != 2)
+				case 'C': // BMP280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bmp280.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bmp280.readPressure();
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
+				#if (UseBMP280 >= 2)
+				case 'F': // BMP280
+					if (PinNextSend[i] < millis())
+					{
+						jeedom += '&';
+						jeedom += i;
+						jeedom += '=';
+						jeedom += bmp280b.readTemperature();
+						jeedom += '&';
+						jeedom += i + 1000;
+						jeedom += '=';
+						jeedom += bmp280b.readPressure();
+						PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
+					}
+					break;
+				#endif
 			#endif
-			#if (UseBME680 >= 2)
-			case 'E': // BME680
-				if (PinNextSend[i] < millis() and bme680b.performReading())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bme680b.temperature;
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bme680b.pressure;
-					jeedom += '&';
-					jeedom += i + 2000;
-					jeedom += '=';
-					jeedom += bme680b.humidity;
-					jeedom += '&';
-					jeedom += i + 3000;
-					jeedom += '=';
-					jeedom += bme680b.gas_resistance;
-					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
-			#endif
-		#endif
-		#if (UseBMP280 >= 1)
-			#if (UseBMP280 != 2)
-			case 'C': // BMP280
-				if (PinNextSend[i] < millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bmp280.readTemperature();
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bmp280.readPressure();
-					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
-			#endif
-			#if (UseBMP280 >= 2)
-			case 'F': // BMP280
-				if (PinNextSend[i] < millis())
-				{
-					jeedom += '&';
-					jeedom += i;
-					jeedom += '=';
-					jeedom += bmp280b.readTemperature();
-					jeedom += '&';
-					jeedom += i + 1000;
-					jeedom += '=';
-					jeedom += bmp280b.readPressure();
-					PinNextSend[i] = millis() + ProbePauseDelay;	// Delai 60s entre chaque mesures pour eviter trop d'envois
-				}
-				break;
-			#endif
-		#endif
 		}
 	}
 
 	#if (UserSketch == 1)
 		//UserLoop(); // Appel de votre loop() permanent
-		if (NextRefresh < millis()) UserLoop(); // Appel de votre loop() toutes les 60s
+		 if (NextRefresh < millis()) UserLoop(); // Appel de votre loop() toutes les 60s
 	#endif
 
 	if (NextRefresh < millis())
@@ -1142,11 +1228,27 @@ void loop()
 			jeedom += F("&ASK=1"); // Sinon on redemande
 		}
 	}
+	#if (UseHLW8012 == 1)
+		if (HLW8012Refresh < millis())
+		{
+			// When not using interrupts we have to manually switch to current or voltage monitor
+			// This means that every time we get into the conditional we only update one of them
+			// while the other will return the cached value.
+			//hlw8012.toggleMode();
 
-/* 	#if (UseLCD16x2 == 1 || UseLCD16x2 == 2)
-		lcd.setCursor(0,1);
-		lcd.print(jeedom);
-	#endif */
+			HLW8012Refresh = millis() + UPDATE_TIME;	// Refresh auto toutes les 30s
+			jeedom += F("&1=");
+			jeedom += hlw8012.getActivePower();
+			jeedom += F("&2=");
+			jeedom += hlw8012.getVoltage();
+			jeedom += F("&3=");
+			jeedom += hlw8012.getCurrent();
+			jeedom += F("&4=");
+			jeedom += hlw8012.getApparentPower();
+			jeedom += F("&5=");
+			jeedom += (int) (100 * hlw8012.getPowerFactor());
+		}
+	#endif
 
 	if (jeedom != "") SendToJeedom();
 }
@@ -1175,7 +1277,7 @@ void loop()
 		// jeedom += '&';
 		// jeedom += 506;	// pin 506
 		// jeedom += '=';
-		// jeedom += "Jeedouino%20speaking%20to%20Jeedom...";	 // valeur string
+		// jeedom += "Jeedouino%20speaking%20to%20Jeedom...";   // valeur string
 
 		// /!\ attention de ne pas mettre de code bloquant (avec trop de "delays") - max time 2s
 	}
@@ -1208,14 +1310,31 @@ void loop()
 #endif
 
 // FONCTIONS
+void WIFI_Connect()
+{
+	WiFi.disconnect();	// Not sure
+	#if defined(ARDUINO_ARCH_ESP8266)
+	WiFi.hostname("JeedouinoESPTAG");
+	#endif
+	WiFi.enableAP(0);
+	WiFi.begin(ssid, password);
+
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		delay(500);
+		#if (DEBUGtoSERIAL == 1)
+			Serial.print(".");
+		#endif
+	}
+}
 
 void SendToJeedom()
 {
-	EthernetClient JEEDOMclient = server.available();
+	WiFiClient JEEDOMclient = server.available();
 	#if (DEBUGtoSERIAL == 1)
-		Serial.print(F("\nSending: "));
+		Serial.print(F("\nSending : "));
 		Serial.println(jeedom);
-		Serial.print(F("To eqLogic: "));
+		Serial.print(F("\nTo eqLogic: "));
 		Serial.println(eqLogic);
 	#endif
 	int J=JEEDOMclient.connect(IP_JEEDOM, 80);
@@ -1233,7 +1352,7 @@ void SendToJeedom()
 		JEEDOMclient.print(IP_JEEDOM[2]);
 		JEEDOMclient.print('.');
 		JEEDOMclient.println(IP_JEEDOM[3]);
-		delay(111);
+		delay(222);
 		JEEDOMclient.println(F("Connection: close"));
 		JEEDOMclient.println();
 		delay(111);
@@ -1248,42 +1367,18 @@ void SendToJeedom()
 		Serial.print('.');
 		Serial.println(IP_JEEDOM[3]);
 	#endif
-
-		UIPEFailTime = millis();
-		UIPEFailCount = 0;
 	}
 	else
 	{
+		#if (DEBUGtoSERIAL == 1)
+			Serial.print(F("connection failed : "));
+			Serial.println(J);
+		#endif
 		JEEDOMclient.stop();
-		UIPEFailCount++;
-	#if (DEBUGtoSERIAL == 1)
-		Serial.print(F("connection failed : "));
-		Serial.println(J);
-		Serial.print(F("UIPEFailCount : "));
-		Serial.println(UIPEFailCount);
-	#endif
-		if (UIPEFailCount>10 and millis()>UIPEFailTime+60000)
-		{
-			#if (DEBUGtoSERIAL == 1)
-				Serial.println(F("Waiting 10s & reboot if UseWatchdog is set"));
-			#endif
-			delay(10000); // tentative soft pour laisser le temps a la lib de se resaisir
-			#if (UseWatchdog == 1)
-				wdt_enable(WDTO_15MS); // try reboot
-				while(1){}
-			#endif
-			JEEDOMclient.stop();
-			delay(1000);
-			Ethernet.begin(mac, IP_ARDUINO);
-			delay(1000);
-			server.begin();
-			UIPEFailTime = millis() + 60000;
-			delay(999);
-		}
 	}
 	jeedom="";
 	delay(444);
-	//JEEDOMclient.stop();
+	JEEDOMclient.stop();
 }
 
 void Set_OutputPin(int i)
@@ -1300,9 +1395,9 @@ void Set_OutputPin(int i)
 			delay(15);
 			break;
 		#endif
-		case 'o': // output			 // S131S pin 13 set to 1 (ou S130S pin 13 set to 0)
-		case 'l': // low_relais	// S13S pin 13 set to 0
-		case 'h': // high_relais	// S13S pin 13 set to 1
+		case 'o':		//	output				// S131S pin 13 set to 1 (ou S130S pin 13 set to 0)
+		case 'l':	 //	low_relais		// S13S pin 13 set to 0
+		case 'h':	 //	high_relais	 // S13S pin 13 set to 1
 			if (c[3]==0)
 			{
 				PinWriteLOW(i);
@@ -1313,7 +1408,7 @@ void Set_OutputPin(int i)
 			}
 			break;
 
-		case 's': // switch			// S13 pin 13 set to 1 si 0 sinon set to 0 si 1
+		case 's':	 //	switch				// S13 pin 13 set to 1 si 0 sinon set to 0 si 1
 			if (swtch[i]==1)
 			{
 				PinWriteLOW(i);
@@ -1329,10 +1424,10 @@ void Set_OutputPin(int i)
 		// On essai d'etre sur une precision de 0.1s mais ca peut fluctuer en fonction de la charge cpu
 		// Testé seulement sur mega2560
 		//
-		case 'u': // output_pulse // Tempo ON : S1309999S : pin 13 set to 0 during 999.9 seconds then set to 1 (S1319999 : set to 1 then to 0)
+		case 'u':		//	output_pulse 	// Tempo ON : S1309999S : pin 13 set to 0 during 999.9 seconds then set to 1 (S1319999 : set to 1 then to 0)
 			pinTempo=10000*int(c[4])+1000*int(c[5])+100*int(c[6])+10*int(c[7])+int(c[8]);
 			// pinTempo est donc en dixieme de seconde
-			pinTempo = pinTempo*100+millis(); // temps apres lequel la pin doit retourner dans l'autre etat.
+			pinTempo = pinTempo*100+millis();	 // temps apres lequel la pin doit retourner dans l'autre etat.
 
 			// Peut buguer quand millis() arrive vers 50jours si une tempo est en cours pendant la remise a zero de millis().
 			// Risque faible si les tempo sont de l'ordre de la seconde (impulsions sur relais par ex.).
@@ -1348,7 +1443,7 @@ void Set_OutputPin(int i)
 			}
 			break;
 
-		case 'v': // low_pulse		// Tempo ON : S139999S : pin 13 set to 0 during 999.9 seconds then set to 1
+		case 'v':		//	low_pulse			// Tempo ON : S139999S : pin 13 set to 0 during 999.9 seconds then set to 1
 			if (c[3]==0)
 			{
 				pinTempo=10000*int(c[4])+1000*int(c[5])+100*int(c[6])+10*int(c[7])+int(c[8]);
@@ -1364,7 +1459,7 @@ void Set_OutputPin(int i)
 			}
 			break;
 
-		case 'w': // high_pulse	 // Tempo ON : S139999S : pin 13 set to 1 during 999.9 seconds then set to 0
+		case 'w':		//	high_pulse		// Tempo ON : S139999S : pin 13 set to 1 during 999.9 seconds then set to 0
 			if (c[3]==0)
 			{
 				PinWriteLOW(i);
@@ -1380,9 +1475,9 @@ void Set_OutputPin(int i)
 			}
 			break;
 
-		case 'm': // pwm_output
+		case 'm':		//	pwm_output
 			pinTempo = 100 * int(c[3]) + 10 * int(c[4]) + int(c[5]); 	// the duty cycle: between 0 (always off) and 255 (always on).
-			analogWrite(i, pinTempo);
+			analogWrite(i, 4 * pinTempo);	// range arduino/jeedom 0-255, esp 0-1023 donc x4 en attendant une adapation du plugin
 			jeedom += '&';
 			jeedom += i;
 			jeedom += '=';
@@ -1399,7 +1494,7 @@ void Load_EEPROM(int k)
 	eqLogic = F("IDeqLogic");
 	eqLogic0 = "";
 	n = EEPROM.read(15);				// Recuperation de la longueur du eqLogic
-	if (n > 0)		// bug probable si eqLogic_id<10 dans jeedom
+	if (n > 0)				// bug probable si eqLogic_id<10 dans jeedom
 	{
 		for (int i = 1; i < n; i++)
 		{
@@ -1446,8 +1541,7 @@ void Load_EEPROM(int k)
 	// 		break;
 	// 	}
 	// }
-
-	for (int i = 2; i < NB_TOTALPIN; i++)
+	for (int i = 0; i < NB_TOTALPIN; i++)
 	{
 		Status_pins[i] = EEPROM.read(30 + i); // Etats des pins
 
@@ -1457,15 +1551,15 @@ void Load_EEPROM(int k)
 		//
 		switch (Status_pins[i])
 		{
-			case 'i': // input
+			case 'i':		// input
 				OLDPinValue[i] = 2;				//@cpaillet
 				PinNextSend[i] = millis();
 				break;
-			case 'a': // analog_input
+			case 'a':		// analog_input
 			case 'n':		// BP_input_pulldown
 				pinMode(i, INPUT);
 				break;
-			#if (UseTeleInfo == 1)
+		#if (UseTeleInfo == 1)
 			case 'j':		// teleinfoRX pin
 				teleinfoRX = i;
 				pinMode(i, INPUT);
@@ -1474,8 +1568,8 @@ void Load_EEPROM(int k)
 				teleinfoTX = i;
 				pinMode(i, OUTPUT);
 				break;
-			#endif
-			#if (UseDHT == 1)
+		#endif
+		#if (UseDHT == 1)
 			case 'd': // DHT11
 				myDHT[i] = new DHT(i, 11);	// DHT11
 				PinNextSend[i] = millis() + ProbePauseDelay;
@@ -1488,12 +1582,12 @@ void Load_EEPROM(int k)
 				myDHT[i] = new DHT(i, 22);	// DHT22
 				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
-			#endif
-			#if (UseDS18x20 == 1)
+		#endif
+		#if (UseDS18x20 == 1)
 			case 'b': // DS18x20
 				PinNextSend[i] = millis() + ProbePauseDelay;
 				break;
-			#endif
+		#endif
 			#if (UseServo == 1)
 			case 'x':
 				myServo[i].attach(i);
@@ -1506,12 +1600,12 @@ void Load_EEPROM(int k)
 			case 'z':		// echo pin
 				pinMode(i, INPUT);
 				break;
-			case 'p':		 // input_pullup
+			case 'p':		// input_pullup
 				pinMode(i, INPUT_PULLUP);
 				OLDPinValue[i] = 2;				//@cpaillet
 				PinNextSend[i] = millis();
 				break;
-			case 'g':		 // pwm_input
+			case 'g': 		// pwm_input
 			case 'q':		// BP_input_pullup
 					pinMode(i, INPUT_PULLUP); // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
 					// Arduino Doc : An internal 20K-ohm resistor is pulled to 5V.
@@ -1519,25 +1613,26 @@ void Load_EEPROM(int k)
 				OLDPinValue[i] = 1;
 				PinNextSend[i] = millis();
 					break;
-			case 'c':		 // compteur_pullup
-					pinMode(i, INPUT_PULLUP); // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
+			case 'c':				// compteur_pullup
+					pinMode(i, INPUT_PULLUP);	 // pour eviter les parasites en lecture, mais inverse l'etat de l'entree : HIGH = input open, LOW = input closed
 					// Arduino Doc : An internal 20K-ohm resistor is pulled to 5V.
 					if (k)
 					{
-						jeedom += F("&CPT_"); // On demande à Jeedom de renvoyer la dernière valeur connue pour la pin i
-						jeedom += i;
-						jeedom += '=';
-						jeedom += i;
+							jeedom += F("&CPT_");	// On demande à Jeedom de renvoyer la dernière valeur connue pour la pin i
+							jeedom += i;
+							jeedom += '=';
+							jeedom += i;
 					}
 					break;
-			case 'o': // output
-			case 's': // switch
-			case 'l': // low_relais
-			case 'h': // high_relais
-			case 'u': // output_pulse
-			case 'v': // low_pulse
-			case 'w': // high_pulse
-			case 'y': // double_pulse
+
+			case 'o':	//	output
+			case 's':	//	switch
+			case 'l':	//	low_relais
+			case 'h':	//	high_relais
+			case 'u':	//	output_pulse
+			case 'v':	//	low_pulse
+			case 'w':	//	high_pulse
+			case 'y': 	// double_pulse
 				pinMode(i, OUTPUT);
 				// restauration de l'etat des pins DIGITAL OUT au demarrage
 			 if (k)
@@ -1577,31 +1672,32 @@ void Load_EEPROM(int k)
 							RepByJeedom=1; // sert a verifier que jeedom a bien repondu a la demande
 						}
 						break;
-					}
+				}
 			 }
 				// fin restauration
 
 				break;
 
-			case 'm': // pwm_output
+			case 'm':		//	pwm_output
 				pinMode(i, OUTPUT);
 				break;
 		}
 	}
 	#if (UseTeleInfo == 1)
-		if (teleinfoRX != 0)
-		{
-				#if (DEBUGtoSERIAL == 1)
-			Serial.print(F("\nteleinfoRX:"));
-			Serial.println(teleinfoRX);
-			Serial.print(F("\nteleinfoTX:"));
-			Serial.println(teleinfoTX);
-			#endif
-			//SoftwareSerial teleinfo(teleinfoRX, teleinfoTX);
-		}
+	if (teleinfoRX != 0)
+	{
+			#if (DEBUGtoSERIAL == 1)
+		Serial.print(F("\nteleinfoRX:"));
+		Serial.println(teleinfoRX);
+		Serial.print(F("\nteleinfoTX:"));
+		Serial.println(teleinfoTX);
+		#endif
+		//SoftwareSerial teleinfo(teleinfoRX, teleinfoTX);
+	}
 	#endif
 	if (jeedom != "") SendToJeedom();
 }
+
 void PinWriteHIGH(long p)
 {
 	digitalWrite(p, HIGH);
@@ -1610,7 +1706,11 @@ void PinWriteHIGH(long p)
 	jeedom += p;
 	jeedom += F("=1");
 	// Si bootmode=4 sauvegarde de l'etat de la pin (en sortie) - !!! Dangereux pour l'eeprom à long terme !!!
-	if (BootMode==4) EEPROM.update(110+p, 1);
+	if (BootMode==4)
+	{
+		EEPROM.write(110+p, 1);
+		EEPROM.commit();
+	}
 	#if (DEBUGtoSERIAL == 1)
 		Serial.print(F("SetPin "));
 		Serial.print(p);
@@ -1625,7 +1725,11 @@ void PinWriteLOW(long p)
 	jeedom += p;
 	jeedom += F("=0");
 	// Si bootmode=4 sauvegarde de l'etat de la pin (en sortie) - !!! Dangereux pour l'eeprom à long terme !!!
-	if (BootMode==4) EEPROM.update(110+p, 0);
+	if (BootMode==4)
+	{
+		EEPROM.write(110+p, 0);
+		EEPROM.commit();
+	}
 	#if (DEBUGtoSERIAL == 1)
 		Serial.print(F("SetPin "));
 		Serial.print(p);
@@ -1636,7 +1740,7 @@ void PinWriteLOW(long p)
 void Init_EEPROM()
 {
 	// Un marqueur
-	EEPROM.update(13, 'J');	 // JEEDOUINO
+	EEPROM.write(13,	'J'); 		// JEEDOUINO
 
 	// BootMode choisi au demarrage de l'arduino
 	// 0 = Pas de sauvegarde - Toutes les pins sorties non modifi�es au d�marrage.
@@ -1644,25 +1748,28 @@ void Init_EEPROM()
 	// 2 = Pas de sauvegarde - Toutes les pins sorties mises � HIGH au d�marrage.
 	// 3 = Sauvegarde sur JEEDOM - Toutes les pins sorties mises suivant leur sauvegarde dans Jeedom. Jeedom requis, sinon pins mises � OFF.
 	// 4 = Sauvegarde sur EEPROM- Toutes les pins sorties mises suivant leur sauvegarde dans l\'EEPROM. Autonome, mais dur�e de vie de l\'eeprom fortement r�duite.
-	EEPROM.update(14, 2);
+	EEPROM.write(14,	2);
 	BootMode=2;
 
 	// Initialisation par default
+	EEPROM.write(15,	0);
 	for (int i = 30; i < 200; i++)
 	{
-		EEPROM.update(i, 1);	// Valeur des pins OUT au 1er demarrage ( mes relais sont actis a 0, donc je met 1 pour eviter de les actionner au 1er boot)
+		EEPROM.write(i, 1);	// Valeur des pins OUT au 1er demarrage ( mes relais sont actifs a 0, donc je met 1 pour eviter de les actionner au 1er boot)
 	}
-	EEPROM.update(26, IP_JEEDOM[0]);				// Sauvegarde de l' IP
-	EEPROM.update(27, IP_JEEDOM[1]);
-	EEPROM.update(28, IP_JEEDOM[2]);
-	EEPROM.update(29, IP_JEEDOM[3]);
+	EEPROM.write(26, IP_JEEDOM[0]);				// Sauvegarde de l' IP
+	EEPROM.write(27, IP_JEEDOM[1]);
+	EEPROM.write(28, IP_JEEDOM[2]);
+	EEPROM.write(29, IP_JEEDOM[3]);
 
-	eqLogic = F("IDeqLogic");						// Sauvegarde de eqLogic pour 1er boot apres 1er flashage
-	EEPROM.update(15, eqLogicLength);				// Sauvegarde de la longueur du eqLogic
+	eqLogic = F("IDeqLogic");					// Sauvegarde de eqLogic pour 1er boot apres 1er flashage
+	EEPROM.write(15, eqLogicLength);			// Sauvegarde de la longueur du eqLogic
 	for (int i = 1; i < eqLogicLength; i++)
 	{
-		EEPROM.update(15+i, eqLogic[i-1]-'0'); 		// Sauvegarde de l' eqLogic
+		EEPROM.write(15+i, eqLogic[i-1]-'0'); 	// Sauvegarde de l' eqLogic
 	}
+
+	EEPROM.commit();
 	// fin initialisation
 }
 

@@ -371,25 +371,25 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
 				$html .= '</td><td>';
 				$html .= '<label class="checkbox-inline"><input type="checkbox" class="configKey " data-l1key="Auto_'. $board_id.'" /><i class="fas fa-redo"></i> {{5min}}</label>';
 				$html .= '</td><td>';
-                $html .= $jsButton;
-                $html .= '</td><td>';
+        $html .= $jsButton;
+        $html .= '</td><td>';
 				if ($Sketch != '')
 				{
-					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../sketchs/');
+					$jeedouinoPATH = realpath(dirname(__FILE__) . '/../data/');
 					$SketchFileName = $jeedouinoPATH . '/JeedouinoUSB_' . $board_id . '.ino';
 					if (file_exists($SketchFileName))
 					{
-						$html .= '<div class="col-lg-5"><a href="plugins/jeedouino/sketchs/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
+						$html .= '<div class="col-lg-5"><a href="plugins/jeedouino/data/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ SketchUSB ( EqID : ' . $board_id . ' ) }}</a></div>';
 						$Arduino_reseaux .= '<div class="form-group">
 						<label class="col-lg-4 control-label">{{ ' . $Sketch . ' ( USB )' . '}}</label>
-						<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fab fa-usb"></i> '.$name.'</a></div>
+						<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id=' . $board_id . '" target="_blank" ><i class="fab fa-usb"></i> ' . $name . '</a></div>
 						<div class="col-lg-5">
-							<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoUSB_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+							<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoUSB_' . $board_id . '.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : ' . $board_id . ' ) }}</a>
 						</div></div>';
 					}
 					else
 					{
-						$html .= '<div class="col-lg-5"><a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}" download target="_blank"><i class="fas fa-download"></i> SketchUSB</a></div>';
+						$html .= '<div class="col-lg-5"><a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoUSB.ino" class="btn btn-info"  title="{{ Télécharger le Sketch à mettre dans l\'arduino }}" download target="_blank"><i class="fas fa-download"></i> SketchUSB</a></div>';
 					}
 				}
 				$html .= '</td></tr>';
@@ -406,7 +406,7 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
 					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( WIFI )' . '}}</label>
 					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fas fa-wifi"></i> '.$name.'</a></div>
 					<div class="col-lg-5">
-						<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
+						<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoESP_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'esp ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
 				}
 				else
@@ -415,7 +415,7 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
 					<label class="col-lg-4 control-label">{{ '.$Sketch . ' ( LAN )' . '}}</label>
 					<div class="col-lg-3"><a class="btn btn-default " href=" index.php?&v=d&p=jeedouino&m=jeedouino&id='.$board_id.'" target="_blank" ><i class="fas fa-sitemap"></i> '.$name.'</a></div>
 					<div class="col-lg-5">
-						<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
+						<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/JeedouinoLAN_'.$board_id.'.ino" class="btn btn-info" download target="_blank" ><i class="fas fa-download"></i>{{ Télécharger le Sketch a mettre dans l\'arduino ( EqID : '.$board_id.' ) }}</a>
 					</div></div>';
 				}
 			}
@@ -427,7 +427,7 @@ if(count(system::ps('dpkg')) > 0 || count(system::ps('apt')) > 0 || $dep != '')
 			$Arduino_reseaux .= '<div class="form-group">
 							<label class="col-lg-5 control-label">{{ Librairies pour vos Sketchs }}</label>
 							<div class="col-lg-5">
-								<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/sketchs/ArduinoLibraries.zip" class="btn btn-warning" target="_blank"  download><i class="fas fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
+								<a href="core/php/downloadFile.php?pathfile=plugins/jeedouino/data/ArduinoLibraries.zip" class="btn btn-warning" target="_blank"  download><i class="fas fa-download"></i>{{ Télécharger les librairies Arduinos/ESP }}</a>
 							</div></div>';
 
 		}

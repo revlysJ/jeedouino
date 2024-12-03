@@ -61,6 +61,7 @@ if (isset($_GET['id']))
 		if ($arduino_board != $ModeleArduino) $ModeleArduino = $arduino_board;
 	}
 	$non_defini = true;
+  $message_a = '';
 	if ($ModeleArduino != '')
 	{
 
@@ -73,19 +74,19 @@ if (isset($_GET['id']))
 			else
 			{
 				$non_defini = false;
-				$message_a .= __(' NON DEFINI ! ', __FILE__);
+				$message_a .= __(' Type de port usb non defini : local/distant ! ', __FILE__);
 			}
 		}
 		else
 		{
 			$non_defini = false;
-			$message_a = __(' NON DEFINI ! ', __FILE__);
+			$message_a = __(' Type de port non defini : usb/reseau ! ', __FILE__);
 		}
 	}
 	else
 	{
 		$non_defini = false;
-		$message_a = __(' NON DEFINI ! ', __FILE__);
+		$message_a = __(' Type de carte non defini ! ', __FILE__);
 	}
 
 
@@ -122,7 +123,7 @@ if (isset($_GET['id']))
 				<?php// if (substr($ModeleArduino,0,2) != 'pi' or (substr($ModeleArduino,0,6) == 'piGPIO') or ($ModeleArduino == 'piPlus'))
 				//{
 				?>
-			<li role="presentation"><a href="#optionstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin"><i class="fas fa-wrench"></i> {{Options}}</a></li>
+			<li role="presentation"><a href="#optionstab" aria-controls="profile" role="tab" data-toggle="tab"  id="bt_conf_Pin1"><i class="fas fa-wrench"></i> {{Options}}</a></li>
 				<?php
 				//}
 				?>
@@ -836,7 +837,7 @@ $(".bt_ProbeDelay").on('click', function (event) {
 				return;
 			}
       //			$('#md_modal').dialog('close');
-			$('#jqueryLoadingDiv').hide();		// A surveiller, élimine la "roue" qui tourne mais laisse celle lors de la sauvegarde de équipement. bug ??
+			//$('#jqueryLoadingDiv').hide();		// A surveiller, élimine la "roue" qui tourne mais laisse celle lors de la sauvegarde de équipement. bug ??
 
 			modifyWithoutSave = false;
 		}
@@ -871,9 +872,10 @@ $(".bt_ProbeDelay").on('click', function (event) {
 	else
 	{
 		?>
-			<script>$('#jqueryLoadingDiv').hide();$('#md_modal').dialog('close');	</script>
+			<script>//$('#jqueryLoadingDiv').hide();//$('#md_modal').dialog('close');	</script>
 		<div class="alert alert-danger">
 			<center><h4>{{Pré-requis}}</h4>
+        <?php echo $message_a; ?><br><br>
 			{{Veuillez finir de configurer l'équipement et le sauvegarder avant de pouvoir configurer les pins de celui-ci}}
 			</center>
 		</div>

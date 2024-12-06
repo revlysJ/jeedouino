@@ -123,8 +123,9 @@ if (isset($_GET['BoardEQ']))
 		{
 			if ($eqLogic->getIsEnable() == 0) jeedouino::StopBoardDemon($arduino_id, 0, $ModeleArduino);
 			config::save('NODEP_' . $arduino_id, $_GET['NODEP'], 'jeedouino');
-			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($_GET['NODEP'])) . __(' introuvables. Veuillez les réinstaller.' , __FILE__);
-			jeedouino::logAlert('error', 'warning', $message);
+			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($_GET['NODEP'])) . __(' introuvables ou problème de configuration.' , __FILE__);
+			if (isset($_GET['errdep'])) $message .= __(' >> Erreur : ', __FILE__) . $_GET['errdep'];
+			jeedouino::logAlert('error', 'danger', ':bg-danger: /!\ ' . $message . ' :/bg:');
 		}
 		if (isset($_GET['NOBMEP']))
 		{

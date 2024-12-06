@@ -9,6 +9,7 @@ import socket
 import threading
 import os, time
 import sys
+from urllib import parse
 try:
 	import http.client as httplib
 except:
@@ -52,9 +53,9 @@ logFile = "JeedouinoPiPlus.log"
 def log(level,message):
 	fifi = open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PiPlus][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		fifi.write('[%s][Demon PiPlus][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	except:
-		print('[%s][Demon PiPlus][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		print('[%s][Demon PiPlus][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -336,7 +337,7 @@ class myThread1 (threading.Thread):
 		s.close()
 		if exit == 1:
 			#listener.deactivate()
-			sys.exit()
+			sys.exit('Daemon stopped.')
 
 def SetPin(u, v, m):
 	global swtch, bus
@@ -439,7 +440,7 @@ class myThread2 (threading.Thread):
 						SimpleSend(pinStr)
 			time.sleep(0.1)
 		s.close()
-		sys.exit()
+		sys.exit('Daemon stopped.')
 
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
@@ -487,15 +488,15 @@ if __name__ == "__main__":
 	sendCPT=0
 
 	if (nodep):
-		SimpleSend('&NODEP=smbus')
+		SimpleSend('&NODEP=smbus&errdep=' + parse.quote(str(errdep)))
 		log('Error' , 'Dependances SMBUS introuvables. Veuillez les (re)installer. - ' + str(errdep))
-		sys.exit('Dependances SMBUS introuvables. - ' + str(errdep))
+		sys.exit('Daemon stopped. Dependances SMBUS introuvables. - ' + str(errdep))
 	try:
 		bus = IOPi(boardId)
 	except Exception as e:
-		SimpleSend('&NODEP=i2cBusNotOpen')
+		SimpleSend('&NODEP=i2cBusNotOpen&errdep=' + parse.quote(str(e)))
 		log('Error' , 'I2C introuvable. Veuillez l activer (sudo raspi-config) ou verifier si la carte i2c est bien connectee/bon port. - ' + str(e))
-		sys.exit('i2c Bus Not Open ! try (sudo raspi-config) or verify i2c port/wiring. - ' + str(e))
+		sys.exit('Daemon stopped. i2c Bus Not Open ! try (sudo raspi-config) or verify i2c port/wiring. - ' + str(e))
 
 	# Toutes les entrees en impulsion
 	# Init du Compteur  d'Impulsion
@@ -631,4 +632,4 @@ if __name__ == "__main__":
 
 	s.close()
 	#listener.deactivate()
-	sys.exit()
+	sys.exit('Daemon stopped.')

@@ -200,18 +200,21 @@ try {
     }
     if (init('action') == 'installPIFACE')
     {
-      $exec .= "$sudo apt-get -y install python{,3}-pip \n";
-      $exec .= "$sudo apt-get -y python{,3}-setuptools \n";
-      $exec .= "$sudo pip install --upgrade pip \n";
-      $exec .= "$sudo pip3 install pifacecommon pifacedigitalio \n";
-      $exec .= "$sudo pip install pifacecommon pifacedigitalio \n";
+      //$exec .= "$sudo apt-get -y install python{,3}-pip \n";
+      //$exec .= "$sudo apt-get -y python{,3}-setuptools \n";
+      //$exec .= "$sudo pip install --upgrade pip \n";
+      $exec .= "$sudo " . dirname(__FILE__) . "/../../ressources/venv/bin/pip3 install pifacecommon pifacedigitalio \n";
+      //$exec .= "$sudo pip3 install pifacecommon pifacedigitalio \n";
+      //$exec .= "$sudo pip install pifacecommon pifacedigitalio \n";
       $exec .= "$sudo echo dtparam=spi=on | sudo tee -a /boot/config.txt \n";
       jeedouino::execSH($exec . $xEnd, log::getPathToLog('jeedouino_piface'));
       ajax::success();
     }
     if (init('action') == 'installPiPlus')
     {
-      $exec .= "$sudo apt-get -y install i2c-tools libi2c-dev python-smbus python3-smbus \n";
+      $exec .= "$sudo apt-get -y install i2c-tools libi2c-dev python3-smbus \n";
+      //$exec .= "$sudo apt-get -y smbus \n";
+      $exec .= "$sudo " . dirname(__FILE__) . "/../../ressources/venv/bin/pip install smbus \n";
       $exec .= "$sudo echo dtparam=i2c_arm=on | sudo tee -a /boot/config.txt \n";
       $exec .= "$sudo echo dtparam=i2c1=on | sudo tee -a /boot/config.txt \n";
       $exec .= "$sudo echo i2c-dev | sudo tee -a /etc/modules \n";

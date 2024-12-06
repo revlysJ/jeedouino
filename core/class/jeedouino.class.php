@@ -971,7 +971,7 @@ class jeedouino extends eqLogic {
 					jeedouino::log('error', __('Erreur de connection  ', __FILE__)  . $matos);
 					if ($errno == '111' or $errno == '110')
 					{
-						jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée. ', __FILE__) . $matos);
+						jeedouino::log('debug', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée. ', __FILE__) . $matos);
 					}
 					return 'NOK';
 				}
@@ -1627,16 +1627,19 @@ class jeedouino extends eqLogic {
 			if ($fp === false)
 			{
 				$reponse = $errno.' - '.$errstr;
-				$matos = ' [ ' . $DemonTypeF . ' ( ' . $name . ' - EqID ' . $board_id . ' ) ' . $IPBoard . ':' . $ipPort . ' ] ';
-				if (!config::byKey('StartDemons', 'jeedouino', 0))
-					jeedouino::log( 'error', __('(Normal si Re/Start/Stop demandé) Erreur de connection au démon ', __FILE__) . $matos . __(' - Réponse : ', __FILE__) . $reponse);
-				if ($errno == '111' or $errno == '110')
+				if (jeedouino::IsNoDep($board_id))
 				{
-					jeedouino::log('error', __('Vérifiez si l\'ip de votre Jeedom (ou celle de votre équipement) n\'a pas changée. ', __FILE__) . $matos);
-					if (substr($my_Board->getConfiguration('arduino_board'), 0, 1) != 'a')
+					$matos = ' [ ' . $DemonTypeF . ' ( ' . $name . ' - EqID ' . $board_id . ' ) ' . $IPBoard . ':' . $ipPort . ' ] ';
+					if (!config::byKey('StartDemons', 'jeedouino', 0))
+						jeedouino::log( 'debug', __('(Normal si Re/Start/Stop demandé) Erreur de connection au démon ', __FILE__) . $matos . __(' - Réponse : ', __FILE__) . $reponse);
+					if ($errno == '111' or $errno == '110')
 					{
-						jeedouino::log('error', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées. ', __FILE__) . $matos);
-						jeedouino::log('error', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée. ', __FILE__) . $matos);
+						jeedouino::log('debug', __('Vérifiez si l\'ip de votre Jeedom [' . self::GetJeedomIP() . '] (ou celle de votre équipement) n\'a pas changée. ', __FILE__) . $matos);
+						if (substr($my_Board->getConfiguration('arduino_board'), 0, 1) != 'a')
+						{
+							jeedouino::log('debug', __('Vérifiez que les dépendances (si il y en a) pour votre équipement soient correctement installées. ', __FILE__) . $matos);
+							jeedouino::log('debug', __('Vérifiez les logs du démon pour voir si une erreur y est indiquée. ', __FILE__) . $matos);
+						}
 					}
 				}
 				return $reponse;
@@ -1787,13 +1790,13 @@ class jeedouino extends eqLogic {
 			config::save('SENDING_'.$board_id, 0, 'jeedouino');
 		}
 	}
-	public function IsNoDep($board_id)
+	public static function IsNoDep($board_id)
 	{
 		$NODEP = config::byKey('NODEP_' . $board_id, 'jeedouino', '');
 		if ($NODEP != '')
 		{
-			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($NODEP)) . __(' introuvables. Imposssible de démarrer le démon.' , __FILE__);
-			jeedouino::logAlert('error', 'warning', $message);
+			$message = __('Dépendances ', __FILE__) . ucfirst(strtolower($NODEP)) . __(' introuvables ou problème de configuration. Veuillez regarder les logs du démon.' , __FILE__);
+			jeedouino::logAlert('error', 'danger', $message);
 			return false;
 		}
 		return true;

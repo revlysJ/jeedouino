@@ -16,6 +16,7 @@ import socket
 import threading
 import os, time
 import sys
+from urllib import parse
 
 os.environ['TZ'] = 'Europe/Paris'
 time.tzset()
@@ -30,25 +31,25 @@ except:
 try:
 	import RPi.GPIO as GPIO
 except Exception as e:
-	errdep += str(e) + ','
+	errdep += str(e) + ', '
 	nodep = 1
 
 try:
 	import Adafruit_DHT
 except Exception as e:
-	errdep += str(e) + ','
+	errdep += str(e) + ', '
 	nodep = 1
 
 try:
 	import Adafruit_BMP.BMP085 as BMP085
 except Exception as e:
-	errdep += str(e) + ','
+	errdep += str(e) + ', '
 	nodep = 1
 
 try:
 	import DS18B20 as DS
 except Exception as e:
-	errdep += str(e) + ','
+	errdep += str(e) + ', '
 	nodep = 1
 
 try:
@@ -101,9 +102,9 @@ logFile = "JeedouinoPiGpio.log"
 def log(level,message):
 	fifi = open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PiGpio][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		fifi.write('[%s][Demon PiGpio][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	except:
-		print('[%s][Demon PiGpio][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		print('[%s][Demon PiGpio][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -544,7 +545,7 @@ class myThread1 (threading.Thread):
 				pwm.stop()
 			except:
 				pass
-			sys.exit()
+			sys.exit('Daemon stopped.')
 
 def SetPin(u, v, m):
 	global swtch
@@ -834,7 +835,7 @@ class myThread2 (threading.Thread):
 			pwm.stop()
 		except:
 			pass
-		sys.exit()
+		sys.exit('Daemon stopped.')
 
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
@@ -909,6 +910,7 @@ if __name__ == "__main__":
 	sendCPT = 0
 
 	if (nodep):
+		SimpleSend('&NODEP=GPIO&errdep=' + parse.quote(str(errdep)))
 		log('Error' , 'Dependances introuvables. Veuillez les (re)installer. - ' + str(errdep))
 
 	# set up GPIO
@@ -1049,4 +1051,4 @@ if __name__ == "__main__":
 	except:
 		pass
 	s.close()
-	sys.exit()
+	sys.exit('Daemon stopped.')

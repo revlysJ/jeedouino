@@ -10,6 +10,8 @@ import socket			   # Import socket module
 import threading
 import os, time
 import sys
+from urllib import parse
+
 try:
 	import http.client as httplib
 except:
@@ -47,9 +49,9 @@ logFile = "JeedouinoPiFace.log"
 def log(level,message):
 	fifi=open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon PiFace][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		fifi.write('[%s][Demon PiFace][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	except:
-		print('[%s][Demon PiFace][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		print('[%s][Demon PiFace][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -302,7 +304,7 @@ class myThread1 (threading.Thread):
 		s.close()
 		if exit==1:
 			#listener.deactivate()
-			sys.exit()
+			sys.exit('Daemon stopped.')
 
 def SetPin(u, v, m):
 	global swtch
@@ -415,7 +417,7 @@ class myThread2 (threading.Thread):
 			time.sleep(0.1)
 		s.close()
 		#listener.deactivate()
-		sys.exit()
+		sys.exit('Daemon stopped.')
 
 def SimpleSend(rep):
 	global eqLogic,JeedomIP,JeedomPort,JeedomCPL
@@ -463,12 +465,17 @@ if __name__ == "__main__":
 	sendCPT=0
 
 	if (nodep):
-		SimpleSend('&NODEP=pifacedigitalio')
+		SimpleSend('&NODEP=pifacedigitalio&errdep=' + parse.quote(str(errdep)))
 		log('Error' , 'Dependances pifacedigitalio introuvables. Veuillez les (re)installer. - ' + str(errdep))
-		sys.exit('Dependances pifacedigitalio introuvables. - ' + str(errdep))
+		sys.exit('Daemon stopped. Dependances pifacedigitalio introuvables. - ' + str(errdep))
 
 	# set up PiFace Digital
-	pifacedigital = pifacedigitalio.PiFaceDigital(int(boardId))
+	try:
+		pifacedigital = pifacedigitalio.PiFaceDigital(int(boardId))
+	except Exception as e:
+		SimpleSend('&NODEP=NoPiFaceBoard&errdep=' + parse.quote(str(e)))
+		log('Error' , 'Carte PiFace introuvable. Veuillez activer le bus SPI (sudo raspi-config) ou verifier si la carte est bien connectee/bon port. - ' + str(e))
+		sys.exit('Daemon stopped. SPI Bus Not Open ! try (sudo raspi-config) or verify spi port/board connection. - ' + str(e))
 	#listener = pifacedigitalio.InputEventListener(chip=pifacedigital)
 
 	# Toutes les entrees en impulsion
@@ -572,4 +579,4 @@ if __name__ == "__main__":
 
 	s.close()
 	#listener.deactivate()
-	sys.exit()
+	sys.exit('Daemon stopped.')

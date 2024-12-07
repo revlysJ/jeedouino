@@ -81,6 +81,11 @@ if [ -f /usr/bin/raspi-config ]; then
 	echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 	rm -Rf /tmp/Adafruit_Python_DHT
 	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+	# workaround faked rpi version -
+	echo -e "\nHardware   : BCM2709" >> /etc/cpuinfo
+	if [ -e /etc/cpuinfo ] ; then
+		mount --bind /etc/cpuinfo /proc/cpuinfo
+	fi
 	sudo ${VENV_DIR}/bin/python3 -m pip install /tmp/Adafruit_Python_DHT
 
 	echo 65 > ${PROGRESS_FILE}

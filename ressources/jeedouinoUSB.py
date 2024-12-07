@@ -10,6 +10,7 @@ import threading
 import os, time
 import sys
 import serial
+from urllib import parse
 try:
 	import http.client as httplib
 except:
@@ -37,9 +38,9 @@ logFile = "JeedouinoUSB.log"
 def log(level,message):
 	fifi=open(logFile, "a+")
 	try:
-		fifi.write('[%s][Demon USB][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		fifi.write('[%s][Demon USB][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	except:
-		print('[%s][Demon USB][%s] %s : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level), str(message)))
+		print('[%s][Demon USB][%s][%s] : %s' % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), str(eqLogic), str(level).upper(), str(message)))
 	fifi.write("\r\n")
 	fifi.close()
 
@@ -174,7 +175,7 @@ class myThread1 (threading.Thread):
 			time.sleep(0.1)
 		s.close()
 		if exit == 1:
-			sys.exit()
+			sys.exit('Daemon stopped.')
 
 
 class myThread2 (threading.Thread):
@@ -231,7 +232,7 @@ class myThread2 (threading.Thread):
 
 		USBArduino.close()
 		s.close()
-		sys.exit()
+		sys.exit('Daemon stopped.')
 
 def SimpleSend(rep):
 	global eqLogic, JeedomIP, JeedomPort, JeedomCPL
@@ -286,9 +287,9 @@ if __name__  ==  "__main__":
 		USBArduino.flush()
 	except Exception as e:
 		USBArduino = ''
-		SimpleSend('&NODEP=SERIAL')
+		SimpleSend('&NODEP=SERIAL&errdep=' + parse.quote(str(e)))
 		log('Error' , 'Dependances Serial introuvables. Veuillez les reinstaller. - ' + str(e))
-		sys.exit('Dependances Serial introuvables. - ' + str(e))
+		sys.exit('Daemon stopped. Dependances Serial introuvables. - ' + str(e))
 
 	# inits
 	exit = 0
@@ -352,4 +353,4 @@ if __name__  ==  "__main__":
 
 	USBArduino.close()
 	s.close()
-	sys.exit()
+	sys.exit('Daemon stopped.')

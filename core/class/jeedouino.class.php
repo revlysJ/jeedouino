@@ -1041,7 +1041,7 @@ class jeedouino extends eqLogic {
 		else return 8888;
 	}
 
-	public function CallSlaveExt($CallCmd, $params)
+	public static function CallSlaveExt($CallCmd, $params)
 	{
 		$board_id = $params['eqLogic'];
 		$board = eqLogic::byid($board_id);
@@ -1064,7 +1064,7 @@ class jeedouino extends eqLogic {
 		return true;
 	}
 
-	public function CallJeedouinoExt($board_id, $CallCmd, $params ,$_port='')
+	public static function CallJeedouinoExt($board_id, $CallCmd, $params ,$_port='')
 	{
 		$board = eqLogic::byid($board_id);
 		$IPboard = $board->getConfiguration('iparduino');
@@ -3528,7 +3528,7 @@ class jeedouino extends eqLogic {
 
 		//jeedouino::log( 'debug','Fin de postAjax()');
 	}
-	public function DelCmdOfVirtual($cmd_def, $LogicalId)
+	public static function DelCmdOfVirtual($cmd_def, $LogicalId)
 	{
 		if (method_exists('virtual', 'copyFromEqLogic'))
 		{
@@ -3546,7 +3546,7 @@ class jeedouino extends eqLogic {
 		else jeedouino::log( 'error', __('Impossible de trouver le plugin Virtuel !', __FILE__));
 	}
 
-	public function AddCmdToVirtual($cmd_def, $eq_id,  $LogicalId)
+	public static function AddCmdToVirtual($cmd_def, $eq_id,  $LogicalId)
 	{
 		if (method_exists('virtual', 'copyFromEqLogic'))
 		{
@@ -3614,7 +3614,7 @@ class jeedouino extends eqLogic {
 		else jeedouino::log( 'error', __('Impossible de trouver le plugin Virtuel !', __FILE__));
 	}
 
-	public function ProbeDelay($arduino_id, $ProbeDelay = 5)
+	public static function ProbeDelay($arduino_id, $ProbeDelay = 5)
 	{
 		if ($ProbeDelay < 1 or $ProbeDelay > 1000) $ProbeDelay = 5;
 		$ProbeDelay = round($ProbeDelay);
@@ -3641,7 +3641,7 @@ class jeedouino extends eqLogic {
 		jeedouino::log( 'debug', __('Fin de MàJ du délai de relève des sondes.', __FILE__));
 	}
 
-	public function CptDelay($arduino_id, $CptDelay = 3600)
+	public static function CptDelay($arduino_id, $CptDelay = 3600)
 	{
 		if ($CptDelay < 600 or $CptDelay > 86400) $CptDelay = 3600;
 		$CptDelay = round($CptDelay);
@@ -3663,7 +3663,7 @@ class jeedouino extends eqLogic {
 		jeedouino::log( 'debug', __('Fin de MàJ du délai de RéArm Event.', __FILE__));
 	}
 
-	public function bounceDelay($arduino_id, $bounceDelay = 200)
+	public static function bounceDelay($arduino_id, $bounceDelay = 200)
 	{
 		$bounceDelay = round($bounceDelay);
 		if ($bounceDelay < 1) $bounceDelay = 1;
@@ -3689,7 +3689,7 @@ class jeedouino extends eqLogic {
 		jeedouino::log( 'debug', __('Fin de MàJ du délai ', __FILE__) . $mm );
 	}
 
-	public function ResetCPT($arduino_id, $RSTvalue = 0, $CMDid = '')
+	public static function ResetCPT($arduino_id, $RSTvalue = 0, $CMDid = '')
 	{
 		// on envoie une reinit aux compteurs
 		if ($CMDid != '')
@@ -3778,7 +3778,7 @@ class jeedouino extends eqLogic {
 		return $port;
 	}
 
-	public function GenerateLanArduinoSketchFile($board_id = '')	//  Génère le sketch pour l'arduino avec shield ethernet
+	public static function GenerateLanArduinoSketchFile($board_id = '')	//  Génère le sketch pour l'arduino avec shield ethernet
 	{
 		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 		if ($board_id != '')
@@ -3881,7 +3881,7 @@ class jeedouino extends eqLogic {
 		}
 	}
 
-	public function GenerateESP8266SketchFile($board_id='')	//  Génère le sketch pour l'esp8266 wifi
+	public static function GenerateESP8266SketchFile($board_id='')	//  Génère le sketch pour l'esp8266 wifi
 	{
 		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 		if ($board_id!='')
@@ -3991,7 +3991,7 @@ class jeedouino extends eqLogic {
 		}
 	}
 
-	public function GenerateUSBArduinoSketchFile($board_id = '')	//  Génère le sketch pour l'arduino avec shield ethernet
+	public static function GenerateUSBArduinoSketchFile($board_id = '')	//  Génère le sketch pour l'arduino avec shield ethernet
 	{
 		$jeedouinoPATH = realpath(dirname(__FILE__) . '/../../data/');
 		if ($board_id != '')

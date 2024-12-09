@@ -1,4 +1,53 @@
 Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
+Aider le développeur : <https://www.paypal.me/jeedouino>
+
+08/12/2024 v1.07g
+---
+
+- Amélioration de l'installation des dépendances
+- Amélioration de l'installation des dépendances JeedouinoExt
+- Amélioration des logs.
+
+03/12/2024 v1.07f
+---
+
+- Corrections diverses.
+- Compatibilité Jeedom v4.4
+- Compatibilité Bookworm / php 8 (fix par @Mips).
+
+04/01/2022 v1.07e
+---
+
+- Corrections diverses.
+- Compatibilité Jeedom v4.2
+
+14/04/2021 v1.07d
+---
+
+- Corrections diverses.
+- Ajout d'un délai anti-rebonds des compteurs (piGpio).
+- Ajout de la modification directe du délai anti-rebonds des compteurs (piGpio).
+- Ajout d'un délai boucle des compteurs (piPlus / piFace).
+- Ajout de la modification directe du délai boucle des compteurs (piPlus / piFace).
+- Amélioration du multi-clics.
+
+08/05/2020 v1.07c
+---
+
+- Corrections diverses.
+- Corrections des démons.
+- Amélioration de l'installation des dépendances.
+- Améliorations cosmétiques.
+
+01/04/2020 v1.07b
+---
+
+- Ajout de la modification directe du délai de relève des sondes.
+- Ajout d'un réarm event des compteurs (piGpio).
+- Ajout de la modification directe du délai de réarm  des compteurs (piGpio).
+- Ajout d'un scan régulier de la présence des sondes ds18b20 (piGpio).
+- Correction Appel API du plugin Téléinfo (fix par @Seb-Othis).
+- Corrections diverses.
 
 03/11/2019 v1.07
 ---

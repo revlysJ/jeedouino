@@ -1,5 +1,5 @@
 """
-JEEDOUINO ARDUINO USB DEMON v0.8 , Dec 2015 - 2020
+JEEDOUINO ARDUINO USB DEMON v0.8 , Dec 2015 - 2024
 Modif de simplewebcontrol.py pour utilisation avec Jeedom
 Original :	https://github.com/piface/pifacedigitalio/blob/master/examples/simplewebcontrol.py
 				http://www.tutorialspoint.com/python/python_multithreading.htm

@@ -20,4 +20,5 @@ Il fonctionne en local ou en déporté (jeedouinoExt) sur votre réseau.
 
 Il est compatible avec le fonctionnement du plugin Jeedom-Link de Jeedom.  
 
-Lien vers la documentation : <https://revlysj.github.io/jeedouino/fr_FR/>
+Lien vers la documentation : <https://revlysj.github.io/jeedouino/fr_FR/>  
+Aider le développeur : <https://www.paypal.me/jeedouino>

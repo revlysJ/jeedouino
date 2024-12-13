@@ -76,25 +76,24 @@ try {
     }
     if (init('action') == 'get_jeedouinoExt')
     {
-        if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . init('id'), 9999);
-        $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
-        $ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
-        if (!in_array($ip, $ListExtIP))
-        {
-			throw new Exception(__('JeedouinoExt inconnu : ' . $ip, __FILE__) . init('id'), 9999);
-		}
-		ajax::success(jeedom::toHumanReadable(jeedouino::GetJeedouinoExt($ip)));
-        //ajax::success(jeedouino::GetJeedouinoExt($ip));
-	}
+      if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . implode(',' , init), 9999);
+      $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
+      $ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
+      if (!in_array($ip, $ListExtIP))
+      {
+        throw new Exception(__('JeedouinoExt inconnu : ' . $ip, __FILE__) . init('id'), 9999);
+      }
+      ajax::success(jeedom::toHumanReadable(jeedouino::GetJeedouinoExt($ip)));
+    }
     if (init('action') == 'send_jeedouinoExt')
     {
-        $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
-        if (!jeedouino::SendJeedouinoExt($JeedouinoExtSend))
-        {
-            ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JeedouinoExt. ', __FILE__));
-        }
-		ajax::success();
-	}
+      $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
+      if (!jeedouino::SendJeedouinoExt($JeedouinoExtSend))
+      {
+        ajax::error(__('Erreur, Impossible d envoyer les fichiers pour JeedouinoExt. ', __FILE__));
+      }
+      ajax::success();
+    }
     if (init('action') == 'send_jeedouinoExt2')
     {
         $JeedouinoExtSend = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));

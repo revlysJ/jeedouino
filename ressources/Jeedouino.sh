@@ -43,6 +43,8 @@ echo "Installation dependance python3-pip & python3-venv"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 sudo apt-get -y install python3 python3-pip python3-dev python3-venv python3-setuptools
 sudo python3 -m venv --upgrade-deps ${VENV_DIR}
+#workaround deb10 old python with no --upgrade-deps (<3.9)
+sudo python3 -m venv --upgrade ${VENV_DIR}
 sudo ${VENV_DIR}/bin/python3 -m pip install --upgrade setuptools pip wheel
 
 

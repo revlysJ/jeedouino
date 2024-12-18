@@ -1,6 +1,5 @@
-Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
-Aider le développeur : <https://www.paypal.me/jeedouino>
-
+- Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
+- Aider le développeur : <https://www.paypal.me/jeedouino>
 08/12/2024 v1.07g
 ---
 

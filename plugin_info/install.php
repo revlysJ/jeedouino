@@ -53,10 +53,6 @@ function jeedouino_update()
             else config::save('JExtname-' . $ip, 'JeedouinoExt', 'jeedouino');
         }
     }
-    //
-	// correction droits fichier DS18B20Scan
-	//exec('sudo chmod 755 ' . dirname(__FILE__) . '/../ressources/DS18B20Scan >> '.log::getPathToLog('jeedouino_update') . ' 2>&1 &');
-	//
 	//$eqLogics = eqLogic::byType('jeedouino');
 	$IPJeedom = jeedouino::GetJeedomIP();
 	jeedouino::log( 'debug', __('-=-= Suite mise à jour du plugin, démarrage global des démons et re-génération des sketchs =-=-', __FILE__));

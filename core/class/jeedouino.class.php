@@ -377,7 +377,8 @@ class jeedouino extends eqLogic {
 		if (!is_array($EqIDarr))
 		{
 			$EqLogics = eqLogic::byType('jeedouino');
-			jeedouino::log( 'debug', __('Suite reboot Jeedom, démarrage du/des démon(s).', __FILE__));
+			if (empty($EqLogics)) return;
+			jeedouino::log( 'debug', __('Suite (re)boot Jeedom, démarrage du/des démon(s).', __FILE__));
 		}
 		else
 		{
@@ -1098,7 +1099,7 @@ class jeedouino extends eqLogic {
 		if (!is_object($Control))
 		{
 			$Control = new jeedouino();
-			$Control->setName(__('Jeedouino Control', __FILE__));
+			$Control->setName(__('Contrôle des démons', __FILE__));
 			$Control->setIsEnable(1);
 			$Control->setIsVisible(1);
 			jeedouino::log('debug',__('NEW : Added JeedouinoControl', __FILE__));

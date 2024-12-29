@@ -1,10 +1,24 @@
+Changelog
+===========
+
 - Changelog Github : <https://github.com/revlysJ/jeedouino/commits/master>
 - Aider le développeur : <https://www.paypal.me/jeedouino>
+
+29/12/2024 v1.08
+---
+
+- Passage en jqueryless (Core js).
+
+19/12/2024 v1.07h
+---
+
+- Fix de l'installation des dépendances sous deb10.
+
 08/12/2024 v1.07g
 ---
 
-- Amélioration de l'installation des dépendances
-- Amélioration de l'installation des dépendances JeedouinoExt
+- Amélioration de l'installation des dépendances.
+- Amélioration de l'installation des dépendances JeedouinoExt.
 - Amélioration des logs.
 
 03/12/2024 v1.07f

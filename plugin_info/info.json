@@ -5,6 +5,9 @@
 	"licence" : "AGPL",
 	"author" : "Revlys",
 	"require" : "4.4",
+	"os" : {
+		"min" : 10,
+		"max" : 12.99},
 	"category" : "automation protocol",
 	"hasDependency" : true,
 	"changelog" : "https://revlysj.github.io/jeedouino/#language#/changelog",

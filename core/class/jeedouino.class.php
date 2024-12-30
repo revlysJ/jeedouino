@@ -2012,7 +2012,7 @@ class jeedouino extends eqLogic {
 			return true;
 		}
 	}
-	public function ChangePortDemon($board_id = 0)
+	public static function ChangePortDemon($board_id = 0)
 	{
 		if ($board_id == 0) $board_id = $this->getEqLogic_id();
 
@@ -3666,9 +3666,9 @@ class jeedouino extends eqLogic {
 
 	public static function bounceDelay($arduino_id, $bounceDelay = 200)
 	{
-		$bounceDelay = round($bounceDelay);
 		if ($bounceDelay < 1) $bounceDelay = 1;
 		if ($bounceDelay > 10000) $bounceDelay = 10000;
+		$bounceDelay = round($bounceDelay);
 		$oldValue = config::byKey($arduino_id . '_bounceDelay', 'jeedouino', 200);
 		list(, $board) = self::GetPinsByBoard($arduino_id);
 		$mm = __('anti-rebonds', __FILE__);

@@ -76,7 +76,7 @@ try {
     }
     if (init('action') == 'get_jeedouinoExt')
     {
-      if (init('id') == '') throw new Exception(__('JeedouinoExt ID inconnu : ', __FILE__) . implode(',' , init), 9999);
+      if (init('id') == '') ajax::success();//throw new Exception(__('JeedouinoExt ID inconnu. ' . init('id'), __FILE__), 9999);
       $ip = jeedouino::IPfromIDJeedouinoExt(init('id'));
       $ListExtIP = config::byKey('ListExtIP', 'jeedouino', '');
       if (!in_array($ip, $ListExtIP))
@@ -107,7 +107,7 @@ try {
     {
         $JeedouinoExtGet = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
         if ($JeedouinoExtGet == '') ajax::error('DarkMatterIsUndetectable...');
-        $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg'; //jeedouino::getPathToLog('jeedouino_ext');
+        $_log = dirname(__FILE__) . '/../../data/jeedouino_ext.txt'; //jeedouino::getPathToLog('jeedouino_ext');
         if (!jeedouino::SshGetJeedouinoExt($JeedouinoExtGet, $_log, init('logfile')))
         {
             ajax::error(__('Erreur, Impossible de récupérer le fichier de log de JeedouinoExt. ', __FILE__));
@@ -118,7 +118,7 @@ try {
     {
         $JeedouinoExtGet = jeedom::fromHumanReadable(json_decode(init('jeedouino_ext'), true));
         if ($JeedouinoExtGet == '') ajax::error('DarkMatterIsUndetectable...');
-        $_log = dirname(__FILE__) . '/../../ressources/jeedouino_ext.logg';
+        $_log = dirname(__FILE__) . '/../../data/jeedouino_ext.txt';
         if (!jeedouino::SshDelJeedouinoExt($JeedouinoExtGet, $_log, init('logfile')))
         {
             ajax::error(__('Erreur, Impossible d\'éffacer le fichier distant de log de JeedouinoExt. ', __FILE__));

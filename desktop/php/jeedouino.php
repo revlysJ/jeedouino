@@ -315,8 +315,8 @@ else $ShowSideBar = "col-xs-12";
                 </div>
               </div>
               <div class="form-group arduinoport usbdeporte">
-                <label class="col-lg-3 control-label">{{Port USB de connection déportée}}</label>
-                <div class="col-lg-3">
+                <label class="col-sm-3 control-label">{{Port USB de connection déportée}}</label>
+                <div class="col-sm-3">
                   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portusbdeporte">
                     <option value="none">{{Veuillez choisir}}</option>
                     <?php

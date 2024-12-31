@@ -1,6 +1,6 @@
 Description
 ===========
-- **Jeedouino v1.07**  [Changelog](changelog.md)
+- **Jeedouino v1.08**  [Changelog](changelog.md)
 - **Aider le développeur : <https://www.paypal.me/jeedouino>**
 
    Ce plugin vous permet de contrôler de différentes manières les pins entrées/sorties des cartes suivantes :

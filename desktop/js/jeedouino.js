@@ -117,19 +117,21 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=dataso
     document.querySelectorAll('.datasource.' + etv).seen();
     if (etv == 'usbarduino')
     {
-      document.querySelector('.ActiveExt').seen();
+      if (qS = document.querySelector('.ActiveExt')) qS.seen();
     }
     else
     {
-      document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+      //document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+      var checkboxElement = document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]');
+      if (checkboxElement) checkboxElement.checked = false;
       RPIlocal();
       if (board.substr(0, 1) == 'e')
       {
-        document.querySelector('.ActiveExt').unseen();
+        if (qS = document.querySelector('.ActiveExt')) qS.unseen();
       }
       if (board.substr(0, 1) == 'a')
       {
-        document.querySelector('.ActiveExt').unseen();
+        if (qS = document.querySelector('.ActiveExt')) qS.unseen();
       }
     }
   }
@@ -139,31 +141,35 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]
   else { RPIalone(); }
 });
 document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduino_board]')?.addEventListener("change", function (event) {
+  var checkboxElement = document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]');
   var etv = event.target.value;
   var eqId = document.querySelector('.eqLogic_active').getAttribute('v4_data-eqlogic_id');
   if (etv == '')
   {
-    document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+    if (checkboxElement) checkboxElement.checked = false;
     document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').removeAttribute('disabled');
     document.querySelectorAll('.datasource').unseen();
     document.querySelector('.piFacePortID').unseen();
     document.querySelector('.piPlusPortI2C').unseen();
     document.querySelector('.esp8266').unseen();
     document.querySelector('.sketchstab').unseen();
-    document.querySelector('.ActiveExt').unseen();
+    if (qS = document.querySelector('.ActiveExt')) qS.unseen();
     document.querySelector('.Alone').unseen();
     document.querySelector('.NotAlone').unseen();
     document.querySelector('.UsbLan').unseen();
   }
   else if (etv.substr(0, 1) == 'p')
   {
-    if (document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').value == 0)
+    if (checkboxElement)
     {
-      RPIlocal();
-    }
-    else
-    {
-      RPIalone();
+      if (checkboxElement.value == 0)
+      {
+        RPIlocal();
+      }
+      else
+      {
+        RPIalone();
+      }
     }
     document.querySelector('.control').seen();
     document.querySelector('.UsbLan').seen();
@@ -177,16 +183,16 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduin
     document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').jeeValue('rj45arduino');
     document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').setAttribute('disabled','disabled');
     document.querySelectorAll('.sketchs').unseen();
-    document.querySelector('.sketchUSB').unseen();
-    document.querySelector('.sketchsLib').unseen();
+    if (qS = document.querySelector('.sketchUSB')) qS.unseen();
+    if (qS = document.querySelector('.sketchsLib')) qS.unseen();
     document.querySelector('.esp8266').unseen();
     document.querySelector('.sketchstab').unseen();
-    document.querySelector('.ActiveExt').seen();
+    if (qS = document.querySelector('.ActiveExt')) qS.seen();
   }
   else if (etv.substr(0, 1) == 'e')
   {
     RPIlocal();
-    document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+    if (checkboxElement) checkboxElement.checked = false;
     document.querySelector('.control').seen();
     document.querySelector('.UsbLan').seen();
     document.querySelector('.piFacePortID').unseen();
@@ -194,16 +200,16 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduin
     document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').jeeValue('rj45arduino');
     document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').setAttribute('disabled','disabled');
     document.querySelectorAll('.sketchs').unseen();
-    document.querySelector('.sketchsLib').seen();
+    if (qS = document.querySelector('.sketchsLib')) qS.unseen();
     document.querySelector('.esp8266').seen();
     document.querySelector('.sketchstab').seen();
-    document.querySelector('.ActiveExt').unseen();
+    if (qS = document.querySelector('.ActiveExt')) qS.unseen();
   }
   else if (etv.substr(0, 1) == 'a')
   {
     if (document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').jeeValue() == 'usbarduino')
     {
-      if (document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked)
+      if (checkboxElement && checkboxElement.checked)
       {
         RPIalone();
       }
@@ -214,7 +220,7 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduin
     }
     else
     {
-      document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+      if (checkboxElement) checkboxElement.checked = false;
       RPIlocal();
     }
 
@@ -222,15 +228,15 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduin
     document.querySelector('.UsbLan').seen();
     if (eqId != undefined)
     {
-      document.querySelector('.sketchsLib').seen();
+      if (qS = document.querySelector('.sketchsLib')) qS.seen();
       if (document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').jeeValue() != 'usbarduino')
       {
-        document.querySelector('.ActiveExt').unseen();
+        if (qS = document.querySelector('.ActiveExt')) qS.unseen();
         document.querySelectorAll('.datasource.rj45arduino').seen();
       }
       else
       {
-        document.querySelector('.ActiveExt').seen();
+        if (qS = document.querySelector('.ActiveExt')) qS.seen();
         document.querySelectorAll('.datasource.usbarduino').seen();
       }
     }
@@ -242,7 +248,7 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduin
   }
   else
   {
-    document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+    if (checkboxElement) checkboxElement.checked = false;
     document.querySelector('.control').seen();
     document.querySelector('.UsbLan').seen();
     document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').removeAttribute('disabled');
@@ -251,18 +257,19 @@ document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduin
     document.querySelectorAll('.datasource ' + document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=datasource]').jeeValue()).seen();
     document.querySelector('.esp8266').unseen();
     document.querySelector('.sketchstab').unseen();
-    document.querySelector('.ActiveExt').unseen();
+    if (qS = document.querySelector('.ActiveExt')) qS.unseen();
   }
 });
 document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=arduinoport]')?.addEventListener("change", function (event) {
+  var checkboxElement = document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]');
   if (event.target.value == 'usblocal')
   {
-    document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = false;
+    if (checkboxElement) checkboxElement.checked = false;
     RPIlocal();
   }
   else
   {
-    document.querySelector('.eqLogicAttr[data-l1key=configuration][data-l2key=alone]').checked = true;
+    if (checkboxElement) checkboxElement.checked = true;
     RPIalone();
   }
 });
@@ -294,7 +301,7 @@ function printEqLogic(_data)
     document.querySelector('.piPlusPortI2C').unseen();
     document.querySelector('.esp8266').unseen();
     document.querySelector('.sketchstab').unseen();
-    document.querySelector('.ActiveExt').unseen();
+    if (qS = document.querySelector('.ActiveExt')) qS.unseen();
     document.querySelectorAll(".eqLogicAction[data-action=save]").unseen();
     document.querySelectorAll(".eqLogicAction[data-action=remove]").unseen();
     document.querySelectorAll(".eqLogicAction[data-action=copy]").unseen();
@@ -323,7 +330,7 @@ function addCmdToTable(_cmd) {
     document.querySelector('.piPlusPortI2C').unseen();
     document.querySelector('.esp8266').unseen();
     document.querySelector('.sketchstab').unseen();
-    document.querySelector('.ActiveExt').unseen();
+    if (qS = document.querySelector('.ActiveExt')) qS.unseen();
     document.querySelectorAll(".eqLogicAction[data-action=save]").unseen();
     document.querySelectorAll(".eqLogicAction[data-action=remove]").unseen();
     document.querySelectorAll(".eqLogicAction[data-action=copy]").unseen();
